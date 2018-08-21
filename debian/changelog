@@ -1,0 +1,5 @@
+univention-apple-school-manager-connector (1.0.0-0) unstable; urgency=low
+
+  * Package skeleton (Bug #47622, Bug #47623, Bug #47624).
+
+ -- Daniel Troeder <troeder@univention.de>  Tue, 21 Aug 2018 10:53:40 +0200

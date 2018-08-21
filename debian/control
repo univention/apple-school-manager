@@ -1,0 +1,51 @@
+Source: univention-apple-school-manager-connector
+Section: univention
+Priority: optional
+Build-Depends: debhelper (>> 7),
+ univention-config-dev,
+ ucslint-univention,
+ python2.7-dev,
+ python-support,
+ univention-config-dev,
+ univention-management-console-dev,
+Maintainer: Univention GmbH <packages@univention.de>
+Standards-Version: 3.8.2
+XS-Python-Version: 2.7
+
+Package: univention-apple-school-manager-connector
+Architecture: all
+Depends: ${misc:Depends},
+ univention-config,
+ python-univention,
+ python-univention-lib,
+ shell-univention-lib,
+ univention-join,
+ python-ucs-school,
+ univention-oneroster-lib,
+Recommends: ntp
+Description: Provision Apple School Manager accounts.
+ Synchronize user accounts to the Apple School Manager server.
+Homepage: https://school.apple.com/
+
+Package: univention-oneroster-lib
+Architecture: all
+Depends: ${misc:Depends},
+ univention-config,
+ python-ucs-school,
+Description: Create OneRoster compliant files.
+Homepage: https://www.imsglobal.org/activity/onerosterlis
+
+Package: univention-management-console-module-apple-school-manager
+Architecture: all
+Depends: univention-apple-school-manager-connector
+Description: Apple School Manager UMC module
+
+Package: ucs-test-asm
+Architecture: all
+Depends: ucs-test-libs,
+ ucs-test-framework,
+ ${misc:Depends}
+Provides: ucs-test-module
+Description: Univention Apple School Manager App tests for ucs-test
+ This package includes some Apple School Manager related tests for
+ ucs-test.

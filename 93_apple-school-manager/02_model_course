@@ -1,0 +1,82 @@
+#!/usr/share/ucs-test/runner python
+## -*- coding: utf-8 -*-
+## desc: test course model/CSV generation
+## tags: [apptest]
+## exposure: dangerous
+## packages:
+##   - univention-oneroster-lib
+## bugs: [47622]
+
+import sys
+from ldap.filter import filter_format
+from ucsschool.lib.models import SchoolClass
+import univention.testing.strings as uts
+import univention.testing.utils as utils
+from univention.oneroster.models.course import OneRosterCourse
+sys.path.append('/usr/share/ucs-test/90_ucsschool/')
+from essential.importusers_cli_v2 import ImportTestbase
+
+
+class Test(ImportTestbase):
+	ou_B = None
+	ou_C = None
+
+	def test(self):
+		school_class1 = '{}-{}'.format(self.ou_A.name, uts.random_username())
+		school_class2 = '{}-{}'.format(self.ou_A.name, uts.random_username())
+
+		self.log.info('*** Creating a teacher with 2 school_classes: %r %r...', school_class1, school_class2)
+		teacher1_name, teacher1_dn = self.schoolenv.create_teacher(
+			self.ou_A.name, classes='{},{}'.format(school_class1, school_class2))
+		self.log.info('Created teacher1: %r (%s)', teacher1_name, teacher1_dn)
+		self.log.info(
+			'Created school_class1=%r',
+			self.lo.search(filter_format('(&(objectClass=univentionGroup)(cn=%s))', (school_class1,)), attr=['memberUid'])
+		)
+		self.log.info(
+			'Created school_class2=%r',
+			self.lo.search(filter_format('(&(objectClass=univentionGroup)(cn=%s))', (school_class1,)), attr=['memberUid'])
+		)
+
+		filter_s = filter_format('(&(objectClass=univentionGroup)(cn=%s))', (school_class1,))
+		res = self.lo.searchDn(filter=filter_s)
+		if len(res) != 1:
+			self.fail('School class 1 not found: search with filter={!r} did not return 1 result:\n{}'.format(
+				filter_s, res))
+		school_class1_dn = res[0]
+		utils.verify_ldap_object(school_class1_dn, {'memberUid': [teacher1_name]})
+
+		filter_s = filter_format('(&(objectClass=univentionGroup)(cn=%s))', (school_class2,))
+		res = self.lo.searchDn(filter=filter_s)
+		if len(res) != 1:
+			self.fail('School class 2 not found: search with filter={!r} did not return 1 result:\n{}'.format(
+				filter_s, res))
+		school_class2_dn = res[0]
+		utils.verify_ldap_object(school_class2_dn, {'memberUid': [teacher1_name]})
+
+		description = uts.random_string()
+		self.log.info('*** Adding description to school_class2: %r...', description)
+		sc2 = SchoolClass.from_dn(school_class2_dn, self.ou_A.name, self.lo)
+		sc2.description = description
+		sc2.modify(self.lo)
+		utils.verify_ldap_object(school_class2_dn, {'memberUid': [teacher1_name], 'description': [description]})
+
+		course1 = OneRosterCourse.from_dn(school_class1_dn)
+		got_course1 = course1.as_csv_line()
+		expected_course1 = [school_class1, school_class1, school_class1, self.ou_A.name]
+		if got_course1 == expected_course1:
+			self.log.info('OK: course1 CSV line is as expected.')
+		else:
+			self.fail('Expected CSV line for course1: {!r}, got: {!r}.'.format(expected_course1, got_course1))
+
+		course2 = OneRosterCourse.from_dn(school_class2_dn)
+		got_course2 = course2.as_csv_line()
+		expected_course2 = [school_class2, school_class2, description, self.ou_A.name]
+		if got_course2 == expected_course2:
+			self.log.info('OK: course2 CSV line is as expected.')
+		else:
+			self.fail('Expected CSV line for course2: {!r}, got: {!r}.'.format(expected_course2, got_course2))
+
+
+if __name__ == '__main__':
+	Test().run()

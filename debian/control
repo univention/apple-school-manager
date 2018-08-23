@@ -32,6 +32,7 @@ Architecture: all
 Depends: ${misc:Depends},
  univention-config,
  python-ucs-school,
+ ucs-school-import (>=16.0.2-29),
 Description: Create OneRoster compliant files.
 Homepage: https://www.imsglobal.org/activity/onerosterlis
 
@@ -44,6 +45,7 @@ Package: ucs-test-asm
 Architecture: all
 Depends: ucs-test-libs,
  ucs-test-framework,
+ ucs-test-ucsschool,
  ${misc:Depends}
 Provides: ucs-test-module
 Description: Univention Apple School Manager App tests for ucs-test

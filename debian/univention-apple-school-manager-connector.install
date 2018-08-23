@@ -1,13 +1,1 @@
-40univention-google-apps.inst usr/lib/univention-install/
-60univention-google-apps.uinst usr/lib/univention-uninstall/
-modules/univention/googleapps/*.py usr/share/pyshared/univention/googleapps/
-modules/univention/googleapps/*.mo usr/share/locale/de/LC_MESSAGES/
-google-apps-user.py usr/lib/univention-directory-listener/system/
-google-apps-group.py usr/lib/univention-directory-listener/system/
-google-apps.schema usr/share/univention-google-apps/
-google-apps-for-work.php usr/share/univention-google-apps/
-print_google_users_and_groups usr/share/univention-google-apps/
-convert_credentials_file usr/share/univention-google-apps/
-update_saml_configuration usr/share/univention-google-apps/
-umc/icons/googleapps.png var/www
-google_primary_address.py usr/share/pyshared/univention/admin/hooks.d/
+modules/univention/asm usr/share/pyshared/univention/

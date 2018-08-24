@@ -38,7 +38,7 @@ from __future__ import absolute_import, unicode_literals
 import inspect
 
 try:
-	from typing import AnyStr, Iterable
+	from typing import AnyStr, Dict, Iterable
 except ImportError:
 	pass
 
@@ -96,6 +96,24 @@ class OneRosterModel(object):
 		"""
 		try:
 			return [getattr(self, member) or '' for member in self.get_header()]
+		except AttributeError:
+			raise NotImplementedError(
+				'Default implementation of as_csv_line() cannot handle {} object.'.format(
+					self.__class__.__name__)
+			)
+
+	def as_dict(self):  # type () -> Dict[AnyStr, AnyStr]
+		"""
+		Get this object represented as a dict of strings.
+
+		This default implementation will work as long as names returned by
+		:py:meth:`get_header()` match member names.
+
+		:return: dictionary with header names as keys and object values
+		:rtype: dict(str)
+		"""
+		try:
+			return dict((member, getattr(self, member) or '') for member in self.get_header())
 		except AttributeError:
 			raise NotImplementedError(
 				'Default implementation of as_csv_line() cannot handle {} object.'.format(

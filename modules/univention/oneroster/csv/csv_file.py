@@ -38,6 +38,8 @@ Data in CSV files is always sorted by 1) school and 2) user/class name.
 """
 
 from __future__ import absolute_import, unicode_literals
+import os
+import json
 from operator import attrgetter
 from ucsschool.lib.models import School, SchoolClass, Student, Teacher, TeachersAndStaff, User
 from ucsschool.importer.writer.csv_writer import CsvWriter
@@ -59,7 +61,7 @@ except ImportError:
 
 __all__ = (
 	'OneRosterClassCsvFile', 'OneRosterCoursesCsvFile', 'OneRosterLocationsCsvFile', 'OneRosterRostersCsvFile',
-	'OneRosterStaffCsvFile', 'OneRosterStudentsCsvFile'
+	'OneRosterStaffCsvFile', 'OneRosterStudentsCsvFile', 'create_csv_files'
 )
 
 
@@ -312,3 +314,42 @@ class OneRosterStudentsCsvFile(OneRosterCsvFile):
 		dns = [dn for school, name, dn in sorted(dns)]  # sorted by 1. school, 2. username
 		for dn in dns:
 			yield OneRosterStudent.from_dn(dn, ou_whitelist=self.ou_whitelist)
+
+
+csv_file_generators = {
+	'classes.csv': OneRosterClassCsvFile,
+	'courses.csv': OneRosterCoursesCsvFile,
+	'locations.csv': OneRosterLocationsCsvFile,
+	'rosters.csv': OneRosterRostersCsvFile,
+	'staff.csv': OneRosterStaffCsvFile,
+	'students.csv': OneRosterStudentsCsvFile,
+}
+
+
+def create_csv_files(target_directory, ou_whitelist=None):
+	# type: (AnyStr, Optional[Iterable[AnyStr]]) -> Iterable[AnyStr]
+	"""
+	Create CSV files in `target_directory`. Directory must either not exist or
+	be empty.
+
+	:param str target_directory: path to a directory in which to create the CSV files
+	:param ou_whitelist: list of schools/OUs that should be considered when looking at ou-overlapping users. No limit if empty or None.
+	:type ou_whitelist: list(str) or None
+	:return: list of files created
+	:rtype: list(str)
+	:raises ValueError: if `target_directory` exists and is not a directory or empty
+	"""
+	if os.path.exists(target_directory) and not os.path.isdir(target_directory):
+		raise ValueError('Is not a directory: {!r}.'.format(target_directory))
+	if os.path.isdir(target_directory):
+		if os.listdir(target_directory):
+			raise ValueError('Directory {!r} is not empty.'.format(target_directory))
+	else:
+		os.mkdir(target_directory, 0o600)
+
+	results = []
+	for filename, cls in csv_file_generators.items():
+		path = os.path.join(target_directory, filename)
+		results.append(path)
+		cls(path, ou_whitelist).write_csv()
+	return results

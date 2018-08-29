@@ -145,7 +145,10 @@ class OneRosterCsvFile(object):
 
 		schools = self.get_schools()
 		for school in schools:
-			for ucs_obj in ucs_class.get_all(self.lo, school.name):
+			ucs_objs = ucs_class.get_all(self.lo, school.name)
+			if ucs_objs and hasattr(ucs_objs[0], 'name'):
+				ucs_objs.sort(key=attrgetter('name'))
+			for ucs_obj in ucs_objs:
 				yield or_class.from_dn(ucs_obj.dn)
 
 	def get_schools(self):  # type: () -> Iterable[School]
@@ -254,8 +257,8 @@ class OneRosterRostersCsvFile(OneRosterCsvFile):
 		"""
 		schools = self.get_schools()
 		for school in schools:
-			for school_class in SchoolClass.get_all(self.lo, school.name):
-				for user_dn in school_class.users:
+			for school_class in sorted(SchoolClass.get_all(self.lo, school.name), key=attrgetter('name')):
+				for user_dn in sorted(school_class.users):
 					user = User.from_dn(user_dn, None, self.lo)
 					if user.is_student(self.lo):
 						yield OneRosterRoster.from_dn(school_class.dn, user_dn)
@@ -274,15 +277,38 @@ class OneRosterStaffCsvFile(OneRosterCsvFile):
 		:rtype: list(OneRosterStaff)
 		"""
 		schools = self.get_schools()
+		dns = set()
 		for school in schools:
-			for teacher in Teacher.get_all(self.lo, school.name):
-				yield OneRosterStaff.from_dn(teacher.dn)
-			for teacherandstaff in TeachersAndStaff.get_all(self.lo, school.name):
-				yield OneRosterStaff.from_dn(teacherandstaff.dn)
+			for teacher in Teacher.get_all(self.lo, school.name) + TeachersAndStaff.get_all(self.lo, school.name):
+				t_schools = [teacher.school] + sorted(s for s in teacher.schools if s != teacher.school)
+				if self.ou_whitelist:
+					t_schools = [s for s in t_schools if s in self.ou_whitelist]
+				dns.add((t_schools[0], teacher.name, teacher.dn))
+		dns = [dn for school, name, dn in sorted(dns)]  # sorted by 1. school, 2. username
+		for dn in dns:
+			yield OneRosterStaff.from_dn(dn, ou_whitelist=self.ou_whitelist)
 
 
 class OneRosterStudentsCsvFile(OneRosterCsvFile):
 	"""CSV file generator for the `students` file."""
 
 	header = OneRosterStudent.header
-	ucs2oneroster_classes = (Student, OneRosterStudent)
+
+	def find_and_create_objects(self):  # type: () -> Iterator[OneRosterStudent]
+		"""
+		Find LDAP objects and return created OneRoster objects.
+
+		:return list of OneRoster objects
+		:rtype: list(OneRosterStudent)
+		"""
+		schools = self.get_schools()
+		dns = set()
+		for school in schools:
+			for student in Student.get_all(self.lo, school.name):
+				s_schools = [student.school] + sorted(s for s in student.schools if s != student.school)
+				if self.ou_whitelist:
+					s_schools = [s for s in s_schools if s in self.ou_whitelist]
+				dns.add((s_schools[0], student.name, student.dn))
+		dns = [dn for school, name, dn in sorted(dns)]  # sorted by 1. school, 2. username
+		for dn in dns:
+			yield OneRosterStudent.from_dn(dn, ou_whitelist=self.ou_whitelist)

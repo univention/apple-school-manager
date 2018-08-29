@@ -135,8 +135,12 @@ class OneRosterStudent(OneRosterModel):
 			if not location_ids:
 				raise ValueError('Non of the users schools is in the whitelist: {} (schools: {!r}).'.format(
 					student, student.schools))
-		student_udm_obj = student.get_udm_object(lo)
-		middle_name = student_udm_obj.get('middleName') or student_udm_obj.get('initials') or student_udm_obj.get('oxMiddleName')
+		student_lo = lo.get(dn)
+		middle_name = (
+				student_lo.get('middleName', [''])[0] or
+				student_lo.get('initials', [''])[0] or
+				student_lo.get('oxMiddleName', [''])[0]
+		)
 		return cls(
 			person_id=student.name,  # TODO: pseudonym
 			first_name=student.firstname,  # TODO: pseudonym

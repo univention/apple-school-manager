@@ -1,4 +1,3 @@
-#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 #
 # Copyright 2018 Univention GmbH
@@ -42,7 +41,7 @@ from ucsschool.lib.models import Student
 from ucsschool.importer.utils.ldap_connection import get_readonly_connection
 
 try:
-	from typing import AnyStr, Iterable, Optional
+	from typing import Any, AnyStr, Iterable, Optional
 except ImportError:
 	pass
 
@@ -69,7 +68,7 @@ class OneRosterStudent(OneRosterModel):
 			password_policy=None,  # type: Optional[AnyStr]
 			additional_location_ids=None  # type: Optional[Iterable[AnyStr]]
 	):
-		# type (...) -> None
+		# type: (...) -> None
 		"""
 		:param str person_id: The unique identifier for a specific student. This `person_id` should match the unique identifier in your SIS if available. This `person_id` is the unique identifier for the student in Apple School Manager. Use this value to refer to the student in the Rosters file and instructors in the Classes file (required).
 		:param str first_name: The student's first name (required).
@@ -85,7 +84,7 @@ class OneRosterStudent(OneRosterModel):
 		:type location_ids: list(str)
 		"""
 		if additional_location_ids:
-			assert len(additional_location_ids) < 15, 'No more than 14 addition locations are allowed.'
+			assert len(additional_location_ids) < 15, 'No more than 14 additional locations are allowed.'
 		else:
 			additional_location_ids = []
 		super(OneRosterStudent, self).__init__(
@@ -115,7 +114,7 @@ class OneRosterStudent(OneRosterModel):
 
 	@classmethod
 	def from_dn(cls, dn, ou_whitelist=None, *args, **kwargs):
-		# type (str, Optional[Iterable[AnyStr]]) -> OneRosterLocation
+		# type: (str, Optional[Iterable[AnyStr]], *Any, **Any) -> OneRosterStudent
 		"""
 		Get OneRosterStudent object created from data in LDAP object.
 

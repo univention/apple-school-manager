@@ -1,4 +1,3 @@
-#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 #
 # Copyright 2018 Univention GmbH
@@ -42,7 +41,7 @@ from ucsschool.lib.models import SchoolClass
 from ucsschool.importer.utils.ldap_connection import get_readonly_connection
 
 try:
-	from typing import AnyStr, Optional
+	from typing import Any, AnyStr, Optional
 except ImportError:
 	pass
 
@@ -59,7 +58,7 @@ class OneRosterCourse(OneRosterModel):
 			course_number=None,  # type: Optional[AnyStr]
 			course_name=None,  # type: Optional[AnyStr]
 	):
-		# type (...) -> None
+		# type: (...) -> None
 		"""
 		:param str course_id: A unique identifier for the course. This must match the corresponding `course_id` used in the Classes file (required).
 		:param str location_id: The `location_id` for the course. This should correspond with a `location_id` in the Locations file. If this entry doesn't match an entry in the Locations file, you will experience issues in the upload process (required).
@@ -73,7 +72,7 @@ class OneRosterCourse(OneRosterModel):
 		self.course_name = course_name
 
 	@classmethod
-	def from_dn(cls, dn, *args, **kwargs):  # type (AnyStr) -> OneRosterCourse
+	def from_dn(cls, dn, *args, **kwargs):  # type: (AnyStr, *Any, **Any) -> OneRosterCourse
 		"""
 		Get OneRosterCourse object created from data in LDAP object.
 

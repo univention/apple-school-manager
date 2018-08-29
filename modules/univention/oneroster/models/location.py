@@ -1,4 +1,3 @@
-#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 #
 # Copyright 2018 Univention GmbH
@@ -42,7 +41,7 @@ from ucsschool.lib.models import School
 from ucsschool.importer.utils.ldap_connection import get_readonly_connection
 
 try:
-	from typing import AnyStr
+	from typing import Any, AnyStr
 except ImportError:
 	pass
 
@@ -52,7 +51,7 @@ class OneRosterLocation(OneRosterModel):
 
 	header = ('location_id', 'location_name')
 
-	def __init__(self, location_id, location_name):  # type (AnyStr, AnyStr) -> None
+	def __init__(self, location_id, location_name):  # type: (AnyStr, AnyStr) -> None
 		"""
 		:param str location_id: A unique identifier made of numbers and/or letters that contains no spaces (required).
 		:param str location_name: The name of the location (required).
@@ -62,7 +61,7 @@ class OneRosterLocation(OneRosterModel):
 		self.location_name = location_name
 
 	@classmethod
-	def from_dn(cls, dn, *args, **kwargs):  # type (AnyStr) -> OneRosterLocation
+	def from_dn(cls, dn, *args, **kwargs):  # type: (AnyStr, *Any, **Any) -> OneRosterLocation
 		"""
 		Get OneRosterLocation object created from data in LDAP object.
 

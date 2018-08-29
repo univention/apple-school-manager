@@ -1,4 +1,3 @@
-#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 #
 # Copyright 2018 Univention GmbH
@@ -42,7 +41,7 @@ from ucsschool.lib.models import SchoolClass, Student
 from ucsschool.importer.utils.ldap_connection import get_readonly_connection
 
 try:
-	from typing import AnyStr
+	from typing import Any, AnyStr
 except ImportError:
 	pass
 
@@ -58,7 +57,7 @@ class OneRosterRoster(OneRosterModel):
 			class_id,  # type: AnyStr
 			student_id,  # type: AnyStr
 	):
-		# type (...) -> None
+		# type: (...) -> None
 		"""
 		:param str roster_id: A unique identifier for the roster in your SIS or other course database (if available) (required).
 		:param str class_id: A unique alphanumeric identifier for the class. This must match a class_id in the Class file (required).
@@ -70,7 +69,7 @@ class OneRosterRoster(OneRosterModel):
 		self.student_id = student_id
 
 	@classmethod
-	def from_dn(cls, class_dn, student_dn, *args, **kwargs):  # type (AnyStr, AnyStr) -> OneRosterRoster
+	def from_dn(cls, class_dn, student_dn, *args, **kwargs):  # type: (AnyStr, AnyStr, *Any, **Any) -> OneRosterRoster
 		"""
 		Get OneRosterRoster object created from data in LDAP object.
 

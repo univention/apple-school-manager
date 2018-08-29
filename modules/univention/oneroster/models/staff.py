@@ -1,4 +1,3 @@
-#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 #
 # Copyright 2018 Univention GmbH
@@ -43,7 +42,7 @@ from ucsschool.lib.models.base import WrongModel
 from ucsschool.importer.utils.ldap_connection import get_readonly_connection
 
 try:
-	from typing import AnyStr, Iterable, Optional
+	from typing import Any, AnyStr, Iterable, Optional
 except ImportError:
 	pass
 
@@ -68,7 +67,7 @@ class OneRosterStaff(OneRosterModel):
 			sis_username=None,  # type: Optional[AnyStr]
 			additional_location_ids=None  # type: Optional[Iterable[AnyStr]]
 	):
-		# type (...) -> None
+		# type: (...) -> None
 		"""
 		:param str person_id: The unique identifier for a specific staff member. This person_id should match the unique identifier in your SIS if available. This person_id is the unique identifier for the staff member in Apple School Manager. Use this value to refer to instructors in the Classes file (required).
 		:param str first_name: The staff member's first name (required).
@@ -81,7 +80,7 @@ class OneRosterStaff(OneRosterModel):
 		:param additional_location_ids: list of additional (max 14) locations (optional).
 		"""
 		if additional_location_ids:
-			assert len(additional_location_ids) < 15, 'No more than 14 addition locations are allowed.'
+			assert len(additional_location_ids) < 15, 'No more than 14 additional locations are allowed.'
 		else:
 			additional_location_ids = []
 		super(OneRosterStaff, self).__init__(
@@ -108,7 +107,8 @@ class OneRosterStaff(OneRosterModel):
 			]
 
 	@classmethod
-	def from_dn(cls, dn, ou_whitelist=None, *args, **kwargs):  # type (AnyStr) -> OneRosterStaff
+	def from_dn(cls, dn, ou_whitelist=None, *args, **kwargs):
+		# type: (AnyStr, Optional[Iterable[AnyStr]], *Any, **Any) -> OneRosterStaff
 		"""
 		Get OneRosterStaff object created from data in LDAP object.
 
@@ -117,7 +117,7 @@ class OneRosterStaff(OneRosterModel):
 		:type ou_whitelist: list(str) or None
 		:return: OneRosterStaff instance
 		:rtype OneRosterStaff
-		:raises WrongModel: when `dn` does not belong to a teacher or teacherandstaff]
+		:raises WrongModel: when `dn` does not belong to a teacher or teacherandstaff
 		:raises ValueError: when non of the users `schools` is in the whitelist
 		"""
 		lo, po = get_readonly_connection()

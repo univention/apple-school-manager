@@ -1,4 +1,3 @@
-#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 #
 # Copyright 2018 Univention GmbH
@@ -34,6 +33,8 @@ Univention Apple School Manager Connector
 Classes the produce OneRoster CSV files.
 
 See https://support.apple.com/en-us/HT207029
+
+Data in CSV files is always sorted by 1) school and 2) user/class name.
 """
 
 from __future__ import absolute_import, unicode_literals
@@ -50,7 +51,7 @@ from univention.oneroster.models.staff import OneRosterStaff
 from univention.oneroster.models.student import OneRosterStudent
 
 try:
-	from typing import Any, AnyStr, Iterable, Iterator, List, Optional
+	from typing import Any, AnyStr, Iterable, Iterator, Optional
 	from univention.oneroster.models.base import OneRosterModel
 except ImportError:
 	pass
@@ -132,8 +133,7 @@ class OneRosterCsvFile(object):
 
 	def find_and_create_objects(self):  # type: () -> Iterator[OneRosterModel]
 		"""
-		Find LDAP objects and create OneRoster objects in `self.obj` (also
-		return them).
+		Find LDAP objects and return created OneRoster objects.
 
 		:return list of OneRoster objects
 		:rtype: list(OneRosterModel)
@@ -168,6 +168,7 @@ class OneRosterCsvFile(object):
 		:type objs: list(OneRosterModel) or None
 		"""
 		objs = objs or self.obj or self.find_and_create_objects()
+		# walk through list (iterator really) and find longest header, because it's needed as first line
 		res = []
 		for obj in objs:
 			res.append(obj)
@@ -229,8 +230,7 @@ class OneRosterLocationsCsvFile(OneRosterCsvFile):
 
 	def find_and_create_objects(self):  # type: () -> Iterator[OneRosterLocation]
 		"""
-		Find LDAP objects and create OneRoster objects in `self.obj` (also
-		return them).
+		Find LDAP objects and return created OneRoster objects.
 
 		:return list of OneRoster objects
 		:rtype: list(OneRosterLocation)
@@ -247,8 +247,7 @@ class OneRosterRostersCsvFile(OneRosterCsvFile):
 
 	def find_and_create_objects(self):  # type: () -> Iterator[OneRosterRoster]
 		"""
-		Find LDAP objects and create OneRoster objects in `self.obj` (also
-		return them).
+		Find LDAP objects and return created OneRoster objects.
 
 		:return list of OneRoster objects
 		:rtype: list(OneRosterRoster)
@@ -269,11 +268,10 @@ class OneRosterStaffCsvFile(OneRosterCsvFile):
 
 	def find_and_create_objects(self):  # type: () -> Iterator[OneRosterStaff]
 		"""
-		Find LDAP objects and create OneRoster objects in `self.obj` (also
-		return them).
+		Find LDAP objects and return created OneRoster objects.
 
 		:return list of OneRoster objects
-		:rtype: list(OneRosterRoster)
+		:rtype: list(OneRosterStaff)
 		"""
 		schools = self.get_schools()
 		for school in schools:

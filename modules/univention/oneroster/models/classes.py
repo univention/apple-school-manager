@@ -1,4 +1,3 @@
-#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 #
 # Copyright 2018 Univention GmbH
@@ -42,7 +41,7 @@ from ucsschool.lib.models import SchoolClass, User
 from ucsschool.importer.utils.ldap_connection import get_readonly_connection
 
 try:
-	from typing import AnyStr, Iterable, Optional
+	from typing import Any, AnyStr, Iterable, Optional
 except ImportError:
 	pass
 
@@ -66,7 +65,7 @@ class OneRosterClass(OneRosterModel):
 			instructor_id_3=None,  # type: Optional[AnyStr]
 			additional_instructor_ids=None  # type: Optional[Iterable[AnyStr]]
 	):
-		# type (...) -> None
+		# type: (...) -> None
 		"""
 		:param str class_id: A unique identifier for the class (required).
 		:param str course_id: The `course_id` of the course this class belongs to. This must match a course_id in the Courses file (required).
@@ -79,7 +78,7 @@ class OneRosterClass(OneRosterModel):
 		:type location_ids: list(str)
 		"""
 		if additional_instructor_ids:
-			assert len(additional_instructor_ids) < 13, 'No more than 12 addition instructors are allowed.'
+			assert len(additional_instructor_ids) < 13, 'No more than 12 additional instructors are allowed.'
 		else:
 			additional_instructor_ids = []
 		super(OneRosterClass, self).__init__(
@@ -105,7 +104,7 @@ class OneRosterClass(OneRosterModel):
 			]
 
 	@classmethod
-	def from_dn(cls, dn, *args, **kwargs):  # type (AnyStr) -> OneRosterClass
+	def from_dn(cls, dn, *args, **kwargs):  # type: (AnyStr, *Any, **Any) -> OneRosterClass
 		"""
 		Get OneRosterClass object created from data in LDAP object.
 

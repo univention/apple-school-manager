@@ -1,4 +1,3 @@
-#!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 #
 # Copyright 2018 Univention GmbH
@@ -38,7 +37,7 @@ from __future__ import absolute_import, unicode_literals
 import inspect
 
 try:
-	from typing import AnyStr, Dict, Iterable
+	from typing import Any, AnyStr, Dict, Iterable
 except ImportError:
 	pass
 
@@ -48,10 +47,10 @@ class OneRosterModel(object):
 
 	header = ()
 
-	def __init__(self, *args, **kwargs):  # type(*Any, **Any) -> None
+	def __init__(self, *args, **kwargs):  # type: (*Any, **Any) -> None
 		pass
 
-	def __repr__(self):  # type () -> str
+	def __repr__(self):  # type: () -> AnyStr
 		if not self.header:
 			members = [
 				m for m in inspect.getmembers(self, predicate=lambda x: not inspect.ismethod(x))
@@ -74,7 +73,7 @@ class OneRosterModel(object):
 		return self.header
 
 	@classmethod
-	def from_dn(cls, dn, *args, **kwargs):  # type (AnyStr) -> OneRosterModel
+	def from_dn(cls, dn, *args, **kwargs):  # type: (AnyStr, *Any, **Any) -> OneRosterModel
 		"""
 		Get OneRosterModel object created from data in LDAP object.
 
@@ -84,7 +83,7 @@ class OneRosterModel(object):
 		"""
 		raise NotImplementedError()
 
-	def as_csv_line(self):  # type () -> Iterable[AnyStr]
+	def as_csv_line(self):  # type: () -> Iterable[AnyStr]
 		"""
 		Get this object represented as a list of strings.
 
@@ -102,7 +101,7 @@ class OneRosterModel(object):
 					self.__class__.__name__)
 			)
 
-	def as_dict(self):  # type () -> Dict[AnyStr, AnyStr]
+	def as_dict(self):  # type: () -> Dict[AnyStr, AnyStr]
 		"""
 		Get this object represented as a dict of strings.
 

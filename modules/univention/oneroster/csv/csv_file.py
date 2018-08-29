@@ -128,6 +128,7 @@ class OneRosterCsvFile(object):
 		self.obj = []
 		if not self.lo:
 			self.__class__.lo, po = get_readonly_connection()
+		self.limbo_ou = self._get_limbo_ou()
 
 	def find_and_create_objects(self):  # type: () -> Iterator[OneRosterModel]
 		"""
@@ -154,7 +155,7 @@ class OneRosterCsvFile(object):
 		:return list of School objects
 		:rtype: list(School)
 		"""
-		schools = School.get_all(self.lo)
+		schools = [s for s in School.get_all(self.lo) if s.name != self.limbo_ou]
 		if self.ou_whitelist:
 			schools = [s for s in schools if s.name in self.ou_whitelist]
 		return sorted(schools, key=attrgetter('name'))
@@ -174,6 +175,37 @@ class OneRosterCsvFile(object):
 				self.header = obj.header
 		orcw = _OneRosterCsvWriter(self.header)
 		orcw.dump(res, self.file_path)
+
+	def _get_limbo_ou(self):  # type: () -> AnyStr
+		"""
+		Get the "limbo_ou", in case we have a "Single source database, partial
+		import user import" scenario.
+
+		:return: name or limbo OU or empty string
+		:rtype: str
+		"""
+		# Not using the importer code to get the import configuration object,
+		# because that would trigger the configuration checks, and the import
+		# might not be configured properly.
+
+		school_names = [s.name for s in School.get_all(self.lo)]
+		config_files = [
+			'/usr/share/ucs-school-import/configs/global_defaults.json',
+			'/var/lib/ucs-school-import/configs/global.json',
+			'/usr/share/ucs-school-import/configs/user_import_defaults.json',
+			'/var/lib/ucs-school-import/configs/user_import.json',
+			'/usr/share/ucs-school-import/configs/user_import_sisopi.json'
+		] + ['/var/lib/ucs-school-import/configs/{}.json'.format(ou) for ou in school_names]
+		config_files = [cf for cf in config_files if os.path.exists(cf)]
+		config_files.reverse()  # search from most specific (OU) to most general (defaults)
+		for config_file in config_files:
+			with open(config_file, 'rb') as fp:
+				config = json.load(fp)
+				try:
+					return config['limbo_ou']
+				except KeyError:
+					pass
+		return ''
 
 
 class OneRosterClassCsvFile(OneRosterCsvFile):

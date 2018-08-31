@@ -55,18 +55,18 @@ class OneRosterStudent(OneRosterModel):
 	)
 
 	def __init__(
-			self,
-			person_id,  # type: AnyStr
-			first_name,  # type: AnyStr
-			last_name,  # type: AnyStr
-			location_id,  # type: AnyStr
-			person_number=None,  # type: Optional[AnyStr]
-			middle_name=None,  # type: Optional[AnyStr]
-			grade_level=None,  # type: Optional[AnyStr]
-			email_address=None,  # type: Optional[AnyStr]
-			sis_username=None,  # type: Optional[AnyStr]
-			password_policy=None,  # type: Optional[AnyStr]
-			additional_location_ids=None  # type: Optional[Iterable[AnyStr]]
+		self,
+		person_id,  # type: AnyStr
+		first_name,  # type: AnyStr
+		last_name,  # type: AnyStr
+		location_id,  # type: AnyStr
+		person_number=None,  # type: Optional[AnyStr]
+		middle_name=None,  # type: Optional[AnyStr]
+		grade_level=None,  # type: Optional[AnyStr]
+		email_address=None,  # type: Optional[AnyStr]
+		sis_username=None,  # type: Optional[AnyStr]
+		password_policy=None,  # type: Optional[AnyStr]
+		additional_location_ids=None  # type: Optional[Iterable[AnyStr]]
 	):
 		# type: (...) -> None
 		"""
@@ -128,7 +128,9 @@ class OneRosterStudent(OneRosterModel):
 		"""
 		lo, po = get_readonly_connection()
 		student = Student.from_dn(dn, None, lo)
-		location_ids = [student.school] + sorted(s for s in student.schools if s != student.school)
+		location_ids = sorted(s for s in student.schools if s != student.school)
+		if student.school:
+			location_ids = [student.school] + location_ids
 		if ou_whitelist:
 			location_ids = [l for l in location_ids if l in ou_whitelist]
 			if not location_ids:
@@ -136,9 +138,9 @@ class OneRosterStudent(OneRosterModel):
 					student, student.schools))
 		student_lo = lo.get(dn)
 		middle_name = (
-				student_lo.get('middleName', [''])[0] or
-				student_lo.get('initials', [''])[0] or
-				student_lo.get('oxMiddleName', [''])[0]
+			student_lo.get('middleName', [''])[0] or
+			student_lo.get('initials', [''])[0] or
+			student_lo.get('oxMiddleName', [''])[0]
 		)
 		return cls(
 			person_id=student.name,  # TODO: pseudonym

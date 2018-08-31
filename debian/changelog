@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (1.0.0-1) unstable; urgency=medium
+
+  * Bug #47623: sftp upload to Apple School Manager
+
+ -- Jürn Brodersen <brodersen@univention.de>  Fri, 31 Aug 2018 10:18:15 +0200
+
 univention-apple-school-manager-connector (1.0.0-0) unstable; urgency=low
 
   * Library to create OneRoster compliant CSV and ZIP files (Bug #47622).

@@ -262,7 +262,7 @@ class OneRosterRostersCsvFile(OneRosterCsvFile):
 			for school_class in sorted(SchoolClass.get_all(self.lo, school.name), key=attrgetter('name')):
 				for user_dn in sorted(school_class.users):
 					user = User.from_dn(user_dn, None, self.lo)
-					if user.is_student(self.lo):
+					if user.is_student(self.lo) and not user.is_exam_student(self.lo):
 						yield OneRosterRoster.from_dn(school_class.dn, user_dn)
 
 

@@ -1,0 +1,15 @@
+[asm/username]
+Type = String
+Description = Your apple school manager sftp username
+Description[de] = Ihr Apple School Manager sftp Benutzername
+
+[asm/password]
+Type = PasswordFile
+Filename = /etc/asm.secret
+Description = Your apple school manager sftp password
+Description[de] = Ihr Apple School Manager sftp Passwort
+
+[asm/school_whitelist]
+Type = String
+Description = Schools to sync to Apple School Manager (if not set all will be synced)
+Description[de] = Schulen die zum Apple School Manager synchronisiert werden (wenn nicht gesetzt werden alle synchronisiert)

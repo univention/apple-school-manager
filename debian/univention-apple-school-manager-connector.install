@@ -1,1 +1,2 @@
 modules/univention/asm usr/share/pyshared/univention/
+usr/sbin/asm-upload usr/sbin

@@ -8,3 +8,10 @@ An app that allows uploading OneRoster files (ZIP compressed CSV files) to the A
 * scripts for daily cronjobs to upload fresh OneRoster files
 
 Meta bug for initial development: http://forge.univention.org/bugzilla/show_bug.cgi?id=47620
+
+## Build and upload to the appcenter
+
+Set your appcenter password in "~/.selfservicepwd" 
+./update-app.sh
+or if your username differs from your appcenter username:
+bash -c "USER=juern ./update-app.sh"

@@ -125,6 +125,8 @@ class OneRosterStaff(OneRosterModel):
 			teacher = Teacher.from_dn(dn, None, lo)
 		except WrongModel:
 			teacher = TeachersAndStaff.from_dn(dn, None, lo)
+		if teacher.email and not cls._check_domain(teacher.email):
+			print('Invalid email domain in {!r} for DN {!r}.'.format(teacher.email, dn))  # TODO: log WARNING
 		location_ids = [teacher.school] + sorted(s for s in teacher.schools if s != teacher.school)
 		if ou_whitelist:
 			location_ids = [l for l in location_ids if l in ou_whitelist]

@@ -128,6 +128,8 @@ class OneRosterStudent(OneRosterModel):
 		"""
 		lo, po = get_readonly_connection()
 		student = Student.from_dn(dn, None, lo)
+		if student.email and not cls._check_domain(student.email):
+			print('Invalid email domain in {!r} for DN {!r}.'.format(student.email, dn))  # TODO: log WARNING
 		location_ids = sorted(s for s in student.schools if s != student.school)
 		if student.school:
 			location_ids = [student.school] + location_ids

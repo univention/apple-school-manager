@@ -34,6 +34,7 @@ Base class for all OneRoster models.
 """
 
 from __future__ import absolute_import, unicode_literals
+import socket
 import inspect
 
 try:
@@ -118,3 +119,22 @@ class OneRosterModel(object):
 				'Default implementation of as_csv_line() cannot handle {} object.'.format(
 					self.__class__.__name__)
 			)
+
+	@staticmethod
+	def _check_domain(email):  # type: (AnyStr) -> bool
+		"""
+		Verify that the second level domain in ``email`` exists.
+
+		:param str email: an email address
+		:return: whether the second level domain in the email addresses domain exists
+		:rtype: bool
+		"""
+		local_part, at, domain = email.rpartition('@')
+		if not all((local_part, at, domain)) or '.' not in domain:
+			raise ValueError('Invalid email address: {!r}.'.format(email))
+		domain_to_check = '.'.join(domain.split('.')[-2:])
+		try:
+			socket.gethostbyname(domain_to_check)
+			return True
+		except socket.gaierror:
+			return False

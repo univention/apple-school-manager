@@ -90,12 +90,10 @@ class OneRosterZipFile(object):
 		assert file_path, 'ZIP file path is empty.'
 		if not self.csv_files:
 			self.csv_files = self.create_csv_files()
-		with open(file_path,  'wb') as fp:
+		with open(file_path,  'wb') as fp, zipfile.ZipFile(fp, 'w', zipfile.ZIP_DEFLATED) as zf:
 			os.fchmod(fp.fileno(), 0o600)
-			zf = zipfile.ZipFile(fp, 'w', zipfile.ZIP_DEFLATED)
 			for path in sorted(self.csv_files):
 				zf.write(path, os.path.basename(path))
-			zf.close()
 		if delete_csv_files:
 			for path in self.csv_files:
 				os.remove(path)

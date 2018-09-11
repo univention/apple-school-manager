@@ -1,0 +1,84 @@
+# -*- coding: utf-8 -*-
+#
+# Copyright 2018 Univention GmbH
+#
+# http://www.univention.de/
+#
+# All rights reserved.
+#
+# The source code of this program is made available
+# under the terms of the GNU Affero General Public License version 3
+# (GNU AGPL V3) as published by the Free Software Foundation.
+#
+# Binary versions of this program provided by Univention to you as
+# well as other copyrighted, protected or trademarked materials like
+# Logos, graphics, fonts, specific documentations and configurations,
+# cryptographic keys etc. are subject to a license agreement between
+# you and Univention and not subject to the GNU AGPL V3.
+#
+# In the case you use this program under the terms of the GNU AGPL V3,
+# the program is provided in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public
+# License with the Debian GNU/Linux or Univention distribution in file
+# /usr/share/common-licenses/AGPL-3; if not, see
+# <http://www.gnu.org/licenses/>.
+
+"""
+Univention Apple School Manager Connector
+
+Utility functions.
+"""
+
+# don't import __future__.unicode_literals here, DNS lib cannot handle it!
+import DNS
+from univention.config_registry import ConfigRegistry
+
+try:
+	from typing import Dict, List
+except ImportError:
+	pass
+
+_external_dns_resolvers = []  # type: List[str]
+_known_domains = {}  # type: Dict[str, bool]
+
+
+def check_domain(email):  # type: (str) -> bool
+	"""
+	Verify that the second level domain in ``email`` exists.
+
+	:param str email: an email address
+	:return: whether the second level domain in the email addresses domain exists
+	:rtype: bool
+	:raises ValueError: if the email address has an invalid format
+	"""
+	local_part, at, domain = email.rpartition('@')
+	if not all((local_part, at, domain)) or '.' not in domain:
+		raise ValueError('Invalid email address: {!r}.'.format(email))
+	domain_to_check = '.'.join(domain.split('.')[-2:])
+	if domain_to_check not in _known_domains:
+		dns_servers = get_static_dns_resolvers()
+		requester = DNS.DnsRequest(server=dns_servers, timeout=5)
+		dns_result = requester.req(name=str(domain_to_check), qtype='A')  # type: DNS.Lib.DnsResult
+		_known_domains[domain_to_check] = bool(dns_result.answers)
+	return _known_domains[domain_to_check]
+
+
+def get_static_dns_resolvers():  # type: () -> List[str]
+	"""
+	Get external DNS resolvers from UCR
+
+	:return: list of IP addresses
+	:rtype: list(str)
+	"""
+	if not _external_dns_resolvers:
+		ucr = ConfigRegistry()
+		ucr.load()
+		_external_dns_resolvers.extend([
+			ns for ns in (ucr.get('dns/forwarder1', ''), ucr.get('dns/forwarder2', ''), ucr.get('dns/forwarder3', ''))
+			if ns.strip()
+		])
+	return _external_dns_resolvers

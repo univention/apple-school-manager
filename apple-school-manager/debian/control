@@ -31,6 +31,7 @@ Package: univention-oneroster-lib
 Architecture: all
 Depends: ${misc:Depends},
  univention-config,
+ python-dns,
  python-ucs-school,
  ucs-school-import (>=16.0.2-29),
 Description: Create OneRoster compliant files.

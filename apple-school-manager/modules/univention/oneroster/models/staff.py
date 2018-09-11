@@ -39,6 +39,7 @@ from __future__ import absolute_import, unicode_literals
 from .base import OneRosterModel
 from ucsschool.lib.models import Teacher, TeachersAndStaff
 from ucsschool.lib.models.base import WrongModel
+from univention.oneroster.utils import check_domain
 from ucsschool.importer.utils.ldap_connection import get_readonly_connection
 
 try:
@@ -125,7 +126,7 @@ class OneRosterStaff(OneRosterModel):
 			teacher = Teacher.from_dn(dn, None, lo)
 		except WrongModel:
 			teacher = TeachersAndStaff.from_dn(dn, None, lo)
-		if teacher.email and not cls._check_domain(teacher.email):
+		if teacher.email and not check_domain(teacher.email):
 			print('Invalid email domain in {!r} for DN {!r}.'.format(teacher.email, dn))  # TODO: log WARNING
 		location_ids = [teacher.school] + sorted(s for s in teacher.schools if s != teacher.school)
 		if ou_whitelist:

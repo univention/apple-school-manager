@@ -71,17 +71,34 @@ class OneRosterStudent(OneRosterModel):
 	):
 		# type: (...) -> None
 		"""
-		:param str person_id: The unique identifier for a specific student. This `person_id` should match the unique identifier in your SIS if available. This `person_id` is the unique identifier for the student in Apple School Manager. Use this value to refer to the student in the Rosters file and instructors in the Classes file (required).
+		:param str person_id: The unique identifier for a specific student.
+			This `person_id` should match the unique identifier in your SIS if
+			available. This `person_id` is the unique identifier for the
+			student in Apple School Manager. Use this value to refer to the
+			student in the Rosters file and instructors in the Classes file
+			(required).
 		:param str first_name: The student's first name (required).
 		:param str last_name: The student's last name (required).
-		:param str location_id: The `location_id` for the student. This must correspond with a `location_id` in the Locations file. If this entry doesn't match an entry in the Locations file, you will experience issues in the upload process (required).
-		:param str person_number: Another value that might identify a student in your school. This might be a student identification number (optional).
+		:param str location_id: The `location_id` for the student. This must
+			correspond with a `location_id` in the Locations file. If this
+			entry doesn't match an entry in the Locations file, you will
+			experience issues in the upload process (required).
+		:param str person_number: Another value that might identify a student
+			in your school. This might be a student identification number
+			(optional).
 		:param str middle_name: The student's middle name (optional).
 		:param str grade_level: The student's grade level (optional).
 		:param str email_address: An email address for the student (optional).
-		:param str sis_username: The user name for the student in your SIS (optional).
-		:param str password_policy: Use the `password_policy` field to specify a password policy for each specific student. This value overrides the location password policy and any password policy you previously set for that student. If you leave password_policy blank, the default password policy for the location is used for a new student and no changes are made to existing students (optional).
-		:param additional_location_ids: list of additional (max 14) locations (optional).
+		:param str sis_username: The user name for the student in your SIS
+			(optional).
+		:param str password_policy: Use the `password_policy` field to specify
+			a password policy for each specific student. This value overrides
+			the location password policy and any password policy you previously
+			set for that student. If you leave password_policy blank, the
+			default password policy for the location is used for a new student
+			and no changes are made to existing students (optional).
+		:param additional_location_ids: list of additional (max 14) locations
+			(optional).
 		:type location_ids: list(str)
 		"""
 		if additional_location_ids:
@@ -120,7 +137,8 @@ class OneRosterStudent(OneRosterModel):
 		Get OneRosterStudent object created from data in LDAP object.
 
 		:param str dn: DN to the Student object to represent
-		:param ou_whitelist: list of schools/OUs that should be considered when looking at ou-overlapping users. No limit if empty or None.
+		:param ou_whitelist: list of schools/OUs that should be considered when
+			looking at ou-overlapping users. No limit if empty or None.
 		:type ou_whitelist: list(str) or None
 		:return: OneRosterStudent instance
 		:rtype OneRosterStudent

@@ -123,7 +123,8 @@ class OneRosterCsvFile(object):
 	def __init__(self, file_path, ou_whitelist=None):  # type: (AnyStr, Optional[Iterable[AnyStr]]) -> None
 		"""
 		:param str file_path: file path to write CSV to
-		:param ou_whitelist: list of schools/OUs that should be considered when looking for LDAP objects. No limit if empty or None.
+		:param ou_whitelist: list of schools/OUs that should be considered
+			when looking for LDAP objects. No limit if empty or None.
 		:type ou_whitelist: list(str) or None
 		"""
 		self.file_path = file_path
@@ -332,12 +333,15 @@ def create_csv_files(target_directory, ou_whitelist=None):
 	Create CSV files in `target_directory`. Directory must either not exist or
 	be empty.
 
-	:param str target_directory: path to a directory in which to create the CSV files
-	:param ou_whitelist: list of schools/OUs that should be considered when looking at ou-overlapping users. No limit if empty or None.
+	:param str target_directory: path to a directory in which to create the
+		CSV files
+	:param ou_whitelist: list of schools/OUs that should be considered when
+		looking at ou-overlapping users. No limit if empty or None.
 	:type ou_whitelist: list(str) or None
 	:return: list of files created
 	:rtype: list(str)
-	:raises ValueError: if `target_directory` exists and is not a directory or empty
+	:raises ValueError: if `target_directory` exists and is not a directory or
+		empty
 	"""
 	if os.path.exists(target_directory) and not os.path.isdir(target_directory):
 		raise ValueError('Is not a directory: {!r}.'.format(target_directory))

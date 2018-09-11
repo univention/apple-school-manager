@@ -53,7 +53,8 @@ class OneRosterLocation(OneRosterModel):
 
 	def __init__(self, location_id, location_name):  # type: (AnyStr, AnyStr) -> None
 		"""
-		:param str location_id: A unique identifier made of numbers and/or letters that contains no spaces (required).
+		:param str location_id: A unique identifier made of numbers and/or
+			letters that contains no spaces (required).
 		:param str location_name: The name of the location (required).
 		"""
 		super(OneRosterLocation, self).__init__(location_id, location_name)

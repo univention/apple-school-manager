@@ -69,14 +69,24 @@ class OneRosterClass(OneRosterModel):
 		# type: (...) -> None
 		"""
 		:param str class_id: A unique identifier for the class (required).
-		:param str course_id: The `course_id` of the course this class belongs to. This must match a course_id in the Courses file (required).
-		:param str location_id: The `location_id` for the class. This should correspond with the location_id in the Locations file. If this entry doesn't match an entry in the Locations file, you will experience issues in the upload process (required).
-		:param str class_number: A number or code that identifies this class in your institution. Unlike class_id, class_number isn't used to refer to this class in CSV rosters (optional).
-		:param str instructor_id: The person_id for the instructor. This must match the person_id used in the Staff file (optional).
-		:param str instructor_id_2: The person_id for the instructor. This must match the person_id used in the Staff file (optional).
-		:param str instructor_id_3: The person_id for the instructor. This must match the person_id used in the Staff file (optional).
-		:param instructor_ids: list of additional (max. 12) instructors (optional).
-		:type location_ids: list(str)
+		:param str course_id: The `course_id` of the course this class belongs
+			to. This must match a course_id in the Courses file (required).
+		:param str location_id: The `location_id` for the class. This should
+			correspond with the location_id in the Locations file. If this
+			entry doesn't match an entry in the Locations file, you will
+			experience issues in the upload process (required).
+		:param str class_number: A number or code that identifies this class in
+			your institution. Unlike class_id, class_number isn't used to refer
+			to this class in CSV rosters (optional).
+		:param str instructor_id: The person_id for the instructor. This must
+			match the person_id used in the Staff file (optional).
+		:param str instructor_id_2: The person_id for the instructor. This must
+			match the person_id used in the Staff file (optional).
+		:param str instructor_id_3: The person_id for the instructor. This must
+			match the person_id used in the Staff file (optional).
+		:param additional_instructor_ids: list of additional (max. 12)
+			instructors (optional).
+		:type additional_instructor_ids: list(str)
 		"""
 		if additional_instructor_ids:
 			assert len(additional_instructor_ids) < 13, 'No more than 12 additional instructors are allowed.'

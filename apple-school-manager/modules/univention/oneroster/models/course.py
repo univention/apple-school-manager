@@ -60,9 +60,16 @@ class OneRosterCourse(OneRosterModel):
 	):
 		# type: (...) -> None
 		"""
-		:param str course_id: A unique identifier for the course. This must match the corresponding `course_id` used in the Classes file (required).
-		:param str location_id: The `location_id` for the course. This should correspond with a `location_id` in the Locations file. If this entry doesn't match an entry in the Locations file, you will experience issues in the upload process (required).
-		:param str course_number: A number for the course. This number might be the course number in your SIS or your curriculum guide (optional).
+		:param str course_id: A unique identifier for the course. This must
+			match the corresponding `course_id` used in the Classes file
+			(required).
+		:param str location_id: The `location_id` for the course. This should
+			correspond with a `location_id` in the Locations file. If this
+			entry doesn't match an entry in the Locations file, you will
+			experience issues in the upload process (required).
+		:param str course_number: A number for the course. This number might
+			be the course number in your SIS or your curriculum guide
+			(optional).
 		:param str course_name: The name of your course (optional).
 		"""
 		super(OneRosterCourse, self).__init__(course_id, location_id, course_number, course_name)

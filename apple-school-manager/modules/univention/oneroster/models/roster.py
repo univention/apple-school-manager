@@ -59,8 +59,10 @@ class OneRosterRoster(OneRosterModel):
 	):
 		# type: (...) -> None
 		"""
-		:param str roster_id: A unique identifier for the roster in your SIS or other course database (if available) (required).
-		:param str class_id: A unique alphanumeric identifier for the class. This must match a class_id in the Class file (required).
+		:param str roster_id: A unique identifier for the roster in your SIS
+			or other course database (if available) (required).
+		:param str class_id: A unique alphanumeric identifier for the class.
+			This must match a class_id in the Class file (required).
 		:param str student_id: A person_id for one student (required).
 		"""
 		super(OneRosterRoster, self).__init__(roster_id, class_id, student_id)

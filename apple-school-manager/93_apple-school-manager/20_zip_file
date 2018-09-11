@@ -213,16 +213,16 @@ class Test(ImportTestbase):
 			with open(class_csv_file_name, 'rb') as class_csv_file:
 				expected_school_classes = sorted([
 					[
-						school_class1, school_class1, school_class1, teacher1_name, teacher2_name, teacher3_name, school1,
+						school_class1, '', school_class1, teacher1_name, teacher2_name, teacher3_name, school1,
 						teacher4_name, '', ''
 					],
 					[
-						school_class2, school_class2, school_class2, teacher1_name, teacher2_name, teacher3_name, school2,
+						school_class2, '', school_class2, teacher1_name, teacher2_name, teacher3_name, school2,
 						teacher4_name, teacher5_name, teacher6_name
 					],
 					# school3 is not in the whitelist, so school_class3 must not be returned
 					[
-						school_class4, school_class4, school_class4, teacher2_name, teacher4_name, '', school1,
+						school_class4, '', school_class4, teacher2_name, teacher4_name, '', school1,
 						'', '', ''
 					],
 				], key=itemgetter(0))  # sort by 1. school name, 2. class name

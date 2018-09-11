@@ -83,7 +83,7 @@ class Test(ImportTestbase):
 		or_class1 = OneRosterClass.from_dn(school_class1_dn)
 		got_school_class1 = or_class1.as_csv_line()
 		expected_school_class1 = [
-			school_class1, school_class1, school_class1, teacher1_name, teacher2_name, teacher3_name, school1,
+			school_class1, '', school_class1, teacher1_name, teacher2_name, teacher3_name, school1,
 			teacher4_name, teacher5_name
 		]
 		if got_school_class1 == expected_school_class1:
@@ -93,7 +93,7 @@ class Test(ImportTestbase):
 
 		or_class2 = OneRosterClass.from_dn(school_class2_dn)
 		got_school_class2 = or_class2.as_csv_line()
-		expected_school_class2 = [school_class2, school_class2, school_class2, teacher1_name, '', '', school2]
+		expected_school_class2 = [school_class2, '', school_class2, teacher1_name, '', '', school2]
 		if got_school_class2 == expected_school_class2:
 			self.log.info('OK: school_class2 CSV line is as expected.')
 		else:

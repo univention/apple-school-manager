@@ -11,6 +11,7 @@ import sys
 from ucsschool.lib.models import Student
 import univention.testing.strings as uts
 import univention.testing.utils as utils
+from univention.config_registry import handler_set
 from univention.oneroster.models.student import OneRosterStudent
 sys.path.append('/usr/share/ucs-test/90_ucsschool/')
 from essential.importusers_cli_v2 import ImportTestbase
@@ -20,11 +21,16 @@ class Test(ImportTestbase):
 	ou_C = None
 
 	def test(self):
+		subdomain = uts.random_name()
+		handler_set(['oneroster/attributes/user/email/prepend_domain={}'.format(subdomain)])
+
 		school1 = self.ou_A.name
 		school2 = self.ou_B.name
 
 		student1_name, student1_dn = self.schoolenv.create_student(school1)
-		email = '{}@{}'.format(uts.random_name(), self.maildomain)
+		email_local = uts.random_name()
+		email = '{}@{}'.format(email_local, self.maildomain)
+		email_sub = '{}@{}.{}'.format(email_local, subdomain, self.maildomain)
 		student2_name, student2_dn = self.schoolenv.create_student(school2, schools=[school1, school2], mailaddress=email)
 		self.log.info('Created student1: %r (%s)', student1_name, student1_dn)
 		self.log.info('Created student2: %r (%s)', student2_name, student2_dn)
@@ -61,7 +67,7 @@ class Test(ImportTestbase):
 		or_student2 = OneRosterStudent.from_dn(student2_dn)
 		got_student2 = or_student2.as_csv_line()
 		expected_student2 = [
-			student2_name, '', student2.firstname, '', student2.lastname, '', email, student2_name, '', school2, school1
+			student2_name, '', student2.firstname, '', student2.lastname, '', email_sub, student2_name, '', school2, school1
 		]
 		if got_student2 == expected_student2:
 			self.log.info('OK: student2 CSV line is as expected.')

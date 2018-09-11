@@ -1,0 +1,5 @@
+[oneroster/attributes/user/email/prepend_domain]
+Description[de]=Ist diese Variable gesetzt, wird ihr Wert als Subdomain vor die Domäne in jeder E-Mail-Adresse gesetzt. Standard: nicht gesetzt.
+Description[en]=If set, the value of this variable will be prepended as a subdomain to every email address. Default: unset.
+Type=str
+Categories=service-administration

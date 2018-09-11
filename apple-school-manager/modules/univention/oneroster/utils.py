@@ -38,12 +38,13 @@ import DNS
 from univention.config_registry import ConfigRegistry
 
 try:
-	from typing import Dict, List
+	from typing import Dict, List, Tuple
 except ImportError:
 	pass
 
 _external_dns_resolvers = []  # type: List[str]
 _known_domains = {}  # type: Dict[str, bool]
+_ucr = None  # type: ConfigRegistry
 
 
 def check_domain(email):  # type: (str) -> bool
@@ -55,9 +56,7 @@ def check_domain(email):  # type: (str) -> bool
 	:rtype: bool
 	:raises ValueError: if the email address has an invalid format
 	"""
-	local_part, at, domain = email.rpartition('@')
-	if not all((local_part, at, domain)) or '.' not in domain:
-		raise ValueError('Invalid email address: {!r}.'.format(email))
+	local_part, domain = split_email(email)
 	domain_to_check = '.'.join(domain.split('.')[-2:])
 	if domain_to_check not in _known_domains:
 		dns_servers = get_static_dns_resolvers()
@@ -75,10 +74,45 @@ def get_static_dns_resolvers():  # type: () -> List[str]
 	:rtype: list(str)
 	"""
 	if not _external_dns_resolvers:
-		ucr = ConfigRegistry()
-		ucr.load()
+		ucr = get_ucr()
 		_external_dns_resolvers.extend([
 			ns for ns in (ucr.get('dns/forwarder1', ''), ucr.get('dns/forwarder2', ''), ucr.get('dns/forwarder3', ''))
 			if ns.strip()
 		])
 	return _external_dns_resolvers
+
+
+def get_ucr():  # type: () -> ConfigRegistry
+	global _ucr
+	if not _ucr:
+		_ucr = ConfigRegistry()
+		_ucr.load()
+	return _ucr
+
+
+def prepend_to_mail_domain(email):  # type: (str) -> str
+	"""
+	Prepend subdomain from UCRV
+	``oneroster/attributes/user/email/prepend_domain`` to domain in email
+	address.
+
+	:param str email: email address
+	:return: if UCRV is set: modified email address, else unchanged email
+	:rtype: str
+	"""
+	if not email:
+		return email
+	ucr = get_ucr()
+	subdomain = ucr.get('oneroster/attributes/user/email/prepend_domain', '').strip()
+	if subdomain:
+		local_part, domain = split_email(email)
+		return '{}@{}.{}'.format(local_part, subdomain, domain)
+	else:
+		return email
+
+
+def split_email(email):  # type: (str) -> Tuple[str, str]
+	local_part, at, domain = email.rpartition('@')
+	if not all((local_part, at, domain)) or '.' not in domain:
+		raise ValueError('Invalid email address: {!r}.'.format(email))
+	return local_part, domain

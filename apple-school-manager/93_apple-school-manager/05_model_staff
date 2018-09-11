@@ -11,6 +11,7 @@ import sys
 from ucsschool.lib.models import Teacher, TeachersAndStaff
 import univention.testing.strings as uts
 import univention.testing.utils as utils
+from univention.config_registry import handler_set
 from univention.oneroster.models.staff import OneRosterStaff
 sys.path.append('/usr/share/ucs-test/90_ucsschool/')
 from essential.importusers_cli_v2 import ImportTestbase
@@ -20,11 +21,16 @@ class Test(ImportTestbase):
 	ou_C = None
 
 	def test(self):
+		subdomain = uts.random_name()
+		handler_set(['oneroster/attributes/user/email/prepend_domain={}'.format(subdomain)])
+
 		school1 = self.ou_A.name
 		school2 = self.ou_B.name
 
 		teacher1_name, teacher1_dn = self.schoolenv.create_teacher(school1)
-		email = '{}@{}'.format(uts.random_name(), self.maildomain)
+		email_local = uts.random_name()
+		email = '{}@{}'.format(email_local, self.maildomain)
+		email_sub = '{}@{}.{}'.format(email_local, subdomain, self.maildomain)
 		teacher2_name, teacher2_dn = self.schoolenv.create_teacher_and_staff(
 			school2, schools=[school1, school2], mailaddress=email)
 		self.log.info('Created teacher1: %r (%s)', teacher1_name, teacher1_dn)
@@ -62,7 +68,7 @@ class Test(ImportTestbase):
 		or_teacher2 = OneRosterStaff.from_dn(teacher2_dn)
 		got_teacher2 = or_teacher2.as_csv_line()
 		expected_teacher2 = [
-			teacher2_name, '', teacher2.firstname, '', teacher2.lastname, email, teacher2_name, school2, school1
+			teacher2_name, '', teacher2.firstname, '', teacher2.lastname, email_sub, teacher2_name, school2, school1
 		]
 		if got_teacher2 == expected_teacher2:
 			self.log.info('OK: teacher2 CSV line is as expected.')

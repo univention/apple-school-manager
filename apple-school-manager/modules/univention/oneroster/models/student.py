@@ -38,7 +38,7 @@ See https://support.apple.com/en-us/HT207029
 from __future__ import absolute_import, unicode_literals
 from .base import OneRosterModel
 from ucsschool.lib.models import Student
-from univention.oneroster.utils import check_domain
+from univention.oneroster.utils import check_domain, prepend_to_mail_domain
 from ucsschool.importer.utils.ldap_connection import get_readonly_connection
 
 try:
@@ -131,6 +131,7 @@ class OneRosterStudent(OneRosterModel):
 		student = Student.from_dn(dn, None, lo)
 		if student.email and not check_domain(student.email):
 			print('Invalid email domain in {!r} for DN {!r}.'.format(student.email, dn))  # TODO: log WARNING
+		email = prepend_to_mail_domain(student.email) if student.email else None
 		location_ids = sorted(s for s in student.schools if s != student.school)
 		if student.school:
 			location_ids = [student.school] + location_ids
@@ -153,7 +154,7 @@ class OneRosterStudent(OneRosterModel):
 			person_number=None,  # TODO: make conf. by UCR which LDAP attr to use
 			middle_name=middle_name,  # TODO: pseudonym
 			grade_level=None,  # TODO: make conf. by UCR which LDAP attr to use
-			email_address=student.email,  # TODO: pseudonym
+			email_address=email,  # TODO: pseudonym
 			sis_username=student.name,  # TODO: pseudonym
 			password_policy=None,  # TODO: what's this?
 			additional_location_ids=location_ids[1:]

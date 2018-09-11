@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (1.0.0-3) unstable; urgency=medium
+
+  * Bug #47623: Add setting to start asm sync
+
+ -- Jürn Brodersen <brodersen@univention.de>  Tue, 11 Sep 2018 12:05:53 +0200
+
 univention-apple-school-manager-connector (1.0.0-2) unstable; urgency=medium
 
   * Bug #47623: Use appsettings

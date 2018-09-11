@@ -13,3 +13,9 @@ Description[de] = Ihr Apple School Manager sftp Passwort
 Type = String
 Description = Comma separated list of schools (abbreviation) to sync to Apple School Manager (if not set all will be synced)
 Description[de] = Kommaseparierte Liste von Schulen (Kürzel) die zum Apple School Manager synchronisiert werden (wenn nicht gesetzt werden alle synchronisiert)
+
+[asm/run_on_appsetting_save]
+Type = Bool
+Description = Run Apple School Manager sync after saving the app settings.
+Description[de] = Apple School Manager synchronisation, nach speichern der Appeinstellungen, ausführen.
+InitialValue = False

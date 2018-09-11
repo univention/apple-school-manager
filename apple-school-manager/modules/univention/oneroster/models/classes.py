@@ -53,6 +53,7 @@ class OneRosterClass(OneRosterModel):
 		'class_id', 'class_number', 'course_id', 'instructor_id', 'instructor_id_2', 'instructor_id_3',
 		'location_id'
 	)
+	_class_number_empty = None
 
 	def __init__(
 			self,
@@ -114,6 +115,8 @@ class OneRosterClass(OneRosterModel):
 		"""
 		lo, po = get_readonly_connection()
 		school_class = SchoolClass.from_dn(dn, None, lo)
+		if cls._class_number_empty is None:
+			cls._class_number_empty = get_ucr().is_true('oneroster/attributes/classes/class_number_empty', True)
 		teachers = []
 		for user_dn in school_class.users:
 			user = User.from_dn(user_dn, None, lo)
@@ -132,7 +135,7 @@ class OneRosterClass(OneRosterModel):
 			class_id=school_class.name,
 			course_id=school_class.name,
 			location_id=school_class.school,
-			class_number=school_class.name,
+			class_number='' if cls._class_number_empty else school_class.name,
 			instructor_id=instructor_id,
 			instructor_id_2=instructor_id_2,
 			instructor_id_3=instructor_id_3,

@@ -3,3 +3,9 @@ Description[de]=Ist diese Variable gesetzt, wird ihr Wert als Subdomain vor die 
 Description[en]=If set, the value of this variable will be prepended as a subdomain to every email address. Default: unset.
 Type=str
 Categories=service-administration
+
+[oneroster/attributes/classes/class_number_empty]
+Description[de]=Klassennamen setzen werden vom ASM aus dem Namen des Kurses und dem Namen der Klasse zusammen gesetzt. Wenn diese gleich sind, ist der Klassenname unnötig und kann weg gelassen werden. Standard: true.
+Description[en]=The ASM creates class names from the name of the course and the class. If both are the same, the classes name can be omitted. Default: true.
+Type=bool
+Categories=service-administration

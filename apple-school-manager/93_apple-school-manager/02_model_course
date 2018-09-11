@@ -28,6 +28,9 @@ class Test(ImportTestbase):
 		self.log.info('*** Creating a teacher with 2 school_classes: %r %r...', school_class1, school_class2)
 		teacher1_name, teacher1_dn = self.schoolenv.create_teacher(
 			self.ou_A.name, classes='{},{}'.format(school_class1, school_class2))
+		work_group1_description = uts.random_name()
+		work_group1_name, work_group1_dn = self.schoolenv.create_workgroup(
+			self.ou_A.name, description=work_group1_description, users=[teacher1_dn])
 		self.log.info('Created teacher1: %r (%s)', teacher1_name, teacher1_dn)
 		self.log.info(
 			'Created school_class1=%r',
@@ -36,6 +39,10 @@ class Test(ImportTestbase):
 		self.log.info(
 			'Created school_class2=%r',
 			self.lo.search(filter_format('(&(objectClass=univentionGroup)(cn=%s))', (school_class1,)), attr=['memberUid'])
+		)
+		self.log.info(
+			'Created work_group1=%r',
+			self.lo.search(filter_format('(&(objectClass=univentionGroup)(cn=%s))', (work_group1_name,)), attr=['memberUid'])
 		)
 
 		filter_s = filter_format('(&(objectClass=univentionGroup)(cn=%s))', (school_class1,))
@@ -61,6 +68,8 @@ class Test(ImportTestbase):
 		sc2.modify(self.lo)
 		utils.verify_ldap_object(school_class2_dn, {'memberUid': [teacher1_name], 'description': [description]})
 
+		utils.verify_ldap_object(work_group1_dn, {'memberUid': [teacher1_name]})
+
 		course1 = OneRosterCourse.from_dn(school_class1_dn)
 		got_course1 = course1.as_csv_line()
 		expected_course1 = [school_class1, school_class1, school_class1, self.ou_A.name]
@@ -76,6 +85,14 @@ class Test(ImportTestbase):
 			self.log.info('OK: course2 CSV line is as expected.')
 		else:
 			self.fail('Expected CSV line for course2: {!r}, got: {!r}.'.format(expected_course2, got_course2))
+
+		workgroup1 = OneRosterCourse.from_dn(work_group1_dn)
+		got_workgroup1 = workgroup1.as_csv_line()
+		expected_workgroup1 = [work_group1_name, work_group1_name, work_group1_description, self.ou_A.name]
+		if got_workgroup1 == expected_workgroup1:
+			self.log.info('OK: workgroup1 CSV line is as expected.')
+		else:
+			self.fail('Expected CSV line for workgroup1: {!r}, got: {!r}.'.format(expected_workgroup1, got_workgroup1))
 
 
 if __name__ == '__main__':

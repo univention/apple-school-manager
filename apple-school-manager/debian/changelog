@@ -1,3 +1,14 @@
+univention-apple-school-manager-connector (1.0.0-4) unstable; urgency=low
+
+  * Bug #47622: use external DNS server for mail domain check
+  * optionally prepend subdomain to email domain (value of UCRV
+    oneroster/attributes/user/email/prepend_domain)
+  * classes have empty name by default (switch with UCRV
+    oneroster/attributes/classes/class_number_empty)
+  * add support for work groups
+
+ -- Daniel Troeder <troeder@univention.de>  Tue, 11 Sep 2018 12:17:59 +0200
+
 univention-apple-school-manager-connector (1.0.0-3) unstable; urgency=medium
 
   * Bug #47623: Add setting to start asm sync

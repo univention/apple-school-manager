@@ -37,7 +37,8 @@ See https://support.apple.com/en-us/HT207029
 
 from __future__ import absolute_import, unicode_literals
 from .base import OneRosterModel
-from ucsschool.lib.models import SchoolClass, Student
+from ucsschool.lib.models import SchoolClass, Student, WorkGroup
+from ucsschool.lib.models.base import UnknownModel
 from ucsschool.importer.utils.ldap_connection import get_readonly_connection
 
 try:
@@ -81,7 +82,10 @@ class OneRosterRoster(OneRosterModel):
 		:rtype OneRosterRoster
 		"""
 		lo, po = get_readonly_connection()
-		school_class = SchoolClass.from_dn(class_dn, None, lo)
+		try:
+			school_class = SchoolClass.from_dn(class_dn, None, lo)
+		except UnknownModel:
+			school_class = WorkGroup.from_dn(class_dn, None, lo)
 		student = Student.from_dn(student_dn, None, lo)
 		return cls(
 			roster_id='{}-{}'.format(school_class.name, student.name),

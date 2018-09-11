@@ -41,7 +41,7 @@ from __future__ import absolute_import, unicode_literals
 import os
 import json
 from operator import attrgetter
-from ucsschool.lib.models import School, SchoolClass, Student, Teacher, TeachersAndStaff, User
+from ucsschool.lib.models import School, SchoolClass, Student, Teacher, TeachersAndStaff, User, WorkGroup
 from ucsschool.importer.writer.csv_writer import CsvWriter
 from ucsschool.importer.writer.result_exporter import ResultExporter
 from ucsschool.importer.utils.ldap_connection import get_readonly_connection
@@ -117,7 +117,8 @@ class OneRosterCsvFile(object):
 	"""Base class for all OneRoster CSV file generator classes."""
 
 	header = ()
-	ucs2oneroster_classes = (None, None)
+	oneroster_class = None
+	ucs_classes = []
 	lo = None
 
 	def __init__(self, file_path, ou_whitelist=None):  # type: (AnyStr, Optional[Iterable[AnyStr]]) -> None
@@ -141,18 +142,18 @@ class OneRosterCsvFile(object):
 		:return list of OneRoster objects
 		:rtype: list(OneRosterModel)
 		"""
-		if all(self.ucs2oneroster_classes):
-			ucs_class, or_class = self.ucs2oneroster_classes
-		else:
+		if not self.oneroster_class:
 			raise NotImplementedError()
 
 		schools = self.get_schools()
 		for school in schools:
-			ucs_objs = ucs_class.get_all(self.lo, school.name)
+			ucs_objs = []
+			for ucs_class in self.ucs_classes:
+				ucs_objs.extend(ucs_class.get_all(self.lo, school.name))
 			if ucs_objs and hasattr(ucs_objs[0], 'name'):
 				ucs_objs.sort(key=attrgetter('name'))
 			for ucs_obj in ucs_objs:
-				yield or_class.from_dn(ucs_obj.dn)
+				yield self.oneroster_class.from_dn(ucs_obj.dn)
 
 	def get_schools(self):  # type: () -> Iterable[School]
 		"""
@@ -219,14 +220,16 @@ class OneRosterClassCsvFile(OneRosterCsvFile):
 	"""CSV file generator for the `classes` file."""
 
 	header = OneRosterClass.header
-	ucs2oneroster_classes = (SchoolClass, OneRosterClass)
+	oneroster_class = OneRosterClass
+	ucs_classes = [SchoolClass, WorkGroup]
 
 
 class OneRosterCoursesCsvFile(OneRosterCsvFile):
 	"""CSV file generator for the `courses` file."""
 
 	header = OneRosterCourse.header
-	ucs2oneroster_classes = (SchoolClass, OneRosterCourse)
+	oneroster_class = OneRosterCourse
+	ucs_classes = [SchoolClass, WorkGroup]
 
 
 class OneRosterLocationsCsvFile(OneRosterCsvFile):
@@ -260,11 +263,14 @@ class OneRosterRostersCsvFile(OneRosterCsvFile):
 		"""
 		schools = self.get_schools()
 		for school in schools:
-			for school_class in sorted(SchoolClass.get_all(self.lo, school.name), key=attrgetter('name')):
-				for user_dn in sorted(school_class.users):
+			for ucs_obj in sorted(
+					SchoolClass.get_all(self.lo, school.name) + WorkGroup.get_all(self.lo, school.name),
+					key=attrgetter('name')
+			):
+				for user_dn in sorted(ucs_obj.users):
 					user = User.from_dn(user_dn, None, self.lo)
 					if user.is_student(self.lo) and not user.is_exam_student(self.lo):
-						yield OneRosterRoster.from_dn(school_class.dn, user_dn)
+						yield OneRosterRoster.from_dn(ucs_obj.dn, user_dn)
 
 
 class OneRosterStaffCsvFile(OneRosterCsvFile):

@@ -24,14 +24,22 @@ class Test(ImportTestbase):
 		school1 = self.ou_A.name
 		school_class1 = '{}-{}'.format(school1, uts.random_username())
 
-		self.log.info('*** Creating two students in same school_class: %r %r...', school_class1)
+		self.log.info('*** Creating two students in same school_class and workgroup: %r %r...', school_class1)
 		student1_name, student1_dn = self.schoolenv.create_student(school1, classes=school_class1)
 		student2_name, student2_dn = self.schoolenv.create_student(school1, classes=school_class1)
+		# "users" are created in the reverse order!?!?!?!
+		work_group1_description = uts.random_name()
+		work_group1_name, work_group1_dn = self.schoolenv.create_workgroup(
+			school1, description=work_group1_description, users=[student2_dn, student1_dn])
 		self.log.info('Created student1: %r (%s)', student1_name, student1_dn)
 		self.log.info('Created student2: %r (%s)', student2_name, student2_dn)
 		self.log.info(
 			'Created school_class1=%r',
 			self.lo.search(filter_format('(&(objectClass=univentionGroup)(cn=%s))', (school_class1,)), attr=['memberUid'])
+		)
+		self.log.info(
+			'Created work_group1=%r',
+			self.lo.search(filter_format('(&(objectClass=univentionGroup)(cn=%s))', (work_group1_name,)), attr=['memberUid'])
 		)
 
 		filter_s = filter_format('(&(objectClass=univentionGroup)(cn=%s))', (school_class1,))
@@ -41,6 +49,8 @@ class Test(ImportTestbase):
 				filter_s, res))
 		school_class1_dn = res[0]
 		utils.verify_ldap_object(school_class1_dn, {'memberUid': [student1_name, student2_name]})
+
+		utils.verify_ldap_object(work_group1_dn, {'memberUid': [student1_name, student2_name]})
 
 		roster1 = OneRosterRoster.from_dn(class_dn=school_class1_dn, student_dn=student1_dn)
 		got_roster1 = roster1.as_csv_line()
@@ -57,6 +67,14 @@ class Test(ImportTestbase):
 			self.log.info('OK: roster2 CSV line is as expected.')
 		else:
 			self.fail('Expected CSV line for roster2: {!r}, got: {!r}.'.format(expected_roster2, got_roster2))
+
+		workgroup1 = OneRosterRoster.from_dn(class_dn=work_group1_dn, student_dn=student2_dn)
+		got_workgroup1 = workgroup1.as_csv_line()
+		expected_workgroup1 = ['{}-{}'.format(work_group1_name, student2_name), work_group1_name, student2_name]
+		if got_workgroup1 == expected_workgroup1:
+			self.log.info('OK: workgroup1 CSV line is as expected.')
+		else:
+			self.fail('Expected CSV line for workgroup1: {!r}, got: {!r}.'.format(expected_workgroup1, got_workgroup1))
 
 
 if __name__ == '__main__':

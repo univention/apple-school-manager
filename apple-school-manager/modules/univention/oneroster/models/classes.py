@@ -37,7 +37,9 @@ See https://support.apple.com/en-us/HT207029
 
 from __future__ import absolute_import, unicode_literals
 from .base import OneRosterModel
-from ucsschool.lib.models import SchoolClass, User
+from ucsschool.lib.models import SchoolClass, User, WorkGroup
+from ucsschool.lib.models.base import UnknownModel
+from univention.oneroster.utils import get_ucr
 from ucsschool.importer.utils.ldap_connection import get_readonly_connection
 
 try:
@@ -124,7 +126,10 @@ class OneRosterClass(OneRosterModel):
 		:rtype OneRosterClass
 		"""
 		lo, po = get_readonly_connection()
-		school_class = SchoolClass.from_dn(dn, None, lo)
+		try:
+			school_class = SchoolClass.from_dn(dn, None, lo)
+		except UnknownModel:
+			school_class = WorkGroup.from_dn(dn, None, lo)
 		if cls._class_number_empty is None:
 			cls._class_number_empty = get_ucr().is_true('oneroster/attributes/classes/class_number_empty', True)
 		teachers = []

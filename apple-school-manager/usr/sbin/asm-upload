@@ -29,10 +29,34 @@
 # <http://www.gnu.org/licenses/>.
 
 from univention.asm.asm_upload import ASMUpload
+from univention.config_registry import ConfigRegistry
+
+
+class ASMCredentialError(Exception):
+	pass
+
+
+def get_config():
+	ucr = ConfigRegistry()
+	ucr.load()
+	ucr_username_key = "asm/username"
+	ucr_ou_whitelist_key = "asm/school_whitelist"
+	with open("/etc/asm.secret", 'r') as passwordFile:
+		password = passwordFile.read().strip("\n")
+	username = ucr[ucr_username_key]
+	whitelist = ucr[ucr_ou_whitelist_key]
+	if whitelist is not None:
+		whitelist = [school.strip(" ") for school in whitelist.split(",") if school]
+	if not username:
+		raise ASMCredentialError("Please set a username in the app settings")
+	if not password:
+		raise ASMCredentialError("Please set a passwrod in the app settings")
+	return (username, password, whitelist)
 
 
 def main():
-	asmUpload = ASMUpload()
+	config = get_config()
+	asmUpload = ASMUpload(*config)
 	asmUpload.upload()
 
 

@@ -35,18 +35,13 @@ export school data to asm
 
 import tempfile
 
-from univention.config_registry import ConfigRegistry
 from univention.oneroster.csv.zip_file import OneRosterZipFile
 from univention.oneroster.network.sftp_upload import SFTP
 
 
 class ASMUpload(object):
 
-	def __init__(self, username=None, password=None, ou_whitelist=None):
-		ucr = ConfigRegistry()
-		ucr.load()
-		ucr_username_key = "asm/username"
-		ucr_ou_whitelist_key = "asm/school_whitelist"
+	def __init__(self, username, password, ou_whitelist=None):
 		self.host_key_line = (
 			"upload.appleschoolcontent.com ssh-rsa "
 			"AAAAB3NzaC1yc2EAAAADAQABAAABAQCsvd7K2o4VQt5dKxpQMifW0M8s"
@@ -58,16 +53,12 @@ class ASMUpload(object):
 			"IzIl4hIbcuWrLCffO9fMDxbIai86LNqOAH15"
 		)
 		self.hostname = "upload.appleschoolcontent.com"
-		self.username = username or ucr[ucr_username_key]
-		self.password = password or self._get_password_from_file()
-		self.ou_whitelist = ou_whitelist or ucr[ucr_ou_whitelist_key]
+		self.username = username
+		self.password = password
+		self.ou_whitelist = ou_whitelist
 
 	def upload(self):
 		with tempfile.NamedTemporaryFile(suffix=".zip") as zip_result_file:
 			zip_path = OneRosterZipFile(zip_result_file.name, self.ou_whitelist).write_zip()
 			with SFTP(self.hostname, self.username, self.password, self.host_key_line) as sftp:
 				sftp.upload(zip_path)
-
-	def _get_password_from_file(self, filename="/etc/asm.secret"):
-		with open(filename, 'r') as passwordFile:
-			return passwordFile.read()

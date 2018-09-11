@@ -11,5 +11,5 @@ Description[de] = Ihr Apple School Manager sftp Passwort
 
 [asm/school_whitelist]
 Type = String
-Description = Schools to sync to Apple School Manager (if not set all will be synced)
-Description[de] = Schulen die zum Apple School Manager synchronisiert werden (wenn nicht gesetzt werden alle synchronisiert)
+Description = Comma separated list of schools (abbreviation) to sync to Apple School Manager (if not set all will be synced)
+Description[de] = Kommaseparierte Liste von Schulen (Kürzel) die zum Apple School Manager synchronisiert werden (wenn nicht gesetzt werden alle synchronisiert)

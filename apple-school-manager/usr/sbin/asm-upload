@@ -28,8 +28,17 @@
 # /usr/share/common-licenses/AGPL-3; if not, see
 # <http://www.gnu.org/licenses/>.
 
+import sys
+import logging
+from logging.handlers import TimedRotatingFileHandler
 from univention.asm.asm_upload import ASMUpload
 from univention.oneroster.utils import get_ucr
+
+
+LOGFILE_PATH = '/var/log/univention/asm.log'
+PASSWORD_FILE_PATH = '/etc/asm.secret'
+UCR_USERNAME_KEY = 'asm/username'
+UCR_OU_WHITELIST_KEY = 'asm/school_whitelist'
 
 
 class ASMCredentialError(Exception):
@@ -38,12 +47,10 @@ class ASMCredentialError(Exception):
 
 def get_config():
 	ucr = get_ucr()
-	ucr_username_key = "asm/username"
-	ucr_ou_whitelist_key = "asm/school_whitelist"
-	with open("/etc/asm.secret", 'r') as passwordFile:
+	with open(PASSWORD_FILE_PATH, 'r') as passwordFile:
 		password = passwordFile.read().strip("\n")
-	username = ucr[ucr_username_key]
-	whitelist = ucr[ucr_ou_whitelist_key]
+	username = ucr[UCR_USERNAME_KEY]
+	whitelist = ucr[UCR_OU_WHITELIST_KEY]
 	if whitelist is not None:
 		whitelist = [school.strip(" ") for school in whitelist.split(",") if school]
 	if not username:
@@ -53,8 +60,28 @@ def get_config():
 	return username, password, whitelist
 
 
+def setup_logging(level_console=logging.INFO, level_file=logging.DEBUG):
+	handler_console = logging.StreamHandler()
+	handler_console.setLevel(level_console)
+	handler_file = TimedRotatingFileHandler(LOGFILE_PATH, when="D", interval=7, backupCount=4)
+	handler_file.setLevel(level_file)
+	formatter_file = logging.Formatter('%(asctime)s %(levelname)-5s %(module)s.%(funcName)s:%(lineno)d - %(message)s')
+	handler_file.setFormatter(formatter_file)
+	for logger_name in ('univention.asm', 'univention.oneroster'):
+		logger = logging.getLogger(logger_name)
+		logger.setLevel(logging.DEBUG)
+		logger.addHandler(handler_console)
+		logger.addHandler(handler_file)
+
+
 def main():
-	config = get_config()
+	logger = logging.getLogger('univention.asm.upload_script')
+	setup_logging()
+	try:
+		config = get_config()
+	except ASMCredentialError as exc:
+		logger.error(exc)
+		sys.exit(1)
 	asmUpload = ASMUpload(*config)
 	asmUpload.upload()
 

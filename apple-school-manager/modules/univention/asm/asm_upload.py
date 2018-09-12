@@ -33,6 +33,7 @@ Univention Apple School Manager Connector
 export school data to asm
 """
 
+import logging
 import tempfile
 
 from univention.oneroster.csv.zip_file import OneRosterZipFile
@@ -56,9 +57,15 @@ class ASMUpload(object):
 		self.username = username
 		self.password = password
 		self.ou_whitelist = ou_whitelist
+		self.logger = logging.getLogger(__name__)
 
 	def upload(self):
 		with tempfile.NamedTemporaryFile(suffix=".zip") as zip_result_file:
 			zip_path = OneRosterZipFile(zip_result_file.name, self.ou_whitelist).write_zip()
+			self.logger.info('Uploading ZIP file to %s...', self.hostname)
 			with SFTP(self.hostname, self.username, self.password, self.host_key_line) as sftp:
+				self.logger.debug('Connected to %s.', self.hostname)
 				sftp.upload(zip_path)
+				self.logger.info('Finished uploading ZIP file.')
+			self.logger.debug('Disconnected.')
+		self.logger.debug('Deleted ZIP file.')

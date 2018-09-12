@@ -36,6 +36,7 @@ See https://support.apple.com/en-us/HT207029
 """
 
 from __future__ import absolute_import, unicode_literals
+import logging
 from .base import OneRosterModel
 from ucsschool.lib.models import Teacher, TeachersAndStaff
 from ucsschool.lib.models.base import WrongModel
@@ -141,7 +142,8 @@ class OneRosterStaff(OneRosterModel):
 		except WrongModel:
 			teacher = TeachersAndStaff.from_dn(dn, None, lo)
 		if teacher.email and not check_domain(teacher.email):
-			print('Invalid email domain in {!r} for DN {!r}.'.format(teacher.email, dn))  # TODO: log WARNING
+			logger = logging.getLogger(__name__)
+			logger.warn('Invalid email domain in %r for DN %r.', teacher.email, dn)
 		email = prepend_to_mail_domain(teacher.email) if teacher.email else None
 		location_ids = [teacher.school] + sorted(s for s in teacher.schools if s != teacher.school)
 		if ou_whitelist:

@@ -36,6 +36,7 @@ See https://support.apple.com/en-us/HT207029
 """
 
 from __future__ import absolute_import, unicode_literals
+import logging
 from .base import OneRosterModel
 from ucsschool.lib.models import Student
 from univention.oneroster.utils import check_domain, prepend_to_mail_domain
@@ -148,7 +149,8 @@ class OneRosterStudent(OneRosterModel):
 		lo, po = get_readonly_connection()
 		student = Student.from_dn(dn, None, lo)
 		if student.email and not check_domain(student.email):
-			print('Invalid email domain in {!r} for DN {!r}.'.format(student.email, dn))  # TODO: log WARNING
+			logger = logging.getLogger(__name__)
+			logger.warn('Invalid email domain in %r for DN %r.', student.email, dn)
 		email = prepend_to_mail_domain(student.email) if student.email else None
 		location_ids = sorted(s for s in student.schools if s != student.school)
 		if student.school:

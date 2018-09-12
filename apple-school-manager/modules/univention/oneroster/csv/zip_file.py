@@ -37,6 +37,7 @@ See https://support.apple.com/en-us/HT207029
 
 from __future__ import absolute_import, unicode_literals
 import os
+import logging
 import tempfile
 import zipfile
 from univention.oneroster.csv.csv_file import create_csv_files
@@ -59,6 +60,7 @@ class OneRosterZipFile(object):
 		self.file_path = file_path
 		self.ou_whitelist = ou_whitelist
 		self.csv_files = []
+		self.logger = logging.getLogger(__name__)
 
 	def create_csv_files(self):  # type: () -> List[AnyStr]
 		"""
@@ -70,8 +72,10 @@ class OneRosterZipFile(object):
 		:rtype: list(str)
 		"""
 		tmp_dir = tempfile.mkdtemp()
+		self.logger.debug('Creating CSV files in %s...', tmp_dir)
 		self.csv_files = create_csv_files(tmp_dir, self.ou_whitelist)
 		assert self.csv_files, 'No CSV files were created.'
+		self.logger.debug('Created CSV files: %s.', ', '.join(sorted(self.csv_files)))
 		return self.csv_files
 
 	def write_zip(self, file_path=None, delete_csv_files=True):  # type: (Optional[AnyStr], Optional[bool]) -> AnyStr
@@ -88,14 +92,21 @@ class OneRosterZipFile(object):
 		"""
 		file_path = file_path or self.file_path
 		assert file_path, 'ZIP file path is empty.'
-		if not self.csv_files:
+		self.logger.info('Creating ZIP file in %s...', file_path)
+		if self.csv_files:
+			self.logger.debug('Using existing CSV files: %s.', ', '.join(sorted(self.csv_files)))
+		else:
 			self.csv_files = self.create_csv_files()
+		self.logger.debug('Writing ZIP file to %s...', file_path)
 		with open(file_path,  'wb') as fp, zipfile.ZipFile(fp, 'w', zipfile.ZIP_DEFLATED) as zf:
 			os.fchmod(fp.fileno(), 0o600)
 			for path in sorted(self.csv_files):
 				zf.write(path, os.path.basename(path))
+		self.logger.debug('Done writing ZIP file.')
 		if delete_csv_files:
+			self.logger.debug('Deleting temporary CSV files and directory...')
 			for path in self.csv_files:
 				os.remove(path)
 			os.rmdir(os.path.dirname(self.csv_files[0]))
+		self.logger.info('Finished creating ZIP file.')
 		return file_path

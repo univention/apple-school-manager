@@ -40,6 +40,7 @@ Data in CSV files is always sorted by 1) school and 2) user/class name.
 from __future__ import absolute_import, unicode_literals
 import os
 import json
+import logging
 from operator import attrgetter
 from ucsschool.lib.models import School, SchoolClass, Student, Teacher, TeachersAndStaff, User, WorkGroup
 from ucsschool.importer.writer.csv_writer import CsvWriter
@@ -131,6 +132,7 @@ class OneRosterCsvFile(object):
 		self.file_path = file_path
 		self.ou_whitelist = ou_whitelist
 		self.obj = []
+		self.logger = logging.getLogger(__name__)
 		if not self.lo:
 			self.__class__.lo, po = get_readonly_connection()
 		self.limbo_ou = self._get_limbo_ou()
@@ -182,6 +184,7 @@ class OneRosterCsvFile(object):
 			if len(obj.header) > len(self.header):
 				self.header = obj.header
 		orcw = _OneRosterCsvWriter(self.header)
+		self.logger.info('Writing %d objects to %s...', len(res), os.path.basename(self.file_path))
 		orcw.dump(res, self.file_path)
 
 	def _get_limbo_ou(self):  # type: () -> AnyStr
@@ -349,6 +352,7 @@ def create_csv_files(target_directory, ou_whitelist=None):
 	:raises ValueError: if `target_directory` exists and is not a directory or
 		empty
 	"""
+	logger = logging.getLogger(__name__)
 	if os.path.exists(target_directory) and not os.path.isdir(target_directory):
 		raise ValueError('Is not a directory: {!r}.'.format(target_directory))
 	if os.path.isdir(target_directory):
@@ -357,9 +361,11 @@ def create_csv_files(target_directory, ou_whitelist=None):
 	else:
 		os.mkdir(target_directory, 0o600)
 
+	logger.info('Creating CSV files%s...', ' for OUs {}'.format(', '.join(ou_whitelist)) if ou_whitelist else '')
 	results = []
 	for filename, cls in csv_file_generators.items():
 		path = os.path.join(target_directory, filename)
 		results.append(path)
 		cls(path, ou_whitelist).write_csv()
+	logger.info('Finished creating CSV files.')
 	return results

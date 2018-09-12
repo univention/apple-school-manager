@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (1.0.0-5) unstable; urgency=low
+
+  * Bug #47622: add logging
+
+ -- Daniel Troeder <troeder@univention.de>  Wed, 12 Sep 2018 09:24:45 +0200
+
 univention-apple-school-manager-connector (1.0.0-4) unstable; urgency=low
 
   * Bug #47622: use external DNS server for mail domain check

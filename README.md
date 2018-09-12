@@ -15,3 +15,7 @@ Set your appcenter password in "~/.selfservicepwd"
 ./update-app.sh
 or if your username differs from your appcenter username:
 bash -c "USER=juern ./update-app.sh"
+
+## Update etc/asm_public_key
+
+You can call generate_asm_host_key.py

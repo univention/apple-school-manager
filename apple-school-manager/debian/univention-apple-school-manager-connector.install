@@ -1,2 +1,3 @@
 modules/univention/asm usr/share/pyshared/univention/
 usr/sbin/asm-upload usr/sbin
+etc/asm_public_key etc/

@@ -33,6 +33,7 @@ Univention Apple School Manager Connector
 sftp upload
 """
 
+import os
 import paramiko
 
 
@@ -57,5 +58,6 @@ class SFTP(object):
 		for hostname in hostKeyEntry.hostnames:
 			host_keys.add(hostname, hostKeyEntry.key.get_name(), hostKeyEntry.key)
 
-	def upload(self, filename):
-		self.sftpClient.put(filename, filename)
+	def upload(self, filename, remote_folder="dropbox"):
+		remote_filename = os.path.join(remote_folder, os.path.basename(filename))
+		self.sftpClient.put(filename, remote_filename)

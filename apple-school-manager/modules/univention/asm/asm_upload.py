@@ -45,16 +45,8 @@ from univention.config_registry import handler_set
 class ASMUpload(object):
 
 	def __init__(self, username, password, ou_whitelist=None):
-		self.host_key_line = (
-			"upload.appleschoolcontent.com ssh-rsa "
-			"AAAAB3NzaC1yc2EAAAADAQABAAABAQCsvd7K2o4VQt5dKxpQMifW0M8s"
-			"KExqyjvjh4tp8EhG2tCsENA8iXvJ66CI8NINx4REUkrzCLbE/c2GAKVQ"
-			"ATmV5dZX8aCsIyciaXBm6gIU9ttVnH088ZoboQGVLOZvfBE+pQwFjvpH"
-			"2LGuUZ+oO34qNBYM9bRaW7os17joe5EHRJaVgQkr7mTli1X/JRwh/tHy"
-			"D6D7a+cB/+LMgOh0bp+muFASnrD95YVmHJ6SoafDFfa2UlnpZR2J0irI"
-			"S3bLvzqOsxs8f2R/6BObGBHQwQrUysdBCTZBUVDn5flEKzoE3WDTmzEG"
-			"IzIl4hIbcuWrLCffO9fMDxbIai86LNqOAH15"
-		)
+		with open("/etc/asm_public_key", "r") as asm_public_key_file:
+			self.host_key_line = asm_public_key_file.read()
 		self.hostname = "upload.appleschoolcontent.com"
 		self.username = username
 		self.password = password

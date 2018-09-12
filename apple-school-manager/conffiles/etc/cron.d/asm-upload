@@ -1,0 +1,13 @@
+@%@UCRWARNING=# @%@
+
+# This job syncs the school data to the Apple School Manager
+
+PATH=/usr/sbin:/usr/bin:/sbin:/bin
+
+@!@
+if not configRegistry.is_true("asm/sync_daily"):
+	print("# Automatic sync deactivated")
+else:
+	hour = configRegistry["asm/sync_daily/hour"]
+	print("0 {} * * * root /usr/sbin/asm-upload".format(hour))
+@!@

@@ -19,3 +19,18 @@ Type = Bool
 Description = Run Apple School Manager sync after saving the app settings.
 Description[de] = Apple School Manager synchronisation, nach speichern der Appeinstellungen, ausführen.
 InitialValue = False
+
+[asm/sync_daily]
+Type = Bool
+Description = Automatically run the Apple School Manager sync daily.
+Description[de] = Die Apple School Manager synchronisation täglich automatisch ausführen.
+Group = Automatic Sync
+Group[de] = Automatische Synchronisation
+InitialValue = False
+
+[asm/sync_daily/hour]
+Type = Int
+Description = The hour (0-23) at which the Apple School Manager sync should run.
+Description[de] = Zu welcher Stunde die Apple School Manager synchronisation ausgeführt werden soll.
+Group = Automatic Sync
+Group[de] = Automatische Synchronisation

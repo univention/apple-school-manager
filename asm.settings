@@ -20,6 +20,11 @@ Description = Run Apple School Manager sync after saving the app settings.
 Description[de] = Apple School Manager synchronisation, nach speichern der Appeinstellungen, ausführen.
 InitialValue = False
 
+[asm/last_upload]
+Type = Status
+Description = Last Apple School Manager upload. For more information check /var/log/univention/asm.log
+Description[de] = Letzter upload zum Apple School Manager. Für mehr Informationen siehe /var/log/univention/asm.log
+
 [asm/sync_daily]
 Type = Bool
 Description = Automatically run the Apple School Manager sync daily.

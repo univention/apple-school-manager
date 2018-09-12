@@ -35,9 +35,11 @@ export school data to asm
 
 import logging
 import tempfile
+from datetime import datetime
 
 from univention.oneroster.csv.zip_file import OneRosterZipFile
 from univention.oneroster.network.sftp_upload import SFTP
+from univention.config_registry import handler_set
 
 
 class ASMUpload(object):
@@ -67,5 +69,7 @@ class ASMUpload(object):
 				self.logger.debug('Connected to %s.', self.hostname)
 				sftp.upload(zip_path)
 				self.logger.info('Finished uploading ZIP file.')
+
 			self.logger.debug('Disconnected.')
+			handler_set(["asm/last_upload={}".format(datetime.isoformat(datetime.now()))])
 		self.logger.debug('Deleted ZIP file.')

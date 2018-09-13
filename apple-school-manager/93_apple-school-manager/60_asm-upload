@@ -24,9 +24,10 @@ from essential.importusers_cli_v2 import ImportTestbase
 
 class LocalHostAsASM(object):
 
-	def __init__(self, username, password, home_dir):
+	def __init__(self, username, password, home_dir, school_name):
 		self.username = username
 		self.password = password
+		self.school_name = school_name
 		subprocess.check_call(["mkhomedir_helper", self.username])
 		self.home_dir = home_dir
 		self.dropbox = os.path.join(home_dir, "dropbox")
@@ -36,6 +37,7 @@ class LocalHostAsASM(object):
 			"hosts/static/127.0.60.60=upload.appleschoolcontent.com",
 			"asm/username={}".format(self.username),
 			"asm/store_zip=yes",
+			"asm/school_whitelist={}".format(self.school_name),
 			"auth/sshd/user/{}=yes".format(self.username),
 		])
 		os.rename("/etc/asm_public_key", "/etc/asm_public_key.backup_60test")
@@ -70,7 +72,7 @@ class Test(ImportTestbase):
 		student1_name, student1_dn = self.schoolenv.create_student(self.ou_A.name, classes=school_class, password="univention")
 		lo, po = getMachineConnection()
 		home_dir = lo.get(student1_dn, attr=["homeDirectory"])["homeDirectory"][0]
-		with ucr_test.UCSTestConfigRegistry(), LocalHostAsASM(student1_name, "univention", home_dir):
+		with ucr_test.UCSTestConfigRegistry(), LocalHostAsASM(student1_name, "univention", home_dir, self.ou_A.name):
 			output = subprocess.check_output(["/usr/sbin/asm-upload"], stderr=subprocess.STDOUT)
 			output = output.split("\n")
 			for line in output:

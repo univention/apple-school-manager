@@ -1,0 +1,89 @@
+#!/usr/share/ucs-test/runner python
+## -*- coding: utf-8 -*-
+## desc: test asm-upload
+## tags: [apptest]
+## exposure: dangerous
+## packages:
+##   - univention-oneroster-lib
+## bugs: [47623]
+
+import os
+import sys
+import subprocess
+import shutil
+import filecmp
+from paramiko.client import SSHClient, AutoAddPolicy
+from univention.admin.uldap import getMachineConnection
+import univention.testing.strings as uts
+import univention.testing.ucr as ucr_test
+import univention.testing.utils as utils
+from univention.config_registry import handler_set
+sys.path.append('/usr/share/ucs-test/90_ucsschool/')
+from essential.importusers_cli_v2 import ImportTestbase
+
+
+class LocalHostAsASM(object):
+
+	def __init__(self, username, password, home_dir):
+		self.username = username
+		self.password = password
+		subprocess.check_call(["mkhomedir_helper", self.username])
+		self.home_dir = home_dir
+		self.dropbox = os.path.join(home_dir, "dropbox")
+
+	def __enter__(self):
+		handler_set([
+			"hosts/static/127.0.60.60=upload.appleschoolcontent.com",
+			"asm/username={}".format(self.username),
+			"asm/store_zip=yes",
+			"auth/sshd/user/{}=yes".format(self.username),
+		])
+		os.rename("/etc/asm_public_key", "/etc/asm_public_key.backup_60test")
+		os.rename("/etc/asm.secret", "/etc/asm.secret.backup_60test")
+		with open("/etc/asm.secret", "w") as asm_secret_file:
+			asm_secret_file.write(self.password)
+		client = SSHClient()
+		client.set_missing_host_key_policy(AutoAddPolicy())
+		client.connect("upload.appleschoolcontent.com", username=self.username, password=self.password)
+		sftp = client.open_sftp()
+		sftp.chdir(self.home_dir)
+		sftp.mkdir("dropbox")
+		client.save_host_keys("/etc/asm_public_key")
+		client.close()
+
+	def __exit__(self, *args):
+		os.rename("/etc/asm_public_key.backup_60test", "/etc/asm_public_key")
+		os.rename("/etc/asm.secret.backup_60test", "/etc/asm.secret")
+		try:
+			shutil.rmtree(self.dropbox)
+		except OSError:
+				pass
+
+
+class Test(ImportTestbase):
+	# use_ou_cache = False  # use only uncached OUs to be certain no previous test left any object
+	ou_B = None
+	ou_C = None
+
+	def test(self):
+		school_class = '{}-{}'.format(self.ou_A.name, uts.random_username())
+		student1_name, student1_dn = self.schoolenv.create_student(self.ou_A.name, classes=school_class, password="univention")
+		lo, po = getMachineConnection()
+		home_dir = lo.get(student1_dn, attr=["homeDirectory"])["homeDirectory"][0]
+		with ucr_test.UCSTestConfigRegistry(), LocalHostAsASM(student1_name, "univention", home_dir):
+			output = subprocess.check_output(["/usr/sbin/asm-upload"], stderr=subprocess.STDOUT)
+			output = output.split("\n")
+			for line in output:
+				if line.startswith("The uplaoded zip is stored under: "):
+					zip_path = line.replace("The uplaoded zip is stored under: ", "")
+					remote_path = os.path.join(home_dir, "dropbox", os.path.basename(zip_path))
+					if not filecmp.cmp(zip_path, remote_path, shallow=False):
+						utils.fail("ZIP file was not correctly uploaded")
+					return
+			else:
+				utils.fail("Something with the upload seems to be broken.")
+
+
+if __name__ == "__main__":
+	test = Test()
+	test.run()

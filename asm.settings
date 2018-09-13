@@ -22,8 +22,8 @@ InitialValue = False
 
 [asm/store_zip]
 Type = Bool
-Description = Don't delete the generated zip file after uploading.
-Description[de] = Das Generierte zip Archiv nicht nach dem Upload löschen.
+Description = Don't delete the generated zip file after uploading. See /var/lib/asm/
+Description[de] = Das Generierte zip Archiv nicht nach dem Upload löschen. Siehe /var/lib/asm/
 InitialValue = False
 
 [asm/last_upload]

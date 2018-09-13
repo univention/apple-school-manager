@@ -1,3 +1,10 @@
+univention-apple-school-manager-connector (1.0.0-6) unstable; urgency=medium
+
+  * Bug #47623: Move asm public key into /etc/asm_public_key
+  * add option to save the generated zip file
+
+ -- Jürn Brodersen <brodersen@univention.de>  Thu, 13 Sep 2018 10:44:00 +0200
+
 univention-apple-school-manager-connector (1.0.0-5) unstable; urgency=low
 
   * Bug #47622: add logging

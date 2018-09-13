@@ -34,8 +34,8 @@ export school data to asm
 """
 
 import logging
-import tempfile
 from datetime import datetime
+import os
 
 from univention.oneroster.csv.zip_file import OneRosterZipFile
 from univention.oneroster.network.sftp_upload import SFTP
@@ -44,24 +44,29 @@ from univention.config_registry import handler_set
 
 class ASMUpload(object):
 
-	def __init__(self, username, password, ou_whitelist=None):
+	def __init__(self, username, password, ou_whitelist=None, delete_zip_file=True):
 		with open("/etc/asm_public_key", "r") as asm_public_key_file:
 			self.host_key_line = asm_public_key_file.read()
 		self.hostname = "upload.appleschoolcontent.com"
 		self.username = username
 		self.password = password
 		self.ou_whitelist = ou_whitelist
+		self.delete_zip_file = delete_zip_file
 		self.logger = logging.getLogger(__name__)
 
-	def upload(self):
-		with tempfile.NamedTemporaryFile(suffix=".zip") as zip_result_file:
-			zip_path = OneRosterZipFile(zip_result_file.name, self.ou_whitelist).write_zip()
-			self.logger.info('Uploading ZIP file to %s...', self.hostname)
-			with SFTP(self.hostname, self.username, self.password, self.host_key_line) as sftp:
-				self.logger.debug('Connected to %s.', self.hostname)
-				sftp.upload(zip_path)
-				self.logger.info('Finished uploading ZIP file.')
+	def upload(self, folder_path="/var/lib/asm"):
+		file_path = os.path.join(folder_path, "asm_{}.zip".format(datetime.isoformat(datetime.now())))
+		zip_path = OneRosterZipFile(file_path, self.ou_whitelist).write_zip()
+		self.logger.info('Uploading ZIP file to %s...', self.hostname)
+		with SFTP(self.hostname, self.username, self.password, self.host_key_line) as sftp:
+			self.logger.debug('Connected to %s.', self.hostname)
+			sftp.upload(zip_path)
+			self.logger.info('Finished uploading ZIP file.')
 
-			self.logger.debug('Disconnected.')
-			handler_set(["asm/last_upload={}".format(datetime.isoformat(datetime.now()))])
-		self.logger.debug('Deleted ZIP file.')
+		self.logger.debug('Disconnected.')
+		handler_set(["asm/last_upload={}".format(datetime.isoformat(datetime.now()))])
+		if self.delete_zip_file:
+			os.remove(zip_path)
+			self.logger.debug('Deleted ZIP file.')
+		else:
+			return zip_path

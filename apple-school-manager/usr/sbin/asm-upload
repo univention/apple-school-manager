@@ -39,6 +39,7 @@ LOGFILE_PATH = '/var/log/univention/asm.log'
 PASSWORD_FILE_PATH = '/etc/asm.secret'
 UCR_USERNAME_KEY = 'asm/username'
 UCR_OU_WHITELIST_KEY = 'asm/school_whitelist'
+UCR_STORE_ZIP_KEY = 'asm/store_zip'
 
 
 class ASMCredentialError(Exception):
@@ -51,13 +52,14 @@ def get_config():
 		password = passwordFile.read().strip("\n")
 	username = ucr[UCR_USERNAME_KEY]
 	whitelist = ucr[UCR_OU_WHITELIST_KEY]
+	delete_zip = not ucr.is_true(UCR_STORE_ZIP_KEY)
 	if whitelist is not None:
 		whitelist = [school.strip(" ") for school in whitelist.split(",") if school]
 	if not username:
 		raise ASMCredentialError("Please set a username in the app settings")
 	if not password:
 		raise ASMCredentialError("Please set a password in the app settings")
-	return username, password, whitelist
+	return username, password, whitelist, delete_zip
 
 
 def setup_logging(level_console=logging.INFO, level_file=logging.DEBUG):
@@ -83,7 +85,9 @@ def main():
 		logger.error(exc)
 		sys.exit(1)
 	asmUpload = ASMUpload(*config)
-	asmUpload.upload()
+	zip_path = asmUpload.upload()
+	if not config[3] and zip_path is not None:
+		logger.info("The uplaoded zip is stored under: {}".format(zip_path))
 
 
 if __name__ == '__main__':

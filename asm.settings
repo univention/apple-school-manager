@@ -20,6 +20,12 @@ Description = Run Apple School Manager sync after saving the app settings.
 Description[de] = Apple School Manager synchronisation, nach speichern der Appeinstellungen, ausführen.
 InitialValue = False
 
+[asm/store_zip]
+Type = Bool
+Description = Don't delete the generated zip file after uploading.
+Description[de] = Das Generierte zip Archiv nicht nach dem Upload löschen.
+InitialValue = False
+
 [asm/last_upload]
 Type = Status
 Description = Last Apple School Manager upload. For more information check /var/log/univention/asm.log

@@ -30,7 +30,7 @@
 """
 Univention Apple School Manager Connector
 
-Class to represent a ASM class.
+Class to represent an ASM class.
 
 See https://support.apple.com/en-us/HT207029
 """
@@ -49,7 +49,7 @@ except ImportError:
 
 
 class AsmClass(AsmModel):
-	"""Class to represent a ASM class entry."""
+	"""Class to represent an ASM class entry."""
 
 	header = (
 		'class_id', 'class_number', 'course_id', 'instructor_id', 'instructor_id_2', 'instructor_id_3',

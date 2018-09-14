@@ -30,7 +30,7 @@
 """
 Univention Apple School Manager Connector
 
-Class to represent a ASM roster.
+Class to represent an ASM roster.
 
 See https://support.apple.com/en-us/HT207029
 """
@@ -48,7 +48,7 @@ except ImportError:
 
 
 class AsmRoster(AsmModel):
-	"""Class to represent a ASM roster entry."""
+	"""Class to represent an ASM roster entry."""
 
 	header = ('roster_id', 'class_id', 'student_id')
 

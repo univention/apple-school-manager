@@ -30,7 +30,7 @@
 """
 Univention Apple School Manager Connector
 
-Class to represent a ASM location.
+Class to represent an ASM location.
 
 See https://support.apple.com/en-us/HT207029
 """
@@ -47,7 +47,7 @@ except ImportError:
 
 
 class AsmLocation(AsmModel):
-	"""Class to represent a ASM location entry."""
+	"""Class to represent an ASM location entry."""
 
 	header = ('location_id', 'location_name')
 

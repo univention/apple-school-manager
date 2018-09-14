@@ -32,7 +32,7 @@ import sys
 import logging
 from logging.handlers import TimedRotatingFileHandler
 from univention.asm.asm_upload import ASMUpload
-from univention.oneroster.utils import get_ucr
+from univention.asm.utils import get_ucr
 
 
 LOGFILE_PATH = '/var/log/univention/asm.log'
@@ -69,11 +69,10 @@ def setup_logging(level_console=logging.INFO, level_file=logging.DEBUG):
 	handler_file.setLevel(level_file)
 	formatter_file = logging.Formatter('%(asctime)s %(levelname)-5s %(module)s.%(funcName)s:%(lineno)d - %(message)s')
 	handler_file.setFormatter(formatter_file)
-	for logger_name in ('univention.asm', 'univention.oneroster'):
-		logger = logging.getLogger(logger_name)
-		logger.setLevel(logging.DEBUG)
-		logger.addHandler(handler_console)
-		logger.addHandler(handler_file)
+	logger = logging.getLogger('univention.asm')
+	logger.setLevel(logging.DEBUG)
+	logger.addHandler(handler_console)
+	logger.addHandler(handler_file)
 
 
 def main():

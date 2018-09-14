@@ -21,21 +21,12 @@ Depends: ${misc:Depends},
  shell-univention-lib,
  univention-join,
  python-ucs-school,
- univention-oneroster-lib,
+ python-dns,
+ ucs-school-import (>=16.0.2-29),
 Recommends: ntp
 Description: Provision Apple School Manager accounts.
  Synchronize user accounts to the Apple School Manager server.
 Homepage: https://school.apple.com/
-
-Package: univention-oneroster-lib
-Architecture: all
-Depends: ${misc:Depends},
- univention-config,
- python-dns,
- python-ucs-school,
- ucs-school-import (>=16.0.2-29),
-Description: Create OneRoster compliant files.
-Homepage: https://www.imsglobal.org/activity/onerosterlis
 
 Package: univention-management-console-module-apple-school-manager
 Architecture: all

@@ -40,7 +40,7 @@ import logging
 from .base import OneRosterModel
 from ucsschool.lib.models import Teacher, TeachersAndStaff
 from ucsschool.lib.models.base import WrongModel
-from univention.oneroster.utils import check_domain, prepend_to_mail_domain
+from univention.asm.utils import check_domain, prepend_to_mail_domain
 from ucsschool.importer.utils.ldap_connection import get_readonly_connection
 
 try:

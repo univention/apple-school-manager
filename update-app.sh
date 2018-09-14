@@ -31,7 +31,7 @@ docker run -v "$(pwd)":/opt --rm $DOCKER_IMAGE /bin/bash -c "
 	cp /tmp/*.deb /opt
 	"
 
-selfservice upload "$APP_VERSION" univention-apple-school-manager-connector*.deb  univention-oneroster-lib*.deb asm.settings configure_host
+selfservice upload "$APP_VERSION" *.deb asm.settings configure_host
 
 rm -f univention-*.deb
 rm -f ucs-*.deb

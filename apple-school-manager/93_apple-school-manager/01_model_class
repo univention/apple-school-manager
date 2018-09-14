@@ -4,7 +4,7 @@
 ## tags: [apptest]
 ## exposure: dangerous
 ## packages:
-##   - univention-oneroster-lib
+##   - univention-apple-school-manager-connector
 ## bugs: [47622]
 
 import sys
@@ -12,7 +12,7 @@ import random
 from ldap.filter import filter_format
 import univention.testing.strings as uts
 import univention.testing.utils as utils
-from univention.oneroster.models.classes import OneRosterClass
+from univention.asm.models.classes import OneRosterClass
 sys.path.append('/usr/share/ucs-test/90_ucsschool/')
 from essential.importusers_cli_v2 import ImportTestbase
 

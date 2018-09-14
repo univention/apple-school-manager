@@ -46,16 +46,16 @@ from ucsschool.lib.models import School, SchoolClass, Student, Teacher, Teachers
 from ucsschool.importer.writer.csv_writer import CsvWriter
 from ucsschool.importer.writer.result_exporter import ResultExporter
 from ucsschool.importer.utils.ldap_connection import get_readonly_connection
-from univention.oneroster.models.classes import OneRosterClass
-from univention.oneroster.models.course import OneRosterCourse
-from univention.oneroster.models.location import OneRosterLocation
-from univention.oneroster.models.roster import OneRosterRoster
-from univention.oneroster.models.staff import OneRosterStaff
-from univention.oneroster.models.student import OneRosterStudent
+from univention.asm.models.classes import OneRosterClass
+from univention.asm.models.course import OneRosterCourse
+from univention.asm.models.location import OneRosterLocation
+from univention.asm.models.roster import OneRosterRoster
+from univention.asm.models.staff import OneRosterStaff
+from univention.asm.models.student import OneRosterStudent
 
 try:
 	from typing import Any, AnyStr, Iterable, Iterator, Optional
-	from univention.oneroster.models.base import OneRosterModel
+	from univention.asm.models.base import OneRosterModel
 except ImportError:
 	pass
 

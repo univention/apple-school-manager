@@ -93,7 +93,7 @@ def get_ucr():  # type: () -> ConfigRegistry
 def prepend_to_mail_domain(email):  # type: (str) -> str
 	"""
 	Prepend subdomain from UCRV
-	``oneroster/attributes/user/email/prepend_domain`` to domain in email
+	``asm/attributes/user/email/prepend_domain`` to domain in email
 	address.
 
 	:param str email: email address
@@ -103,7 +103,7 @@ def prepend_to_mail_domain(email):  # type: (str) -> str
 	if not email:
 		return email
 	ucr = get_ucr()
-	subdomain = ucr.get('oneroster/attributes/user/email/prepend_domain', '').strip()
+	subdomain = ucr.get('asm/attributes/user/email/prepend_domain', '').strip()
 	if subdomain:
 		local_part, domain = split_email(email)
 		return '{}@{}.{}'.format(local_part, subdomain, domain)

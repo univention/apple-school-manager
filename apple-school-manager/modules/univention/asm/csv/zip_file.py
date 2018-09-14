@@ -40,7 +40,7 @@ import os
 import logging
 import tempfile
 import zipfile
-from univention.oneroster.csv.csv_file import create_csv_files
+from .csv_file import create_csv_files
 
 try:
 	from typing import AnyStr, Iterable, List, Optional

@@ -4,7 +4,7 @@
 ## tags: [apptest]
 ## exposure: dangerous
 ## packages:
-##   - univention-oneroster-lib
+##   - univention-apple-school-manager-connector
 ## bugs: [47622]
 
 import csv
@@ -15,7 +15,7 @@ from ldap.filter import filter_format
 import univention.testing.strings as uts
 import univention.testing.utils as utils
 from ucsschool.lib.models import School, SchoolClass
-from univention.oneroster.csv.csv_file import (
+from univention.asm.csv.csv_file import (
 	OneRosterClassCsvFile, OneRosterCoursesCsvFile, OneRosterLocationsCsvFile, OneRosterRostersCsvFile,
 	OneRosterStaffCsvFile, OneRosterStudentsCsvFile)
 sys.path.append('/usr/share/ucs-test/90_ucsschool/')

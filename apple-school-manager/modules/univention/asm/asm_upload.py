@@ -33,12 +33,13 @@ Univention Apple School Manager Connector
 export school data to asm
 """
 
+from __future__ import absolute_import
+import os
 import logging
 from datetime import datetime
-import os
 
-from univention.oneroster.csv.zip_file import OneRosterZipFile
-from univention.oneroster.network.sftp_upload import SFTP
+from .csv.zip_file import OneRosterZipFile
+from .network.sftp_upload import SFTP
 from univention.config_registry import handler_set
 
 

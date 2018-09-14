@@ -12,7 +12,7 @@ Categories=service-administration
 
 [asm/attributes/staff/anonymize]
 Description[de]=Das Anonymisieren der Attribute 'first_name', 'middle_name', 'last_name' und 'email_address' bei Lehrkräften einschalten. Die Ersetzungswerte können mit asm/attributes/staff/anonymize/<Attribut> verändert werden. Standard: false.
-Description[en]=Enable the anonymization of the attributes 'first_name', 'middle_name', 'last_name' and 'email_address' for teachers. Default: false.
+Description[en]=Enable the anonymization of the attributes 'first_name', 'middle_name', 'last_name', 'email_address' and 'sis_username' for teachers. Default: false.
 Type=bool
 Categories=service-administration
 
@@ -48,7 +48,7 @@ Categories=service-administration
 
 [asm/attributes/student/anonymize]
 Description[de]=Das Anonymisieren der Attribute 'first_name', 'middle_name', 'last_name' und 'email_address' bei Schülerinnen und Schülern einschalten. Die Ersetzungswerte können mit asm/attributes/student/anonymize/<Attribut> verändert werden. Standard: false.
-Description[en]=Enable the anonymization of the attributes 'first_name', 'middle_name', 'last_name' and 'email_address' for students. Default: false.
+Description[en]=Enable the anonymization of the attributes 'first_name', 'middle_name', 'last_name', 'email_address' and 'sis_username' for students. Default: false.
 Type=bool
 Categories=service-administration
 

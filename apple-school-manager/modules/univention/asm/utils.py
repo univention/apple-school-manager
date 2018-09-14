@@ -85,8 +85,15 @@ def get_static_dns_resolvers():  # type: () -> List[str]
 def get_ucr():  # type: () -> ConfigRegistry
 	global _ucr
 	if not _ucr:
+		_ucr = update_ucr()
+	return _ucr
+
+
+def update_ucr():  # type: () -> ConfigRegistry
+	global _ucr
+	if not _ucr:
 		_ucr = ConfigRegistry()
-		_ucr.load()
+	_ucr.load()
 	return _ucr
 
 

@@ -37,7 +37,7 @@ See https://support.apple.com/en-us/HT207029
 
 from __future__ import absolute_import, unicode_literals
 import logging
-from .base import AsmModel
+from .base import AsmModel, AnonymizeMixIn
 from ucsschool.lib.models import Teacher, TeachersAndStaff
 from ucsschool.lib.models.base import WrongModel
 from univention.asm.utils import check_domain, prepend_to_mail_domain
@@ -49,13 +49,14 @@ except ImportError:
 	pass
 
 
-class AsmStaff(AsmModel):
+class AsmStaff(AsmModel, AnonymizeMixIn):
 	"""Class to represent an ASM staff entry."""
 
 	header = (
 		'person_id', 'person_number', 'first_name', 'middle_name', 'last_name', 'email_address', 'sis_username',
 		'location_id'
 	)
+	ucr_anonymize_key_base = 'asm/attributes/staff/anonymize'
 
 	def __init__(
 			self,
@@ -157,14 +158,14 @@ class AsmStaff(AsmModel):
 				teacher_lo.get('initials', [''])[0] or
 				teacher_lo.get('oxMiddleName', [''])[0]
 		)
-		return cls(
-			person_id=teacher.name,  # TODO: pseudonym
-			first_name=teacher.firstname,  # TODO: pseudonym
-			last_name=teacher.lastname,  # TODO: pseudonym
+		return cls(**cls.anonymize(
+			person_id=teacher.name,
+			first_name=teacher.firstname,
+			last_name=teacher.lastname,
 			location_id=location_ids[0],
 			person_number=None,  # TODO: make conf. by UCR which LDAP attr to use
-			middle_name=middle_name,  # TODO: pseudonym
-			email_address=email,  # TODO: pseudonym
-			sis_username=teacher.name,  # TODO: pseudonym
+			middle_name=middle_name,
+			email_address=email,
+			sis_username=teacher.name,
 			additional_location_ids=location_ids[1:]
-		)
+		))

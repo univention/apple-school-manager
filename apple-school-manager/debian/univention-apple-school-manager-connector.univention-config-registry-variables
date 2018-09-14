@@ -9,3 +9,75 @@ Description[de]=Klassennamen setzen werden vom ASM aus dem Namen des Kurses und 
 Description[en]=The ASM creates class names from the name of the course and the class. If both are the same, the classes name can be omitted. Default: true.
 Type=bool
 Categories=service-administration
+
+[asm/attributes/staff/anonymize]
+Description[de]=Das Anonymisieren der Attribute 'first_name', 'middle_name', 'last_name' und 'email_address' bei Lehrkräften einschalten. Die Ersetzungswerte können mit asm/attributes/staff/anonymize/<Attribut> verändert werden. Standard: false.
+Description[en]=Enable the anonymization of the attributes 'first_name', 'middle_name', 'last_name' and 'email_address' for teachers. Default: false.
+Type=bool
+Categories=service-administration
+
+[asm/attributes/staff/anonymize/first_name]
+Description[de]=Wert der, wenn asm/attributes/staff/anonymize eingeschaltet ist, für das Attribut 'first_name' von Lehrkräften übertragen werden soll. Standard: 'Vorname'.
+Description[en]=Value for the attribute 'first_name', when asm/attributes/staff/anonymize ist enabled. Default: 'Vorname'.
+Type=str
+Categories=service-administration
+
+[asm/attributes/staff/anonymize/middle_name]
+Description[de]=Wert der, wenn asm/attributes/staff/anonymize eingeschaltet ist, für das Attribut 'middle_name' von Lehrkräften übertragen werden soll. Standard: kein Wert / leer.
+Description[en]=Value for the attribute 'middle_name', when asm/attributes/staff/anonymize ist enabled. Default: no value / empty.
+Type=str
+Categories=service-administration
+
+[asm/attributes/staff/anonymize/last_name]
+Description[de]=Wert der, wenn asm/attributes/staff/anonymize eingeschaltet ist, für das Attribut 'last_name' von Lehrkräften übertragen werden soll. Standard: 'Nachname'.
+Description[en]=Value for the attribute 'last_name', when asm/attributes/staff/anonymize ist enabled. Default: 'Nachname'.
+Type=str
+Categories=service-administration
+
+[asm/attributes/staff/anonymize/email_address]
+Description[de]=Wert der, wenn asm/attributes/staff/anonymize eingeschaltet ist, für das Attribut 'email_address' von Lehrkräften übertragen werden soll. Standard: kein Wert / leer.
+Description[en]=Value for the attribute 'email_address', when asm/attributes/staff/anonymize ist enabled. Default: no value / empty.
+Type=str
+Categories=service-administration
+
+[asm/attributes/staff/anonymize/sis_username]
+Description[de]=Wert der, wenn asm/attributes/staff/anonymize eingeschaltet ist, für das Attribut 'sis_username' von Lehrkräften übertragen werden soll. Standard: kein Wert / leer.
+Description[en]=Value for the attribute 'sis_username', when asm/attributes/staff/anonymize ist enabled. Default: no value / empty.
+Type=str
+Categories=service-administration
+
+[asm/attributes/student/anonymize]
+Description[de]=Das Anonymisieren der Attribute 'first_name', 'middle_name', 'last_name' und 'email_address' bei Schülerinnen und Schülern einschalten. Die Ersetzungswerte können mit asm/attributes/student/anonymize/<Attribut> verändert werden. Standard: false.
+Description[en]=Enable the anonymization of the attributes 'first_name', 'middle_name', 'last_name' and 'email_address' for students. Default: false.
+Type=bool
+Categories=service-administration
+
+[asm/attributes/student/anonymize/first_name]
+Description[de]=Wert der, wenn asm/attributes/student/anonymize eingeschaltet ist, für das Attribut 'first_name' von Schülerinnen und Schülern übertragen werden soll. Standard: 'Vorname'.
+Description[en]=Value for the attribute 'first_name', when asm/attributes/student/anonymize ist enabled. Default: 'Vorname'.
+Type=str
+Categories=service-administration
+
+[asm/attributes/student/anonymize/middle_name]
+Description[de]=Wert der, wenn asm/attributes/student/anonymize eingeschaltet ist, für das Attribut 'middle_name' von Schülerinnen und Schülern übertragen werden soll. Standard: kein Wert / leer.
+Description[en]=Value for the attribute 'middle_name', when asm/attributes/student/anonymize ist enabled. Default: no value / empty.
+Type=str
+Categories=service-administration
+
+[asm/attributes/student/anonymize/last_name]
+Description[de]=Wert der, wenn asm/attributes/student/anonymize eingeschaltet ist, für das Attribut 'last_name' von Schülerinnen und Schülern übertragen werden soll. Standard: 'Nachname'.
+Description[en]=Value for the attribute 'last_name', when asm/attributes/student/anonymize ist enabled. Default: 'Nachname'.
+Type=str
+Categories=service-administration
+
+[asm/attributes/student/anonymize/email_address]
+Description[de]=Wert der, wenn asm/attributes/student/anonymize eingeschaltet ist, für das Attribut 'email_address' von Schülerinnen und Schülern übertragen werden soll. Standard: kein Wert / leer.
+Description[en]=Value for the attribute 'email_address', when asm/attributes/student/anonymize ist enabled. Default: no value / empty.
+Type=str
+Categories=service-administration
+
+[asm/attributes/student/anonymize/sis_username]
+Description[de]=Wert der, wenn asm/attributes/student/anonymize eingeschaltet ist, für das Attribut 'sis_username' von Schülerinnen und Schülern übertragen werden soll. Standard: kein Wert / leer.
+Description[en]=Value for the attribute 'sis_username', when asm/attributes/student/anonymize ist enabled. Default: no value / empty.
+Type=str
+Categories=service-administration

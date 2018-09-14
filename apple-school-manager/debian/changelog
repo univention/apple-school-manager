@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (1.0.0-8) unstable; urgency=low
+
+  * Bug #47622: add support for anonymization
+
+ -- Daniel Troeder <troeder@univention.de>  Fri, 14 Sep 2018 14:40:57 +0200
+
 univention-apple-school-manager-connector (1.0.0-7) unstable; urgency=low
 
   * Bug #47622: refactor packages and code so that it's not "oneroster"

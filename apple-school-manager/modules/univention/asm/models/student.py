@@ -37,7 +37,7 @@ See https://support.apple.com/en-us/HT207029
 
 from __future__ import absolute_import, unicode_literals
 import logging
-from .base import AsmModel
+from .base import AsmModel, AnonymizeMixIn
 from ucsschool.lib.models import Student
 from univention.asm.utils import check_domain, prepend_to_mail_domain
 from ucsschool.importer.utils.ldap_connection import get_readonly_connection
@@ -48,13 +48,14 @@ except ImportError:
 	pass
 
 
-class AsmStudent(AsmModel):
+class AsmStudent(AsmModel, AnonymizeMixIn):
 	"""Class to represent an ASM student entry."""
 
 	header = (
 		'person_id', 'person_number', 'first_name', 'middle_name', 'last_name', 'grade_level',
 		'email_address', 'sis_username', 'password_policy', 'location_id'
 	)
+	ucr_anonymize_key_base = 'asm/attributes/student/anonymize'
 
 	def __init__(
 		self,
@@ -166,16 +167,16 @@ class AsmStudent(AsmModel):
 			student_lo.get('initials', [''])[0] or
 			student_lo.get('oxMiddleName', [''])[0]
 		)
-		return cls(
-			person_id=student.name,  # TODO: pseudonym
-			first_name=student.firstname,  # TODO: pseudonym
-			last_name=student.lastname,  # TODO: pseudonym
+		return cls(**cls.anonymize(
+			person_id=student.name,
+			first_name=student.firstname,
+			last_name=student.lastname,
 			location_id=location_ids[0],
 			person_number=None,  # TODO: make conf. by UCR which LDAP attr to use
-			middle_name=middle_name,  # TODO: pseudonym
+			middle_name=middle_name,
 			grade_level=None,  # TODO: make conf. by UCR which LDAP attr to use
-			email_address=email,  # TODO: pseudonym
-			sis_username=student.name,  # TODO: pseudonym
+			email_address=email,
+			sis_username=student.name,
 			password_policy=None,  # TODO: what's this?
 			additional_location_ids=location_ids[1:]
-		)
+		))

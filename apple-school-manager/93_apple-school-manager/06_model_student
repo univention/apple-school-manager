@@ -13,6 +13,7 @@ import univention.testing.strings as uts
 import univention.testing.utils as utils
 from univention.config_registry import handler_set
 from univention.asm.models.student import AsmStudent
+from univention.asm.utils import update_ucr
 sys.path.append('/usr/share/ucs-test/90_ucsschool/')
 from essential.importusers_cli_v2 import ImportTestbase
 
@@ -73,6 +74,22 @@ class Test(ImportTestbase):
 			self.log.info('OK: student2 CSV line is as expected.')
 		else:
 			self.fail('Expected CSV line for student2: {!r}, got: {!r}.'.format(expected_student2, got_student2))
+
+		last_name_anon = uts.random_name()
+		handler_set([
+			'asm/attributes/student/anonymize=true',
+			'asm/attributes/student/anonymize/last_name={}'.format(last_name_anon)
+		])
+		update_ucr()
+		or_student1 = AsmStudent.from_dn(student1_dn)
+		got_student1 = or_student1.as_csv_line()
+		expected_student1 = [
+			student1_name, '', 'Vorname', '', last_name_anon, '', '', '', '', school1
+		]
+		if got_student1 == expected_student1:
+			self.log.info('OK: student1 anonymized CSV line is as expected.')
+		else:
+			self.fail('Expected CSV line for student1 anonymized: {!r}, got: {!r}.'.format(expected_student1, got_student1))
 
 
 if __name__ == '__main__':

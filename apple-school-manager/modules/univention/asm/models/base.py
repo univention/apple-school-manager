@@ -35,6 +35,7 @@ Base class for all ASM models.
 
 from __future__ import absolute_import, unicode_literals
 import inspect
+from univention.asm.utils import get_ucr
 
 try:
 	from typing import Any, AnyStr, Dict, Iterable
@@ -118,3 +119,30 @@ class AsmModel(object):
 				'Default implementation of as_csv_line() cannot handle {} object.'.format(
 					self.__class__.__name__)
 			)
+
+
+class AnonymizeMixIn(object):
+	ucr_anonymize_key_base = ''
+
+	@classmethod
+	def anonymize(cls, **kwargs):  # type: (**Any) -> Dict[AnyStr, AnyStr]
+		"""
+		Change values of function arguments to anonymize/pseudonymize user if
+		UCRV asm/attributes/<staff/student>/anonymize is true. Will return
+		unchanged function arguments otherwise.
+
+		:return: dictionary with [modified] function arguments
+		:rtype: dict
+		:raises NotImplementedError: if cls.ucr_anonymize_key_base is unset
+		"""
+		if not cls.ucr_anonymize_key_base:
+			raise NotImplementedError('Class attribute "ucr_anonymize_key_base" must be set.')
+		cls.ucr_anonymize_key_base = cls.ucr_anonymize_key_base.rstrip('/')
+		ucr = get_ucr()
+		if ucr.is_true(cls.ucr_anonymize_key_base):
+			kwargs['first_name'] = ucr.get('{}/first_name'.format(cls.ucr_anonymize_key_base), 'Vorname')
+			kwargs['middle_name'] = ucr.get('{}/middle_name'.format(cls.ucr_anonymize_key_base), None)
+			kwargs['last_name'] = ucr.get('{}/last_name'.format(cls.ucr_anonymize_key_base), 'Nachname')
+			kwargs['email_address'] = ucr.get('{}/email_address'.format(cls.ucr_anonymize_key_base), None)
+			kwargs['sis_username'] = ucr.get('{}/sis_username'.format(cls.ucr_anonymize_key_base), None)
+		return kwargs

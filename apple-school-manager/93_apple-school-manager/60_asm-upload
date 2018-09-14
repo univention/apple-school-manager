@@ -76,8 +76,8 @@ class Test(ImportTestbase):
 			output = subprocess.check_output(["/usr/sbin/asm-upload"], stderr=subprocess.STDOUT)
 			output = output.split("\n")
 			for line in output:
-				if line.startswith("The uplaoded zip is stored under: "):
-					zip_path = line.replace("The uplaoded zip is stored under: ", "")
+				if line.startswith("The uploaded zip is stored in: "):
+					zip_path = line.replace("The uploaded zip is stored in: ", "")
 					remote_path = os.path.join(home_dir, "dropbox", os.path.basename(zip_path))
 					if not filecmp.cmp(zip_path, remote_path, shallow=False):
 						utils.fail("ZIP file was not correctly uploaded")

@@ -86,7 +86,7 @@ def main():
 	asmUpload = ASMUpload(*config)
 	zip_path = asmUpload.upload()
 	if not config[3] and zip_path is not None:
-		logger.info("The uplaoded zip is stored under: {}".format(zip_path))
+		logger.info("The uploaded zip is stored in: {}".format(zip_path))
 
 
 if __name__ == '__main__':

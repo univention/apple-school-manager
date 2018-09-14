@@ -110,7 +110,7 @@ def prepend_to_mail_domain(email):  # type: (str) -> str
 	if not email:
 		return email
 	ucr = get_ucr()
-	subdomain = ucr.get('asm/attributes/user/email/prepend_domain', '').strip()
+	subdomain = ucr.get('asm/attributes/user/email/prepend_domain', '').strip(' .')
 	if subdomain:
 		local_part, domain = split_email(email)
 		return '{}@{}.{}'.format(local_part, subdomain, domain)

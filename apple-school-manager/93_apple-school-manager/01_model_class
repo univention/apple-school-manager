@@ -12,7 +12,7 @@ import random
 from ldap.filter import filter_format
 import univention.testing.strings as uts
 import univention.testing.utils as utils
-from univention.asm.models.classes import OneRosterClass
+from univention.asm.models.classes import AsmClass
 sys.path.append('/usr/share/ucs-test/90_ucsschool/')
 from essential.importusers_cli_v2 import ImportTestbase
 
@@ -96,7 +96,7 @@ class Test(ImportTestbase):
 		utils.verify_ldap_object(work_group1_dn, {'memberUid': [student1_name, teacher1_name, teacher2_name]})
 		utils.verify_ldap_object(work_group2_dn, {'memberUid': [student2_name]})
 
-		or_class1 = OneRosterClass.from_dn(school_class1_dn)
+		or_class1 = AsmClass.from_dn(school_class1_dn)
 		got_school_class1 = or_class1.as_csv_line()
 		expected_school_class1 = [
 			school_class1, '', school_class1, teacher1_name, teacher2_name, teacher3_name, school1,
@@ -107,7 +107,7 @@ class Test(ImportTestbase):
 		else:
 			self.fail('Expected CSV line for school_class1: {!r}, got: {!r}.'.format(expected_school_class1, got_school_class1))
 
-		or_class2 = OneRosterClass.from_dn(school_class2_dn)
+		or_class2 = AsmClass.from_dn(school_class2_dn)
 		got_school_class2 = or_class2.as_csv_line()
 		expected_school_class2 = [school_class2, '', school_class2, teacher1_name, '', '', school2]
 		if got_school_class2 == expected_school_class2:
@@ -115,7 +115,7 @@ class Test(ImportTestbase):
 		else:
 			self.fail('Expected CSV line for school_class2: {!r}, got: {!r}.'.format(expected_school_class2, got_school_class2))
 
-		or_wg1 = OneRosterClass.from_dn(work_group1_dn)
+		or_wg1 = AsmClass.from_dn(work_group1_dn)
 		got_wg1 = or_wg1.as_csv_line()
 		expected_wg1 = (  # handle random user order
 			[work_group1_name, '', work_group1_name, teacher1_name, teacher2_name, '', school1],
@@ -126,7 +126,7 @@ class Test(ImportTestbase):
 		else:
 			self.fail('Expected CSV line for work_group1: {!r}, got: {!r}.'.format(expected_wg1, got_wg1))
 
-		or_wg2 = OneRosterClass.from_dn(work_group2_dn)
+		or_wg2 = AsmClass.from_dn(work_group2_dn)
 		got_wg2 = or_wg2.as_csv_line()
 		expected_wg2 = [work_group2_name, '', work_group2_name, '', '', '', school2]
 		if got_wg2 == expected_wg2:

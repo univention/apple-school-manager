@@ -30,7 +30,7 @@
 """
 Univention Apple School Manager Connector
 
-Classes the produce OneRoster ZIP files containing CSV files.
+Classes the produce ASM ZIP files containing CSV files.
 
 See https://support.apple.com/en-us/HT207029
 """
@@ -48,8 +48,8 @@ except ImportError:
 	pass
 
 
-class OneRosterZipFile(object):
-	"""Class to create a ZIP file with OneRoster CSV files."""
+class AsmZipFile(object):
+	"""Class to create a ZIP file with ASM CSV files."""
 
 	def __init__(self, file_path, ou_whitelist=None):  # type: (AnyStr, Optional[Iterable[AnyStr]]) -> None
 		"""
@@ -62,9 +62,9 @@ class OneRosterZipFile(object):
 		self.csv_files = []
 		self.logger = logging.getLogger(__name__)
 
-	def create_csv_files(self):  # type: () -> List[AnyStr]
+	def create_csv_files(self):  # type: () -> Iterable[AnyStr]
 		"""
-		Create OneRoster CSV files.
+		Create ASM CSV files.
 
 		File names will be saved to :py:attr:`self.file_path`.
 

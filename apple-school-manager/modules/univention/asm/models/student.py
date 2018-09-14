@@ -30,14 +30,14 @@
 """
 Univention Apple School Manager Connector
 
-Class to represent a OneRoster student.
+Class to represent a ASM student.
 
 See https://support.apple.com/en-us/HT207029
 """
 
 from __future__ import absolute_import, unicode_literals
 import logging
-from .base import OneRosterModel
+from .base import AsmModel
 from ucsschool.lib.models import Student
 from univention.asm.utils import check_domain, prepend_to_mail_domain
 from ucsschool.importer.utils.ldap_connection import get_readonly_connection
@@ -48,8 +48,8 @@ except ImportError:
 	pass
 
 
-class OneRosterStudent(OneRosterModel):
-	"""Class to represent a OneRoster student entry."""
+class AsmStudent(AsmModel):
+	"""Class to represent a ASM student entry."""
 
 	header = (
 		'person_id', 'person_number', 'first_name', 'middle_name', 'last_name', 'grade_level',
@@ -106,7 +106,7 @@ class OneRosterStudent(OneRosterModel):
 			assert len(additional_location_ids) < 15, 'No more than 14 additional locations are allowed.'
 		else:
 			additional_location_ids = []
-		super(OneRosterStudent, self).__init__(
+		super(AsmStudent, self).__init__(
 			person_id, first_name, last_name, location_id, person_number, middle_name, grade_level,
 			email_address, sis_username, additional_location_ids
 		)
@@ -133,16 +133,16 @@ class OneRosterStudent(OneRosterModel):
 
 	@classmethod
 	def from_dn(cls, dn, ou_whitelist=None, *args, **kwargs):
-		# type: (str, Optional[Iterable[AnyStr]], *Any, **Any) -> OneRosterStudent
+		# type: (str, Optional[Iterable[AnyStr]], *Any, **Any) -> AsmStudent
 		"""
-		Get OneRosterStudent object created from data in LDAP object.
+		Get AsmStudent object created from data in LDAP object.
 
 		:param str dn: DN to the Student object to represent
 		:param ou_whitelist: list of schools/OUs that should be considered when
 			looking at ou-overlapping users. No limit if empty or None.
 		:type ou_whitelist: list(str) or None
-		:return: OneRosterStudent instance
-		:rtype OneRosterStudent
+		:return: AsmStudent instance
+		:rtype AsmStudent
 		:raises WrongModel: when `dn` does not belong to a student
 		:raises ValueError: when non of the users `schools` is in the whitelist
 		"""

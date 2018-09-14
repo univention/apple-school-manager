@@ -30,14 +30,14 @@
 """
 Univention Apple School Manager Connector
 
-Class to represent a OneRoster staff.
+Class to represent a ASM staff.
 
 See https://support.apple.com/en-us/HT207029
 """
 
 from __future__ import absolute_import, unicode_literals
 import logging
-from .base import OneRosterModel
+from .base import AsmModel
 from ucsschool.lib.models import Teacher, TeachersAndStaff
 from ucsschool.lib.models.base import WrongModel
 from univention.asm.utils import check_domain, prepend_to_mail_domain
@@ -49,8 +49,8 @@ except ImportError:
 	pass
 
 
-class OneRosterStaff(OneRosterModel):
-	"""Class to represent a OneRoster staff entry."""
+class AsmStaff(AsmModel):
+	"""Class to represent a ASM staff entry."""
 
 	header = (
 		'person_id', 'person_number', 'first_name', 'middle_name', 'last_name', 'email_address', 'sis_username',
@@ -97,7 +97,7 @@ class OneRosterStaff(OneRosterModel):
 			assert len(additional_location_ids) < 15, 'No more than 14 additional locations are allowed.'
 		else:
 			additional_location_ids = []
-		super(OneRosterStaff, self).__init__(
+		super(AsmStaff, self).__init__(
 			person_id, first_name, last_name, location_id, person_number, middle_name, email_address, sis_username,
 			additional_location_ids
 		)
@@ -122,16 +122,16 @@ class OneRosterStaff(OneRosterModel):
 
 	@classmethod
 	def from_dn(cls, dn, ou_whitelist=None, *args, **kwargs):
-		# type: (AnyStr, Optional[Iterable[AnyStr]], *Any, **Any) -> OneRosterStaff
+		# type: (AnyStr, Optional[Iterable[AnyStr]], *Any, **Any) -> AsmStaff
 		"""
-		Get OneRosterStaff object created from data in LDAP object.
+		Get AsmStaff object created from data in LDAP object.
 
 		:param str dn: DN to the Teacher/TeachersAndStaff object to represent
 		:param ou_whitelist: list of schools/OUs that should be considered when
 			looking at ou-overlapping users. No limit if empty or None.
 		:type ou_whitelist: list(str) or None
-		:return: OneRosterStaff instance
-		:rtype OneRosterStaff
+		:return: AsmStaff instance
+		:rtype AsmStaff
 		:raises WrongModel: when `dn` does not belong to a teacher or
 			teacherandstaff
 		:raises ValueError: when non of the users `schools` is in the whitelist

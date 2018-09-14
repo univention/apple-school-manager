@@ -30,7 +30,7 @@
 """
 Univention Apple School Manager Connector
 
-Base class for all OneRoster models.
+Base class for all ASM models.
 """
 
 from __future__ import absolute_import, unicode_literals
@@ -42,8 +42,8 @@ except ImportError:
 	pass
 
 
-class OneRosterModel(object):
-	"""Base class for all OneRoster models."""
+class AsmModel(object):
+	"""Base class for all ASM models."""
 
 	header = ()  # type: Iterable[AnyStr]
 
@@ -73,13 +73,13 @@ class OneRosterModel(object):
 		return self.header
 
 	@classmethod
-	def from_dn(cls, dn, *args, **kwargs):  # type: (AnyStr, *Any, **Any) -> OneRosterModel
+	def from_dn(cls, dn, *args, **kwargs):  # type: (AnyStr, *Any, **Any) -> AsmModel
 		"""
-		Get OneRosterModel object created from data in LDAP object.
+		Get AsmModel object created from data in LDAP object.
 
 		:param str dn: DN to object to represent
-		:return: OneRosterModel instance
-		:rtype OneRosterModel
+		:return: AsmModel instance
+		:rtype AsmModel
 		"""
 		raise NotImplementedError()
 

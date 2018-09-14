@@ -17,7 +17,7 @@ from ldap.filter import filter_format
 import univention.testing.strings as uts
 import univention.testing.utils as utils
 from ucsschool.lib.models import School, SchoolClass
-from univention.asm.csv.zip_file import OneRosterZipFile
+from univention.asm.csv.zip_file import AsmZipFile
 sys.path.append('/usr/share/ucs-test/90_ucsschool/')
 from essential.importusers_cli_v2 import ImportTestbase
 
@@ -367,7 +367,7 @@ class Test(ImportTestbase):
 					)
 
 		with tempfile.NamedTemporaryFile() as zip_result_file:
-			zip_path = OneRosterZipFile(zip_result_file.name, schools).write_zip()
+			zip_path = AsmZipFile(zip_result_file.name, schools).write_zip()
 			assert zip_path == zip_result_file.name
 			tmp_dir = tempfile.mkdtemp()
 			zf = zipfile.ZipFile(zip_path)

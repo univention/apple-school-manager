@@ -38,7 +38,7 @@ import os
 import logging
 from datetime import datetime
 
-from .csv.zip_file import OneRosterZipFile
+from .csv.zip_file import AsmZipFile
 from .network.sftp_upload import SFTP
 from univention.config_registry import handler_set
 
@@ -57,7 +57,7 @@ class ASMUpload(object):
 
 	def upload(self, folder_path="/var/lib/asm"):
 		file_path = os.path.join(folder_path, "asm_{}.zip".format(datetime.isoformat(datetime.now())))
-		zip_path = OneRosterZipFile(file_path, self.ou_whitelist).write_zip()
+		zip_path = AsmZipFile(file_path, self.ou_whitelist).write_zip()
 		self.logger.info('Uploading ZIP file to %s...', self.hostname)
 		with SFTP(self.hostname, self.username, self.password, self.host_key_line) as sftp:
 			self.logger.debug('Connected to %s.', self.hostname)

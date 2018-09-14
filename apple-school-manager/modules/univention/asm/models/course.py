@@ -30,13 +30,13 @@
 """
 Univention Apple School Manager Connector
 
-Class to represent a OneRoster course.
+Class to represent a ASM course.
 
 See https://support.apple.com/en-us/HT207029
 """
 
 from __future__ import absolute_import, unicode_literals
-from .base import OneRosterModel
+from .base import AsmModel
 from ucsschool.lib.models import SchoolClass, WorkGroup
 from ucsschool.lib.models.base import UnknownModel
 from ucsschool.importer.utils.ldap_connection import get_readonly_connection
@@ -47,8 +47,8 @@ except ImportError:
 	pass
 
 
-class OneRosterCourse(OneRosterModel):
-	"""Class to represent a OneRoster course entry."""
+class AsmCourse(AsmModel):
+	"""Class to represent a ASM course entry."""
 
 	header = ('course_id', 'course_number', 'course_name', 'location_id')
 
@@ -73,20 +73,20 @@ class OneRosterCourse(OneRosterModel):
 			(optional).
 		:param str course_name: The name of your course (optional).
 		"""
-		super(OneRosterCourse, self).__init__(course_id, location_id, course_number, course_name)
+		super(AsmCourse, self).__init__(course_id, location_id, course_number, course_name)
 		self.course_id = course_id
 		self.location_id = location_id
 		self.course_number = course_number
 		self.course_name = course_name
 
 	@classmethod
-	def from_dn(cls, dn, *args, **kwargs):  # type: (AnyStr, *Any, **Any) -> OneRosterCourse
+	def from_dn(cls, dn, *args, **kwargs):  # type: (AnyStr, *Any, **Any) -> AsmCourse
 		"""
-		Get OneRosterCourse object created from data in LDAP object.
+		Get AsmCourse object created from data in LDAP object.
 
 		:param str dn: DN to the SchoolClass/Workgroup object to represent
-		:return: OneRosterCourse instance
-		:rtype OneRosterCourse
+		:return: AsmCourse instance
+		:rtype AsmCourse
 		"""
 		lo, po = get_readonly_connection()
 		try:

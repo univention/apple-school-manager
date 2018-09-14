@@ -30,7 +30,7 @@
 """
 Univention Apple School Manager Connector
 
-Classes the produce OneRoster CSV files.
+Classes that produce ASM CSV files.
 
 See https://support.apple.com/en-us/HT207029
 
@@ -46,34 +46,34 @@ from ucsschool.lib.models import School, SchoolClass, Student, Teacher, Teachers
 from ucsschool.importer.writer.csv_writer import CsvWriter
 from ucsschool.importer.writer.result_exporter import ResultExporter
 from ucsschool.importer.utils.ldap_connection import get_readonly_connection
-from univention.asm.models.classes import OneRosterClass
-from univention.asm.models.course import OneRosterCourse
-from univention.asm.models.location import OneRosterLocation
-from univention.asm.models.roster import OneRosterRoster
-from univention.asm.models.staff import OneRosterStaff
-from univention.asm.models.student import OneRosterStudent
+from univention.asm.models.classes import AsmClass
+from univention.asm.models.course import AsmCourse
+from univention.asm.models.location import AsmLocation
+from univention.asm.models.roster import AsmRoster
+from univention.asm.models.staff import AsmStaff
+from univention.asm.models.student import AsmStudent
 
 try:
 	from typing import Any, AnyStr, Iterable, Iterator, Optional
-	from univention.asm.models.base import OneRosterModel
+	from univention.asm.models.base import AsmModel
 except ImportError:
 	pass
 
 
 __all__ = (
-	'OneRosterClassCsvFile', 'OneRosterCoursesCsvFile', 'OneRosterLocationsCsvFile', 'OneRosterRostersCsvFile',
-	'OneRosterStaffCsvFile', 'OneRosterStudentsCsvFile', 'create_csv_files'
+	'AsmClassCsvFile', 'AsmCoursesCsvFile', 'AsmLocationsCsvFile', 'AsmRostersCsvFile',
+	'AsmStaffCsvFile', 'AsmStudentsCsvFile', 'create_csv_files'
 )
 
 
-class _OneRosterCsvWriter(ResultExporter):
+class _AsmCsvWriter(ResultExporter):
 	"""
 	CSV file writer.
 	"""
 
 	def __init__(self, header, *arg, **kwargs):  # type: (Iterable[AnyStr], *Any, **Any) -> None
 		self.header = header
-		super(_OneRosterCsvWriter, self).__init__(*arg, **kwargs)
+		super(_AsmCsvWriter, self).__init__(*arg, **kwargs)
 
 	def get_header(self):  # type: () -> Iterable[AnyStr]
 		"""
@@ -83,12 +83,12 @@ class _OneRosterCsvWriter(ResultExporter):
 		"""
 		return self.header
 
-	def get_iter(self, objs):  # type: (Iterable[OneRosterModel]) -> Iterable[OneRosterModel]
+	def get_iter(self, objs):  # type: (Iterable[AsmModel]) -> Iterable[AsmModel]
 		"""
 		Iterator over relevant objects.
 
-		:param objs: list of OneRosterModel objects
-		:return: iterator for OneRosterModel objects
+		:param objs: list of AsmModel objects
+		:return: iterator for AsmModel objects
 		:rtype: Iterator
 		"""
 		return objs
@@ -102,23 +102,23 @@ class _OneRosterCsvWriter(ResultExporter):
 		"""
 		return CsvWriter(field_names=self.get_header())
 
-	def serialize(self, obj):  # type: (OneRosterModel) -> Iterator[str]
+	def serialize(self, obj):  # type: (AsmModel) -> Iterator[str]
 		"""
 		Make a dict of attr_name->strings from an object delivered by the
 		iterator from get_iter().
 
-		:param OneRosterModel obj: object to serialize
+		:param AsmModel obj: object to serialize
 		:return: attr_name->strings that will be used to write the output file
 		:rtype: dict
 		"""
 		return obj.as_dict()
 
 
-class OneRosterCsvFile(object):
-	"""Base class for all OneRoster CSV file generator classes."""
+class AsmCsvFile(object):
+	"""Base class for all ASM CSV file generator classes."""
 
 	header = ()
-	oneroster_class = None
+	asm_model_class = None
 	ucs_classes = []
 	lo = None
 
@@ -137,14 +137,14 @@ class OneRosterCsvFile(object):
 			self.__class__.lo, po = get_readonly_connection()
 		self.limbo_ou = self._get_limbo_ou()
 
-	def find_and_create_objects(self):  # type: () -> Iterator[OneRosterModel]
+	def find_and_create_objects(self):  # type: () -> Iterator[AsmModel]
 		"""
-		Find LDAP objects and return created OneRoster objects.
+		Find LDAP objects and return created AsmModel objects.
 
-		:return list of OneRoster objects
-		:rtype: list(OneRosterModel)
+		:return list of AsmModel objects
+		:rtype: list(AsmModel)
 		"""
-		if not self.oneroster_class:
+		if not self.asm_model_class:
 			raise NotImplementedError()
 
 		schools = self.get_schools()
@@ -155,7 +155,7 @@ class OneRosterCsvFile(object):
 			if ucs_objs and hasattr(ucs_objs[0], 'name'):
 				ucs_objs.sort(key=attrgetter('name'))
 			for ucs_obj in ucs_objs:
-				yield self.oneroster_class.from_dn(ucs_obj.dn)
+				yield self.asm_model_class.from_dn(ucs_obj.dn)
 
 	def get_schools(self):  # type: () -> Iterable[School]
 		"""
@@ -169,12 +169,12 @@ class OneRosterCsvFile(object):
 			schools = [s for s in schools if s.name in self.ou_whitelist]
 		return sorted(schools, key=attrgetter('name'))
 
-	def write_csv(self, objs=None):  # type: (Optional[Iterable[OneRosterModel]]) -> None
+	def write_csv(self, objs=None):  # type: (Optional[Iterable[AsmModel]]) -> None
 		"""
 		Write CSV to `self.file_path`.
 
-		:param objs: optional list of OneRoster objects, if not set `self.objs` will be used
-		:type objs: list(OneRosterModel) or None
+		:param objs: optional list of AsmModel objects, if not set `self.objs` will be used
+		:type objs: list(AsmModel) or None
 		"""
 		objs = objs or self.obj or self.find_and_create_objects()
 		# walk through list (iterator really) and find longest header, because it's needed as first line
@@ -183,7 +183,7 @@ class OneRosterCsvFile(object):
 			res.append(obj)
 			if len(obj.header) > len(self.header):
 				self.header = obj.header
-		orcw = _OneRosterCsvWriter(self.header)
+		orcw = _AsmCsvWriter(self.header)
 		self.logger.info('Writing %d objects to %s...', len(res), os.path.basename(self.file_path))
 		orcw.dump(res, self.file_path)
 
@@ -219,50 +219,50 @@ class OneRosterCsvFile(object):
 		return ''
 
 
-class OneRosterClassCsvFile(OneRosterCsvFile):
+class AsmClassCsvFile(AsmCsvFile):
 	"""CSV file generator for the `classes` file."""
 
-	header = OneRosterClass.header
-	oneroster_class = OneRosterClass
+	header = AsmClass.header
+	asm_model_class = AsmClass
 	ucs_classes = [SchoolClass, WorkGroup]
 
 
-class OneRosterCoursesCsvFile(OneRosterCsvFile):
+class AsmCoursesCsvFile(AsmCsvFile):
 	"""CSV file generator for the `courses` file."""
 
-	header = OneRosterCourse.header
-	oneroster_class = OneRosterCourse
+	header = AsmCourse.header
+	asm_model_class = AsmCourse
 	ucs_classes = [SchoolClass, WorkGroup]
 
 
-class OneRosterLocationsCsvFile(OneRosterCsvFile):
+class AsmLocationsCsvFile(AsmCsvFile):
 	"""CSV file generator for the `locations` file."""
 
-	header = OneRosterLocation.header
+	header = AsmLocation.header
 
-	def find_and_create_objects(self):  # type: () -> Iterator[OneRosterLocation]
+	def find_and_create_objects(self):  # type: () -> Iterator[AsmLocation]
 		"""
-		Find LDAP objects and return created OneRoster objects.
+		Find LDAP objects and return created AsmModel objects.
 
-		:return list of OneRoster objects
-		:rtype: list(OneRosterLocation)
+		:return list of AsmModel objects
+		:rtype: list(AsmLocation)
 		"""
 		schools = self.get_schools()
 		for school in schools:
-			yield OneRosterLocation.from_dn(school.dn)
+			yield AsmLocation.from_dn(school.dn)
 
 
-class OneRosterRostersCsvFile(OneRosterCsvFile):
+class AsmRostersCsvFile(AsmCsvFile):
 	"""CSV file generator for the `rosters` file."""
 
-	header = OneRosterRoster.header
+	header = AsmRoster.header
 
-	def find_and_create_objects(self):  # type: () -> Iterator[OneRosterRoster]
+	def find_and_create_objects(self):  # type: () -> Iterator[AsmRoster]
 		"""
-		Find LDAP objects and return created OneRoster objects.
+		Find LDAP objects and return created AsmModel objects.
 
-		:return list of OneRoster objects
-		:rtype: list(OneRosterRoster)
+		:return list of AsmModel objects
+		:rtype: list(AsmRoster)
 		"""
 		schools = self.get_schools()
 		for school in schools:
@@ -273,20 +273,20 @@ class OneRosterRostersCsvFile(OneRosterCsvFile):
 				for user_dn in sorted(ucs_obj.users):
 					user = User.from_dn(user_dn, None, self.lo)
 					if user.is_student(self.lo) and not user.is_exam_student(self.lo):
-						yield OneRosterRoster.from_dn(ucs_obj.dn, user_dn)
+						yield AsmRoster.from_dn(ucs_obj.dn, user_dn)
 
 
-class OneRosterStaffCsvFile(OneRosterCsvFile):
+class AsmStaffCsvFile(AsmCsvFile):
 	"""CSV file generator for the `staff` file."""
 
-	header = OneRosterStaff.header
+	header = AsmStaff.header
 
-	def find_and_create_objects(self):  # type: () -> Iterator[OneRosterStaff]
+	def find_and_create_objects(self):  # type: () -> Iterator[AsmStaff]
 		"""
-		Find LDAP objects and return created OneRoster objects.
+		Find LDAP objects and return created AsmModel objects.
 
-		:return list of OneRoster objects
-		:rtype: list(OneRosterStaff)
+		:return list of AsmModel objects
+		:rtype: list(AsmStaff)
 		"""
 		schools = self.get_schools()
 		dns = set()
@@ -298,20 +298,20 @@ class OneRosterStaffCsvFile(OneRosterCsvFile):
 				dns.add((t_schools[0], teacher.name, teacher.dn))
 		dns = [dn for school, name, dn in sorted(dns)]  # sorted by 1. school, 2. username
 		for dn in dns:
-			yield OneRosterStaff.from_dn(dn, ou_whitelist=self.ou_whitelist)
+			yield AsmStaff.from_dn(dn, ou_whitelist=self.ou_whitelist)
 
 
-class OneRosterStudentsCsvFile(OneRosterCsvFile):
+class AsmStudentsCsvFile(AsmCsvFile):
 	"""CSV file generator for the `students` file."""
 
-	header = OneRosterStudent.header
+	header = AsmStudent.header
 
-	def find_and_create_objects(self):  # type: () -> Iterator[OneRosterStudent]
+	def find_and_create_objects(self):  # type: () -> Iterator[AsmStudent]
 		"""
-		Find LDAP objects and return created OneRoster objects.
+		Find LDAP objects and return created AsmModel objects.
 
-		:return list of OneRoster objects
-		:rtype: list(OneRosterStudent)
+		:return list of AsmModel objects
+		:rtype: list(AsmStudent)
 		"""
 		schools = self.get_schools()
 		dns = set()
@@ -323,16 +323,16 @@ class OneRosterStudentsCsvFile(OneRosterCsvFile):
 				dns.add((s_schools[0], student.name, student.dn))
 		dns = [dn for school, name, dn in sorted(dns)]  # sorted by 1. school, 2. username
 		for dn in dns:
-			yield OneRosterStudent.from_dn(dn, ou_whitelist=self.ou_whitelist)
+			yield AsmStudent.from_dn(dn, ou_whitelist=self.ou_whitelist)
 
 
 csv_file_generators = {
-	'classes.csv': OneRosterClassCsvFile,
-	'courses.csv': OneRosterCoursesCsvFile,
-	'locations.csv': OneRosterLocationsCsvFile,
-	'rosters.csv': OneRosterRostersCsvFile,
-	'staff.csv': OneRosterStaffCsvFile,
-	'students.csv': OneRosterStudentsCsvFile,
+	'classes.csv': AsmClassCsvFile,
+	'courses.csv': AsmCoursesCsvFile,
+	'locations.csv': AsmLocationsCsvFile,
+	'rosters.csv': AsmRostersCsvFile,
+	'staff.csv': AsmStaffCsvFile,
+	'students.csv': AsmStudentsCsvFile,
 }
 
 

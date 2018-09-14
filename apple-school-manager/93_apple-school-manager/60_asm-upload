@@ -4,7 +4,7 @@
 ## tags: [apptest]
 ## exposure: dangerous
 ## packages:
-##   - univention-oneroster-lib
+##   - univention-apple-school-manager-connector
 ## bugs: [47623]
 
 import os

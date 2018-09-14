@@ -16,8 +16,8 @@ import univention.testing.strings as uts
 import univention.testing.utils as utils
 from ucsschool.lib.models import School, SchoolClass
 from univention.asm.csv.csv_file import (
-	OneRosterClassCsvFile, OneRosterCoursesCsvFile, OneRosterLocationsCsvFile, OneRosterRostersCsvFile,
-	OneRosterStaffCsvFile, OneRosterStudentsCsvFile)
+	AsmClassCsvFile, AsmCoursesCsvFile, AsmLocationsCsvFile, AsmRostersCsvFile,
+	AsmStaffCsvFile, AsmStudentsCsvFile)
 sys.path.append('/usr/share/ucs-test/90_ucsschool/')
 from essential.importusers_cli_v2 import ImportTestbase
 
@@ -211,7 +211,7 @@ class Test(ImportTestbase):
 
 		def check_classes():
 			with NamedTemporaryFile() as class_csv_file:
-				OneRosterClassCsvFile(class_csv_file.name, schools).write_csv()
+				AsmClassCsvFile(class_csv_file.name, schools).write_csv()
 				class_csv_file.flush()
 				class_csv_file.seek(0)
 				expected_school_classes = sorted([
@@ -244,7 +244,7 @@ class Test(ImportTestbase):
 
 		def check_courses():
 			with NamedTemporaryFile() as course_csv_file:
-				OneRosterCoursesCsvFile(course_csv_file.name, schools).write_csv()
+				AsmCoursesCsvFile(course_csv_file.name, schools).write_csv()
 				course_csv_file.flush()
 				course_csv_file.seek(0)
 				expected_courses = sorted([
@@ -268,7 +268,7 @@ class Test(ImportTestbase):
 
 		def check_location():
 			with NamedTemporaryFile() as location_csv_file:
-				OneRosterLocationsCsvFile(location_csv_file.name, schools).write_csv()
+				AsmLocationsCsvFile(location_csv_file.name, schools).write_csv()
 				location_csv_file.flush()
 				location_csv_file.seek(0)
 				expected_locations = sorted([
@@ -291,7 +291,7 @@ class Test(ImportTestbase):
 
 		def check_roster():
 			with NamedTemporaryFile() as roster_csv_file:
-				OneRosterRostersCsvFile(roster_csv_file.name, schools).write_csv()
+				AsmRostersCsvFile(roster_csv_file.name, schools).write_csv()
 				roster_csv_file.flush()
 				roster_csv_file.seek(0)
 				expected_roster = []
@@ -319,7 +319,7 @@ class Test(ImportTestbase):
 
 		def check_staff():
 			with NamedTemporaryFile() as staff_csv_file:
-				OneRosterStaffCsvFile(staff_csv_file.name, schools).write_csv()
+				AsmStaffCsvFile(staff_csv_file.name, schools).write_csv()
 				staff_csv_file.flush()
 				staff_csv_file.seek(0)
 				expected_staff = []
@@ -352,7 +352,7 @@ class Test(ImportTestbase):
 
 		def check_student():
 			with NamedTemporaryFile() as student_csv_file:
-				OneRosterStudentsCsvFile(student_csv_file.name, schools).write_csv()
+				AsmStudentsCsvFile(student_csv_file.name, schools).write_csv()
 				student_csv_file.flush()
 				student_csv_file.seek(0)
 				expected_students = []

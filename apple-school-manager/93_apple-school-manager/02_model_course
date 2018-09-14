@@ -12,7 +12,7 @@ from ldap.filter import filter_format
 from ucsschool.lib.models import SchoolClass
 import univention.testing.strings as uts
 import univention.testing.utils as utils
-from univention.asm.models.course import OneRosterCourse
+from univention.asm.models.course import AsmCourse
 sys.path.append('/usr/share/ucs-test/90_ucsschool/')
 from essential.importusers_cli_v2 import ImportTestbase
 
@@ -70,7 +70,7 @@ class Test(ImportTestbase):
 
 		utils.verify_ldap_object(work_group1_dn, {'memberUid': [teacher1_name]})
 
-		course1 = OneRosterCourse.from_dn(school_class1_dn)
+		course1 = AsmCourse.from_dn(school_class1_dn)
 		got_course1 = course1.as_csv_line()
 		expected_course1 = [school_class1, school_class1, school_class1, self.ou_A.name]
 		if got_course1 == expected_course1:
@@ -78,7 +78,7 @@ class Test(ImportTestbase):
 		else:
 			self.fail('Expected CSV line for course1: {!r}, got: {!r}.'.format(expected_course1, got_course1))
 
-		course2 = OneRosterCourse.from_dn(school_class2_dn)
+		course2 = AsmCourse.from_dn(school_class2_dn)
 		got_course2 = course2.as_csv_line()
 		expected_course2 = [school_class2, school_class2, description, self.ou_A.name]
 		if got_course2 == expected_course2:
@@ -86,7 +86,7 @@ class Test(ImportTestbase):
 		else:
 			self.fail('Expected CSV line for course2: {!r}, got: {!r}.'.format(expected_course2, got_course2))
 
-		workgroup1 = OneRosterCourse.from_dn(work_group1_dn)
+		workgroup1 = AsmCourse.from_dn(work_group1_dn)
 		got_workgroup1 = workgroup1.as_csv_line()
 		expected_workgroup1 = [work_group1_name, work_group1_name, work_group1_description, self.ou_A.name]
 		if got_workgroup1 == expected_workgroup1:

@@ -11,7 +11,7 @@ import sys
 from ldap.filter import filter_format
 import univention.testing.strings as uts
 import univention.testing.utils as utils
-from univention.asm.models.roster import OneRosterRoster
+from univention.asm.models.roster import AsmRoster
 sys.path.append('/usr/share/ucs-test/90_ucsschool/')
 from essential.importusers_cli_v2 import ImportTestbase
 
@@ -52,7 +52,7 @@ class Test(ImportTestbase):
 
 		utils.verify_ldap_object(work_group1_dn, {'memberUid': [student1_name, student2_name]})
 
-		roster1 = OneRosterRoster.from_dn(class_dn=school_class1_dn, student_dn=student1_dn)
+		roster1 = AsmRoster.from_dn(class_dn=school_class1_dn, student_dn=student1_dn)
 		got_roster1 = roster1.as_csv_line()
 		expected_roster1 = ['{}-{}'.format(school_class1, student1_name), school_class1, student1_name]
 		if got_roster1 == expected_roster1:
@@ -60,7 +60,7 @@ class Test(ImportTestbase):
 		else:
 			self.fail('Expected CSV line for roster1: {!r}, got: {!r}.'.format(expected_roster1, got_roster1))
 
-		roster2 = OneRosterRoster.from_dn(class_dn=school_class1_dn, student_dn=student2_dn)
+		roster2 = AsmRoster.from_dn(class_dn=school_class1_dn, student_dn=student2_dn)
 		got_roster2 = roster2.as_csv_line()
 		expected_roster2 = ['{}-{}'.format(school_class1, student2_name), school_class1, student2_name]
 		if got_roster2 == expected_roster2:
@@ -68,7 +68,7 @@ class Test(ImportTestbase):
 		else:
 			self.fail('Expected CSV line for roster2: {!r}, got: {!r}.'.format(expected_roster2, got_roster2))
 
-		workgroup1 = OneRosterRoster.from_dn(class_dn=work_group1_dn, student_dn=student2_dn)
+		workgroup1 = AsmRoster.from_dn(class_dn=work_group1_dn, student_dn=student2_dn)
 		got_workgroup1 = workgroup1.as_csv_line()
 		expected_workgroup1 = ['{}-{}'.format(work_group1_name, student2_name), work_group1_name, student2_name]
 		if got_workgroup1 == expected_workgroup1:

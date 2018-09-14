@@ -30,13 +30,13 @@
 """
 Univention Apple School Manager Connector
 
-Class to represent a OneRoster location.
+Class to represent a ASM location.
 
 See https://support.apple.com/en-us/HT207029
 """
 
 from __future__ import absolute_import, unicode_literals
-from .base import OneRosterModel
+from .base import AsmModel
 from ucsschool.lib.models import School
 from ucsschool.importer.utils.ldap_connection import get_readonly_connection
 
@@ -46,8 +46,8 @@ except ImportError:
 	pass
 
 
-class OneRosterLocation(OneRosterModel):
-	"""Class to represent a OneRoster location entry."""
+class AsmLocation(AsmModel):
+	"""Class to represent a ASM location entry."""
 
 	header = ('location_id', 'location_name')
 
@@ -57,18 +57,18 @@ class OneRosterLocation(OneRosterModel):
 			letters that contains no spaces (required).
 		:param str location_name: The name of the location (required).
 		"""
-		super(OneRosterLocation, self).__init__(location_id, location_name)
+		super(AsmLocation, self).__init__(location_id, location_name)
 		self.location_id = location_id
 		self.location_name = location_name
 
 	@classmethod
-	def from_dn(cls, dn, *args, **kwargs):  # type: (AnyStr, *Any, **Any) -> OneRosterLocation
+	def from_dn(cls, dn, *args, **kwargs):  # type: (AnyStr, *Any, **Any) -> AsmLocation
 		"""
-		Get OneRosterLocation object created from data in LDAP object.
+		Get AsmLocation object created from data in LDAP object.
 
 		:param str dn: DN to the School/OU object to represent
-		:return: OneRosterLocation instance
-		:rtype OneRosterLocation
+		:return: AsmLocation instance
+		:rtype AsmLocation
 		"""
 		lo, po = get_readonly_connection()
 		school = School.from_dn(dn, None, lo)

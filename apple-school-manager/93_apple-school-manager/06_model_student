@@ -12,7 +12,7 @@ from ucsschool.lib.models import Student
 import univention.testing.strings as uts
 import univention.testing.utils as utils
 from univention.config_registry import handler_set
-from univention.asm.models.student import OneRosterStudent
+from univention.asm.models.student import AsmStudent
 sys.path.append('/usr/share/ucs-test/90_ucsschool/')
 from essential.importusers_cli_v2 import ImportTestbase
 
@@ -54,7 +54,7 @@ class Test(ImportTestbase):
 
 		student2 = Student.from_dn(student2_dn, None, self.lo)
 
-		or_student1 = OneRosterStudent.from_dn(student1_dn)
+		or_student1 = AsmStudent.from_dn(student1_dn)
 		got_student1 = or_student1.as_csv_line()
 		expected_student1 = [
 			student1_name, '', student1.firstname, middle_name, student1.lastname, '', '', student1_name, '', school1
@@ -64,7 +64,7 @@ class Test(ImportTestbase):
 		else:
 			self.fail('Expected CSV line for student1: {!r}, got: {!r}.'.format(expected_student1, got_student1))
 
-		or_student2 = OneRosterStudent.from_dn(student2_dn)
+		or_student2 = AsmStudent.from_dn(student2_dn)
 		got_student2 = or_student2.as_csv_line()
 		expected_student2 = [
 			student2_name, '', student2.firstname, '', student2.lastname, '', email_sub, student2_name, '', school2, school1

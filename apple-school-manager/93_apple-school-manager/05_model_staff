@@ -12,7 +12,7 @@ from ucsschool.lib.models import Teacher, TeachersAndStaff
 import univention.testing.strings as uts
 import univention.testing.utils as utils
 from univention.config_registry import handler_set
-from univention.asm.models.staff import OneRosterStaff
+from univention.asm.models.staff import AsmStaff
 sys.path.append('/usr/share/ucs-test/90_ucsschool/')
 from essential.importusers_cli_v2 import ImportTestbase
 
@@ -55,7 +55,7 @@ class Test(ImportTestbase):
 
 		teacher2 = TeachersAndStaff.from_dn(teacher2_dn, None, self.lo)
 
-		or_teacher1 = OneRosterStaff.from_dn(teacher1_dn)
+		or_teacher1 = AsmStaff.from_dn(teacher1_dn)
 		got_teacher1 = or_teacher1.as_csv_line()
 		expected_teacher1 = [
 			teacher1_name, '', teacher1.firstname, middle_name, teacher1.lastname, '', teacher1_name, school1
@@ -65,7 +65,7 @@ class Test(ImportTestbase):
 		else:
 			self.fail('Expected CSV line for teacher1: {!r}, got: {!r}.'.format(expected_teacher1, got_teacher1))
 
-		or_teacher2 = OneRosterStaff.from_dn(teacher2_dn)
+		or_teacher2 = AsmStaff.from_dn(teacher2_dn)
 		got_teacher2 = or_teacher2.as_csv_line()
 		expected_teacher2 = [
 			teacher2_name, '', teacher2.firstname, '', teacher2.lastname, email_sub, teacher2_name, school2, school1

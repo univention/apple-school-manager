@@ -38,7 +38,7 @@ See https://support.apple.com/en-us/HT207029
 from __future__ import absolute_import, unicode_literals
 from .base import AsmModel
 from ucsschool.lib.models import School
-from ucsschool.importer.utils.ldap_connection import get_readonly_connection
+from ucsschool.importer.utils.ldap_connection import get_admin_connection
 
 try:
 	from typing import Any, AnyStr
@@ -70,6 +70,6 @@ class AsmLocation(AsmModel):
 		:return: AsmLocation instance
 		:rtype AsmLocation
 		"""
-		lo, po = get_readonly_connection()
+		lo, po = get_admin_connection()
 		school = School.from_dn(dn, None, lo)
 		return cls(school.name, school.display_name or school.name)

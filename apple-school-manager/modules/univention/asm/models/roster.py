@@ -39,7 +39,7 @@ from __future__ import absolute_import, unicode_literals
 from .base import AsmModel
 from ucsschool.lib.models import SchoolClass, Student, WorkGroup
 from ucsschool.lib.models.base import UnknownModel
-from ucsschool.importer.utils.ldap_connection import get_readonly_connection
+from ucsschool.importer.utils.ldap_connection import get_admin_connection
 
 try:
 	from typing import Any, AnyStr
@@ -81,7 +81,7 @@ class AsmRoster(AsmModel):
 		:return: AsmRoster instance
 		:rtype AsmRoster
 		"""
-		lo, po = get_readonly_connection()
+		lo, po = get_admin_connection()
 		try:
 			school_class = SchoolClass.from_dn(class_dn, None, lo)
 		except UnknownModel:

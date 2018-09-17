@@ -40,7 +40,7 @@ from .base import AsmModel
 from ucsschool.lib.models import SchoolClass, User, WorkGroup
 from ucsschool.lib.models.base import UnknownModel
 from univention.asm.utils import get_ucr
-from ucsschool.importer.utils.ldap_connection import get_readonly_connection
+from ucsschool.importer.utils.ldap_connection import get_admin_connection
 
 try:
 	from typing import Any, AnyStr, Iterable, Optional
@@ -125,7 +125,7 @@ class AsmClass(AsmModel):
 		:return: AsmClass instance
 		:rtype AsmClass
 		"""
-		lo, po = get_readonly_connection()
+		lo, po = get_admin_connection()
 		try:
 			school_class = SchoolClass.from_dn(dn, None, lo)
 		except UnknownModel:

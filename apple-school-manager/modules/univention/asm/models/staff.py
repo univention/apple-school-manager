@@ -41,7 +41,7 @@ from .base import AsmModel, AnonymizeMixIn
 from ucsschool.lib.models import Teacher, TeachersAndStaff
 from ucsschool.lib.models.base import WrongModel
 from univention.asm.utils import check_domain, prepend_to_mail_domain
-from ucsschool.importer.utils.ldap_connection import get_readonly_connection
+from ucsschool.importer.utils.ldap_connection import get_admin_connection
 
 try:
 	from typing import Any, AnyStr, Iterable, Optional
@@ -137,7 +137,7 @@ class AsmStaff(AsmModel, AnonymizeMixIn):
 			teacherandstaff
 		:raises ValueError: when non of the users `schools` is in the whitelist
 		"""
-		lo, po = get_readonly_connection()
+		lo, po = get_admin_connection()
 		try:
 			teacher = Teacher.from_dn(dn, None, lo)
 		except WrongModel:

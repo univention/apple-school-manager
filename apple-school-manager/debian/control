@@ -22,7 +22,7 @@ Depends: ${misc:Depends},
  univention-join,
  python-ucs-school,
  python-dns,
- ucs-school-import (>=16.0.2-29),
+ ucs-school-import,
 Recommends: ntp
 Description: Provision Apple School Manager accounts.
  Synchronize user accounts to the Apple School Manager server.

@@ -40,8 +40,9 @@ Group[de] = Automatische Synchronisation
 InitialValue = False
 
 [asm/sync_daily/hour]
-Type = Int
-Description = The hour (0-23) at which the Apple School Manager sync should run.
+Type = List
+Description = The hour at which the Apple School Manager sync should run.
 Description[de] = Zu welcher Stunde die Apple School Manager synchronisation ausgeführt werden soll.
+Values = 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23
 Group = Automatic Sync
 Group[de] = Automatische Synchronisation

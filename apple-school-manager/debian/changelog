@@ -1,3 +1,11 @@
+univention-apple-school-manager-connector (1.0.0-9) unstable; urgency=low
+
+  * Bug #47622: use uid as first_name
+  * Bug #47622: remove dependency on recent ucs-school-import package by using
+    a r/w cn=admin LDAP connection
+
+ -- Daniel Troeder <troeder@univention.de>  Mon, 17 Sep 2018 12:46:04 +0200
+
 univention-apple-school-manager-connector (1.0.0-8) unstable; urgency=low
 
   * Bug #47622: add support for anonymization

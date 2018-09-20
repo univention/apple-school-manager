@@ -28,11 +28,6 @@ Description: Provision Apple School Manager accounts.
  Synchronize user accounts to the Apple School Manager server.
 Homepage: https://school.apple.com/
 
-Package: univention-management-console-module-apple-school-manager
-Architecture: all
-Depends: univention-apple-school-manager-connector
-Description: Apple School Manager UMC module
-
 Package: ucs-test-asm
 Architecture: all
 Depends: ucs-test-libs,

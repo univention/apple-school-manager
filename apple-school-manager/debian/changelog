@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (1.0.0-10) unstable; urgency=low
+
+  * Bug #47622: remove empty binary package
+
+ -- Daniel Troeder <troeder@univention.de>  Thu, 20 Sep 2018 15:39:25 +0200
+
 univention-apple-school-manager-connector (1.0.0-9) unstable; urgency=low
 
   * Bug #47622: use uid as first_name

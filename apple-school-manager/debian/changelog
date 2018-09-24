@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (1.0.0-11) unstable; urgency=medium
+
+  * Bug #47624: Better error handling in the asm cronjob
+
+ -- Jürn Brodersen <brodersen@univention.de>  Mon, 24 Sep 2018 17:54:23 +0200
+
 univention-apple-school-manager-connector (1.0.0-10) unstable; urgency=low
 
   * Bug #47622: remove empty binary package

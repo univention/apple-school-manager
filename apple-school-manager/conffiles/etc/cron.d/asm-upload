@@ -16,7 +16,7 @@ else:
 	if hour < 0 or hour > 23:
 		hour = None
 if hour is None:
-	print("Please set a valid hour for the sync")
+	print("# Please set a valid hour for the sync")
 else:
 	print("0 {} * * * root /usr/sbin/asm-upload".format(hour))
 @!@

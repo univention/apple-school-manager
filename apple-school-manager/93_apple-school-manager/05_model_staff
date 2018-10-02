@@ -8,6 +8,8 @@
 ## bugs: [47622]
 
 import sys
+from univention.config_registry import handler_unset
+import univention.testing.ucr as ucr_test
 from ucsschool.lib.models import Teacher, TeachersAndStaff
 import univention.testing.strings as uts
 import univention.testing.utils as utils
@@ -100,4 +102,11 @@ class Test(ImportTestbase):
 
 
 if __name__ == '__main__':
-	Test().run()
+	with ucr_test.UCSTestConfigRegistry():
+		handler_unset([
+			"asm/attributes/user/email/prepend_domain",
+			"asm/attributes/classes/class_number_empty",
+			"asm/attributes/staff/anonymize",
+			"asm/attributes/student/anonymize",
+		])
+		Test().run()

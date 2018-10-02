@@ -10,6 +10,8 @@
 import sys
 import random
 from ldap.filter import filter_format
+from univention.config_registry import handler_unset
+import univention.testing.ucr as ucr_test
 import univention.testing.strings as uts
 import univention.testing.utils as utils
 from univention.asm.models.classes import AsmClass
@@ -136,4 +138,11 @@ class Test(ImportTestbase):
 
 
 if __name__ == '__main__':
-	Test().run()
+	with ucr_test.UCSTestConfigRegistry():
+		handler_unset([
+			"asm/attributes/user/email/prepend_domain",
+			"asm/attributes/classes/class_number_empty",
+			"asm/attributes/staff/anonymize",
+			"asm/attributes/student/anonymize",
+		])
+		Test().run()

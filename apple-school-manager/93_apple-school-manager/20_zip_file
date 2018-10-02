@@ -1,6 +1,6 @@
 #!/usr/share/ucs-test/runner python
 ## -*- coding: utf-8 -*-
-## desc: test CSV generation
+## desc: test ZIP generation
 ## tags: [apptest]
 ## exposure: dangerous
 ## packages:
@@ -14,6 +14,8 @@ from operator import itemgetter
 import tempfile
 import zipfile
 from ldap.filter import filter_format
+from univention.config_registry import handler_unset
+import univention.testing.ucr as ucr_test
 import univention.testing.strings as uts
 import univention.testing.utils as utils
 from ucsschool.lib.models import School, SchoolClass
@@ -386,4 +388,11 @@ class Test(ImportTestbase):
 
 
 if __name__ == '__main__':
-	Test().run()
+	with ucr_test.UCSTestConfigRegistry():
+		handler_unset([
+			"asm/attributes/user/email/prepend_domain",
+			"asm/attributes/classes/class_number_empty",
+			"asm/attributes/staff/anonymize",
+			"asm/attributes/student/anonymize",
+		])
+		Test().run()

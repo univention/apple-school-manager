@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (1.0.0-13) unstable; urgency=medium
+
+  * Bug #47624: Fix asm/sync_daily
+
+ -- Jürn Brodersen <brodersen@univention.de>  Tue, 02 Oct 2018 10:58:46 +0200
+
 univention-apple-school-manager-connector (1.0.0-12) unstable; urgency=medium
 
   * Bug #47620: Test adjustments

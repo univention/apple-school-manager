@@ -106,7 +106,7 @@ if __name__ == '__main__':
 		handler_unset([
 			"asm/attributes/user/email/prepend_domain",
 			"asm/attributes/classes/class_number_empty",
-			"asm/attributes/staff/anonymize",
 			"asm/attributes/student/anonymize",
 		])
+		handler_unset(["asm/attributes/staff/anonymize{}".format(value) for value in ("", "/email_address", "/first_name", "/last_name", "/middle_name", "/sis_username")])
 		Test().run()

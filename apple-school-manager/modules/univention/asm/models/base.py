@@ -35,7 +35,7 @@ Base class for all ASM models.
 
 from __future__ import absolute_import, unicode_literals
 import inspect
-from univention.asm.utils import get_ucr
+from ..utils import get_ucr
 
 try:
 	from typing import Any, AnyStr, Dict, Iterable

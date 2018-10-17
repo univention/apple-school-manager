@@ -46,6 +46,12 @@ Description[en]=Value for the attribute 'sis_username', when asm/attributes/staf
 Type=str
 Categories=service-administration
 
+[asm/attributes/staff/person_id/mapping]
+Description[de]=LDAP Attribut welches zur Identifikation des UCS-Benutzers verwendet wird. Sollte sich nicht ändern, wenn der Benutzer umbenannt wird. Standard: entryUUID.
+Description[en]=LDAP attribute that is used to identify the UCS user. Should not change, when the user is renamed. Default: entryUUID.
+Type=str
+Categories=service-administration
+
 [asm/attributes/student/anonymize]
 Description[de]=Das Anonymisieren der Attribute 'first_name', 'middle_name', 'last_name' und 'email_address' bei Schülerinnen und Schülern einschalten. Die Ersetzungswerte können mit asm/attributes/student/anonymize/<Attribut> verändert werden. Standard: false.
 Description[en]=Enable the anonymization of the attributes 'first_name', 'middle_name', 'last_name', 'email_address' and 'sis_username' for students. Default: false.
@@ -79,5 +85,11 @@ Categories=service-administration
 [asm/attributes/student/anonymize/sis_username]
 Description[de]=Wert der, wenn asm/attributes/student/anonymize eingeschaltet ist, für das Attribut 'sis_username' von Schülerinnen und Schülern übertragen werden soll. Standard: kein Wert / leer.
 Description[en]=Value for the attribute 'sis_username', when asm/attributes/student/anonymize ist enabled. Default: no value / empty.
+Type=str
+Categories=service-administration
+
+[asm/attributes/student/person_id/mapping]
+Description[de]=LDAP Attribut welches zur Identifikation des UCS-Benutzers verwendet wird. Sollte sich nicht ändern, wenn der Benutzer umbenannt wird. Standard: entryUUID.
+Description[en]=LDAP attribute that is used to identify the UCS user. Should not change, when the user is renamed. Default: entryUUID.
 Type=str
 Categories=service-administration

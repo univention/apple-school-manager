@@ -1,3 +1,10 @@
+univention-apple-school-manager-connector (1.0.0-14) unstable; urgency=low
+
+  * Bug #47893: make person_id mapping configurable (UCRV
+    asm/attributes/$ROLE/person_id/mapping), defaults to "entryUUID"
+
+ -- Daniel Troeder <troeder@univention.de>  Wed, 17 Oct 2018 10:57:34 +0200
+
 univention-apple-school-manager-connector (1.0.0-13) unstable; urgency=medium
 
   * Bug #47624: Fix asm/sync_daily

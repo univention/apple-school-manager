@@ -36,9 +36,10 @@ Utility functions.
 # don't import __future__.unicode_literals here, DNS lib cannot handle it!
 import DNS
 from univention.config_registry import ConfigRegistry
+from ucsschool.importer.utils.ldap_connection import get_admin_connection
 
 try:
-	from typing import Dict, List, Tuple
+	from typing import Dict, List, Text, Tuple
 except ImportError:
 	pass
 
@@ -123,3 +124,15 @@ def split_email(email):  # type: (str) -> Tuple[str, str]
 	if not all((local_part, at, domain)) or '.' not in domain:
 		raise ValueError('Invalid email address: {!r}.'.format(email))
 	return local_part, domain
+
+
+def get_person_id(dn, role, additional_attrs):  # type: (Text, Text, List[Text]) -> Tuple[Text, Dict[Text, Text]]
+	assert role in ('staff', 'student')
+	additional_attrs = additional_attrs or []
+	ucrv = 'asm/attributes/{}/person_id/mapping'.format(role)
+	lo, po = get_admin_connection()
+	person_id_attr = get_ucr().get(ucrv, 'entryUUID')
+	res = lo.get(dn, map(str, [person_id_attr] + additional_attrs))  # unicode2str for python-ldap
+	if person_id_attr not in res:
+		raise ValueError('Attribute {!r} from {!r} is not set on {!r}.'.format(person_id_attr, ucrv, dn))
+	return person_id_attr, res

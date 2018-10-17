@@ -37,6 +37,7 @@ See https://support.apple.com/en-us/HT207029
 
 from __future__ import absolute_import, unicode_literals
 from .base import AsmModel
+from ..utils import get_person_id
 from ucsschool.lib.models import SchoolClass, Student, WorkGroup
 from ucsschool.lib.models.base import UnknownModel
 from ucsschool.importer.utils.ldap_connection import get_admin_connection
@@ -87,8 +88,10 @@ class AsmRoster(AsmModel):
 		except UnknownModel:
 			school_class = WorkGroup.from_dn(class_dn, None, lo)
 		student = Student.from_dn(student_dn, None, lo)
+		person_id_attr, student_lo = get_person_id(student.dn, 'student', [])
+		student_id = student_lo[person_id_attr][0]
 		return cls(
-			roster_id='{}-{}'.format(school_class.name, student.name),
+			roster_id='{}-{}'.format(school_class.name, student_id),
 			class_id=school_class.name,
-			student_id=student.name,
+			student_id=student_id,
 		)

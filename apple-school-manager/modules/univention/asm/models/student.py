@@ -38,8 +38,8 @@ See https://support.apple.com/en-us/HT207029
 from __future__ import absolute_import, unicode_literals
 import logging
 from .base import AsmModel, AnonymizeMixIn
+from ..utils import check_domain, get_person_id, prepend_to_mail_domain
 from ucsschool.lib.models import Student
-from univention.asm.utils import check_domain, prepend_to_mail_domain
 from ucsschool.importer.utils.ldap_connection import get_admin_connection
 
 try:
@@ -161,14 +161,14 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
 			if not location_ids:
 				raise ValueError('Non of the users schools is in the whitelist: {} (schools: {!r}).'.format(
 					student, student.schools))
-		student_lo = lo.get(dn)
+		person_id_attr, student_lo = get_person_id(student.dn, 'student', ['middleName', 'initials', 'oxMiddleName'])
 		middle_name = (
 			student_lo.get('middleName', [''])[0] or
 			student_lo.get('initials', [''])[0] or
 			student_lo.get('oxMiddleName', [''])[0]
 		)
 		return cls(**cls.anonymize(
-			person_id=student.name,
+			person_id=student_lo[person_id_attr][0],
 			first_name=student.firstname,
 			last_name=student.lastname,
 			location_id=location_ids[0],

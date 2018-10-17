@@ -37,9 +37,9 @@ See https://support.apple.com/en-us/HT207029
 
 from __future__ import absolute_import, unicode_literals
 from .base import AsmModel
+from ..utils import get_ucr, get_person_id
 from ucsschool.lib.models import SchoolClass, User, WorkGroup
 from ucsschool.lib.models.base import UnknownModel
-from univention.asm.utils import get_ucr
 from ucsschool.importer.utils.ldap_connection import get_admin_connection
 
 try:
@@ -136,7 +136,8 @@ class AsmClass(AsmModel):
 		for user_dn in school_class.users:
 			user = User.from_dn(user_dn, None, lo)
 			if user.is_teacher(lo):
-				teachers.append(user.name)
+				person_id_attr, teacher_lo = get_person_id(user.dn, 'staff', [])
+				teachers.append(teacher_lo[person_id_attr][0])
 		instructor_id = instructor_id_2 = instructor_id_3 = additional_instructor_ids = None
 		if teachers:
 			try:

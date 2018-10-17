@@ -38,9 +38,9 @@ See https://support.apple.com/en-us/HT207029
 from __future__ import absolute_import, unicode_literals
 import logging
 from .base import AsmModel, AnonymizeMixIn
+from ..utils import check_domain, get_person_id, prepend_to_mail_domain
 from ucsschool.lib.models import Teacher, TeachersAndStaff
 from ucsschool.lib.models.base import WrongModel
-from univention.asm.utils import check_domain, prepend_to_mail_domain
 from ucsschool.importer.utils.ldap_connection import get_admin_connection
 
 try:
@@ -152,14 +152,14 @@ class AsmStaff(AsmModel, AnonymizeMixIn):
 			if not location_ids:
 				raise ValueError('Non of the users schools is in the whitelist: {} (schools: {!r}).'.format(
 					teacher, teacher.schools))
-		teacher_lo = lo.get(dn)
+		person_id_attr, teacher_lo = get_person_id(teacher.dn, 'staff', ['middleName', 'initials', 'oxMiddleName'])
 		middle_name = (
 				teacher_lo.get('middleName', [''])[0] or
 				teacher_lo.get('initials', [''])[0] or
 				teacher_lo.get('oxMiddleName', [''])[0]
 		)
 		return cls(**cls.anonymize(
-			person_id=teacher.name,
+			person_id=teacher_lo[person_id_attr][0],
 			first_name=teacher.firstname,
 			last_name=teacher.lastname,
 			location_id=location_ids[0],

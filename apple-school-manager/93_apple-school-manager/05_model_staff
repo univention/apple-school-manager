@@ -15,7 +15,7 @@ import univention.testing.strings as uts
 import univention.testing.utils as utils
 from univention.config_registry import handler_set
 from univention.asm.models.staff import AsmStaff
-from univention.asm.utils import update_ucr
+from univention.asm.utils import get_person_id, update_ucr
 sys.path.append('/usr/share/ucs-test/90_ucsschool/')
 from essential.importusers_cli_v2 import ImportTestbase
 
@@ -36,8 +36,12 @@ class Test(ImportTestbase):
 		email_sub = '{}@{}.{}'.format(email_local, subdomain, self.maildomain)
 		teacher2_name, teacher2_dn = self.schoolenv.create_teacher_and_staff(
 			school2, schools=[school1, school2], mailaddress=email)
-		self.log.info('Created teacher1: %r (%s)', teacher1_name, teacher1_dn)
-		self.log.info('Created teacher2: %r (%s)', teacher2_name, teacher2_dn)
+		t1_id_attr, t1_lo = get_person_id(teacher1_dn, 'staff', [])
+		t1_name = t1_lo[t1_id_attr][0]
+		t2_id_attr, t2_lo = get_person_id(teacher2_dn, 'staff', [])
+		t2_name = t2_lo[t2_id_attr][0]
+		self.log.info('Created teacher1: %r (%s, %s)', teacher1_name, teacher1_dn, t1_name)
+		self.log.info('Created teacher2: %r (%s, %s)', teacher2_name, teacher2_dn, t2_name)
 
 		# check if this system has a schema that supports a middle name
 		teacher1 = Teacher.from_dn(teacher1_dn, None, self.lo)
@@ -61,7 +65,7 @@ class Test(ImportTestbase):
 		or_teacher1 = AsmStaff.from_dn(teacher1_dn)
 		got_teacher1 = or_teacher1.as_csv_line()
 		expected_teacher1 = [
-			teacher1_name, '', teacher1.firstname, middle_name, teacher1.lastname, '', teacher1_name, school1
+			t1_name, '', teacher1.firstname, middle_name, teacher1.lastname, '', teacher1_name, school1
 		]
 		if got_teacher1 == expected_teacher1:
 			self.log.info('OK: teacher1 CSV line is as expected.')
@@ -71,7 +75,7 @@ class Test(ImportTestbase):
 		or_teacher2 = AsmStaff.from_dn(teacher2_dn)
 		got_teacher2 = or_teacher2.as_csv_line()
 		expected_teacher2 = [
-			teacher2_name, '', teacher2.firstname, '', teacher2.lastname, email_sub, teacher2_name, school2, school1
+			t2_name, '', teacher2.firstname, '', teacher2.lastname, email_sub, teacher2_name, school2, school1
 		]
 		if got_teacher2 == expected_teacher2:
 			self.log.info('OK: teacher2 CSV line is as expected.')
@@ -82,7 +86,7 @@ class Test(ImportTestbase):
 		update_ucr()
 		or_teacher1 = AsmStaff.from_dn(teacher1_dn)
 		got_teacher1 = or_teacher1.as_csv_line()
-		expected_teacher1 = [teacher1_name, '', teacher1_name, middle_name, 'Nachname', '', '', school1]
+		expected_teacher1 = [t1_name, '', t1_name, middle_name, 'Nachname', '', '', school1]
 		if got_teacher1 == expected_teacher1:
 			self.log.info('OK: teacher1 anonymized CSV line is as expected.')
 		else:
@@ -93,7 +97,7 @@ class Test(ImportTestbase):
 		update_ucr()
 		or_teacher1 = AsmStaff.from_dn(teacher1_dn)
 		got_teacher1 = or_teacher1.as_csv_line()
-		expected_teacher1 = [teacher1_name, '', first_name_anon, middle_name, 'Nachname', '', '', school1]
+		expected_teacher1 = [t1_name, '', first_name_anon, middle_name, 'Nachname', '', '', school1]
 		if got_teacher1 == expected_teacher1:
 			self.log.info('OK: teacher1 anonymized CSV line with static first_name is as expected.')
 		else:

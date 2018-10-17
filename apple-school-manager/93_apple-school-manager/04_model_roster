@@ -14,6 +14,7 @@ import univention.testing.ucr as ucr_test
 import univention.testing.strings as uts
 import univention.testing.utils as utils
 from univention.asm.models.roster import AsmRoster
+from univention.asm.utils import get_person_id
 sys.path.append('/usr/share/ucs-test/90_ucsschool/')
 from essential.importusers_cli_v2 import ImportTestbase
 
@@ -30,11 +31,15 @@ class Test(ImportTestbase):
 		student1_name, student1_dn = self.schoolenv.create_student(school1, classes=school_class1)
 		student2_name, student2_dn = self.schoolenv.create_student(school1, classes=school_class1)
 		# "users" are created in the reverse order!?!?!?!
+		s1_id_attr, s1_lo = get_person_id(student1_dn, 'student', [])
+		s1_name = s1_lo[s1_id_attr][0]
+		s2_id_attr, s2_lo = get_person_id(student2_dn, 'student', [])
+		s2_name = s2_lo[s2_id_attr][0]
 		work_group1_description = uts.random_name()
 		work_group1_name, work_group1_dn = self.schoolenv.create_workgroup(
 			school1, description=work_group1_description, users=[student2_dn, student1_dn])
-		self.log.info('Created student1: %r (%s)', student1_name, student1_dn)
-		self.log.info('Created student2: %r (%s)', student2_name, student2_dn)
+		self.log.info('Created student1: %r (%s, %s)', student1_name, student1_dn, s1_name)
+		self.log.info('Created student2: %r (%s, %s)', student2_name, student2_dn, s2_name)
 		self.log.info(
 			'Created school_class1=%r',
 			self.lo.search(filter_format('(&(objectClass=univentionGroup)(cn=%s))', (school_class1,)), attr=['memberUid'])
@@ -56,7 +61,7 @@ class Test(ImportTestbase):
 
 		roster1 = AsmRoster.from_dn(class_dn=school_class1_dn, student_dn=student1_dn)
 		got_roster1 = roster1.as_csv_line()
-		expected_roster1 = ['{}-{}'.format(school_class1, student1_name), school_class1, student1_name]
+		expected_roster1 = ['{}-{}'.format(school_class1, s1_name), school_class1, s1_name]
 		if got_roster1 == expected_roster1:
 			self.log.info('OK: roster1 CSV line is as expected.')
 		else:
@@ -64,7 +69,7 @@ class Test(ImportTestbase):
 
 		roster2 = AsmRoster.from_dn(class_dn=school_class1_dn, student_dn=student2_dn)
 		got_roster2 = roster2.as_csv_line()
-		expected_roster2 = ['{}-{}'.format(school_class1, student2_name), school_class1, student2_name]
+		expected_roster2 = ['{}-{}'.format(school_class1, s2_name), school_class1, s2_name]
 		if got_roster2 == expected_roster2:
 			self.log.info('OK: roster2 CSV line is as expected.')
 		else:
@@ -72,7 +77,7 @@ class Test(ImportTestbase):
 
 		workgroup1 = AsmRoster.from_dn(class_dn=work_group1_dn, student_dn=student2_dn)
 		got_workgroup1 = workgroup1.as_csv_line()
-		expected_workgroup1 = ['{}-{}'.format(work_group1_name, student2_name), work_group1_name, student2_name]
+		expected_workgroup1 = ['{}-{}'.format(work_group1_name, s2_name), work_group1_name, s2_name]
 		if got_workgroup1 == expected_workgroup1:
 			self.log.info('OK: workgroup1 CSV line is as expected.')
 		else:

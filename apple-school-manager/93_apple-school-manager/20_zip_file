@@ -19,6 +19,7 @@ import univention.testing.ucr as ucr_test
 import univention.testing.strings as uts
 import univention.testing.utils as utils
 from ucsschool.lib.models import School, SchoolClass
+from univention.asm.utils import get_person_id
 from univention.asm.csv.zip_file import AsmZipFile
 sys.path.append('/usr/share/ucs-test/90_ucsschool/')
 from essential.importusers_cli_v2 import ImportTestbase
@@ -95,6 +96,33 @@ class Test(ImportTestbase):
 		student6_name, student6_dn = self.schoolenv.create_student(school1, classes=school_class1)
 		student7_name, student7_dn = self.schoolenv.create_student(school2, classes=school_class2)
 		student8_name, student8_dn = self.schoolenv.create_student(school3, classes=school_class3)
+
+		t1_id_attr, t1_lo = get_person_id(teacher1_dn, 'staff', [])
+		t1_name = t1_lo[t1_id_attr][0]
+		t2_id_attr, t2_lo = get_person_id(teacher2_dn, 'staff', [])
+		t2_name = t2_lo[t2_id_attr][0]
+		t3_id_attr, t3_lo = get_person_id(teacher3_dn, 'staff', [])
+		t3_name = t3_lo[t3_id_attr][0]
+		t4_id_attr, t4_lo = get_person_id(teacher4_dn, 'staff', [])
+		t4_name = t4_lo[t4_id_attr][0]
+		t5_id_attr, t5_lo = get_person_id(teacher5_dn, 'staff', [])
+		t5_name = t5_lo[t5_id_attr][0]
+		t6_id_attr, t6_lo = get_person_id(teacher6_dn, 'staff', [])
+		t6_name = t6_lo[t6_id_attr][0]
+		s1_id_attr, s1_lo = get_person_id(student1_dn, 'student', [])
+		s1_name = s1_lo[s1_id_attr][0]
+		s2_id_attr, s2_lo = get_person_id(student2_dn, 'student', [])
+		s2_name = s2_lo[s2_id_attr][0]
+		s3_id_attr, s3_lo = get_person_id(student3_dn, 'student', [])
+		s3_name = s3_lo[s3_id_attr][0]
+		s4_id_attr, s4_lo = get_person_id(student4_dn, 'student', [])
+		s4_name = s4_lo[s4_id_attr][0]
+		s5_id_attr, s5_lo = get_person_id(student5_dn, 'student', [])
+		s5_name = s5_lo[s5_id_attr][0]
+		s6_id_attr, s6_lo = get_person_id(student6_dn, 'student', [])
+		s6_name = s6_lo[s6_id_attr][0]
+		s7_id_attr, s7_lo = get_person_id(student7_dn, 'student', [])
+		s7_name = s7_lo[s7_id_attr][0]
 
 		self.log.info('Created a staff in each OU.')
 
@@ -215,16 +243,16 @@ class Test(ImportTestbase):
 			with open(class_csv_file_name, 'rb') as class_csv_file:
 				expected_school_classes = sorted([
 					[
-						school_class1, '', school_class1, teacher1_name, teacher2_name, teacher3_name, school1,
-						teacher4_name, '', ''
+						school_class1, '', school_class1, t1_name, t2_name, t3_name, school1,
+						t4_name, '', ''
 					],
 					[
-						school_class2, '', school_class2, teacher1_name, teacher2_name, teacher3_name, school2,
-						teacher4_name, teacher5_name, teacher6_name
+						school_class2, '', school_class2, t1_name, t2_name, t3_name, school2,
+						t4_name, t5_name, t6_name
 					],
 					# school3 is not in the whitelist, so school_class3 must not be returned
 					[
-						school_class4, '', school_class4, teacher2_name, teacher4_name, '', school1,
+						school_class4, '', school_class4, t2_name, t4_name, '', school1,
 						'', '', ''
 					],
 				], key=itemgetter(0))  # sort by 1. school name, 2. class name
@@ -286,14 +314,34 @@ class Test(ImportTestbase):
 			with open(roster_csv_file_name, 'rb') as roster_csv_file:
 				expected_roster = []
 				for student_name in sorted((
-					student1_name, student2_name, student3_name, student4_name, student5_name, student6_name
-				)):
-					expected_roster.append(['{}-{}'.format(school_class1, student_name), school_class1, student_name])
-				for student_name in sorted((student2_name, student3_name, student4_name, student5_name, student7_name)):
-					expected_roster.append(['{}-{}'.format(school_class2, student_name), school_class2, student_name])
+						(student1_name, s1_name), (student2_name, s2_name), (student3_name, s3_name),
+						(student4_name, s4_name), (student5_name, s5_name), (student6_name, s6_name)
+				), key=itemgetter(0)):
+					expected_roster.append(
+						(
+							(school_class1, student_name[0]),  # sort key
+							['{}-{}'.format(school_class1, student_name[1]), school_class1, student_name[1]]
+						)
+					)
+				for student_name in sorted((
+						(student2_name, s2_name), (student3_name, s3_name), (student4_name, s4_name),
+						(student5_name, s5_name), (student7_name, s7_name)
+				), key=itemgetter(0)):
+					expected_roster.append(
+						(
+							(school_class2, student_name[0]),  # sort key
+							['{}-{}'.format(school_class2, student_name[1]), school_class2, student_name[1]]
+						)
+					)
 				# school3 is not in the whitelist, so school3 must not be returned
-				expected_roster.append(['{}-{}'.format(school_class4, student3_name), school_class4, student3_name])
+				expected_roster.append(
+					(
+						(school_class4, student3_name),  # sort key
+						['{}-{}'.format(school_class4, s3_name), school_class4, s3_name]
+					)
+				)
 				expected_roster.sort(key=itemgetter(0))  # sort by 1. school name, 2. class name, 3. student name
+				expected_roster = map(itemgetter(1), expected_roster)
 				got_roster = list(row for row in csv.reader(roster_csv_file))[1:]  # remove header line
 				if got_roster == expected_roster:
 					self.log.info('OK: roster CSV file is as expected.')
@@ -310,19 +358,19 @@ class Test(ImportTestbase):
 		def check_staff(staff_csv_file_name):
 			with open(staff_csv_file_name, 'rb') as staff_csv_file:
 				expected_staff = []
-				teachers = sorted([
-					(school1, teacher1_name, teacher1_dn, school2),
-					(school1, teacher2_name, teacher2_dn, school2),
-					(school2, teacher3_name, teacher3_dn, school1),
-					(school2, teacher4_name, teacher4_dn, school1),
-					(school2, teacher5_name, teacher5_dn, ''),
-					(school2, teacher6_name, teacher6_dn, ''),
-				])  # sorted by 1. school, 2. username
+				teachers = map(itemgetter(1), sorted([
+					((school1, teacher1_name), (school1, teacher1_name, t1_name, teacher1_dn, school2)),
+					((school1, teacher2_name), (school1, teacher2_name, t2_name, teacher2_dn, school2)),
+					((school2, teacher3_name), (school2, teacher3_name, t3_name, teacher3_dn, school1)),
+					((school2, teacher4_name), (school2, teacher4_name, t4_name, teacher4_dn, school1)),
+					((school2, teacher5_name), (school2, teacher5_name, t5_name, teacher5_dn, '')),
+					((school2, teacher6_name), (school2, teacher6_name, t6_name, teacher6_dn, '')),
+				], key=itemgetter(0)))  # sorted by 1. school, 2. username
 				# school3 is not in the whitelist, so school3 must not be returned
-				for s1, t_name, t_dn, s2 in teachers:
+				for s1, t_name, t_id, t_dn, s2 in teachers:
 					atts = self._get_user_attr(t_dn)
 					expected_staff.append(
-						[t_name, '', atts['first'], atts['middle'], atts['last'], atts['email'], t_name, s1, s2]
+						[t_id, '', atts['first'], atts['middle'], atts['last'], atts['email'], t_name, s1, s2]
 					)
 				got_staff = list(row for row in csv.reader(staff_csv_file))[1:]  # remove header line
 				if got_staff == expected_staff:
@@ -340,20 +388,20 @@ class Test(ImportTestbase):
 		def check_student(student_csv_file_name):
 			with open(student_csv_file_name, 'rb') as student_csv_file:
 				expected_students = []
-				teachers = sorted([
-					(school1, student1_name, student1_dn, ''),
-					(school1, student2_name, student2_dn, school2),
-					(school1, student3_name, student3_dn, school2),
-					(school2, student4_name, student4_dn, school1),
-					(school2, student5_name, student5_dn, school1),
-					(school1, student6_name, student6_dn, ''),
-					(school2, student7_name, student7_dn, ''),
-				])  # sorted by 1. school, 2. username
+				teachers = map(itemgetter(1), sorted([
+					((school1, student1_name), (school1, student1_name, s1_name, student1_dn, '')),
+					((school1, student2_name), (school1, student2_name, s2_name, student2_dn, school2)),
+					((school1, student3_name), (school1, student3_name, s3_name, student3_dn, school2)),
+					((school2, student4_name), (school2, student4_name, s4_name, student4_dn, school1)),
+					((school2, student5_name), (school2, student5_name, s5_name, student5_dn, school1)),
+					((school1, student6_name), (school1, student6_name, s6_name, student6_dn, '')),
+					((school2, student7_name), (school2, student7_name, s7_name, student7_dn, '')),
+				], key=itemgetter(0)))  # sorted by 1. school, 2. username
 				# school3 is not in the whitelist, so school3 must not be returned
-				for s1, t_name, t_dn, s2 in teachers:
+				for s1, t_name, t_id, t_dn, s2 in teachers:
 					atts = self._get_user_attr(t_dn)
 					expected_students.append(
-						[t_name, '', atts['first'], atts['middle'], atts['last'], '', atts['email'], t_name, '', s1, s2]
+						[t_id, '', atts['first'], atts['middle'], atts['last'], '', atts['email'], t_name, '', s1, s2]
 					)
 				got_students = list(row for row in csv.reader(student_csv_file))[1:]  # remove header line
 				if got_students == expected_students:

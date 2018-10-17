@@ -15,6 +15,7 @@ import univention.testing.ucr as ucr_test
 import univention.testing.strings as uts
 import univention.testing.utils as utils
 from univention.asm.models.classes import AsmClass
+from univention.asm.utils import get_person_id
 sys.path.append('/usr/share/ucs-test/90_ucsschool/')
 from essential.importusers_cli_v2 import ImportTestbase
 
@@ -46,17 +47,27 @@ class Test(ImportTestbase):
 		student1_name, student1_dn = self.schoolenv.create_student(school1, classes=school_class1)
 		student2_name, student2_dn = self.schoolenv.create_student(school2, classes=school_class2)
 		# "users" are created in the reverse order!?!?!?!
+		t1_id_attr, t1_lo = get_person_id(teacher1_dn, 'staff', [])
+		t1_name = t1_lo[t1_id_attr][0]
+		t2_id_attr, t2_lo = get_person_id(teacher2_dn, 'staff', [])
+		t2_name = t2_lo[t2_id_attr][0]
+		t3_id_attr, t3_lo = get_person_id(teacher3_dn, 'staff', [])
+		t3_name = t3_lo[t3_id_attr][0]
+		t4_id_attr, t4_lo = get_person_id(teacher4_dn, 'staff', [])
+		t4_name = t4_lo[t4_id_attr][0]
+		t5_id_attr, t5_lo = get_person_id(teacher5_dn, 'staff', [])
+		t5_name = t5_lo[t5_id_attr][0]
 		work_group1_name, work_group1_dn = self.schoolenv.create_workgroup(
 			school1, description='The description {}'.format(school1), users=[teacher2_dn, teacher1_dn, student1_dn])
 		work_group2_name, work_group2_dn = self.schoolenv.create_workgroup(
 			school2, description='The description {}'.format(school2), users=[student2_dn])
 
 		self.log.info('Created staff1: %r (%s)', staff1_name, staff1_dn)
-		self.log.info('Created teacher1: %r (%s)', teacher1_name, teacher1_dn)
-		self.log.info('Created teacher2: %r (%s)', teacher2_name, teacher2_dn)
-		self.log.info('Created teacher3: %r (%s)', teacher3_name, teacher3_dn)
-		self.log.info('Created teacher4: %r (%s)', teacher4_name, teacher4_dn)
-		self.log.info('Created teacher5: %r (%s)', teacher5_name, teacher5_dn)
+		self.log.info('Created teacher1: %r (%s, %s)', teacher1_name, teacher1_dn, t1_name)
+		self.log.info('Created teacher2: %r (%s, %s)', teacher2_name, teacher2_dn, t2_name)
+		self.log.info('Created teacher3: %r (%s, %s)', teacher3_name, teacher3_dn, t3_name)
+		self.log.info('Created teacher4: %r (%s, %s)', teacher4_name, teacher4_dn, t4_name)
+		self.log.info('Created teacher5: %r (%s, %s)', teacher5_name, teacher5_dn, t5_name)
 		self.log.info('Created student1: %r (%s)', student1_name, student1_dn)
 		self.log.info('Created student2: %r (%s)', student2_name, student2_dn)
 		self.log.info(
@@ -101,8 +112,8 @@ class Test(ImportTestbase):
 		or_class1 = AsmClass.from_dn(school_class1_dn)
 		got_school_class1 = or_class1.as_csv_line()
 		expected_school_class1 = [
-			school_class1, '', school_class1, teacher1_name, teacher2_name, teacher3_name, school1,
-			teacher4_name, teacher5_name
+			school_class1, '', school_class1, t1_name, t2_name, t3_name, school1,
+			t4_name, t5_name
 		]
 		if got_school_class1 == expected_school_class1:
 			self.log.info('OK: school_class1 CSV line is as expected.')
@@ -111,7 +122,7 @@ class Test(ImportTestbase):
 
 		or_class2 = AsmClass.from_dn(school_class2_dn)
 		got_school_class2 = or_class2.as_csv_line()
-		expected_school_class2 = [school_class2, '', school_class2, teacher1_name, '', '', school2]
+		expected_school_class2 = [school_class2, '', school_class2, t1_name, '', '', school2]
 		if got_school_class2 == expected_school_class2:
 			self.log.info('OK: school_class2 CSV line is as expected.')
 		else:
@@ -120,8 +131,8 @@ class Test(ImportTestbase):
 		or_wg1 = AsmClass.from_dn(work_group1_dn)
 		got_wg1 = or_wg1.as_csv_line()
 		expected_wg1 = (  # handle random user order
-			[work_group1_name, '', work_group1_name, teacher1_name, teacher2_name, '', school1],
-			[work_group1_name, '', work_group1_name, teacher2_name, teacher1_name, '', school1],
+			[work_group1_name, '', work_group1_name, t1_name, t2_name, '', school1],
+			[work_group1_name, '', work_group1_name, t2_name, t1_name, '', school1],
 		)
 		if got_wg1 in expected_wg1:
 			self.log.info('OK: work_group1 CSV line is as expected.')

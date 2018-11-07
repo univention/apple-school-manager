@@ -152,18 +152,23 @@ class AsmStaff(AsmModel, AnonymizeMixIn):
 			if not location_ids:
 				raise ValueError('Non of the users schools is in the whitelist: {} (schools: {!r}).'.format(
 					teacher, teacher.schools))
-		person_id_attr, teacher_lo = get_person_id(teacher.dn, 'staff', ['middleName', 'initials', 'oxMiddleName'])
+		additional_attrs = ['middleName', 'initials', 'oxMiddleName']
+		additional_attrs.extend({v[1:].strip() for v in cls.anonymize_mapping().values() if v and v.startswith('%')})
+		person_id_attr, teacher_lo = get_person_id(teacher.dn, 'staff', additional_attrs)
+		person_id = teacher_lo[person_id_attr][0]
 		middle_name = (
 				teacher_lo.get('middleName', [''])[0] or
 				teacher_lo.get('initials', [''])[0] or
 				teacher_lo.get('oxMiddleName', [''])[0]
 		)
 		return cls(**cls.anonymize(
-			person_id=teacher_lo[person_id_attr][0],
+			teacher,
+			teacher_lo,
+			person_id=person_id,
 			first_name=teacher.firstname,
 			last_name=teacher.lastname,
 			location_id=location_ids[0],
-			person_number=None,  # TODO: make conf. by UCR which LDAP attr to use
+			person_number=person_id,
 			middle_name=middle_name,
 			email_address=email,
 			sis_username=teacher.name,

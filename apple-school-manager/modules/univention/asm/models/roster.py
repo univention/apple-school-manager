@@ -89,9 +89,9 @@ class AsmRoster(AsmModel):
 			school_class = WorkGroup.from_dn(class_dn, None, lo)
 		student = Student.from_dn(student_dn, None, lo)
 		person_id_attr, student_lo = get_person_id(student.dn, 'student', [])
-		student_id = student_lo[person_id_attr][0]
+		person_id = student_lo[person_id_attr][0]
 		return cls(
-			roster_id='{}-{}'.format(school_class.name, student_id),
+			roster_id='{}-{}'.format(school_class.name, person_id),
 			class_id=school_class.name,
-			student_id=student_id,
+			student_id=person_id,
 		)

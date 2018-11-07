@@ -130,9 +130,11 @@ def get_person_id(dn, role, additional_attrs):  # type: (Text, Text, List[Text])
 	assert role in ('staff', 'student')
 	additional_attrs = additional_attrs or []
 	ucrv = 'asm/attributes/{}/person_id/mapping'.format(role)
+	person_id_attr = get_ucr().get(ucrv, '%entryUUID')
+	person_id_attr = person_id_attr[1:].strip()
+	attrs = map(str, [person_id_attr] + additional_attrs)  # unicode2str for python-ldap
 	lo, po = get_admin_connection()
-	person_id_attr = get_ucr().get(ucrv, 'entryUUID')
-	res = lo.get(dn, map(str, [person_id_attr] + additional_attrs))  # unicode2str for python-ldap
-	if person_id_attr not in res:
-		raise ValueError('Attribute {!r} from {!r} is not set on {!r}.'.format(person_id_attr, ucrv, dn))
+	res = lo.get(dn, attrs)
+	if not res.get(person_id_attr):
+		raise ValueError('Attribute {!r} from {!r} is not set or empty on {!r}.'.format(person_id_attr, ucrv, dn))
 	return person_id_attr, res

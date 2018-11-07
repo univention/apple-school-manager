@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (1.0.0-16) unstable; urgency=low
+
+  * Bug #48109: add support for setting anonymized values from LDAP attributes
+
+ -- Daniel Troeder <troeder@univention.de>  Wed, 07 Nov 2018 13:44:40 +0100
+
 univention-apple-school-manager-connector (1.0.0-15) unstable; urgency=low
 
   * Bug #48107: upload ZIPs to simple target filename

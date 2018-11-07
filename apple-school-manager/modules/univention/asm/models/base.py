@@ -38,7 +38,7 @@ import inspect
 from ..utils import get_ucr
 
 try:
-	from typing import Any, AnyStr, Dict, Iterable
+	from typing import Any, AnyStr, Dict, Iterable, Union
 except ImportError:
 	pass
 
@@ -125,27 +125,44 @@ class AnonymizeMixIn(object):
 	ucr_anonymize_key_base = ''
 
 	@classmethod
-	def anonymize(cls, **kwargs):  # type: (**Any) -> Dict[AnyStr, AnyStr]
+	def anonymize(cls, user, ldap_attrs, **kwargs):
+		# type: (ucsschool.lib.models.user.User, Dict[AnyStr, Any], **Any) -> Dict[AnyStr, AnyStr]
 		"""
 		Change values of function arguments to anonymize/pseudonymize user if
 		UCRV asm/attributes/<staff/student>/anonymize is true. Will return
 		unchanged function arguments otherwise.
 
+		:param ucsschool.lib.models.user.User user: user object
+		:param dict ldap_attrs: dictionary with the users LDAP attributes
 		:return: dictionary with [modified] function arguments
 		:rtype: dict
 		:raises NotImplementedError: if cls.ucr_anonymize_key_base is unset
 		"""
+		ucr = get_ucr()
+		if ucr.is_true(cls.ucr_anonymize_key_base):
+			for k, v in cls.anonymize_mapping().items():
+				if v and v.startswith('%'):
+					attr = v[1:].strip()
+					try:
+						v = ldap_attrs[attr][0]
+					except KeyError:
+						raise ValueError('Attribute {!r} not found in LDAP object of {}.'.format(attr, user))
+					except IndexError:
+						raise ValueError('Attribute {!r} empty in LDAP object of {}.'.format(attr, user))
+				kwargs[k] = v
+		return kwargs
+
+	@classmethod
+	def anonymize_mapping(cls):  # type: () -> Dict[AnyStr, Union[AnyStr, None]]
 		if not cls.ucr_anonymize_key_base:
 			raise NotImplementedError('Class attribute "ucr_anonymize_key_base" must be set.')
 		cls.ucr_anonymize_key_base = cls.ucr_anonymize_key_base.rstrip('/')
 		ucr = get_ucr()
-		if ucr.is_true(cls.ucr_anonymize_key_base):
-			kwargs['first_name'] = ucr.get('{}/first_name'.format(cls.ucr_anonymize_key_base), '%uid')
-			kwargs['middle_name'] = ucr.get('{}/middle_name'.format(cls.ucr_anonymize_key_base), None)
-			kwargs['last_name'] = ucr.get('{}/last_name'.format(cls.ucr_anonymize_key_base), None)
-			kwargs['email_address'] = ucr.get('{}/email_address'.format(cls.ucr_anonymize_key_base), None)
-			kwargs['sis_username'] = ucr.get('{}/sis_username'.format(cls.ucr_anonymize_key_base), '%uid')
-		return kwargs
-
-# TODO: person_number -> entryUUID
-# TODO: sftp to /archive.zip
+		res = {
+			'first_name': ucr.get('{}/first_name'.format(cls.ucr_anonymize_key_base), '%uid'),
+			'middle_name': ucr.get('{}/middle_name'.format(cls.ucr_anonymize_key_base), None),
+			'last_name': ucr.get('{}/last_name'.format(cls.ucr_anonymize_key_base), 'No Name'),
+			'email_address': ucr.get('{}/email_address'.format(cls.ucr_anonymize_key_base), None),
+			'sis_username': ucr.get('{}/sis_username'.format(cls.ucr_anonymize_key_base), '%uid'),
+		}
+		return res

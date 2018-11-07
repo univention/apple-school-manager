@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (1.0.0-15) unstable; urgency=low
+
+  * Bug #48107: upload ZIPs to simple target filename
+
+ -- Daniel Troeder <troeder@univention.de>  Wed, 07 Nov 2018 10:59:06 +0100
+
 univention-apple-school-manager-connector (1.0.0-14) unstable; urgency=low
 
   * Bug #47893: make person_id mapping configurable (UCRV

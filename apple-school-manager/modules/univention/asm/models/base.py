@@ -140,9 +140,12 @@ class AnonymizeMixIn(object):
 		cls.ucr_anonymize_key_base = cls.ucr_anonymize_key_base.rstrip('/')
 		ucr = get_ucr()
 		if ucr.is_true(cls.ucr_anonymize_key_base):
-			kwargs['first_name'] = ucr.get('{}/first_name'.format(cls.ucr_anonymize_key_base), kwargs['person_id'])
+			kwargs['first_name'] = ucr.get('{}/first_name'.format(cls.ucr_anonymize_key_base), '%uid')
 			kwargs['middle_name'] = ucr.get('{}/middle_name'.format(cls.ucr_anonymize_key_base), None)
-			kwargs['last_name'] = ucr.get('{}/last_name'.format(cls.ucr_anonymize_key_base), 'Nachname')
+			kwargs['last_name'] = ucr.get('{}/last_name'.format(cls.ucr_anonymize_key_base), None)
 			kwargs['email_address'] = ucr.get('{}/email_address'.format(cls.ucr_anonymize_key_base), None)
-			kwargs['sis_username'] = ucr.get('{}/sis_username'.format(cls.ucr_anonymize_key_base), None)
+			kwargs['sis_username'] = ucr.get('{}/sis_username'.format(cls.ucr_anonymize_key_base), '%uid')
 		return kwargs
+
+# TODO: person_number -> entryUUID
+# TODO: sftp to /archive.zip

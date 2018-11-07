@@ -58,6 +58,6 @@ class SFTP(object):
 		for hostname in hostKeyEntry.hostnames:
 			host_keys.add(hostname, hostKeyEntry.key.get_name(), hostKeyEntry.key)
 
-	def upload(self, filename, remote_folder="dropbox"):
-		remote_filename = os.path.join(remote_folder, os.path.basename(filename))
+	def upload(self, filename, remote_folder='/'):
+		remote_filename = os.path.join(remote_folder, 'archive.zip')
 		self.sftpClient.put(filename, remote_filename)

@@ -28,7 +28,7 @@ Description: Provision Apple School Manager accounts.
  Synchronize user accounts to the Apple School Manager server.
 Homepage: https://school.apple.com/
 
-Package: ucs-test-asm
+Package: ucs-test-apple-school-manager
 Architecture: all
 Depends: ucs-test-libs,
  ucs-test-framework,

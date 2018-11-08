@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (1.0.0-18) unstable; urgency=low
+
+  * Bug #47620: rename ucs-test package to match app ID
+
+ -- Daniel Troeder <troeder@univention.de>  Thu, 08 Nov 2018 12:11:32 +0100
+
 univention-apple-school-manager-connector (1.0.0-17) unstable; urgency=medium
 
   * Bug #48117: Log ssh failures instead of producing a traceback

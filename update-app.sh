@@ -3,7 +3,7 @@
 set -e
 set -x
 
-APP_VERSION="4.3/asm=1.0"
+APP_VERSION="4.3/apple-school-manager=1.0"
 DOCKER_IMAGE="docker.software-univention.de/ucs-appbox-amd64:4.3-0"
 
 selfservice () {

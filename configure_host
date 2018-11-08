@@ -30,6 +30,7 @@
 
 import logging
 import subprocess
+import sys
 from univention.config_registry import ConfigRegistry
 
 
@@ -50,7 +51,7 @@ class ConfigureASM(object):
 		self.logger = logging.getLogger(__name__)
 
 	def configure(self):
-		if self.ucr.is_true("asm/run_on_appsetting_save"):
+		if self.ucr.is_true("asm/run_on_appsetting_save") and "settings" in sys.argv:
 			self.upload_to_asm()
 		if self.ucr.is_true("asm/sync_daily"):
 			try:
@@ -60,10 +61,12 @@ class ConfigureASM(object):
 
 	def upload_to_asm(self):
 		self.logger.info("Start ASM upload")
-		output = subprocess.check_output(["/usr/sbin/asm-upload"])
-		if output:
-			self.logger.info("ASM log:\n%s", output)
-		self.logger.info("ASM upload done")
+		try:
+			subprocess.check_call(["/usr/sbin/asm-upload"])
+		except subprocess.CalledProcessError:
+			self.logger.error("ASM upload failed, see /var/log/univention/asm.log")
+		else:
+			self.logger.info("ASM upload done")
 
 	def check_hour(self):
 		hour = self.ucr["asm/sync_daily/hour"]

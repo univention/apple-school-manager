@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (1.0.0-17) unstable; urgency=medium
+
+  * Bug #48117: Log ssh failures instead of producing a traceback
+
+ -- Jürn Brodersen <brodersen@univention.de>  Thu, 08 Nov 2018 09:55:00 +0100
+
 univention-apple-school-manager-connector (1.0.0-16) unstable; urgency=low
 
   * Bug #48109: add support for setting anonymized values from LDAP attributes

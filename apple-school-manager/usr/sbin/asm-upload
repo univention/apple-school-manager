@@ -31,6 +31,7 @@
 import sys
 import logging
 from logging.handlers import TimedRotatingFileHandler
+from paramiko.ssh_exception import SSHException, NoValidConnectionsError
 from univention.asm.asm_upload import ASMUpload
 from univention.asm.utils import get_ucr
 
@@ -84,7 +85,11 @@ def main():
 		logger.error(exc)
 		sys.exit(1)
 	asmUpload = ASMUpload(*config)
-	zip_path = asmUpload.upload()
+	try:
+		zip_path = asmUpload.upload()
+	except (SSHException, NoValidConnectionsError) as exc:
+		logger.error("SFTP upload failed: {}".format(exc))
+		sys.exit(1)
 	if not config[3] and zip_path is not None:
 		logger.info("The uploaded zip is stored in: {}".format(zip_path))
 

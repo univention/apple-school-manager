@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (1.0.0-19) unstable; urgency=low
+
+  * Bug #47620: enable anonymization by default
+
+ -- Daniel Troeder <troeder@univention.de>  Mon, 12 Nov 2018 08:09:35 +0100
+
 univention-apple-school-manager-connector (1.0.0-18) unstable; urgency=low
 
   * Bug #47620: rename ucs-test package to match app ID

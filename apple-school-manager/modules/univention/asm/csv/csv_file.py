@@ -45,13 +45,13 @@ from operator import attrgetter
 from ucsschool.lib.models import School, SchoolClass, Student, Teacher, TeachersAndStaff, User, WorkGroup
 from ucsschool.importer.writer.csv_writer import CsvWriter
 from ucsschool.importer.writer.result_exporter import ResultExporter
-from ucsschool.importer.utils.ldap_connection import get_admin_connection
 from univention.asm.models.classes import AsmClass
 from univention.asm.models.course import AsmCourse
 from univention.asm.models.location import AsmLocation
 from univention.asm.models.roster import AsmRoster
 from univention.asm.models.staff import AsmStaff
 from univention.asm.models.student import AsmStudent
+from ..utils import get_ldap_connection
 
 try:
 	from typing import Any, AnyStr, Iterable, Iterator, Optional
@@ -134,7 +134,7 @@ class AsmCsvFile(object):
 		self.obj = []
 		self.logger = logging.getLogger(__name__)
 		if not self.lo:
-			self.__class__.lo, po = get_admin_connection()
+			self.__class__.lo, po = get_ldap_connection()
 		self.limbo_ou = self._get_limbo_ou()
 
 	def find_and_create_objects(self):  # type: () -> Iterator[AsmModel]

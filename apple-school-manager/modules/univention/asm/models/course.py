@@ -37,9 +37,9 @@ See https://support.apple.com/en-us/HT207029
 
 from __future__ import absolute_import, unicode_literals
 from .base import AsmModel
+from ..utils import get_ldap_connection
 from ucsschool.lib.models import SchoolClass, WorkGroup
 from ucsschool.lib.models.base import UnknownModel
-from ucsschool.importer.utils.ldap_connection import get_admin_connection
 
 try:
 	from typing import Any, AnyStr, Optional
@@ -88,7 +88,7 @@ class AsmCourse(AsmModel):
 		:return: AsmCourse instance
 		:rtype AsmCourse
 		"""
-		lo, po = get_admin_connection()
+		lo, po = get_ldap_connection()
 		try:
 			school_class = SchoolClass.from_dn(dn, None, lo)
 		except UnknownModel:

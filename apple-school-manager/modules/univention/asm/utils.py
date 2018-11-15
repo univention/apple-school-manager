@@ -36,16 +36,24 @@ Utility functions.
 # don't import __future__.unicode_literals here, DNS lib cannot handle it!
 import DNS
 from univention.config_registry import ConfigRegistry
-from ucsschool.importer.utils.ldap_connection import get_admin_connection
+from ucsschool.importer.utils.ldap_connection import get_machine_connection, get_readonly_connection
 
 try:
 	from typing import Dict, List, Text, Tuple
+	from ucsschool.importer.utils.ldap_connection import LoType, PoType
 except ImportError:
 	pass
 
 _external_dns_resolvers = []  # type: List[str]
 _known_domains = {}  # type: Dict[str, bool]
 _ucr = None  # type: ConfigRegistry
+
+
+def get_ldap_connection():  # type: () -> (Tuple[LoType, PoType])
+	if get_ucr()['server/role'] in ('domaincontroller_master', 'domaincontroller_backup'):
+		return get_readonly_connection()
+	else:
+		return get_machine_connection()
 
 
 def check_domain(email):  # type: (str) -> bool
@@ -133,7 +141,7 @@ def get_person_id(dn, role, additional_attrs):  # type: (Text, Text, List[Text])
 	person_id_attr = get_ucr().get(ucrv, '%entryUUID')
 	person_id_attr = person_id_attr[1:].strip()
 	attrs = map(str, [person_id_attr] + additional_attrs)  # unicode2str for python-ldap
-	lo, po = get_admin_connection()
+	lo, po = get_ldap_connection()
 	res = lo.get(dn, attrs)
 	if not res.get(person_id_attr):
 		raise ValueError('Attribute {!r} from {!r} is not set or empty on {!r}.'.format(person_id_attr, ucrv, dn))

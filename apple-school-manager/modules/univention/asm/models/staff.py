@@ -38,10 +38,9 @@ See https://support.apple.com/en-us/HT207029
 from __future__ import absolute_import, unicode_literals
 import logging
 from .base import AsmModel, AnonymizeMixIn
-from ..utils import check_domain, get_person_id, prepend_to_mail_domain
+from ..utils import check_domain, get_ldap_connection, get_person_id, prepend_to_mail_domain
 from ucsschool.lib.models import Teacher, TeachersAndStaff
 from ucsschool.lib.models.base import WrongModel
-from ucsschool.importer.utils.ldap_connection import get_admin_connection
 
 try:
 	from typing import Any, AnyStr, Iterable, Optional
@@ -137,7 +136,7 @@ class AsmStaff(AsmModel, AnonymizeMixIn):
 			teacherandstaff
 		:raises ValueError: when non of the users `schools` is in the whitelist
 		"""
-		lo, po = get_admin_connection()
+		lo, po = get_ldap_connection()
 		try:
 			teacher = Teacher.from_dn(dn, None, lo)
 		except WrongModel:

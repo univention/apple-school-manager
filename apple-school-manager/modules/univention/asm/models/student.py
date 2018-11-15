@@ -38,9 +38,8 @@ See https://support.apple.com/en-us/HT207029
 from __future__ import absolute_import, unicode_literals
 import logging
 from .base import AsmModel, AnonymizeMixIn
-from ..utils import check_domain, get_person_id, prepend_to_mail_domain
+from ..utils import check_domain, get_person_id, get_ldap_connection, prepend_to_mail_domain
 from ucsschool.lib.models import Student
-from ucsschool.importer.utils.ldap_connection import get_admin_connection
 
 try:
 	from typing import Any, AnyStr, Iterable, Optional
@@ -147,7 +146,7 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
 		:raises WrongModel: when `dn` does not belong to a student
 		:raises ValueError: when non of the users `schools` is in the whitelist
 		"""
-		lo, po = get_admin_connection()
+		lo, po = get_ldap_connection()
 		student = Student.from_dn(dn, None, lo)
 		if student.email and not check_domain(student.email):
 			logger = logging.getLogger(__name__)

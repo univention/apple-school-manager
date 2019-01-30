@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (1.0.0-21) unstable; urgency=low
+
+  * Bug #48511: synchronize only 15 instructors per class
+
+ -- Daniel Troeder <troeder@univention.de>  Wed, 30 Jan 2019 12:10:07 +0100
+
 univention-apple-school-manager-connector (1.0.0-20) unstable; urgency=low
 
   * Bug #48150: use read-only cn=adminconnection on master/backup and machine

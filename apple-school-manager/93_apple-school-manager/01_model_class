@@ -5,16 +5,15 @@
 ## exposure: dangerous
 ## packages:
 ##   - univention-apple-school-manager-connector
-## bugs: [47622]
+## bugs: [47622, 48511]
 
-import os
-import glob
 import random
 from ldap.filter import filter_format
 from univention.config_registry import handler_unset
 import univention.testing.ucr as ucr_test
 import univention.testing.strings as uts
 import univention.testing.utils as utils
+from ucsschool.lib.models import SchoolClass, User
 from univention.asm.models.classes import AsmClass
 from univention.asm.utils import get_person_id
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
@@ -146,6 +145,37 @@ class Test(ImportTestbase):
 			self.log.info('OK: work_group2 CSV line is as expected.')
 		else:
 			self.fail('Expected CSV line for work_group2: {!r}, got: {!r}.'.format(expected_wg2, got_wg2))
+		# Bug #48511: not more than 3+12=15 instructors per class
+		# school_class1 has 5 teachers now. adding 11.
+		# the CSV should only contain 3+12=15 instructors and ignore 1 teacher.
+		new_teacher_dns = []
+		for _i in range(11):
+			teacher_name, teacher_dn = self.schoolenv.create_teacher_and_staff(school1, classes=school_class1)
+			new_teacher_dns.append(teacher_dn)
+			self.log.info('Added teacher %r to %r.', teacher_name, school_class1)
+		self.log.info(
+			'Members of %r (school_class1) now: %r',
+			school_class1,
+			self.lo.search(filter_format('(&(objectClass=univentionGroup)(cn=%s))', (school_class1,)), attr=['memberUid'])[0][1]['memberUid']
+		)
+
+		teacher_count = 0
+		sc1 = SchoolClass.from_dn(school_class1_dn, school1, self.lo)
+		for user_dn in sc1.users:
+			user = User.from_dn(user_dn, school1, self.lo)
+			if user.is_teacher(self.lo):
+				teacher_count += 1
+		self.log.info('Counted %d teachers in %r (school_class1).', teacher_count, school_class1)
+		or_class1 = AsmClass.from_dn(school_class1_dn)
+		got_school_class1 = or_class1.as_csv_line()
+		for t_dn in new_teacher_dns[:10]:  # <-- dropping last teacher!
+			t_id_attr, t_lo = get_person_id(t_dn, 'staff', [])
+			t_name = t_lo[t_id_attr][0]
+			expected_school_class1.append(t_name)
+		if got_school_class1 == expected_school_class1:
+			self.log.info('OK: school_class1 CSV line is as expected.')
+		else:
+			self.fail('Expected CSV line for school_class1: {!r}, got: {!r}.'.format(expected_school_class1, got_school_class1))
 
 
 if __name__ == '__main__':

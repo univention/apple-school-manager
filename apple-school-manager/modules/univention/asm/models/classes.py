@@ -36,6 +36,7 @@ See https://support.apple.com/en-us/HT207029
 """
 
 from __future__ import absolute_import, unicode_literals
+import logging
 from .base import AsmModel
 from ..utils import get_ucr, get_person_id, get_ldap_connection
 from ucsschool.lib.models import SchoolClass, User, WorkGroup
@@ -125,6 +126,7 @@ class AsmClass(AsmModel):
 		:rtype AsmClass
 		"""
 		lo, po = get_ldap_connection()
+		logger = logging.getLogger(__name__)
 		try:
 			school_class = SchoolClass.from_dn(dn, None, lo)
 		except UnknownModel:
@@ -143,9 +145,13 @@ class AsmClass(AsmModel):
 				instructor_id = teachers[0]
 				instructor_id_2 = teachers[1]
 				instructor_id_3 = teachers[2]
-				additional_instructor_ids = teachers[3:]
+				additional_instructor_ids = teachers[3:15]
 			except IndexError:
 				pass
+			if len(teachers) > 15:
+				logger.warn(
+					'Class %r has more than 15 teachers. Only 15 will be synchronized. This is a limitation of the '
+					'Apple School Manager service.', school_class.name)
 		return cls(
 			class_id=school_class.name,
 			course_id=school_class.name,

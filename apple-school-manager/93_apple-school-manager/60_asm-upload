@@ -8,7 +8,6 @@
 ## bugs: [47623]
 
 import os
-import sys
 import subprocess
 import shutil
 import filecmp
@@ -18,8 +17,7 @@ import univention.testing.strings as uts
 import univention.testing.ucr as ucr_test
 import univention.testing.utils as utils
 from univention.config_registry import handler_set
-sys.path.append('/usr/share/ucs-test/90_ucsschool/')
-from essential.importusers_cli_v2 import ImportTestbase
+from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
 
 class LocalHostAsASM(object):

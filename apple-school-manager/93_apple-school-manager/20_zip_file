@@ -9,7 +9,6 @@
 
 import os
 import csv
-import sys
 from operator import itemgetter
 import tempfile
 import zipfile
@@ -21,8 +20,7 @@ import univention.testing.utils as utils
 from ucsschool.lib.models import School, SchoolClass
 from univention.asm.utils import get_person_id
 from univention.asm.csv.zip_file import AsmZipFile
-sys.path.append('/usr/share/ucs-test/90_ucsschool/')
-from essential.importusers_cli_v2 import ImportTestbase
+from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
 try:
 	from typing import List

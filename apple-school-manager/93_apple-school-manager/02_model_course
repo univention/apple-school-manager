@@ -7,7 +7,6 @@
 ##   - univention-apple-school-manager-connector
 ## bugs: [47622]
 
-import sys
 from ldap.filter import filter_format
 from ucsschool.lib.models import SchoolClass
 from univention.config_registry import handler_unset
@@ -15,8 +14,7 @@ import univention.testing.ucr as ucr_test
 import univention.testing.strings as uts
 import univention.testing.utils as utils
 from univention.asm.models.course import AsmCourse
-sys.path.append('/usr/share/ucs-test/90_ucsschool/')
-from essential.importusers_cli_v2 import ImportTestbase
+from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
 
 class Test(ImportTestbase):

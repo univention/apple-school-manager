@@ -68,7 +68,7 @@ class Test(ImportTestbase):
 		if got_teacher1 == expected_teacher1:
 			self.log.info('OK: teacher1 CSV line is as expected.')
 		else:
-			self.fail('Expected CSV line for teacher1: {!r}, got: {!r}.'.format(expected_teacher1, got_teacher1))
+			self.fail('CSV line for teacher1,\nexp: {!r}\ngot: {!r}.'.format(expected_teacher1, got_teacher1))
 
 		or_teacher2 = AsmStaff.from_dn(teacher2_dn)
 		got_teacher2 = or_teacher2.as_csv_line()
@@ -78,7 +78,7 @@ class Test(ImportTestbase):
 		if got_teacher2 == expected_teacher2:
 			self.log.info('OK: teacher2 CSV line is as expected.')
 		else:
-			self.fail('Expected CSV line for teacher2: {!r}, got: {!r}.'.format(expected_teacher2, got_teacher2))
+			self.fail('CSV line for teacher2,\nexp: {!r}\ngot: {!r}.'.format(expected_teacher2, got_teacher2))
 
 		handler_set(['asm/attributes/staff/anonymize=true'])
 		update_ucr()
@@ -88,7 +88,7 @@ class Test(ImportTestbase):
 		if got_teacher1 == expected_teacher1:
 			self.log.info('OK: teacher1 anonymized CSV line is as expected.')
 		else:
-			self.fail('Expected CSV line for teacher1 anonymized: {!r}, got: {!r}.'.format(expected_teacher1, got_teacher1))
+			self.fail('CSV line for teacher1 anonymized,\nexp: {!r}\ngot: {!r}'.format(expected_teacher1, got_teacher1))
 
 		first_name_anon = uts.random_name()
 		handler_set(['asm/attributes/staff/anonymize/first_name={}'.format(first_name_anon)])
@@ -99,7 +99,7 @@ class Test(ImportTestbase):
 		if got_teacher1 == expected_teacher1:
 			self.log.info('OK: teacher1 anonymized CSV line with static first_name is as expected.')
 		else:
-			self.fail('Expected CSV line with static first_name for teacher1 anonymized: {!r}, got: {!r}.'.format(
+			self.fail('CSV line with static first_name for teacher1 anonymized,\nexp: {!r}\ngot: {!r}.'.format(
 					expected_teacher1, got_teacher1))
 
 

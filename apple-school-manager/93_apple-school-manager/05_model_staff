@@ -63,7 +63,7 @@ class Test(ImportTestbase):
 		or_teacher1 = AsmStaff.from_dn(teacher1_dn)
 		got_teacher1 = or_teacher1.as_csv_line()
 		expected_teacher1 = [
-			t1_name, '', teacher1.firstname, middle_name, teacher1.lastname, '', teacher1_name, school1
+			t1_name, t1_name, teacher1.firstname, middle_name, teacher1.lastname, '', teacher1_name, school1
 		]
 		if got_teacher1 == expected_teacher1:
 			self.log.info('OK: teacher1 CSV line is as expected.')
@@ -73,7 +73,7 @@ class Test(ImportTestbase):
 		or_teacher2 = AsmStaff.from_dn(teacher2_dn)
 		got_teacher2 = or_teacher2.as_csv_line()
 		expected_teacher2 = [
-			t2_name, '', teacher2.firstname, '', teacher2.lastname, email_sub, teacher2_name, school2, school1
+			t2_name, t2_name, teacher2.firstname, '', teacher2.lastname, email_sub, teacher2_name, school2, school1
 		]
 		if got_teacher2 == expected_teacher2:
 			self.log.info('OK: teacher2 CSV line is as expected.')
@@ -84,7 +84,7 @@ class Test(ImportTestbase):
 		update_ucr()
 		or_teacher1 = AsmStaff.from_dn(teacher1_dn)
 		got_teacher1 = or_teacher1.as_csv_line()
-		expected_teacher1 = [t1_name, '', t1_name, middle_name, 'Nachname', '', '', school1]
+		expected_teacher1 = [t1_name, t1_name, teacher1.name, middle_name, 'No Name', '', teacher1.name, school1]
 		if got_teacher1 == expected_teacher1:
 			self.log.info('OK: teacher1 anonymized CSV line is as expected.')
 		else:
@@ -95,7 +95,7 @@ class Test(ImportTestbase):
 		update_ucr()
 		or_teacher1 = AsmStaff.from_dn(teacher1_dn)
 		got_teacher1 = or_teacher1.as_csv_line()
-		expected_teacher1 = [t1_name, '', first_name_anon, middle_name, 'Nachname', '', '', school1]
+		expected_teacher1 = [t1_name, t1_name, first_name_anon, middle_name, 'No Name', '', teacher1.name, school1]
 		if got_teacher1 == expected_teacher1:
 			self.log.info('OK: teacher1 anonymized CSV line with static first_name is as expected.')
 		else:

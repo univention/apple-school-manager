@@ -63,7 +63,7 @@ class Test(ImportTestbase):
 		or_student1 = AsmStudent.from_dn(student1_dn)
 		got_student1 = or_student1.as_csv_line()
 		expected_student1 = [
-			s1_name, '', student1.firstname, middle_name, student1.lastname, '', '', student1_name, '', school1
+			s1_name, s1_name, student1.firstname, middle_name, student1.lastname, '', '', student1_name, '', school1
 		]
 		if got_student1 == expected_student1:
 			self.log.info('OK: student1 CSV line is as expected.')
@@ -73,7 +73,7 @@ class Test(ImportTestbase):
 		or_student2 = AsmStudent.from_dn(student2_dn)
 		got_student2 = or_student2.as_csv_line()
 		expected_student2 = [
-			s2_name, '', student2.firstname, '', student2.lastname, '', email_sub, student2_name, '', school2, school1
+			s2_name, s2_name, student2.firstname, '', student2.lastname, '', email_sub, student2_name, '', school2, school1
 		]
 		if got_student2 == expected_student2:
 			self.log.info('OK: student2 CSV line is as expected.')
@@ -85,7 +85,7 @@ class Test(ImportTestbase):
 		or_student1 = AsmStudent.from_dn(student1_dn)
 		got_student1 = or_student1.as_csv_line()
 		expected_student1 = [
-			s1_name, '', s1_name, '', 'Nachname', '', '', '', '', school1
+			s1_name, s1_name, student1.name, '', 'No Name', '', '', student1.name, '', school1
 		]
 		if got_student1 == expected_student1:
 			self.log.info('OK: student1 anonymized CSV line is as expected.')
@@ -98,7 +98,7 @@ class Test(ImportTestbase):
 		or_student1 = AsmStudent.from_dn(student1_dn)
 		got_student1 = or_student1.as_csv_line()
 		expected_student1 = [
-			s1_name, '', s1_name, '', last_name_anon, '', '', '', '', school1
+			s1_name, s1_name, student1.name, '', last_name_anon, '', '', student1.name, '', school1
 		]
 		if got_student1 == expected_student1:
 			self.log.info('OK: student1 anonymized CSV line with static last_name is as expected.')

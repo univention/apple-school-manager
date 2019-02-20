@@ -383,7 +383,7 @@ class Test(ImportTestbase):
 				for s1, t_name, t_id, t_dn, s2 in teachers:
 					atts = self._get_user_attr(t_dn)
 					expected_staff.append(
-						[t_id, '', atts['first'], atts['middle'], atts['last'], atts['email'], t_name, s1, s2]
+						[t_id, t_id, atts['first'], atts['middle'], atts['last'], atts['email'], t_name, s1, s2]
 					)
 				got_staff = list(row for row in csv.reader(staff_csv_file))[1:]  # remove header line
 				if got_staff == expected_staff:
@@ -417,7 +417,7 @@ class Test(ImportTestbase):
 				for s1, t_name, t_id, t_dn, s2 in teachers:
 					atts = self._get_user_attr(t_dn)
 					expected_students.append(
-						[t_id, '', atts['first'], atts['middle'], atts['last'], '', atts['email'], t_name, '', s1, s2]
+						[t_id, t_id, atts['first'], atts['middle'], atts['last'], '', atts['email'], t_name, '', s1, s2]
 					)
 				got_students = list(row for row in csv.reader(student_csv_file))[1:]  # remove header line
 				if got_students == expected_students:

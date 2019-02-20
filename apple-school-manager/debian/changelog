@@ -1,3 +1,17 @@
+univention-apple-school-manager-connector (2.0.0-1) unstable; urgency=low
+
+  * Bug #48664: version bump for 4.4
+
+ -- Daniel Troeder <troeder@univention.de>  Wed, 20 Feb 2019 13:40:56 +0100
+
+univention-apple-school-manager-connector (1.0.0-22) unstable; urgency=low
+
+  * Bug #48664: fix debian file names
+  * improve error messages in ucs-tests
+  * fix ucs-tests
+
+ -- Daniel Troeder <troeder@univention.de>  Wed, 20 Feb 2019 12:52:18 +0100
+
 univention-apple-school-manager-connector (1.0.0-21) unstable; urgency=low
 
   * Bug #48511: synchronize only 15 instructors per class

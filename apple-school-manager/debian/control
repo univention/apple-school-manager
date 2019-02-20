@@ -31,7 +31,7 @@ Package: ucs-test-apple-school-manager
 Architecture: all
 Depends: ucs-test-libs,
  ucs-test-framework,
- ucs-test-ucsschool (>= 6.0.0-2),
+ ucs-test-ucsschool (>= 5.0.4-2),
  ${misc:Depends}
 Provides: ucs-test-module
 Description: Univention Apple School Manager App tests for ucs-test

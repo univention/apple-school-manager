@@ -38,7 +38,7 @@ See https://support.apple.com/en-us/HT207029
 from __future__ import absolute_import, unicode_literals
 import logging
 from .base import AsmModel, AnonymizeMixIn
-from ..utils import check_domain, get_person_id, get_ldap_connection, prepend_to_mail_domain
+from ..utils import check_domain, get_default_password_policy, get_person_id, get_ldap_connection, prepend_to_mail_domain
 from ucsschool.lib.models import Student
 
 try:
@@ -94,10 +94,11 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
 			(optional).
 		:param str password_policy: Use the `password_policy` field to specify
 			a password policy for each specific student. This value overrides
-			the location password policy and any password policy you previously
-			set for that student. If you leave password_policy blank, the
-			default password policy for the location is used for a new student
-			and no changes are made to existing students (optional).
+			the location password policy and any password policy previously set
+			for that student. The `password_policy` field must have the number
+			4, 6, 8, or be an emtpy string (`''`). If None, the value of the
+			UCR variable asm/attributes/student/password_policy is used
+			(optional).
 		:param additional_location_ids: list of additional (max 14) locations
 			(optional).
 		:type location_ids: list(str)
@@ -119,7 +120,7 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
 		self.grade_level = grade_level
 		self.email_address = email_address
 		self.sis_username = sis_username
-		self.password_policy = password_policy
+		self.password_policy = get_default_password_policy() if password_policy is None else password_policy
 		self.additional_location_ids = additional_location_ids
 		if additional_location_ids:
 			# add members, so that default as_csv_line() will work
@@ -181,6 +182,6 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
 			grade_level=None,  # TODO: make conf. by UCR which LDAP attr to use
 			email_address=email,
 			sis_username=student.name,
-			password_policy=None,  # TODO: what's this?
-			additional_location_ids=location_ids[1:]
+			password_policy=None,  # UCS password policy doesn't fit and nothing else is ...
+			additional_location_ids=location_ids[1:]  # ... stored in LDAP regarding password length
 		))

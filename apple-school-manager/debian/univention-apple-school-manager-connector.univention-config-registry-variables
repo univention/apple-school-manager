@@ -88,6 +88,12 @@ Description[en]=Value for the attribute 'sis_username', when asm/attributes/stud
 Type=str
 Categories=service-administration
 
+[asm/attributes/student/password_policy]
+Description[de]=Länge des von Apple automatisch generierten Passworts für neue Schülerinnen und Schüler. (Eine password policy für Lehrkräfte wird von Apple nicht unterstützt.) Erlaubte Werte sind 4, 6, 8 und Bindestrich ('-'). Bindestrich bedeutet, dass der Standardwert der im Apple School Manager für eine Schule konfiguriert wurde, verwendet werden soll (wird ins CSV als leeres Feld geschreiben). Standard: 4.
+Description[en]=Length of password created by Apple automatically for new students. (A password policy for teachers is not supported by Apple.) Allowed values are 4, 6, 8 and the dash ('-'). The dash means, that the default value configures in the Apple School Manager for a school will be used (will be written as empty field to CSV). Default: 4.
+Type=int
+Categories=service-administration
+
 [asm/attributes/student/person_id/mapping]
 Description[de]=LDAP Attribut welches zur Identifikation des UCS-Benutzers verwendet wird (Spalte 'person_number'). Sollte sich nicht ändern, wenn der Benutzer umbenannt wird. Obwohl dieser Wert optional ist, raten wir stark davon ab ihn zu ändern. Standard: '%entryUUID'.
 Description[en]=LDAP attribute that is used to identify the UCS user (column 'person_number'). Should not change, when the user is renamed. Although this value is optional we advise strongly against changing it. Default: '%entryUUID'.

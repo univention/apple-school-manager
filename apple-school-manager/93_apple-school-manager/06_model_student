@@ -8,13 +8,12 @@
 ## bugs: [47622]
 
 from ucsschool.lib.models import Student
-from univention.config_registry import handler_unset
+from univention.config_registry import handler_set, handler_unset
 import univention.testing.ucr as ucr_test
 import univention.testing.strings as uts
 import univention.testing.utils as utils
-from univention.config_registry import handler_set
 from univention.asm.models.student import AsmStudent
-from univention.asm.utils import get_person_id, update_ucr
+from univention.asm.utils import get_default_password_policy, get_person_id, update_ucr
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
 
@@ -24,6 +23,8 @@ class Test(ImportTestbase):
 	def test(self):
 		subdomain = uts.random_name()
 		handler_set(['asm/attributes/user/email/prepend_domain={}'.format(subdomain)])
+
+		assert get_default_password_policy() == '4', "Unset asm/attributes/student/password_policy is {!r}, expected '4'.".format(get_default_password_policy())
 
 		school1 = self.ou_A.name
 		school2 = self.ou_B.name
@@ -63,13 +64,15 @@ class Test(ImportTestbase):
 		or_student1 = AsmStudent.from_dn(student1_dn)
 		got_student1 = or_student1.as_csv_line()
 		expected_student1 = [
-			s1_name, s1_name, student1.firstname, middle_name, student1.lastname, '', '', student1_name, '', school1
+			s1_name, s1_name, student1.firstname, middle_name, student1.lastname, '', '', student1_name, '4', school1
 		]
 		if got_student1 == expected_student1:
 			self.log.info('OK: student1 CSV line is as expected.')
 		else:
 			self.fail('CSV line for student1,\nexp: {!r}\ngot: {!r}.'.format(expected_student1, got_student1))
 
+		handler_set(['asm/attributes/student/password_policy=-'])
+		update_ucr()
 		or_student2 = AsmStudent.from_dn(student2_dn)
 		got_student2 = or_student2.as_csv_line()
 		expected_student2 = [
@@ -80,12 +83,12 @@ class Test(ImportTestbase):
 		else:
 			self.fail('CSV line for student2,\nexp: {!r}\ngot: {!r}.'.format(expected_student2, got_student2))
 
-		handler_set(['asm/attributes/student/anonymize=true'])
+		handler_set(['asm/attributes/student/anonymize=true', 'asm/attributes/student/password_policy=6'])
 		update_ucr()
 		or_student1 = AsmStudent.from_dn(student1_dn)
 		got_student1 = or_student1.as_csv_line()
 		expected_student1 = [
-			s1_name, s1_name, student1.name, '', 'No Name', '', '', student1.name, '', school1
+			s1_name, s1_name, student1.name, '', 'No Name', '', '', student1.name, '6', school1
 		]
 		if got_student1 == expected_student1:
 			self.log.info('OK: student1 anonymized CSV line is as expected.')
@@ -93,12 +96,12 @@ class Test(ImportTestbase):
 			self.fail('CSV line for student1 anonymized,\nexp: {!r}\ngot: {!r}.'.format(expected_student1, got_student1))
 
 		last_name_anon = uts.random_name()
-		handler_set(['asm/attributes/student/anonymize/last_name={}'.format(last_name_anon)])
+		handler_set(['asm/attributes/student/anonymize/last_name={}'.format(last_name_anon), 'asm/attributes/student/password_policy=8'])
 		update_ucr()
 		or_student1 = AsmStudent.from_dn(student1_dn)
 		got_student1 = or_student1.as_csv_line()
 		expected_student1 = [
-			s1_name, s1_name, student1.name, '', last_name_anon, '', '', student1.name, '', school1
+			s1_name, s1_name, student1.name, '', last_name_anon, '', '', student1.name, '8', school1
 		]
 		if got_student1 == expected_student1:
 			self.log.info('OK: student1 anonymized CSV line with static last_name is as expected.')
@@ -109,10 +112,15 @@ class Test(ImportTestbase):
 
 if __name__ == '__main__':
 	with ucr_test.UCSTestConfigRegistry():
-		handler_unset([
-			"asm/attributes/user/email/prepend_domain",
-			"asm/attributes/classes/class_number_empty",
-			"asm/attributes/staff/anonymize",
-		])
-		handler_unset(["asm/attributes/student/anonymize{}".format(value) for value in ("", "/email_address", "/first_name", "/last_name", "/middle_name", "/sis_username")])
+		handler_unset(
+			[
+				"asm/attributes/user/email/prepend_domain",
+				"asm/attributes/classes/class_number_empty",
+				"asm/attributes/staff/anonymize",
+				"asm/attributes/student/password_policy",
+			] + [
+				"asm/attributes/student/anonymize{}".format(value)
+				for value in ("", "/email_address", "/first_name", "/last_name", "/middle_name", "/sis_username")
+			]
+		)
 		Test().run()

@@ -146,3 +146,20 @@ def get_person_id(dn, role, additional_attrs):  # type: (Text, Text, List[Text])
 	if not res.get(person_id_attr):
 		raise ValueError('Attribute {!r} from {!r} is not set or empty on {!r}.'.format(person_id_attr, ucrv, dn))
 	return person_id_attr, res
+
+
+def get_default_password_policy():
+	ucr = get_ucr()
+	pp_ori = ucr.get('asm/attributes/student/password_policy', 4)
+	try:
+		if pp_ori == '-':
+			pp = ''
+		else:
+			pp = int(pp_ori)
+		if pp not in (4, 6, 8, ''):
+			raise ValueError
+	except ValueError:
+		raise ValueError(
+			"Value of UCR asm/attributes/student/password_policy must be 4, 6, 8 or '-' (found {!r}).".format(pp_ori)
+		)
+	return str(pp)

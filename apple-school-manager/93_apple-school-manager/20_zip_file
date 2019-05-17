@@ -18,7 +18,7 @@ import univention.testing.ucr as ucr_test
 import univention.testing.strings as uts
 import univention.testing.utils as utils
 from ucsschool.lib.models import School, SchoolClass
-from univention.asm.utils import get_person_id
+from univention.asm.utils import get_default_password_policy, get_person_id
 from univention.asm.csv.zip_file import AsmZipFile
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
@@ -384,6 +384,8 @@ class Test(ImportTestbase):
 					)
 
 		def check_student(student_csv_file_name):
+			assert get_default_password_policy() == '4', "Unset asm/attributes/student/password_policy is {!r}, expected '4'.".format(get_default_password_policy())
+
 			with open(student_csv_file_name, 'rb') as student_csv_file:
 				expected_students = []
 				teachers = map(itemgetter(1), sorted([
@@ -399,7 +401,7 @@ class Test(ImportTestbase):
 				for s1, t_name, t_id, t_dn, s2 in teachers:
 					atts = self._get_user_attr(t_dn)
 					expected_students.append(
-						[t_id, t_id, atts['first'], atts['middle'], atts['last'], '', atts['email'], t_name, '', s1, s2]
+						[t_id, t_id, atts['first'], atts['middle'], atts['last'], '', atts['email'], t_name, '4', s1, s2]
 					)
 				got_students = list(row for row in csv.reader(student_csv_file))[1:]  # remove header line
 				if got_students == expected_students:
@@ -440,5 +442,6 @@ if __name__ == '__main__':
 			"asm/attributes/classes/class_number_empty",
 			"asm/attributes/staff/anonymize",
 			"asm/attributes/student/anonymize",
+			"asm/attributes/student/password_policy",
 		])
 		Test().run()

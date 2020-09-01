@@ -51,7 +51,7 @@ from univention.asm.models.location import AsmLocation
 from univention.asm.models.roster import AsmRoster
 from univention.asm.models.staff import AsmStaff
 from univention.asm.models.student import AsmStudent
-from ..utils import get_ldap_connection
+from ..utils import get_ldap_connection, get_ucr
 
 try:
 	from typing import Any, AnyStr, Iterable, Iterator, Optional
@@ -288,10 +288,13 @@ class AsmStaffCsvFile(AsmCsvFile):
 		:return list of AsmModel objects
 		:rtype: list(AsmStaff)
 		"""
+		ucr = get_ucr()
+		global_ldap_filter_str = ucr.get("asm/ldap_filter/staff", "")
 		schools = self.get_schools()
 		dns = set()
 		for school in schools:
-			for teacher in Teacher.get_all(self.lo, school.name) + TeachersAndStaff.get_all(self.lo, school.name):
+			specific_ldap_filter = ucr.get("asm/ldap_filter/staff/{}".format(school.name), global_ldap_filter_str)
+			for teacher in Teacher.get_all(self.lo, school.name, filter_str=specific_ldap_filter) + TeachersAndStaff.get_all(self.lo, school.name, filter_str=specific_ldap_filter):
 				t_schools = [teacher.school] + sorted(s for s in teacher.schools if s != teacher.school)
 				if self.ou_whitelist:
 					t_schools = [s for s in t_schools if s in self.ou_whitelist]
@@ -313,10 +316,13 @@ class AsmStudentsCsvFile(AsmCsvFile):
 		:return list of AsmModel objects
 		:rtype: list(AsmStudent)
 		"""
+		ucr = get_ucr()
+		global_ldap_filter_str = ucr.get("asm/ldap_filter/students", "")
 		schools = self.get_schools()
 		dns = set()
 		for school in schools:
-			for student in Student.get_all(self.lo, school.name):
+			specific_ldap_filter = ucr.get("asm/ldap_filter/students/{}".format(school.name), global_ldap_filter_str)
+			for student in Student.get_all(self.lo, school.name, filter_str=specific_ldap_filter):
 				s_schools = [student.school] + sorted(s for s in student.schools if s != student.school)
 				if self.ou_whitelist:
 					s_schools = [s for s in s_schools if s in self.ou_whitelist]

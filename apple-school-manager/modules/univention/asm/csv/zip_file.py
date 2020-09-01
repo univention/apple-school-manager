@@ -38,8 +38,13 @@ See https://support.apple.com/en-us/HT207029
 from __future__ import absolute_import, unicode_literals
 import os
 import logging
+import shutil
+import sys
 import tempfile
 import zipfile
+
+from univention.admin import uexceptions
+
 from .csv_file import create_csv_files
 
 try:
@@ -62,7 +67,7 @@ class AsmZipFile(object):
 		self.csv_files = []
 		self.logger = logging.getLogger(__name__)
 
-	def create_csv_files(self):  # type: () -> Iterable[AnyStr]
+	def create_csv_files(self, tmp_dir):  # type: (str) -> Iterable[AnyStr]
 		"""
 		Create ASM CSV files.
 
@@ -71,7 +76,6 @@ class AsmZipFile(object):
 		:return: list of files created
 		:rtype: list(str)
 		"""
-		tmp_dir = tempfile.mkdtemp()
 		self.logger.debug('Creating CSV files in %s...', tmp_dir)
 		self.csv_files = create_csv_files(tmp_dir, self.ou_whitelist)
 		assert self.csv_files, 'No CSV files were created.'
@@ -91,12 +95,18 @@ class AsmZipFile(object):
 		:rtype: str
 		"""
 		file_path = file_path or self.file_path
+		tmp_dir = tempfile.mkdtemp()
 		assert file_path, 'ZIP file path is empty.'
 		self.logger.info('Creating ZIP file in %s...', file_path)
 		if self.csv_files:
 			self.logger.debug('Using existing CSV files: %s.', ', '.join(sorted(self.csv_files)))
 		else:
-			self.csv_files = self.create_csv_files()
+			try:
+				self.csv_files = self.create_csv_files(tmp_dir)
+			except uexceptions.valueInvalidSyntax:
+				shutil.rmtree(tmp_dir, ignore_errors=True)
+				self.logger.error("Error during creation of csv files. Abort asm-upload.")
+				sys.exit(1)
 		self.logger.debug('Writing ZIP file to %s...', file_path)
 		with open(file_path,  'wb') as fp, zipfile.ZipFile(fp, 'w', zipfile.ZIP_DEFLATED) as zf:
 			os.fchmod(fp.fileno(), 0o600)
@@ -105,8 +115,6 @@ class AsmZipFile(object):
 		self.logger.debug('Done writing ZIP file.')
 		if delete_csv_files:
 			self.logger.debug('Deleting temporary CSV files and directory...')
-			for path in self.csv_files:
-				os.remove(path)
-			os.rmdir(os.path.dirname(self.csv_files[0]))
+			shutil.rmtree(tmp_dir, ignore_errors=True)
 		self.logger.info('Finished creating ZIP file.')
 		return file_path

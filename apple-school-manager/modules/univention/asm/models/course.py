@@ -97,5 +97,5 @@ class AsmCourse(AsmModel):
 			course_id=school_class.name,
 			location_id=school_class.school,
 			course_number=school_class.name,
-			course_name=school_class.description or school_class.name,
+			course_name=school_class.name.split("-", 1)[1],
 		)

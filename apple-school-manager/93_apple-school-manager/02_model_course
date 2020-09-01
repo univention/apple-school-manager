@@ -72,7 +72,7 @@ class Test(ImportTestbase):
 
 		course1 = AsmCourse.from_dn(school_class1_dn)
 		got_course1 = course1.as_csv_line()
-		expected_course1 = [school_class1, school_class1, school_class1, self.ou_A.name]
+		expected_course1 = [school_class1, school_class1, school_class1.split("-", 1)[1], self.ou_A.name]
 		if got_course1 == expected_course1:
 			self.log.info('OK: course1 CSV line is as expected.')
 		else:
@@ -80,7 +80,7 @@ class Test(ImportTestbase):
 
 		course2 = AsmCourse.from_dn(school_class2_dn)
 		got_course2 = course2.as_csv_line()
-		expected_course2 = [school_class2, school_class2, description, self.ou_A.name]
+		expected_course2 = [school_class2, school_class2, school_class2.split("-", 1)[1], self.ou_A.name]
 		if got_course2 == expected_course2:
 			self.log.info('OK: course2 CSV line is as expected.')
 		else:
@@ -88,7 +88,7 @@ class Test(ImportTestbase):
 
 		workgroup1 = AsmCourse.from_dn(work_group1_dn)
 		got_workgroup1 = workgroup1.as_csv_line()
-		expected_workgroup1 = [work_group1_name, work_group1_name, work_group1_description, self.ou_A.name]
+		expected_workgroup1 = [work_group1_name, work_group1_name, work_group1_name.split("-", 1)[1], self.ou_A.name]
 		if got_workgroup1 == expected_workgroup1:
 			self.log.info('OK: workgroup1 CSV line is as expected.')
 		else:

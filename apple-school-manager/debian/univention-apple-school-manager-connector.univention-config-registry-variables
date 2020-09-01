@@ -99,3 +99,15 @@ Description[de]=LDAP Attribut welches zur Identifikation des UCS-Benutzers verwe
 Description[en]=LDAP attribute that is used to identify the UCS user (column 'person_number'). Should not change, when the user is renamed. Although this value is optional we advise strongly against changing it. Default: '%entryUUID'.
 Type=str
 Categories=service-administration
+
+[asm/ldap_filter/students/*]
+Description[de]=Hier kann ein LDAP-Filter pro Schule angegeben werden, der eine feinere Auswahl der Schüler erlaubt, die über den ASM synchronisiert werden. Wenn der LDAP-Filter ungültig ist, bricht die Synchronisation ab. Über asm/ldap_filter/students=FILTER kann ein globaler Fallback für alle Schulen definiert werden.
+Description[en]=This can be a LDAP filter that allows for finer control over which students to synchronize via the ASM per school. If the LDAP filter is invalid, the synchronization will be aborted. A global fallback for all schools can be defined via asm/ldap_filter/students=FILTER.
+Type=str
+Categories=service-administration
+
+[asm/ldap_filter/staff/*]
+Description[de]=Hier kann ein LDAP-Filter pro Schule angegeben werden, der eine feinere Auswahl der Lehrkräfte erlaubt, die über den ASM synchronisiert werden. Wenn der LDAP-Filter ungültig ist, bricht die Synchronisation ab. Über asm/ldap_filter/staff=FILTER kann ein globaler Fallback für alle Schulen definiert werden.
+Description[en]=This can be a LDAP filter that allows for finer control over which teachers to synchronize via the ASM per school. If the LDAP filter is invalid, the synchronization will be aborted. A global fallback for all schools can be defined via asm/ldap_filter/staff=FILTER.
+Type=str
+Categories=service-administration

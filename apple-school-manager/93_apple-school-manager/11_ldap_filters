@@ -1,0 +1,57 @@
+#!/usr/share/ucs-test/runner python
+## -*- coding: utf-8 -*-
+## desc: test staff model/CSV generation
+## tags: [apptest]
+## exposure: dangerous
+## packages:
+##   - univention-apple-school-manager-connector
+## bugs: [48346]
+
+from univention.admin import uexceptions
+from univention.asm.csv.csv_file import AsmStaffCsvFile, AsmStudentsCsvFile
+from univention.asm.utils import get_ucr
+from univention.config_registry import handler_set
+from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
+
+import univention.testing.ucr as ucr_test
+
+
+class Test(ImportTestbase):
+    def test(self):
+        school1 = self.ou_A.name
+        school2 = self.ou_B.name
+        teacher1_name, teacher1_dn = self.schoolenv.create_teacher(school1)
+        teacher2_name, teacher2_dn = self.schoolenv.create_teacher_and_staff(school1)
+        student1_name, student1_dn = self.schoolenv.create_student(school1)
+        student2_name, student2_dn = self.schoolenv.create_student(school1)
+
+        #  For staff and students
+        for klass, user1, user2, filter_type in [(AsmStaffCsvFile, teacher1_name, teacher2_name, "staff"), (AsmStudentsCsvFile, student1_name, student2_name, "students")]:
+            csv_class = klass("")
+
+            handler_set(["asm/ldap_filter/{}=NONSENSE".format(filter_type)])
+            get_ucr().load()
+            try:
+                objects = list(csv_class.find_and_create_objects())
+                self.fail("We expect an valueInvalidSyntax exception with an invalid filter for filter type '{}'".format(filter_type))
+            except uexceptions.valueInvalidSyntax:
+                pass  # That is what we expect
+
+            #  global filter works
+            handler_set(["asm/ldap_filter/{}=uid={}".format(filter_type, user1)])
+            get_ucr().load()
+            objects = [user.first_name for user in csv_class.find_and_create_objects()]
+            assert len(objects) == 1
+            assert user1 in objects
+
+            #  overriding with school specific filter works
+            handler_set(["asm/ldap_filter/{}/{}=uid={}".format(filter_type, school1, user2)])
+            get_ucr().load()
+            objects = [user.first_name for user in csv_class.find_and_create_objects()]
+            assert len(objects) == 1, "The objects found are: {}".format(objects)
+            assert user2 in objects
+
+
+if __name__ == '__main__':
+    with ucr_test.UCSTestConfigRegistry():
+        Test().run()

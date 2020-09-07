@@ -1,6 +1,6 @@
 #!/usr/share/ucs-test/runner python
 ## -*- coding: utf-8 -*-
-## desc: test staff model/CSV generation
+## desc: test ldap filter for student and staff csv generation
 ## tags: [apptest]
 ## exposure: dangerous
 ## packages:
@@ -19,7 +19,6 @@ import univention.testing.ucr as ucr_test
 class Test(ImportTestbase):
     def test(self):
         school1 = self.ou_A.name
-        school2 = self.ou_B.name
         teacher1_name, teacher1_dn = self.schoolenv.create_teacher(school1)
         teacher2_name, teacher2_dn = self.schoolenv.create_teacher_and_staff(school1)
         student1_name, student1_dn = self.schoolenv.create_student(school1)
@@ -38,11 +37,14 @@ class Test(ImportTestbase):
                 pass  # That is what we expect
 
             #  global filter works
-            handler_set(["asm/ldap_filter/{}=uid={}".format(filter_type, user1)])
+            ucr_v = "asm/ldap_filter/{}=uid={}".format(filter_type, user1)
+            handler_set([ucr_v])
             get_ucr().load()
             objects = [user.first_name for user in csv_class.find_and_create_objects()]
             assert len(objects) == 1
-            assert user1 in objects
+            print teacher1_name, teacher2_name, student1_name, student2_name
+            print get_ucr().get("asm/attributes/staff/anonymize")
+            assert user1 in objects, "The ucr filter is: {}. '{}' was not found in {}".format(ucr_v, user1, objects)
 
             #  overriding with school specific filter works
             handler_set(["asm/ldap_filter/{}/{}=uid={}".format(filter_type, school1, user2)])

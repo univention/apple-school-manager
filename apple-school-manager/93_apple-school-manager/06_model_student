@@ -42,11 +42,11 @@ class Test(ImportTestbase):
 		student_udm_obj = student1.get_udm_object(self.lo)
 		for attr in ('middleName', 'initials', 'oxMiddleName'):
 			if attr in student_udm_obj:
-				middle_name = uts.random_name()
+				middle_name = uts.random_name(length=5)
 				self.log.info('*** Adding middle name to student1: %r...', middle_name)
 				student_udm_obj[attr] = middle_name
 				student_udm_obj.modify()
-				utils.verify_ldap_object(student1_dn, {'attr': [middle_name]})
+				utils.verify_ldap_object(student1_dn, {attr: [middle_name]})
 				# reload object just to be safe
 				student1 = Student.from_dn(student1_dn, None, self.lo)
 				break

@@ -46,11 +46,11 @@ class Test(ImportTestbase):
 		teacher_udm_obj = teacher1.get_udm_object(self.lo)
 		for attr in ('middleName', 'initials', 'oxMiddleName'):
 			if attr in teacher_udm_obj:
-				middle_name = uts.random_name()
+				middle_name = uts.random_name(length=5)
 				self.log.info('*** Adding middle name to teacher1: %r...', middle_name)
 				teacher_udm_obj[attr] = middle_name
 				teacher_udm_obj.modify()
-				utils.verify_ldap_object(teacher1_dn, {'attr': [middle_name]})
+				utils.verify_ldap_object(teacher1_dn, {attr: [middle_name]})
 				# reload object just to be safe
 				teacher1 = Teacher.from_dn(teacher1_dn, None, self.lo)
 				break
@@ -84,7 +84,7 @@ class Test(ImportTestbase):
 		update_ucr()
 		or_teacher1 = AsmStaff.from_dn(teacher1_dn)
 		got_teacher1 = or_teacher1.as_csv_line()
-		expected_teacher1 = [t1_name, t1_name, teacher1.name, middle_name, 'No Name', '', teacher1.name, school1]
+		expected_teacher1 = [t1_name, t1_name, teacher1.name, '', 'No Name', '', teacher1.name, school1]
 		if got_teacher1 == expected_teacher1:
 			self.log.info('OK: teacher1 anonymized CSV line is as expected.')
 		else:
@@ -95,7 +95,7 @@ class Test(ImportTestbase):
 		update_ucr()
 		or_teacher1 = AsmStaff.from_dn(teacher1_dn)
 		got_teacher1 = or_teacher1.as_csv_line()
-		expected_teacher1 = [t1_name, t1_name, first_name_anon, middle_name, 'No Name', '', teacher1.name, school1]
+		expected_teacher1 = [t1_name, t1_name, first_name_anon, '', 'No Name', '', teacher1.name, school1]
 		if got_teacher1 == expected_teacher1:
 			self.log.info('OK: teacher1 anonymized CSV line with static first_name is as expected.')
 		else:

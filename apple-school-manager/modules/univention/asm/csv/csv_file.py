@@ -299,15 +299,14 @@ class AsmRostersCsvFile(AsmCsvFile):
 		:return list of AsmModel objects
 		:rtype: list(AsmRoster)
 		"""
-		schools = self.get_schools()
-		for school in schools:
+		for school in self.get_schools():
+			student_dns = {student.dn for student in self.get_students(school)}
 			for ucs_obj in sorted(
 					SchoolClass.get_all(self.lo, school.name) + WorkGroup.get_all(self.lo, school.name),
 					key=attrgetter('name')
 			):
 				for user_dn in sorted(ucs_obj.users):
-					user = User.from_dn(user_dn, None, self.lo)
-					if user.is_student(self.lo) and not user.is_exam_student(self.lo):
+					if user_dn in student_dns:
 						yield AsmRoster.from_dn(ucs_obj.dn, user_dn)
 
 

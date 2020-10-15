@@ -68,7 +68,7 @@ class AsmLocation(AsmModel):
 
 		:param str dn: DN to the School/OU object to represent
 		:return: AsmLocation instance
-		:rtype AsmLocation
+		:rtype: AsmLocation
 		"""
 		lo, po = get_ldap_connection()
 		school = School.from_dn(dn, None, lo)

@@ -131,7 +131,7 @@ class AsmStaff(AsmModel, AnonymizeMixIn):
 			looking at ou-overlapping users. No limit if empty or None.
 		:type ou_whitelist: list(str) or None
 		:return: AsmStaff instance
-		:rtype AsmStaff
+		:rtype: AsmStaff
 		:raises WrongModel: when `dn` does not belong to a teacher or
 			teacherandstaff
 		:raises ValueError: when non of the users `schools` is in the whitelist

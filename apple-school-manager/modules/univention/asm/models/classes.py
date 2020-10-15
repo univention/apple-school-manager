@@ -123,7 +123,7 @@ class AsmClass(AsmModel):
 
 		:param str dn: DN to the SchoolClass/Workgroup object to represent
 		:return: AsmClass instance
-		:rtype AsmClass
+		:rtype: AsmClass
 		"""
 		lo, po = get_ldap_connection()
 		logger = logging.getLogger(__name__)

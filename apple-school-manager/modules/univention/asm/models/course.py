@@ -86,7 +86,7 @@ class AsmCourse(AsmModel):
 
 		:param str dn: DN to the SchoolClass/Workgroup object to represent
 		:return: AsmCourse instance
-		:rtype AsmCourse
+		:rtype: AsmCourse
 		"""
 		lo, po = get_ldap_connection()
 		try:

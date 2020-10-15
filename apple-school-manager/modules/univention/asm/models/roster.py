@@ -79,7 +79,7 @@ class AsmRoster(AsmModel):
 		:param str class_dn: DN to the SchoolClass/Workgroup object to represent
 		:param str student_dn: DN to the student object to represent
 		:return: AsmRoster instance
-		:rtype AsmRoster
+		:rtype: AsmRoster
 		"""
 		lo, po = get_ldap_connection()
 		try:

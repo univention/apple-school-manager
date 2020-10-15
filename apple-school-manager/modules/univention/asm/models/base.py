@@ -80,7 +80,7 @@ class AsmModel(object):
 
 		:param str dn: DN to object to represent
 		:return: AsmModel instance
-		:rtype AsmModel
+		:rtype: AsmModel
 		"""
 		raise NotImplementedError()
 

@@ -134,6 +134,7 @@ class AsmCsvFile(object):
 		self.ou_whitelist = ou_whitelist
 		self.obj = []
 		self.logger = logging.getLogger(__name__)
+		self.ucr = get_ucr()
 		if not self.lo:
 			self.__class__.lo, po = get_ldap_connection()
 		self.limbo_ou = self._get_limbo_ou()
@@ -219,6 +220,39 @@ class AsmCsvFile(object):
 					pass
 		return ''
 
+	def get_staff(self, school):  # type: (School) -> Iterable[Teacher]
+		global_ldap_filter_str = self.ucr.get("asm/ldap_filter/staff", "")
+		specific_ldap_filter = self.ucr.get(
+			"asm/ldap_filter/staff/{}".format(school.name), global_ldap_filter_str
+		)
+		try:
+			return Teacher.get_all(
+				self.lo, school.name, filter_str=specific_ldap_filter
+			) + TeachersAndStaff.get_all(
+				self.lo, school.name, filter_str=specific_ldap_filter
+			)
+		except uexceptions.valueInvalidSyntax as exc:
+			self.logger.error("Invalid LDAP-filter for staff: {!r}".format(specific_ldap_filter))
+			raise exc
+
+	def get_students(self, school):  # type: (School) -> Iterable[Student]
+		global_ldap_filter_str = self.ucr.get("asm/ldap_filter/students", "")
+		specific_ldap_filter = self.ucr.get(
+			"asm/ldap_filter/students/{}".format(school.name), global_ldap_filter_str
+		)
+		try:
+			return [
+				student
+				for student in Student.get_all(self.lo, school.name, filter_str=specific_ldap_filter)
+				if not student.is_exam_student(self.lo)
+			]
+		except uexceptions.valueInvalidSyntax as exc:
+			self.logger.error("Invalid LDAP-filter for students: {!r}".format(specific_ldap_filter))
+			raise
+		except Exception as exc:
+			self.logger.traceback("other exc: %s", exc)
+			raise
+
 
 class AsmClassCsvFile(AsmCsvFile):
 	"""CSV file generator for the `classes` file."""
@@ -289,19 +323,9 @@ class AsmStaffCsvFile(AsmCsvFile):
 		:return list of AsmModel objects
 		:rtype: list(AsmStaff)
 		"""
-		logger = logging.getLogger(__name__)
-		ucr = get_ucr()
-		global_ldap_filter_str = ucr.get("asm/ldap_filter/staff", "")
-		schools = self.get_schools()
 		dns = set()
-		for school in schools:
-			specific_ldap_filter = ucr.get("asm/ldap_filter/staff/{}".format(school.name), global_ldap_filter_str)
-			try:
-				staff = Teacher.get_all(self.lo, school.name, filter_str=specific_ldap_filter) + TeachersAndStaff.get_all(self.lo, school.name, filter_str=specific_ldap_filter)
-			except uexceptions.valueInvalidSyntax as exc:
-				logger.error("Invalid LDAP-filter for staff: '{}'".format(specific_ldap_filter))
-				raise exc
-			for teacher in staff:
+		for school in self.get_schools():
+			for teacher in self.get_staff(school):
 				t_schools = [teacher.school] + sorted(s for s in teacher.schools if s != teacher.school)
 				if self.ou_whitelist:
 					t_schools = [s for s in t_schools if s in self.ou_whitelist]
@@ -323,19 +347,9 @@ class AsmStudentsCsvFile(AsmCsvFile):
 		:return list of AsmModel objects
 		:rtype: list(AsmStudent)
 		"""
-		logger = logging.getLogger(__name__)
-		ucr = get_ucr()
-		global_ldap_filter_str = ucr.get("asm/ldap_filter/students", "")
-		schools = self.get_schools()
 		dns = set()
-		for school in schools:
-			specific_ldap_filter = ucr.get("asm/ldap_filter/students/{}".format(school.name), global_ldap_filter_str)
-			try:
-				students = Student.get_all(self.lo, school.name, filter_str=specific_ldap_filter)
-			except uexceptions.valueInvalidSyntax as exc:
-				logger.error("Invalid LDAP-filter for students: '{}'".format(specific_ldap_filter))
-				raise exc
-			for student in students:
+		for school in self.get_schools():
+			for student in self.get_students(school):
 				s_schools = [student.school] + sorted(s for s in student.schools if s != student.school)
 				if self.ou_whitelist:
 					s_schools = [s for s in s_schools if s in self.ou_whitelist]

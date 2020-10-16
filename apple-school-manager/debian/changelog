@@ -1,6 +1,13 @@
+univention-apple-school-manager-connector (2.0.0-5) unstable; urgency=low
+
+  * Bug #52224: the LDAP filter for students and staff is also used when
+    generating the roster csv file
+
+ -- Daniel Troeder <troeder@univention.de>  Thu, 15 Oct 2020 13:46:58 +0200
+
 univention-apple-school-manager-connector (2.0.0-4) unstable; urgency=low
 
-  * Bug #48346: Allow filtering of sutdents and staff via LDAP filter
+  * Bug #48346: Allow filtering of students and staff via LDAP filter
 
  -- Ole Schwiegert <schwiegert@univention.de>  Mon, 07 Sep 2020 09:43:03 +0200
 

@@ -111,3 +111,9 @@ Description[de]=Hier kann ein LDAP-Filter pro Schule angegeben werden, der eine 
 Description[en]=This can be a LDAP filter that allows for finer control over which teachers to synchronize via the ASM per school. If the LDAP filter is invalid, the synchronization will be aborted. A global fallback for all schools can be defined via asm/ldap_filter/staff=FILTER.
 Type=str
 Categories=service-administration
+
+[asm/attributes/course-name-pattern]
+Description[de]=Definiert ein Muster, nach dem der Kursname berechnet wird. Standard: {ou}-{name}
+Description[en]=Defines a pattern according to which the course name is calculated. Default: {ou}-{name}
+Type=str
+Categories=service-administration

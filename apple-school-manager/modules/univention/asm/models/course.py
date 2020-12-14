@@ -36,6 +36,8 @@ See https://support.apple.com/en-us/HT207029
 """
 
 from __future__ import absolute_import, unicode_literals
+import logging
+
 from .base import AsmModel
 from ..utils import get_ldap_connection, get_ucr
 from ucsschool.lib.models import SchoolClass, WorkGroup
@@ -89,13 +91,18 @@ class AsmCourse(AsmModel):
 		:rtype: AsmCourse
 		"""
 		lo, po = get_ldap_connection()
+		logger = logging.getLogger(__name__)
 		try:
 			school_class = SchoolClass.from_dn(dn, None, lo)
 		except UnknownModel:
 			school_class = WorkGroup.from_dn(dn, None, lo)
 
 		course_pattern = get_ucr().get("asm/attributes/course-name-pattern", "{ou}-{name}")
-		name = school_class.name.split("-", 1)[1]
+		try:
+			name = school_class.name.split("-", 1)[1]
+		except IndexError:
+			logger.warning("course {} is missing an OU".format(school_class.name))
+			name = school_class.name
 		course_name = course_pattern.replace("{ou}", school_class.school).replace("{name}", name)
 		return cls(
 			course_id=school_class.name,

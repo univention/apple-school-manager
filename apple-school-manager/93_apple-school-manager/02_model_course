@@ -9,12 +9,17 @@
 
 from ldap.filter import filter_format
 from ucsschool.lib.models import SchoolClass
-from univention.config_registry import handler_unset
+from univention.config_registry import handler_unset, handler_set, ConfigRegistry
+
 import univention.testing.ucr as ucr_test
 import univention.testing.strings as uts
 import univention.testing.utils as utils
 from univention.asm.models.course import AsmCourse
+from univention.asm.utils import update_ucr
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
+
+def get_course_name(course_pattern, school, name):
+	return course_pattern.format(ou=school, name=name)
 
 
 class Test(ImportTestbase):
@@ -70,29 +75,41 @@ class Test(ImportTestbase):
 
 		utils.verify_ldap_object(work_group1_dn, {'memberUid': [teacher1_name]})
 
-		course1 = AsmCourse.from_dn(school_class1_dn)
-		got_course1 = course1.as_csv_line()
-		expected_course1 = [school_class1, school_class1, school_class1.split("-", 1)[1], self.ou_A.name]
-		if got_course1 == expected_course1:
-			self.log.info('OK: course1 CSV line is as expected.')
-		else:
-			self.fail('Expected CSV line for course1: {!r}, got: {!r}.'.format(expected_course1, got_course1))
+		for course_pattern in ["{name}", "{ou}-{name}", "{name}-{random}-{ou}"]:
+				course_pattern = course_pattern.replace("{random}", uts.random_string())
+				handler_set(["asm/attributes/course-name-pattern={}".format(course_pattern)])
+				update_ucr()
 
-		course2 = AsmCourse.from_dn(school_class2_dn)
-		got_course2 = course2.as_csv_line()
-		expected_course2 = [school_class2, school_class2, school_class2.split("-", 1)[1], self.ou_A.name]
-		if got_course2 == expected_course2:
-			self.log.info('OK: course2 CSV line is as expected.')
-		else:
-			self.fail('Expected CSV line for course2: {!r}, got: {!r}.'.format(expected_course2, got_course2))
+				course1 = AsmCourse.from_dn(school_class1_dn)
+				got_course1 = course1.as_csv_line()
+				school, school_class1_name = school_class1.split("-", 1)
+				course_name = get_course_name(course_pattern, school, school_class1_name)
 
-		workgroup1 = AsmCourse.from_dn(work_group1_dn)
-		got_workgroup1 = workgroup1.as_csv_line()
-		expected_workgroup1 = [work_group1_name, work_group1_name, work_group1_name.split("-", 1)[1], self.ou_A.name]
-		if got_workgroup1 == expected_workgroup1:
-			self.log.info('OK: workgroup1 CSV line is as expected.')
-		else:
-			self.fail('Expected CSV line for workgroup1: {!r}, got: {!r}.'.format(expected_workgroup1, got_workgroup1))
+				expected_course1 = [school_class1, school_class1, course_name, self.ou_A.name]
+				if got_course1 == expected_course1:
+					self.log.info('OK: course1 CSV line is as expected.')
+				else:
+					self.fail('Expected CSV line for course1: {!r}, got: {!r}.'.format(expected_course1, got_course1))
+
+				course2 = AsmCourse.from_dn(school_class2_dn)
+				got_course2 = course2.as_csv_line()
+				school, school_class2_name = school_class2.split("-", 1)
+				course_name = get_course_name(course_pattern, school, school_class2_name)
+				expected_course2 = [school_class2, school_class2, course_name, self.ou_A.name]
+				if got_course2 == expected_course2:
+					self.log.info('OK: course2 CSV line is as expected.')
+				else:
+					self.fail('Expected CSV line for course2: {!r}, got: {!r}.'.format(expected_course2, got_course2))
+
+				workgroup1 = AsmCourse.from_dn(work_group1_dn)
+				got_workgroup1 = workgroup1.as_csv_line()
+				_work_group1_name = work_group1_name.split("-", 1)[1]
+				course_name = get_course_name(course_pattern, self.ou_A.name, _work_group1_name)
+				expected_workgroup1 = [work_group1_name, work_group1_name, course_name, self.ou_A.name]
+				if got_workgroup1 == expected_workgroup1:
+					self.log.info('OK: workgroup1 CSV line is as expected.')
+				else:
+					self.fail('Expected CSV line for workgroup1: {!r}, got: {!r}.'.format(expected_workgroup1, got_workgroup1))
 
 
 if __name__ == '__main__':

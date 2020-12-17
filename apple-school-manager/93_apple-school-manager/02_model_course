@@ -75,7 +75,7 @@ class Test(ImportTestbase):
 
 		utils.verify_ldap_object(work_group1_dn, {'memberUid': [teacher1_name]})
 
-		for course_pattern in ["{ou}-{name}", "{name}-{random}-{ou}"]:
+		for course_pattern in ["{name}", "{ou}-{name}", "{name}-{random}-{ou}"]:
 				course_pattern = course_pattern.replace("{random}", uts.random_string())
 				handler_set(["asm/attributes/course-name-pattern={}".format(course_pattern)])
 				update_ucr()

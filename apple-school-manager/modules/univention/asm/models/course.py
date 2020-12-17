@@ -91,7 +91,6 @@ class AsmCourse(AsmModel):
 		:rtype: AsmCourse
 		"""
 		lo, po = get_ldap_connection()
-		logger = logging.getLogger(__name__)
 		try:
 			school_class = SchoolClass.from_dn(dn, None, lo)
 		except UnknownModel:
@@ -101,7 +100,8 @@ class AsmCourse(AsmModel):
 		try:
 			name = school_class.name.split("-", 1)[1]
 		except IndexError:
-			logger.warning("course {} is missing an OU".format(school_class.name))
+			logger = logging.getLogger(__name__)
+			logger.warning("{}: course {!r} is missing an OU".format(dn, school_class.name))
 			name = school_class.name
 		course_name = course_pattern.replace("{ou}", school_class.school).replace("{name}", name)
 		return cls(

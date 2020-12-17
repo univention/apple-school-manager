@@ -116,4 +116,4 @@ Categories=service-administration
 Description[de]=Definiert ein Muster, nach dem der Kursname berechnet wird. Standard: {ou}-{name}
 Description[en]=Defines a pattern according to which the course name is calculated. Default: {ou}-{name}
 Type=str
-Categories=management-umc
+Categories=service-administration

@@ -19,8 +19,8 @@ from univention.asm.utils import update_ucr
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
 def get_course_name(course_pattern, school, name):
-	course_name = course_pattern.replace("{ou}", school).replace("{name}", name)
-	return course_name
+	return course_pattern.format(ou=school, name=name)
+
 
 class Test(ImportTestbase):
 	ou_B = None

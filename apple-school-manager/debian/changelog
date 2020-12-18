@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (2.0.0-6) unstable; urgency=medium
+
+  * Bug #52343: introduce new ucr-v asm/attributes/course-name-pattern
+
+ -- Tobias Wenzel <wenzel@univention.de>  Fri, 18 Dec 2020 15:15:05 +0100
+
 univention-apple-school-manager-connector (2.0.0-5) unstable; urgency=low
 
   * Bug #52224: the LDAP filter for students and staff is also used when

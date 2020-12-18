@@ -12,6 +12,7 @@ import subprocess
 import shutil
 import filecmp
 from paramiko.client import SSHClient, AutoAddPolicy
+from ucsschool.lib.models.utils import exec_cmd
 from univention.admin.uldap import getMachineConnection
 import univention.testing.strings as uts
 import univention.testing.ucr as ucr_test
@@ -60,6 +61,25 @@ class LocalHostAsASM(object):
 				pass
 
 
+class TempUserWritableFileAnywhere(object):
+	def __init__(self, path, uid, gid):
+		self.path = path
+		self.uid = uid
+		self.gid = gid
+
+	def __enter__(self):
+		print("Creating file {!r} with uid={!r} and gid={!r}...".format(self.path, self.uid, self.gid))
+		with open(self.path, "w") as fp:
+			os.fchown(fp.fileno(), self.uid, self.gid)
+
+	def __exit__(self, *args):
+		print("Deleting file {!r}...".format(self.path))
+		try:
+			os.unlink(self.path)
+		except EnvironmentError:
+			pass
+
+
 class Test(ImportTestbase):
 	# use_ou_cache = False  # use only uncached OUs to be certain no previous test left any object
 	ou_B = None
@@ -67,16 +87,32 @@ class Test(ImportTestbase):
 
 	def test(self):
 		school_class = '{}-{}'.format(self.ou_A.name, uts.random_username())
-		student1_name, student1_dn = self.schoolenv.create_student(self.ou_A.name, classes=school_class, password="univention")
+		student1_name, student1_dn = self.schoolenv.create_student(
+			self.ou_A.name, classes=school_class, password="univention"
+		)
 		lo, po = getMachineConnection()
-		home_dir = lo.get(student1_dn, attr=["homeDirectory"])["homeDirectory"][0]
-		with ucr_test.UCSTestConfigRegistry(), LocalHostAsASM(student1_name, "univention", home_dir, self.ou_A.name):
-			output = subprocess.check_output(["/usr/sbin/asm-upload"], stderr=subprocess.STDOUT)
-			output = output.split("\n")
-			for line in output:
+		user_attrs = lo.get(student1_dn, attr=["homeDirectory", "uidNumber", "gidNumber"])
+		home_dir = user_attrs["homeDirectory"][0]
+		uid = int(user_attrs["uidNumber"][0])
+		gid = int(user_attrs["gidNumber"][0])
+		remote_path = "/archive.zip"
+		with ucr_test.UCSTestConfigRegistry(), LocalHostAsASM(
+				student1_name, "univention", home_dir, self.ou_A.name
+		), TempUserWritableFileAnywhere(remote_path, uid, gid):
+			cmd = ["/usr/sbin/asm-upload"]
+			print("Executing {!r}...".format(cmd))
+			returncode, stdout, stderr = exec_cmd(cmd)
+			print("-> returncode={}".format(returncode))
+			print("-> stdout={}".format(stdout))
+			print("-> stderr={}".format(stderr))
+			if returncode:
+				utils.fail("{!r} returned {}.)".format(cmd, returncode))
+			for line in stderr.split("\n"):
 				if line.startswith("The uploaded zip is stored in: "):
-					zip_path = line.replace("The uploaded zip is stored in: ", "")
-					remote_path = os.path.join(home_dir, "dropbox", os.path.basename(zip_path))
+					zip_path = line.split()[-1]
+					print("Comparing zip_path={!r} and remote_path={!r}...".format(
+						zip_path, remote_path)
+					)
 					if not filecmp.cmp(zip_path, remote_path, shallow=False):
 						utils.fail("ZIP file was not correctly uploaded")
 					return

@@ -11,10 +11,13 @@ Meta bug for initial development: http://forge.univention.org/bugzilla/show_bug.
 
 ## Build and upload to the appcenter
 
-Set your appcenter password in "~/.selfservicepwd" 
-./update-app.sh
-or if your username differs from your appcenter username:
-bash -c "USER=juern ./update-app.sh"
+```shell
+ssh dimma  # (or omar)
+cd git
+git clone git@git.knut.univention.de:univention/components/apple-school-manager.git
+cd apple-school-manager
+univention-appcenter-control upload '4.4/apple-school-manager=2.2.2' asm.settings configure_host $(find /var/univention/buildsystem2/apt/ucs_4.4-0-univention-asm/ -name '*.deb')
+```
 
 ## Update etc/asm_public_key
 

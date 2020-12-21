@@ -270,10 +270,10 @@ class Test(ImportTestbase):
 		def check_courses(course_csv_file_name):
 			with open(course_csv_file_name, 'rb') as course_csv_file:
 				expected_courses = sorted([
-					[school_class1, school_class1, school_class1.split("-", 1)[1], school1],
-					[school_class2, school_class2, school_class2.split("-", 1)[1], school2],
+					[school_class1, school_class1, school_class1, school1],
+					[school_class2, school_class2, school_class2, school2],
 					# school3 is not in the whitelist, so school_class3 must not be returned
-					[school_class4, school_class4, school_class4.split("-", 1)[1], school1],
+					[school_class4, school_class4, school_class4, school1],
 				], key=itemgetter(0))  # sort by 1. school name, 2. class name
 				got_courses = list(row for row in csv.reader(course_csv_file))[1:]  # remove header line
 				if got_courses == expected_courses:

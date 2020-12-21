@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (2.0.0-7) unstable; urgency=low
+
+  * Bug #52343: adapt tests to changed course naming
+
+ -- Daniel Troeder <troeder@univention.de>  Mon, 21 Dec 2020 14:04:17 +0100
+
 univention-apple-school-manager-connector (2.0.0-6) unstable; urgency=medium
 
   * Bug #52343: introduce new ucr-v asm/attributes/course-name-pattern

@@ -1,0 +1,96 @@
+<h3>
+	After installation
+</h3>
+<p>
+	To set up synchronization with the Apple School Manager, please enter the Apple School Manager SFTP
+	username and password in the
+	<a href="https://docs.software-univention.de/app-provider.html#app-settings" target="_blank">App
+	Settings</a>. For more information on how to obtain these credentials, please visit
+	<a href="https://support.apple.com/en-us/HT207029" target="_blank">Apple's support page</a>.
+</p>
+<p>
+	There are several ways to configure the Apple School Manager Connector.
+</p>
+<dl>
+	<dt>
+		<b>Regular Synchronization</b>
+	</dt>
+	<dd>
+		<p>
+			You can select the daily synchronization in the App Settings.
+		</p>
+	</dd>
+	<dt>
+		<b>Synchronization of schools</b>
+	</dt>
+	<dd>
+		<p>
+			By default, a complete update of the user data takes place. Schools, classes, working groups
+			and users (teachers and students) are synchronized.
+		</p>
+		<p>
+			However, it is also possible to restrict the synchronization to individual schools. To do
+			this, please go to Overview → School administration (Orange) → Schools → and select the
+			school abbreviations of the schools you want to synchronize. Then switch to the App Settings
+			of the Apple School Manager Connector and insert all school abbreviations of the schools you
+			want to synchronize as comma seperated list.
+		</p>
+	</dd>
+	<dt>
+		<b>Newly created users</b>
+	</dt>
+	<dd>
+		<p>
+			If new users are created in the UCS IDM, they will be created during the next synchronization.
+		</p>
+		<p>
+			<b>Attention</b>: If users were not created automatically, it is possible that the users did
+			not have a valid mail domain in their mail address.
+		</p>
+	</dd>
+	<dt>
+		<b>Deleting users </b>
+	</dt>
+	<dd>
+		<p>
+			If users are deleted in the UCS IDM, they will be deactivated during the next synchronization
+			in the ASM and also deleted after 30 days.
+		</p>
+	</dd>
+	<dt>
+		<b>Apple ID</b>
+	</dt>
+	<dd>
+		<p>
+			Users are only synchronized if they have a valid primary mail address. This is used by
+			default. It is possible to insert a prefix before the mail domain. If necessary, set the UCR
+			variable <code>asm/attributes/user/email/prepend_domain</code> under Overview → System (Purple) → Univention Configuration Registry.
+		</p>
+	</dd>
+	<dt>
+		<b>Passwords</b>
+	</dt>
+	<dd>
+		<p>
+			Passwords must be distributed independently within the ASM.
+		</p>
+	</dd>
+	<dt>
+		<b>Anonymization</b>
+	</dt>
+	<dd>
+		<p>
+			If you want to activate anonymization, please set the following two UCR variables <code>asm/attributes/staff/anonymize</code> &amp; <code>asm/attributes/student/anonymize</code> under Overview → System (Purple) → Univention Configuration Registry. Afterwards only the username (uid) of the user synchronized.
+		</p>
+	</dd>
+	<dt>
+		<b>Class numbers</b>
+	</dt>
+	<dd>
+		<p>
+			The synchronization of the class numbers can be deactivated with the UCR variable <code>asm/attributes/classes/class_number_empty</code> under Overview → System (Purple) → Univention Configuration Registry.
+		</p>
+	</dd>
+	<dl>
+	</dl>
+</dl>

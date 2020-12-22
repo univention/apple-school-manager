@@ -1,0 +1,104 @@
+<h3>
+	Nach der Installation
+</h3>
+<p>
+	Um die Synchronisation mit Apple School Manager einzurichten, geben Sie bitte in den
+	<a href="https://docs.software-univention.de/app-provider.html#app-settings" target="_blank">App
+	Settings</a> den Apple School Manager SFTP Benutzernamen und das Passwort ein. Weitere Information,
+	wie Sie diese Anmeldedaten erhalten, finden Sie auf der
+	<a href="https://support.apple.com/de-de/HT207029" target="_blank">Supportseite von Apple</a>.
+</p>
+<p>
+	Es gibt verschiedene Möglichkeiten, Apple School Manager Connector zu konfigurieren.
+</p>
+<dl>
+	<dt>
+		<b>Regelmäßige Synchronisierung</b>
+	</dt>
+	<dd>
+		<p>
+			Sie können in den App Settings eine tägliche Synchronisierung auswählen.
+		</p>
+	</dd>
+	<dt>
+		<b>Synchronisation der Schulen</b>
+	</dt>
+	<dd>
+		<p>
+			Standardmäßig findet bei jeder nächtlichen Synchronisation eine komplette Aktualisierung der
+			Benutzerdaten statt. Es werden Schulen, Klassen, Arbeitsgruppen und Benutzer (Lehrkräfte und
+			SchülerInnen) synchronisiert.
+		</p>
+		<p>
+			Es ist jedoch auch möglich die Synchronisation auf einzelne Schulen einzuschränken. Dazu
+			suchen Sie sich bitte in der Übersicht → Schuladministration (Orange) → Schulen → die
+			Schulkürzel der Schulen heraus, die Sie synchronisieren möchten. Anschließend wechseln Sie
+			in die App Settings des Apple School Manager Connectors und fügen alle Schulkürzel der
+			Schulen, die Sie synchronisieren möchten, als kommaseperierte Liste ein.
+		</p>
+	</dd>
+	<dt>
+		<b>Neu angelegte Benutzer</b>
+	</dt>
+	<dd>
+		<p>
+			Werden Benutzer im UCS IDM neu angelegt, werden diese bei der nächsten Synchronisation
+			übertragen.
+		</p>
+		<p>
+			<b>Achtung!</b> Wenn Benutzer nicht automatisch im ASM angelegt wurden, kann es sein, dass
+			die Benutzer keine gültige Maildomain in ihrer Mailadresse hatten.
+		</p>
+	</dd>
+	<dt>
+		<b>Löschen von Benutzern</b>
+	</dt>
+	<dd>
+		<p>
+			Werden Benutzer im UCS IDM gelöscht, werden diese bei der nächsten Synchronisation im ASM
+			zunächst deaktiviert und nach 30 Tage ebenfalls gelöscht.
+		</p>
+	</dd>
+	<dt>
+		<b>Apple-ID</b>
+	</dt>
+	<dd>
+		<p>
+			Benutzer werden nur synchronisiert, sofern diese eine gültige primäre Mailaddresse besitzen.
+			Standardmäßig wird diese verwendet. Es ist möglich ein Prefix vor der Maildomain einzufügen.
+			Dazu setzen Sie gegebenenfalls bitte die UCR-Variable
+			<code>asm/attributes/user/email/prepend_domain</code> unter Übersicht → System (Lila) →
+			Univention Configuration Registry.
+		</p>
+	</dd>
+	<dt>
+		<b>Passwörter</b>
+	</dt>
+	<dd>
+		<p>
+			Passwörter müssen selbstständig aus dem ASM heraus verteilt werden.
+		</p>
+	</dd>
+	<dt>
+		<b>Anonymisierung</b>
+	</dt>
+	<dd>
+		<p>
+			Wenn Sie die Anonymisierung aktivieren möchten, setzen Sie bitte folgende zwei UCR-Variablen
+			<code>asm/attributes/staff/anonymize</code> &amp;
+			<code>asm/attributes/student/anonymize<code> unter Übersicht → System (Lila) → Univention
+			Configuration Registry. Anschließend wird nur noch der Benutzername der Benutzer
+			synchronisiert.
+		</p>
+	</dd>
+	<dt>
+		<b>Klassennummern</b>
+	</dt>
+	<dd>
+		<p>
+			Die Synchronisation der Klassennummern kann mit der UCR-Variable
+			<code>asm/attributes/classes/class_number_empty<code> unter Übersicht → System (Lila) →
+			Univention Configuration Registry deaktiviert werden.
+		</p>
+	</dd>
+</dl>

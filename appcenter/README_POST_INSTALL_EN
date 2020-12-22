@@ -1,0 +1,2 @@
+If you wish to anonymize you users data (except the username), take a look at the UCR variables
+<code>asm/attributes/staff/anonymize</code> and <code>asm/attributes/student/anonymize</code>.

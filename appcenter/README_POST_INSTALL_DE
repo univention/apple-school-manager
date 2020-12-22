@@ -1,0 +1,3 @@
+Wenn Sie die Daten Ihrer Benutzer (den Benutzernamen ausgenommen) anonymisieren wollen, schauen Sie sich
+bitte die UCR Variablen <code>asm/attributes/staff/anonymize</code> und
+<code>asm/attributes/student/anonymize</code> an.

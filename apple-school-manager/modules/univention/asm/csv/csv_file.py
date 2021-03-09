@@ -250,7 +250,7 @@ class AsmCsvFile(object):
 			self.logger.error("Invalid LDAP-filter for students: {!r}".format(specific_ldap_filter))
 			raise
 		except Exception as exc:
-			self.logger.traceback("other exc: %s", exc)
+			self.logger.exception("other exc: %s", exc)
 			raise
 
 

@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (2.0.0-8) unstable; urgency=low
+
+  * Bug #52882: fix AttributeError
+
+ -- Daniel Troeder <troeder@univention.de>  Tue, 09 Mar 2021 17:11:04 +0100
+
 univention-apple-school-manager-connector (2.0.0-7) unstable; urgency=low
 
   * Bug #52343: adapt tests to changed course naming

@@ -38,13 +38,15 @@ Data in CSV files is always sorted by 1) school and 2) user/class name.
 """
 
 from __future__ import absolute_import, unicode_literals
-import os
+
 import json
 import logging
+import os
 from operator import attrgetter
-from ucsschool.lib.models import School, SchoolClass, Student, Teacher, TeachersAndStaff, User, WorkGroup
+
 from ucsschool.importer.writer.csv_writer import CsvWriter
 from ucsschool.importer.writer.result_exporter import ResultExporter
+from ucsschool.lib.models import School, SchoolClass, Student, Teacher, WorkGroup
 from univention.admin import uexceptions
 from univention.asm.models.classes import AsmClass
 from univention.asm.models.course import AsmCourse
@@ -52,14 +54,15 @@ from univention.asm.models.location import AsmLocation
 from univention.asm.models.roster import AsmRoster
 from univention.asm.models.staff import AsmStaff
 from univention.asm.models.student import AsmStudent
+
 from ..utils import get_ldap_connection, get_ucr
 
 try:
 	from typing import Any, AnyStr, Iterable, Iterator, Optional
+
 	from univention.asm.models.base import AsmModel
 except ImportError:
 	pass
-
 
 __all__ = (
 	'AsmClassCsvFile', 'AsmCoursesCsvFile', 'AsmLocationsCsvFile', 'AsmRostersCsvFile',
@@ -203,12 +206,12 @@ class AsmCsvFile(object):
 
 		school_names = [s.name for s in School.get_all(self.lo)]
 		config_files = [
-			'/usr/share/ucs-school-import/configs/global_defaults.json',
-			'/var/lib/ucs-school-import/configs/global.json',
-			'/usr/share/ucs-school-import/configs/user_import_defaults.json',
-			'/var/lib/ucs-school-import/configs/user_import.json',
-			'/usr/share/ucs-school-import/configs/user_import_sisopi.json'
-		] + ['/var/lib/ucs-school-import/configs/{}.json'.format(ou) for ou in school_names]
+						'/usr/share/ucs-school-import/configs/global_defaults.json',
+						'/var/lib/ucs-school-import/configs/global.json',
+						'/usr/share/ucs-school-import/configs/user_import_defaults.json',
+						'/var/lib/ucs-school-import/configs/user_import.json',
+						'/usr/share/ucs-school-import/configs/user_import_sisopi.json'
+					] + ['/var/lib/ucs-school-import/configs/{}.json'.format(ou) for ou in school_names]
 		config_files = [cf for cf in config_files if os.path.exists(cf)]
 		config_files.reverse()  # search from most specific (OU) to most general (defaults)
 		for config_file in config_files:
@@ -221,19 +224,7 @@ class AsmCsvFile(object):
 		return ''
 
 	def get_staff(self, school):  # type: (School) -> Iterable[Teacher]
-		global_ldap_filter_str = self.ucr.get("asm/ldap_filter/staff", "")
-		specific_ldap_filter = self.ucr.get(
-			"asm/ldap_filter/staff/{}".format(school.name), global_ldap_filter_str
-		)
-		try:
-			return Teacher.get_all(
-				self.lo, school.name, filter_str=specific_ldap_filter
-			) + TeachersAndStaff.get_all(
-				self.lo, school.name, filter_str=specific_ldap_filter
-			)
-		except uexceptions.valueInvalidSyntax as exc:
-			self.logger.error("Invalid LDAP-filter for staff: {!r}".format(specific_ldap_filter))
-			raise exc
+		return AsmStaff.get_filtered_staff(self.lo, self.logger, school.name)
 
 	def get_students(self, school):  # type: (School) -> Iterable[Student]
 		global_ldap_filter_str = self.ucr.get("asm/ldap_filter/students", "")

@@ -36,14 +36,19 @@ See https://support.apple.com/en-us/HT207029
 """
 
 from __future__ import absolute_import, unicode_literals
+
 import logging
-from .base import AsmModel, AnonymizeMixIn
-from ..utils import check_domain, get_ldap_connection, get_person_id, prepend_to_mail_domain
+
 from ucsschool.lib.models import Teacher, TeachersAndStaff
 from ucsschool.lib.models.base import WrongModel
+from univention.admin import uexceptions
+
+from ..utils import check_domain, get_ldap_connection, get_person_id, get_ucr, prepend_to_mail_domain
+from .base import AnonymizeMixIn, AsmModel
 
 try:
 	from typing import Any, AnyStr, Iterable, Optional
+	from ucsschool.importer.utils.ldap_connection import LoType
 except ImportError:
 	pass
 
@@ -173,3 +178,21 @@ class AsmStaff(AsmModel, AnonymizeMixIn):
 			sis_username=teacher.name,
 			additional_location_ids=location_ids[1:]
 		))
+
+	@classmethod
+	def get_filtered_staff(cls, lo, logger, school):  # type: (LoType, logging.Logger, str) -> Iterable[Teacher]
+		ucr = get_ucr()
+		global_ldap_filter_str = ucr.get("asm/ldap_filter/staff", "")
+		specific_ldap_filter = ucr.get(
+			"asm/ldap_filter/staff/{}".format(school), global_ldap_filter_str
+		)
+		try:
+			filtered_teachers = Teacher.get_all(
+				lo, school, filter_str=specific_ldap_filter
+			) + TeachersAndStaff.get_all(
+				lo, school, filter_str=specific_ldap_filter
+			)
+		except uexceptions.valueInvalidSyntax as exc:
+			logger.error("Invalid LDAP-filter for staff: {!r}".format(specific_ldap_filter))
+			raise exc
+		return filtered_teachers

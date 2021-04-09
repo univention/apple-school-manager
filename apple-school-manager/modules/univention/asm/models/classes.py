@@ -36,11 +36,15 @@ See https://support.apple.com/en-us/HT207029
 """
 
 from __future__ import absolute_import, unicode_literals
+
 import logging
-from .base import AsmModel
-from ..utils import get_ucr, get_person_id, get_ldap_connection
+
 from ucsschool.lib.models import SchoolClass, User, WorkGroup
 from ucsschool.lib.models.base import UnknownModel
+
+from ..utils import get_ldap_connection, get_person_id, get_ucr
+from .base import AsmModel
+from .staff import AsmStaff
 
 try:
 	from typing import Any, AnyStr, Iterable, Optional
@@ -126,19 +130,24 @@ class AsmClass(AsmModel):
 		:rtype: AsmClass
 		"""
 		lo, po = get_ldap_connection()
+		ucr = get_ucr()
 		logger = logging.getLogger(__name__)
 		try:
 			school_class = SchoolClass.from_dn(dn, None, lo)
 		except UnknownModel:
 			school_class = WorkGroup.from_dn(dn, None, lo)
 		if cls._class_number_empty is None:
-			cls._class_number_empty = get_ucr().is_true('asm/attributes/classes/class_number_empty', True)
+			cls._class_number_empty = ucr.is_true('asm/attributes/classes/class_number_empty', True)
 		teachers = []
+		expected_teachers = AsmStaff.get_filtered_staff(lo, logger, school_class.school)
+		expected_teachers_dns = [teacher.dn for teacher in expected_teachers]
+
 		for user_dn in school_class.users:
-			user = User.from_dn(user_dn, None, lo)
-			if user.is_teacher(lo):
-				person_id_attr, teacher_lo = get_person_id(user.dn, 'staff', [])
-				teachers.append(teacher_lo[person_id_attr][0])
+			if user_dn not in expected_teachers_dns:
+				logger.debug("User {} is excluded due to a ldap-filter set in UCR-V asm/ldap_filter/staff".format(user_dn))
+				continue
+			person_id_attr, teacher_lo = get_person_id(user_dn, 'staff', [])
+			teachers.append(teacher_lo[person_id_attr][0])
 		instructor_id = instructor_id_2 = instructor_id_3 = additional_instructor_ids = None
 		if teachers:
 			try:

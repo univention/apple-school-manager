@@ -15,6 +15,7 @@ import univention.testing.strings as uts
 import univention.testing.utils as utils
 from ucsschool.lib.models import SchoolClass, User
 from univention.asm.models.classes import AsmClass
+from univention.asm.models.staff import get_filtered_staff
 from univention.asm.utils import get_person_id
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
@@ -166,6 +167,7 @@ class Test(ImportTestbase):
 			if user.is_teacher(self.lo):
 				teacher_count += 1
 		self.log.info('Counted %d teachers in %r (school_class1).', teacher_count, school_class1)
+		get_filtered_staff.cache_clear()
 		or_class1 = AsmClass.from_dn(school_class1_dn)
 		got_school_class1 = or_class1.as_csv_line()
 		for t_dn in new_teacher_dns[:10]:  # <-- dropping last teacher!

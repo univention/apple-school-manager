@@ -1,6 +1,6 @@
 #!/usr/share/ucs-test/runner python
 ## -*- coding: utf-8 -*-
-## desc: test ldap filter for AsmStaff class method get_filtered_staff
+## desc: test ldap filter for AsmStaff function get_filtered_staff
 ## tags: [apptest]
 ## exposure: dangerous
 ## packages:
@@ -14,7 +14,7 @@ import univention.testing.ucr as ucr_test
 from ldap.filter import filter_format
 from univention.admin import uexceptions
 
-from univention.asm.models.staff import AsmStaff
+from univention.asm.models.staff import get_filtered_staff
 from univention.asm.utils import get_person_id, update_ucr
 from univention.config_registry import handler_set
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
@@ -48,7 +48,6 @@ class Test(ImportTestbase):
 			filter_format("(&(objectClass=univentionGroup)(cn=%s))", (school_class1,)),
 			attr=["memberUid"],
 		)
-		school_class_dn = school_class[0][0]
 		self.log.info(
 			"*** school_class1=%r",
 			school_class,
@@ -63,11 +62,12 @@ class Test(ImportTestbase):
 		for handler in self.log.handlers:
 			asm_logger.addHandler(handler)
 
+		get_filtered_staff.cache_clear()
 		self.log.info("Test if global filter works for AsmClass")
 		ucr_v = "asm/ldap_filter/staff=NONSENSE"
 		set_and_update_ucr(ucr_v)
 		try:
-			_ = AsmStaff.get_filtered_staff(self.lo, self.log, school1)
+			_ = get_filtered_staff(self.lo, self.log, school1)
 			self.fail(
 				"We expect an valueInvalidSyntax exception with an invalid filter for filter "
 				"type 'staff'"
@@ -75,9 +75,10 @@ class Test(ImportTestbase):
 		except uexceptions.valueInvalidSyntax:
 			self.log.info("*** OK: expected exception was raised (AsmClass).")
 
+		get_filtered_staff.cache_clear()
 		ucr_v = "asm/ldap_filter/{}=uid={}".format(filter_type, teacher1_name)
 		set_and_update_ucr(ucr_v)
-		teachers = AsmStaff.get_filtered_staff(self.lo, self.log, school1)
+		teachers = get_filtered_staff(self.lo, self.log, school1)
 		filtered_teacher_ids = [get_person_id_by_dn(teacher.dn, "staff") for teacher in teachers]
 		assert teacher1_id in filtered_teacher_ids
 		assert len(filtered_teacher_ids) == 1, "Not exactly 1 staff object found: {}".format(filtered_teacher_ids)
@@ -87,9 +88,10 @@ class Test(ImportTestbase):
 			filter_type,
 		)
 
+		get_filtered_staff.cache_clear()
 		ucr_v = "asm/ldap_filter/{}=(!(uid={}))".format(filter_type, teacher1_name)
 		set_and_update_ucr(ucr_v)
-		teachers = AsmStaff.get_filtered_staff(self.lo, self.log, school1)
+		teachers = get_filtered_staff(self.lo, self.log, school1)
 		filtered_teacher_ids = [get_person_id_by_dn(teacher.dn, "staff") for teacher in teachers]
 		assert teacher1_id not in filtered_teacher_ids
 		assert teacher2_id in filtered_teacher_ids
@@ -99,12 +101,13 @@ class Test(ImportTestbase):
 			filter_type,
 		)
 
+		get_filtered_staff.cache_clear()
 		self.log.info("Test if overriding with school specific filter works")
 		ucr_v = "asm/ldap_filter/{}/{}=uid={}".format(
 			filter_type, school1, teacher1_name
 		)
 		set_and_update_ucr(ucr_v)
-		teachers = AsmStaff.get_filtered_staff(self.lo, self.log, school1)
+		teachers = get_filtered_staff(self.lo, self.log, school1)
 		filtered_teacher_ids = [get_person_id_by_dn(teacher.dn, "staff") for teacher in teachers]
 		assert teacher1_id in filtered_teacher_ids
 		assert len(filtered_teacher_ids) == 1, "Not exactly 1 staff object found: {}".format(filtered_teacher_ids)
@@ -114,11 +117,12 @@ class Test(ImportTestbase):
 			filter_type,
 		)
 
+		get_filtered_staff.cache_clear()
 		ucr_v = "asm/ldap_filter/{}/{}=(!(uid={}))".format(
 			filter_type, school1, teacher1_name
 		)
 		set_and_update_ucr(ucr_v)
-		teachers = AsmStaff.get_filtered_staff(self.lo, self.log, school1)
+		teachers = get_filtered_staff(self.lo, self.log, school1)
 		filtered_teacher_ids = [get_person_id_by_dn(teacher.dn, "staff") for teacher in teachers]
 		assert teacher1_id not in filtered_teacher_ids
 		assert teacher2_id in filtered_teacher_ids
@@ -127,6 +131,7 @@ class Test(ImportTestbase):
 			teacher1_name,
 			filter_type,
 		)
+		get_filtered_staff.cache_clear()
 
 
 if __name__ == "__main__":

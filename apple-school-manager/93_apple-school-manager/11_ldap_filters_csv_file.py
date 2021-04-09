@@ -14,6 +14,7 @@ import univention.testing.ucr as ucr_test
 from ldap.filter import filter_format
 from univention.admin import uexceptions
 from univention.asm.csv.csv_file import AsmRostersCsvFile, AsmStaffCsvFile, AsmStudentsCsvFile
+from univention.asm.models.staff import get_filtered_staff
 from univention.asm.utils import get_person_id, update_ucr
 from univention.config_registry import handler_set
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
@@ -70,6 +71,7 @@ class Test(ImportTestbase):
 			(AsmStaffCsvFile, teacher1_name, teacher2_name, "staff"),
 			(AsmStudentsCsvFile, student1_name, student2_name, "students"),
 		]:
+			get_filtered_staff.cache_clear()
 			self.log.info(
 				"===> klass=%r user1=%r user2=%r filter_type=%r",
 				klass.__name__,
@@ -93,6 +95,7 @@ class Test(ImportTestbase):
 					"*** OK: expected exception was raised (%s).",
 					csv_class.__class__.__name__,
 				)
+			get_filtered_staff.cache_clear()
 			# roster:
 			if filter_type == "students":
 				try:
@@ -107,6 +110,7 @@ class Test(ImportTestbase):
 						AsmRostersCsvFile.__name__,
 					)
 
+			get_filtered_staff.cache_clear()
 			#  global filter works
 			# user:
 			ucr_v = "asm/ldap_filter/{}=uid={}".format(filter_type, user1)
@@ -128,6 +132,7 @@ class Test(ImportTestbase):
 
 			# roster:
 			if filter_type == "students":
+				get_filtered_staff.cache_clear()
 				roster_objs = list(AsmRostersCsvFile("").find_and_create_objects())
 				assert (
 					len(roster_objs) == 1
@@ -139,6 +144,7 @@ class Test(ImportTestbase):
 					filter_type,
 				)
 
+			get_filtered_staff.cache_clear()
 			self.log.info("Test if overriding with school specific filter works")
 			# user:
 			ucr_v = "asm/ldap_filter/{}/{}=uid={}".format(
@@ -157,6 +163,7 @@ class Test(ImportTestbase):
 			)
 			# roster:
 			if filter_type == "students":
+				get_filtered_staff.cache_clear()
 				roster_objs = list(AsmRostersCsvFile("").find_and_create_objects())
 				assert (
 					len(roster_objs) == 1

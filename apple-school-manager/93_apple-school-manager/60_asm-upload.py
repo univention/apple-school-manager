@@ -40,7 +40,8 @@ class LocalHostAsASM(object):
 			"auth/sshd/user/{}=yes".format(self.username),
 		])
 		os.rename("/etc/asm_public_key", "/etc/asm_public_key.backup_60test")
-		os.rename("/etc/asm.secret", "/etc/asm.secret.backup_60test")
+		if os.path.exists("/etc/asm.secret"):
+			os.rename("/etc/asm.secret", "/etc/asm.secret.backup_60test")
 		with open("/etc/asm.secret", "w") as asm_secret_file:
 			asm_secret_file.write(self.password)
 		client = SSHClient()
@@ -54,7 +55,8 @@ class LocalHostAsASM(object):
 
 	def __exit__(self, *args):
 		os.rename("/etc/asm_public_key.backup_60test", "/etc/asm_public_key")
-		os.rename("/etc/asm.secret.backup_60test", "/etc/asm.secret")
+		if os.path.exists("/etc/asm.secret.backup_60test"):
+			os.rename("/etc/asm.secret.backup_60test", "/etc/asm.secret")
 		try:
 			shutil.rmtree(self.dropbox)
 		except OSError:

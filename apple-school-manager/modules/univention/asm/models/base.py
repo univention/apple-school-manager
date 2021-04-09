@@ -36,6 +36,7 @@ Base class for all ASM models.
 from __future__ import absolute_import, unicode_literals
 import inspect
 from ..utils import get_ucr
+from ucsschool.lib.models.user import User
 
 try:
 	from typing import Any, AnyStr, Dict, Iterable, Union
@@ -126,13 +127,13 @@ class AnonymizeMixIn(object):
 
 	@classmethod
 	def anonymize(cls, user, ldap_attrs, **kwargs):
-		# type: (ucsschool.lib.models.user.User, Dict[AnyStr, Any], **Any) -> Dict[AnyStr, AnyStr]
+		# type: (User, Dict[AnyStr, Any], **Any) -> Dict[AnyStr, AnyStr]
 		"""
 		Change values of function arguments to anonymize/pseudonymize user if
 		UCRV asm/attributes/<staff/student>/anonymize is true. Will return
 		unchanged function arguments otherwise.
 
-		:param ucsschool.lib.models.user.User user: user object
+		:param User user: user object
 		:param dict ldap_attrs: dictionary with the users LDAP attributes
 		:return: dictionary with [modified] function arguments
 		:rtype: dict

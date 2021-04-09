@@ -15,6 +15,7 @@ from ldap.filter import filter_format
 from univention.admin import uexceptions
 
 from univention.asm.models.classes import AsmClass
+from univention.asm.models.staff import get_filtered_staff
 from univention.asm.utils import get_person_id, update_ucr
 from univention.config_registry import handler_set
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
@@ -63,6 +64,7 @@ class Test(ImportTestbase):
 		for handler in self.log.handlers:
 			asm_logger.addHandler(handler)
 
+		get_filtered_staff.cache_clear()
 		self.log.info("Test if global filter works for AsmClass")
 		ucr_v = "asm/ldap_filter/staff=NONSENSE"
 		set_and_update_ucr(ucr_v)
@@ -75,6 +77,7 @@ class Test(ImportTestbase):
 		except uexceptions.valueInvalidSyntax:
 			self.log.info("*** OK: expected exception was raised (AsmClass).")
 
+		get_filtered_staff.cache_clear()
 		ucr_v = "asm/ldap_filter/{}=uid={}".format(filter_type, teacher1_name)
 		set_and_update_ucr(ucr_v)
 		asm_class = AsmClass.from_dn(school_class_dn)
@@ -88,6 +91,7 @@ class Test(ImportTestbase):
 			filter_type,
 		)
 
+		get_filtered_staff.cache_clear()
 		ucr_v = "asm/ldap_filter/{}=(!(uid={}))".format(filter_type, teacher1_name)
 		set_and_update_ucr(ucr_v)
 		asm_class = AsmClass.from_dn(school_class_dn)
@@ -99,6 +103,7 @@ class Test(ImportTestbase):
 			filter_type,
 		)
 
+		get_filtered_staff.cache_clear()
 		self.log.info("Test if overriding with school specific filter works")
 		ucr_v = "asm/ldap_filter/{}/{}=uid={}".format(
 			filter_type, school1, teacher1_name
@@ -115,6 +120,7 @@ class Test(ImportTestbase):
 			filter_type,
 		)
 
+		get_filtered_staff.cache_clear()
 		ucr_v = "asm/ldap_filter/{}/{}=(!(uid={}))".format(
 			filter_type, school1, teacher1_name
 		)

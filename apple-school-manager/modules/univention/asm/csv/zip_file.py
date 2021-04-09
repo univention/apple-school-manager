@@ -48,7 +48,7 @@ from univention.admin import uexceptions
 from .csv_file import create_csv_files
 
 try:
-	from typing import AnyStr, Iterable, List, Optional
+	from typing import AnyStr, Iterable, Optional
 except ImportError:
 	pass
 

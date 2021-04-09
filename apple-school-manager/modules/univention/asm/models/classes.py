@@ -36,7 +36,6 @@ See https://support.apple.com/en-us/HT207029
 """
 
 from __future__ import absolute_import, unicode_literals
-
 import logging
 
 from ucsschool.lib.models import SchoolClass, User, WorkGroup
@@ -46,8 +45,12 @@ from ..utils import get_ldap_connection, get_person_id, get_ucr
 from .base import AsmModel
 from .staff import AsmStaff
 
+from ..utils import get_ldap_connection, get_person_id, get_ucr
+from .base import AsmModel
+from .staff import get_filtered_staff
+
 try:
-	from typing import Any, AnyStr, Iterable, Optional
+	from typing import Any, AnyStr, Iterable, Optional, Dict, List
 except ImportError:
 	pass
 
@@ -60,6 +63,7 @@ class AsmClass(AsmModel):
 		'location_id'
 	)
 	_class_number_empty = None
+	_teachers_in_school = {}  # type: Dict[str, List[str]]
 
 	def __init__(
 			self,
@@ -139,7 +143,7 @@ class AsmClass(AsmModel):
 		if cls._class_number_empty is None:
 			cls._class_number_empty = ucr.is_true('asm/attributes/classes/class_number_empty', True)
 		teachers = []
-		expected_teachers = AsmStaff.get_filtered_staff(lo, logger, school_class.school)
+		expected_teachers = get_filtered_staff(lo, logger, school_class.school)
 		expected_teachers_dns = [teacher.dn for teacher in expected_teachers]
 
 		for user_dn in school_class.users:

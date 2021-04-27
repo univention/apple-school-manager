@@ -22,11 +22,6 @@ from univention.asm.csv.csv_file import (
 	AsmStaffCsvFile, AsmStudentsCsvFile)
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
-try:
-	from typing import List
-except ImportError:
-	pass
-
 
 class Test(ImportTestbase):
 	use_ou_cache = False  # use only uncached OUs to be certain no previous test left any object

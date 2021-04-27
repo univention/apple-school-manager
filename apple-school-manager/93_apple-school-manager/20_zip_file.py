@@ -22,11 +22,6 @@ from univention.asm.utils import get_default_password_policy, get_person_id
 from univention.asm.csv.zip_file import AsmZipFile
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
-try:
-	from typing import List
-except ImportError:
-	pass
-
 
 class Test(ImportTestbase):
 	use_ou_cache = False  # use only uncached OUs to be certain no previous test left any object

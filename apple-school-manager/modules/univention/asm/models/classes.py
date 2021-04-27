@@ -38,12 +38,9 @@ See https://support.apple.com/en-us/HT207029
 from __future__ import absolute_import, unicode_literals
 import logging
 
-from ucsschool.lib.models import SchoolClass, User, WorkGroup
+from ucsschool.lib.models import SchoolClass, WorkGroup
 from ucsschool.lib.models.base import UnknownModel
 
-from ..utils import get_ldap_connection, get_person_id, get_ucr
-from .base import AsmModel
-from .staff import AsmStaff
 
 from ..utils import get_ldap_connection, get_person_id, get_ucr
 from .base import AsmModel
@@ -63,7 +60,6 @@ class AsmClass(AsmModel):
 		'location_id'
 	)
 	_class_number_empty = None
-	_teachers_in_school = {}  # type: Dict[str, List[str]]
 
 	def __init__(
 			self,

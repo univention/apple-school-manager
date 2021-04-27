@@ -9,7 +9,7 @@
 
 from ldap.filter import filter_format
 from ucsschool.lib.models import SchoolClass
-from univention.config_registry import handler_unset, handler_set, ConfigRegistry
+from univention.config_registry import handler_unset, handler_set
 
 import univention.testing.ucr as ucr_test
 import univention.testing.strings as uts

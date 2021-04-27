@@ -206,12 +206,12 @@ class AsmCsvFile(object):
 
 		school_names = [s.name for s in School.get_all(self.lo)]
 		config_files = [
-						'/usr/share/ucs-school-import/configs/global_defaults.json',
-						'/var/lib/ucs-school-import/configs/global.json',
-						'/usr/share/ucs-school-import/configs/user_import_defaults.json',
-						'/var/lib/ucs-school-import/configs/user_import.json',
-						'/usr/share/ucs-school-import/configs/user_import_sisopi.json'
-					] + ['/var/lib/ucs-school-import/configs/{}.json'.format(ou) for ou in school_names]
+			'/usr/share/ucs-school-import/configs/global_defaults.json',
+			'/var/lib/ucs-school-import/configs/global.json',
+			'/usr/share/ucs-school-import/configs/user_import_defaults.json',
+			'/var/lib/ucs-school-import/configs/user_import.json',
+			'/usr/share/ucs-school-import/configs/user_import_sisopi.json'
+		] + ['/var/lib/ucs-school-import/configs/{}.json'.format(ou) for ou in school_names]
 		config_files = [cf for cf in config_files if os.path.exists(cf)]
 		config_files.reverse()  # search from most specific (OU) to most general (defaults)
 		for config_file in config_files:
@@ -237,7 +237,7 @@ class AsmCsvFile(object):
 				for student in Student.get_all(self.lo, school.name, filter_str=specific_ldap_filter)
 				if not student.is_exam_student(self.lo)
 			]
-		except uexceptions.valueInvalidSyntax as exc:
+		except uexceptions.valueInvalidSyntax:
 			self.logger.error("Invalid LDAP-filter for students: {!r}".format(specific_ldap_filter))
 			raise
 		except Exception as exc:

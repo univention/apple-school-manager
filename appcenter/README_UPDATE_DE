@@ -1,3 +1,10 @@
+<b>Version 2.2.4</b>
+<ul>
+	<li>
+		Bug fix release. Configured LDAP filters are now applied correct when loading classes.
+	</li>
+</ul>
+
 <b>Version 2.2.3</b>
 <ul>
 	<li>

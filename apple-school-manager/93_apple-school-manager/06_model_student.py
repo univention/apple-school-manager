@@ -7,7 +7,7 @@
 ##   - univention-apple-school-manager-connector
 ## bugs: [47622]
 
-from ucsschool.lib.models import Student
+from ucsschool.lib.models.user import Student
 from univention.config_registry import handler_set, handler_unset
 import univention.testing.ucr as ucr_test
 import univention.testing.strings as uts

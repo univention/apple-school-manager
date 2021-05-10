@@ -39,7 +39,7 @@ from __future__ import absolute_import, unicode_literals
 import logging
 from .base import AsmModel, AnonymizeMixIn
 from ..utils import check_domain, get_default_password_policy, get_person_id, get_ldap_connection, prepend_to_mail_domain
-from ucsschool.lib.models import Student
+from ucsschool.lib.models.user import Student
 
 try:
 	from typing import Any, AnyStr, Iterable, Optional

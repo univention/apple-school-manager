@@ -8,7 +8,7 @@
 ## bugs: [47622]
 
 from ldap.filter import filter_format
-from ucsschool.lib.models import School
+from ucsschool.lib.models.school import School
 from univention.config_registry import handler_unset
 import univention.testing.ucr as ucr_test
 import univention.testing.strings as uts

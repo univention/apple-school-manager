@@ -39,7 +39,7 @@ from __future__ import absolute_import, unicode_literals
 import logging
 from backports.functools_lru_cache import lru_cache
 
-from ucsschool.lib.models import Teacher, TeachersAndStaff
+from ucsschool.lib.models.user import Teacher, TeachersAndStaff
 from ucsschool.lib.models.base import WrongModel
 from univention.admin import uexceptions
 

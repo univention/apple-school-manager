@@ -9,7 +9,7 @@
 
 from univention.config_registry import handler_unset
 import univention.testing.ucr as ucr_test
-from ucsschool.lib.models import Teacher, TeachersAndStaff
+from ucsschool.lib.models.user import Teacher, TeachersAndStaff
 import univention.testing.strings as uts
 import univention.testing.utils as utils
 from univention.config_registry import handler_set

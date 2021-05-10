@@ -46,7 +46,9 @@ from operator import attrgetter
 
 from ucsschool.importer.writer.csv_writer import CsvWriter
 from ucsschool.importer.writer.result_exporter import ResultExporter
-from ucsschool.lib.models import School, SchoolClass, Student, Teacher, WorkGroup
+from ucsschool.lib.models.group import SchoolClass, WorkGroup
+from ucsschool.lib.models.school import School
+from ucsschool.lib.models.user import Student, Teacher
 from univention.admin import uexceptions
 from univention.asm.models.classes import AsmClass
 from univention.asm.models.course import AsmCourse

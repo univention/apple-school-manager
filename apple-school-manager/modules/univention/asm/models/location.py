@@ -38,7 +38,7 @@ See https://support.apple.com/en-us/HT207029
 from __future__ import absolute_import, unicode_literals
 from .base import AsmModel
 from ..utils import get_ldap_connection
-from ucsschool.lib.models import School
+from ucsschool.lib.models.school import School
 
 try:
 	from typing import Any, AnyStr

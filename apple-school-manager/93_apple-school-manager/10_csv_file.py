@@ -15,7 +15,8 @@ from univention.config_registry import handler_unset
 import univention.testing.strings as uts
 import univention.testing.ucr as ucr_test
 import univention.testing.utils as utils
-from ucsschool.lib.models import School, SchoolClass
+from ucsschool.lib.models.group import SchoolClass
+from ucsschool.lib.models.school import School
 from univention.asm.utils import get_default_password_policy, get_person_id
 from univention.asm.csv.csv_file import (
 	AsmClassCsvFile, AsmCoursesCsvFile, AsmLocationsCsvFile, AsmRostersCsvFile,

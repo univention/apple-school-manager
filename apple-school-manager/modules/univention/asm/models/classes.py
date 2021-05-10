@@ -38,7 +38,7 @@ See https://support.apple.com/en-us/HT207029
 from __future__ import absolute_import, unicode_literals
 import logging
 
-from ucsschool.lib.models import SchoolClass, WorkGroup
+from ucsschool.lib.models.group import SchoolClass, WorkGroup
 from ucsschool.lib.models.base import UnknownModel
 
 

@@ -40,7 +40,7 @@ import logging
 
 from .base import AsmModel
 from ..utils import get_ldap_connection, get_ucr
-from ucsschool.lib.models import SchoolClass, WorkGroup
+from ucsschool.lib.models.group import SchoolClass, WorkGroup
 from ucsschool.lib.models.base import UnknownModel
 
 try:

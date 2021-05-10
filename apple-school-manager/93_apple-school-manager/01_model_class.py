@@ -13,7 +13,8 @@ from univention.config_registry import handler_unset
 import univention.testing.ucr as ucr_test
 import univention.testing.strings as uts
 import univention.testing.utils as utils
-from ucsschool.lib.models import SchoolClass, User
+from ucsschool.lib.models.group import SchoolClass
+from ucsschool.lib.models.user import User
 from univention.asm.models.classes import AsmClass
 from univention.asm.models.staff import get_filtered_staff
 from univention.asm.utils import get_person_id

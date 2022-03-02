@@ -1,0 +1,4 @@
+modules/univention/asm/*.py univention.asm
+modules/univention/asm/csv/*.py univention.asm.csv
+modules/univention/asm/models/*.py univention.asm.models
+modules/univention/asm/network/*.py univention.asm.network

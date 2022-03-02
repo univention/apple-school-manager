@@ -1,29 +1,35 @@
 Source: univention-apple-school-manager-connector
 Section: univention
 Priority: optional
-Build-Depends: debhelper (>> 9),
- univention-config-dev,
- ucslint-univention,
- python2.7-dev,
- python-support,
- univention-config-dev,
- univention-management-console-dev,
- python-backports.functools-lru-cache,
+Build-Depends:
+    debhelper (>> 9),
+    univention-config-dev,
+    ucslint,
+    dh-python,
+    univention-config-dev,
+    univention-management-console-dev,
 Maintainer: Univention GmbH <packages@univention.de>
 Standards-Version: 3.8.2
 
 Package: univention-apple-school-manager-connector
 Architecture: all
 Depends: ${misc:Depends},
- univention-config,
- python-univention,
- python-univention-lib,
- shell-univention-lib,
- univention-join,
- python-ucs-school,
- python-dns,
- ucs-school-import,
- python-backports.functools-lru-cache,
+    python3-univention-apple-school-manager-connector
+Description: Provision Apple School Manager accounts.
+ Synchronize user accounts to the Apple School Manager server.
+Homepage: https://school.apple.com/
+
+Package: python3-univention-apple-school-manager-connector
+Architecture: all
+Depends: ${misc:Depends},
+     ucs-school-import,
+     univention-config,
+     python-univention,
+     python-univention-lib,
+     shell-univention-lib,
+     univention-join,
+     python-ucs-school,
+     python-dns,
 Recommends: ntp
 Description: Provision Apple School Manager accounts.
  Synchronize user accounts to the Apple School Manager server.

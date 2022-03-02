@@ -30,20 +30,5 @@
 # /usr/share/common-licenses/AGPL-3; if not, see
 # <http://www.gnu.org/licenses/>.
 
-
-override_dh_auto_test:
-	ucslint
-	dh_auto_test
-
-override_dh_auto_build:
-	# dh-umc-module-build
-	# msgfmt -o modules/univention/asm/univention-asm.mo modules/univention/asm/de.po
-	dh_auto_build
-
-override_dh_auto_install:
-	univention-install-config-registry
-	# dh-umc-module-install
-	dh_auto_install
-
 %:
-	dh $@ --with 'python_support'
+	dh $@ --with python3,ucr

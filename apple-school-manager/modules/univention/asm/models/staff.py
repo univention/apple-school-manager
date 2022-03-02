@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 #
 # Copyright 2018-2020 Univention GmbH
@@ -158,7 +157,7 @@ class AsmStaff(AsmModel, AnonymizeMixIn):
 				raise ValueError('Non of the users schools is in the whitelist: {} (schools: {!r}).'.format(
 					teacher, teacher.schools))
 		additional_attrs = ['middleName', 'initials', 'oxMiddleName']
-		additional_attrs.extend({v[1:].strip() for v in list(cls.anonymize_mapping().values()) if v and v.startswith('%')})
+		additional_attrs.extend({v[1:].strip() for v in cls.anonymize_mapping().values() if v and v.startswith('%')})
 		person_id_attr, teacher_lo = get_person_id(teacher.dn, 'staff', additional_attrs)
 		person_id = teacher_lo[person_id_attr][0]
 		middle_name = (

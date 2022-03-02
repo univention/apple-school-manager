@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 #
 # Copyright 2018-2020 Univention GmbH
@@ -389,7 +388,7 @@ def create_csv_files(target_directory, ou_whitelist=None):
 
 	logger.info('Creating CSV files%s...', ' for OUs {}'.format(', '.join(ou_whitelist)) if ou_whitelist else '')
 	results = []
-	for filename, cls in list(csv_file_generators.items()):
+	for filename, cls in csv_file_generators.items():
 		path = os.path.join(target_directory, filename)
 		results.append(path)
 		cls(path, ou_whitelist).write_csv()

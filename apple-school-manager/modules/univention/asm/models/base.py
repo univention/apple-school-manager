@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 #
 # Copyright 2018-2020 Univention GmbH
@@ -33,7 +34,7 @@ Univention Apple School Manager Connector
 Base class for all ASM models.
 """
 
-from __future__ import absolute_import, unicode_literals
+
 import inspect
 from ..utils import get_ucr
 from ucsschool.lib.models.user import User
@@ -59,7 +60,7 @@ class AsmModel(object):
 				if not m[0].startswith('_') and m[0] != 'header'
 			]
 		else:
-			members = zip(self.header, [getattr(self, m) for m in self.header])
+			members = list(zip(self.header, [getattr(self, m) for m in self.header]))
 		return '{}({})'.format(
 			self.__class__.__name__,
 			', '.join('{}={!r}'.format(k, v) for k, v in members)
@@ -141,7 +142,7 @@ class AnonymizeMixIn(object):
 		"""
 		ucr = get_ucr()
 		if ucr.is_true(cls.ucr_anonymize_key_base):
-			for k, v in cls.anonymize_mapping().items():
+			for k, v in list(cls.anonymize_mapping().items()):
 				if v and v.startswith('%'):
 					attr = v[1:].strip()
 					try:

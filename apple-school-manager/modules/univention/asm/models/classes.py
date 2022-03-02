@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 #
 # Copyright 2018-2020 Univention GmbH
@@ -35,7 +36,7 @@ Class to represent an ASM class.
 See https://support.apple.com/en-us/HT207029
 """
 
-from __future__ import absolute_import, unicode_literals
+
 import logging
 
 from ucsschool.lib.models.group import SchoolClass, WorkGroup

@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 #
 # Copyright 2018-2020 Univention GmbH
@@ -33,7 +34,7 @@ Univention Apple School Manager Connector
 export school data to asm
 """
 
-from __future__ import absolute_import
+
 import os
 import logging
 from datetime import datetime

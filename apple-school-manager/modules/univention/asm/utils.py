@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 #
 # Copyright 2018-2020 Univention GmbH
@@ -140,7 +141,7 @@ def get_person_id(dn, role, additional_attrs):  # type: (Text, Text, List[Text])
 	ucrv = 'asm/attributes/{}/person_id/mapping'.format(role)
 	person_id_attr = get_ucr().get(ucrv, '%entryUUID')
 	person_id_attr = person_id_attr[1:].strip()
-	attrs = map(str, [person_id_attr] + additional_attrs)  # unicode2str for python-ldap
+	attrs = list(map(str, [person_id_attr] + additional_attrs))  # unicode2str for python-ldap
 	lo, po = get_ldap_connection()
 	res = lo.get(dn, attrs)
 	if not res.get(person_id_attr):

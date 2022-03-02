@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 #
 # Copyright 2018-2020 Univention GmbH
@@ -35,7 +36,7 @@ Class to represent an ASM student.
 See https://support.apple.com/en-us/HT207029
 """
 
-from __future__ import absolute_import, unicode_literals
+
 import logging
 from .base import AsmModel, AnonymizeMixIn
 from ..utils import check_domain, get_default_password_policy, get_person_id, get_ldap_connection, prepend_to_mail_domain
@@ -162,7 +163,7 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
 				raise ValueError('Non of the users schools is in the whitelist: {} (schools: {!r}).'.format(
 					student, student.schools))
 		additional_attrs = ['middleName', 'initials', 'oxMiddleName']
-		additional_attrs.extend({v[1:].strip() for v in cls.anonymize_mapping().values() if v and v.startswith('%')})
+		additional_attrs.extend({v[1:].strip() for v in list(cls.anonymize_mapping().values()) if v and v.startswith('%')})
 		person_id_attr, student_lo = get_person_id(student.dn, 'student', additional_attrs)
 		person_id = student_lo[person_id_attr][0]
 		middle_name = (

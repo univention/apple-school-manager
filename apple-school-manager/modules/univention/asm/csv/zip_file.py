@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 #
 # Copyright 2018-2020 Univention GmbH
@@ -35,7 +36,7 @@ Classes the produce ASM ZIP files containing CSV files.
 See https://support.apple.com/en-us/HT207029
 """
 
-from __future__ import absolute_import, unicode_literals
+
 import os
 import logging
 import shutil

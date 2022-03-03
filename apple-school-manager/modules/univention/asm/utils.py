@@ -39,7 +39,7 @@ from univention.config_registry import ConfigRegistry
 from ucsschool.importer.utils.ldap_connection import get_machine_connection, get_readonly_connection
 
 try:
-	from typing import Dict, List, Text, Tuple
+	from typing import Dict, List, Tuple
 	from ucsschool.importer.utils.ldap_connection import LoType, PoType
 except ImportError:
 	pass
@@ -134,7 +134,7 @@ def split_email(email):  # type: (str) -> Tuple[str, str]
 	return local_part, domain
 
 
-def get_person_id(dn, role, additional_attrs):  # type: (Text, Text, List[Text]) -> Tuple[Text, Dict[Text, Text]]
+def get_person_id(dn, role, additional_attrs):  # type: (str, str, List[str]) -> Tuple[str, Dict[str, str]]
 	assert role in ('staff', 'student')
 	additional_attrs = additional_attrs or []
 	ucrv = 'asm/attributes/{}/person_id/mapping'.format(role)
@@ -143,7 +143,7 @@ def get_person_id(dn, role, additional_attrs):  # type: (Text, Text, List[Text])
 	attrs = list(map(str, [person_id_attr] + additional_attrs))  # unicode2str for python-ldap
 	lo, po = get_ldap_connection()
 	res = lo.get(dn, attrs)
-	res = {k: [v.decode()] for k, [v] in res.items()} # byte2str for python-ldap
+	res = {k: [v.decode('utf-8')] for k, [v] in res.items()} # byte2str for python-ldap
 	if not res.get(person_id_attr):
 		raise ValueError('Attribute {!r} from {!r} is not set or empty on {!r}.'.format(person_id_attr, ucrv, dn))
 	return person_id_attr, res

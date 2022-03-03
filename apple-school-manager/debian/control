@@ -27,7 +27,7 @@ Depends: ${misc:Depends},
      python3-univention-lib,
      shell-univention-lib,
      univention-join,
-     python3-ucsschool-lib,
+     python3-ucsschool,
 Recommends: ntp
 Description: Provision Apple School Manager accounts.
  Synchronize user accounts to the Apple School Manager server.

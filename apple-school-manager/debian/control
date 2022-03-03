@@ -6,7 +6,6 @@ Build-Depends:
     univention-config-dev,
     ucslint,
     dh-python,
-    univention-config-dev,
     univention-management-console-dev,
 Maintainer: Univention GmbH <packages@univention.de>
 Standards-Version: 3.8.2
@@ -28,8 +27,7 @@ Depends: ${misc:Depends},
      python3-univention-lib,
      shell-univention-lib,
      univention-join,
-     python-ucs-school,
-     python-dns,
+     python3-ucsschool-lib,
 Recommends: ntp
 Description: Provision Apple School Manager accounts.
  Synchronize user accounts to the Apple School Manager server.

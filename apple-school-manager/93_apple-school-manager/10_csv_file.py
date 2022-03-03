@@ -347,7 +347,7 @@ class Test(ImportTestbase):
 					)
 				)
 				expected_roster.sort(key=itemgetter(0))  # sort by 1. school name, 2. class name, 3. student name
-				expected_roster = map(itemgetter(1), expected_roster)
+				expected_roster = list(map(itemgetter(1), expected_roster))
 				got_roster = list(row for row in csv.reader(roster_csv_file))[1:]  # remove header line
 				if got_roster == expected_roster:
 					self.log.info('OK: roster CSV file is as expected.')
@@ -377,7 +377,7 @@ class Test(ImportTestbase):
 				], key=itemgetter(0)))  # sorted by 1. school, 2. username
 				# school3 is not in the whitelist, so school3 must not be returned
 				for s1, t_name, t_id, t_dn, s2 in teachers:
-					atts = self._get_user_attr(t_dn)
+					atts = {k: (str(v,'utf-8') if isinstance(v, (bytes)) else v) for k, v in self._get_user_attr(t_dn).items()}
 					expected_staff.append(
 						[t_id, t_id, atts['first'], atts['middle'], atts['last'], atts['email'], t_name, s1, s2]
 					)
@@ -413,7 +413,7 @@ class Test(ImportTestbase):
 				], key=itemgetter(0)))  # sorted by 1. school, 2. username
 				# school3 is not in the whitelist, so school3 must not be returned
 				for s1, t_name, t_id, t_dn, s2 in teachers:
-					atts = self._get_user_attr(t_dn)
+					atts = {k: (str(v, 'utf-8') if isinstance(v, (bytes)) else v) for k, v in self._get_user_attr(t_dn).items()}
 					expected_students.append(
 						[t_id, t_id, atts['first'], atts['middle'], atts['last'], '', atts['email'], t_name, '4', s1, s2]
 					)

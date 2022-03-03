@@ -234,7 +234,7 @@ class Test(ImportTestbase):
 		self.log.info('OK: school class creation.')
 
 		def check_classes():
-			with NamedTemporaryFile() as class_csv_file:
+			with NamedTemporaryFile(mode='rt') as class_csv_file:
 				AsmClassCsvFile(class_csv_file.name, schools).write_csv()
 				class_csv_file.flush()
 				class_csv_file.seek(0)
@@ -267,7 +267,7 @@ class Test(ImportTestbase):
 					)
 
 		def check_courses():
-			with NamedTemporaryFile() as course_csv_file:
+			with NamedTemporaryFile(mode='rt') as course_csv_file:
 				AsmCoursesCsvFile(course_csv_file.name, schools).write_csv()
 				course_csv_file.flush()
 				course_csv_file.seek(0)
@@ -291,7 +291,7 @@ class Test(ImportTestbase):
 					)
 
 		def check_location():
-			with NamedTemporaryFile() as location_csv_file:
+			with NamedTemporaryFile(mode='rt') as location_csv_file:
 				AsmLocationsCsvFile(location_csv_file.name, schools).write_csv()
 				location_csv_file.flush()
 				location_csv_file.seek(0)
@@ -314,7 +314,7 @@ class Test(ImportTestbase):
 					)
 
 		def check_roster():
-			with NamedTemporaryFile() as roster_csv_file:
+			with NamedTemporaryFile(mode='rt') as roster_csv_file:
 				AsmRostersCsvFile(roster_csv_file.name, schools).write_csv()
 				roster_csv_file.flush()
 				roster_csv_file.seek(0)
@@ -362,7 +362,7 @@ class Test(ImportTestbase):
 					)
 
 		def check_staff():
-			with NamedTemporaryFile() as staff_csv_file:
+			with NamedTemporaryFile(mode='rt') as staff_csv_file:
 				AsmStaffCsvFile(staff_csv_file.name, schools).write_csv()
 				staff_csv_file.flush()
 				staff_csv_file.seek(0)
@@ -397,7 +397,7 @@ class Test(ImportTestbase):
 		def check_student():
 			assert get_default_password_policy() == '4', "Unset asm/attributes/student/password_policy is {!r}, expected '4'.".format(get_default_password_policy())
 
-			with NamedTemporaryFile() as student_csv_file:
+			with NamedTemporaryFile(mode='rt') as student_csv_file:
 				AsmStudentsCsvFile(student_csv_file.name, schools).write_csv()
 				student_csv_file.flush()
 				student_csv_file.seek(0)

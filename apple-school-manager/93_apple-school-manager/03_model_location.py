@@ -1,4 +1,4 @@
-#!/usr/share/ucs-test/runner python
+#!/usr/share/ucs-test/runner python3
 ## -*- coding: utf-8 -*-
 ## desc: test location model/CSV generation
 ## tags: [apptest]
@@ -48,7 +48,7 @@ class Test(ImportTestbase):
 
 		loc1 = AsmLocation.from_dn(school1_dn)
 		got_loc1 = loc1.as_csv_line()
-		expected_loc1 = [school1, school1_attrs.get('displayName', [None])[0] or school1]
+		expected_loc1 = [school1, school1_attrs.get('displayName', [None])[0].decode('utf-8') or school1]
 		if got_loc1 == expected_loc1:
 			self.log.info('OK: location1 CSV line is as expected.')
 		else:

@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (3.0.0) unstable; urgency=medium
+
+  * Bug #54062: migrated apple-school-manager to UCS 5.0 
+
+ -- Siavash Sefid Rodi <sefid-rodi.extern@univention.de>  Fri, 04 Mar 2022 12:26:20 +0100
+
 univention-apple-school-manager-connector (2.0.0-10) unstable; urgency=medium
 
   * Bug #52920: cache teachers in school

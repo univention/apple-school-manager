@@ -94,7 +94,7 @@ class Test(ImportTestbase):
 		)
 		lo, po = getMachineConnection()
 		user_attrs = lo.get(student1_dn, attr=["homeDirectory", "uidNumber", "gidNumber"])
-		home_dir = user_attrs["homeDirectory"][0]
+		home_dir = user_attrs["homeDirectory"][0].decode()
 		uid = int(user_attrs["uidNumber"][0])
 		gid = int(user_attrs["gidNumber"][0])
 		remote_path = "/archive.zip"

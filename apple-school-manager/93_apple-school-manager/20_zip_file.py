@@ -234,7 +234,7 @@ class Test(ImportTestbase):
 		self.log.info('OK: school class creation.')
 
 		def check_classes(class_csv_file_name):
-			with open(class_csv_file_name, 'rb') as class_csv_file:
+			with open(class_csv_file_name, 'r') as class_csv_file:  # open csv-file in text mode
 				expected_school_classes = sorted([
 					[
 						school_class1, '', school_class1, t1_name, t2_name, t3_name, school1,
@@ -264,7 +264,7 @@ class Test(ImportTestbase):
 					)
 
 		def check_courses(course_csv_file_name):
-			with open(course_csv_file_name, 'rb') as course_csv_file:
+			with open(course_csv_file_name, 'r') as course_csv_file:  # open csv-file in text mode
 				expected_courses = sorted([
 					[school_class1, school_class1, school_class1, school1],
 					[school_class2, school_class2, school_class2, school2],
@@ -285,7 +285,7 @@ class Test(ImportTestbase):
 					)
 
 		def check_location(location_csv_file_name):
-			with open(location_csv_file_name, 'rb') as location_csv_file:
+			with open(location_csv_file_name, 'r') as location_csv_file:  # open csv-file in text mode
 				expected_locations = sorted([
 					[school1, school1],
 					[school2, school2_display_name],
@@ -305,7 +305,7 @@ class Test(ImportTestbase):
 					)
 
 		def check_roster(roster_csv_file_name):
-			with open(roster_csv_file_name, 'rb') as roster_csv_file:
+			with open(roster_csv_file_name, 'r') as roster_csv_file:  # open csv-file in text mode
 				expected_roster = []
 				for student_name in sorted((
 						(student1_name, s1_name), (student2_name, s2_name), (student3_name, s3_name),
@@ -335,7 +335,7 @@ class Test(ImportTestbase):
 					)
 				)
 				expected_roster.sort(key=itemgetter(0))  # sort by 1. school name, 2. class name, 3. student name
-				expected_roster = map(itemgetter(1), expected_roster)
+				expected_roster = list(map(itemgetter(1), expected_roster))
 				got_roster = list(row for row in csv.reader(roster_csv_file))[1:]  # remove header line
 				if got_roster == expected_roster:
 					self.log.info('OK: roster CSV file is as expected.')
@@ -350,7 +350,7 @@ class Test(ImportTestbase):
 					)
 
 		def check_staff(staff_csv_file_name):
-			with open(staff_csv_file_name, 'rb') as staff_csv_file:
+			with open(staff_csv_file_name, 'r') as staff_csv_file:  # open csv-file in text mode
 				expected_staff = []
 				teachers = map(itemgetter(1), sorted([
 					((school1, teacher1_name), (school1, teacher1_name, t1_name, teacher1_dn, school2)),
@@ -364,7 +364,7 @@ class Test(ImportTestbase):
 				for s1, t_name, t_id, t_dn, s2 in teachers:
 					atts = self._get_user_attr(t_dn)
 					expected_staff.append(
-						[t_id, t_id, atts['first'], atts['middle'], atts['last'], atts['email'], t_name, s1, s2]
+						[t_id, t_id, atts['first'].decode(), atts['middle'], atts['last'].decode(), atts['email'], t_name, s1, s2]
 					)
 				got_staff = list(row for row in csv.reader(staff_csv_file))[1:]  # remove header line
 				if got_staff == expected_staff:
@@ -382,7 +382,7 @@ class Test(ImportTestbase):
 		def check_student(student_csv_file_name):
 			assert get_default_password_policy() == '4', "Unset asm/attributes/student/password_policy is {!r}, expected '4'.".format(get_default_password_policy())
 
-			with open(student_csv_file_name, 'rb') as student_csv_file:
+			with open(student_csv_file_name, 'r') as student_csv_file:  # open csv-file in text mode
 				expected_students = []
 				teachers = map(itemgetter(1), sorted([
 					((school1, student1_name), (school1, student1_name, s1_name, student1_dn, '')),
@@ -397,7 +397,7 @@ class Test(ImportTestbase):
 				for s1, t_name, t_id, t_dn, s2 in teachers:
 					atts = self._get_user_attr(t_dn)
 					expected_students.append(
-						[t_id, t_id, atts['first'], atts['middle'], atts['last'], '', atts['email'], t_name, '4', s1, s2]
+						[t_id, t_id, atts['first'].decode(), atts['middle'], atts['last'].decode(), '', atts['email'], t_name, '4', s1, s2]
 					)
 				got_students = list(row for row in csv.reader(student_csv_file))[1:]  # remove header line
 				if got_students == expected_students:

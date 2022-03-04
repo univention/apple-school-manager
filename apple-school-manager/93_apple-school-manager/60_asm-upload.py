@@ -60,7 +60,7 @@ class LocalHostAsASM(object):
 		try:
 			shutil.rmtree(self.dropbox)
 		except OSError:
-				pass
+			pass
 
 
 class TempUserWritableFileAnywhere(object):
@@ -99,7 +99,7 @@ class Test(ImportTestbase):
 		gid = int(user_attrs["gidNumber"][0])
 		remote_path = "/archive.zip"
 		with ucr_test.UCSTestConfigRegistry(), LocalHostAsASM(
-				student1_name, "univention", home_dir, self.ou_A.name
+			student1_name, "univention", home_dir, self.ou_A.name
 		), TempUserWritableFileAnywhere(remote_path, uid, gid):
 			cmd = ["/usr/sbin/asm-upload"]
 			print("Executing {!r}...".format(cmd))

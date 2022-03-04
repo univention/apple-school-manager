@@ -100,7 +100,7 @@ class Test(ImportTestbase):
 			self.log.info('OK: teacher1 anonymized CSV line with static first_name is as expected.')
 		else:
 			self.fail('CSV line with static first_name for teacher1 anonymized,\nexp: {!r}\ngot: {!r}.'.format(
-					expected_teacher1, got_teacher1))
+				expected_teacher1, got_teacher1))
 
 
 if __name__ == '__main__':

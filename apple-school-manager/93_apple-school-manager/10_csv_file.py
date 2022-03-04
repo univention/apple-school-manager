@@ -30,9 +30,9 @@ class Test(ImportTestbase):
 	def _get_user_attr(self, dn):
 		user = self.lo.get(dn)
 		middle_name = (
-				user.get('middleName', [''])[0] or
-				user.get('initials', [''])[0] or
-				user.get('oxMiddleName', [''])[0]
+			user.get('middleName', [''])[0] or
+			user.get('initials', [''])[0] or
+			user.get('oxMiddleName', [''])[0]
 		)
 		return {
 			'first': user.get('givenName', [''])[0],
@@ -320,8 +320,8 @@ class Test(ImportTestbase):
 				roster_csv_file.seek(0)
 				expected_roster = []
 				for student_name in sorted((
-						(student1_name, s1_name), (student2_name, s2_name), (student3_name, s3_name),
-						(student4_name, s4_name), (student5_name, s5_name), (student6_name, s6_name)
+					(student1_name, s1_name), (student2_name, s2_name), (student3_name, s3_name),
+					(student4_name, s4_name), (student5_name, s5_name), (student6_name, s6_name)
 				), key=itemgetter(0)):
 					expected_roster.append(
 						(
@@ -330,8 +330,8 @@ class Test(ImportTestbase):
 						)
 					)
 				for student_name in sorted((
-						(student2_name, s2_name), (student3_name, s3_name), (student4_name, s4_name),
-						(student5_name, s5_name), (student7_name, s7_name)
+					(student2_name, s2_name), (student3_name, s3_name), (student4_name, s4_name),
+					(student5_name, s5_name), (student7_name, s7_name)
 				), key=itemgetter(0)):
 					expected_roster.append(
 						(
@@ -377,7 +377,7 @@ class Test(ImportTestbase):
 				], key=itemgetter(0)))  # sorted by 1. school, 2. username
 				# school3 is not in the whitelist, so school3 must not be returned
 				for s1, t_name, t_id, t_dn, s2 in teachers:
-					atts = {k: (str(v,'utf-8') if isinstance(v, (bytes)) else v) for k, v in self._get_user_attr(t_dn).items()}
+					atts = {k: (str(v, 'utf-8') if isinstance(v, (bytes)) else v) for k, v in self._get_user_attr(t_dn).items()}
 					expected_staff.append(
 						[t_id, t_id, atts['first'], atts['middle'], atts['last'], atts['email'], t_name, s1, s2]
 					)

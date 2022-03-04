@@ -30,9 +30,9 @@ class Test(ImportTestbase):
 	def _get_user_attr(self, dn):
 		user = self.lo.get(dn)
 		middle_name = (
-				user.get('middleName', [''])[0] or
-				user.get('initials', [''])[0] or
-				user.get('oxMiddleName', [''])[0]
+			user.get('middleName', [''])[0] or
+			user.get('initials', [''])[0] or
+			user.get('oxMiddleName', [''])[0]
 		)
 		return {
 			'first': user.get('givenName', [''])[0],
@@ -308,8 +308,8 @@ class Test(ImportTestbase):
 			with open(roster_csv_file_name, 'r') as roster_csv_file:  # open csv-file in text mode
 				expected_roster = []
 				for student_name in sorted((
-						(student1_name, s1_name), (student2_name, s2_name), (student3_name, s3_name),
-						(student4_name, s4_name), (student5_name, s5_name), (student6_name, s6_name)
+					(student1_name, s1_name), (student2_name, s2_name), (student3_name, s3_name),
+					(student4_name, s4_name), (student5_name, s5_name), (student6_name, s6_name)
 				), key=itemgetter(0)):
 					expected_roster.append(
 						(
@@ -318,8 +318,8 @@ class Test(ImportTestbase):
 						)
 					)
 				for student_name in sorted((
-						(student2_name, s2_name), (student3_name, s3_name), (student4_name, s4_name),
-						(student5_name, s5_name), (student7_name, s7_name)
+					(student2_name, s2_name), (student3_name, s3_name), (student4_name, s4_name),
+					(student5_name, s5_name), (student7_name, s7_name)
 				), key=itemgetter(0)):
 					expected_roster.append(
 						(

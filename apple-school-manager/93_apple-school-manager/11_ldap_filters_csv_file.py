@@ -120,7 +120,7 @@ class Test(ImportTestbase):
 				user_objs
 			)
 			assert (
-				user1 == user_objs[0].first_name
+				user1 == user_objs[0].sis_username
 			), "The ucr filter is: {}. '{}' was not found in {}".format(
 				ucr_v, user1, user_objs
 			)
@@ -155,7 +155,7 @@ class Test(ImportTestbase):
 			assert len(user_objs) == 1, "Not exactly 1 user object found: {}".format(
 				user_objs
 			)
-			assert user2 == user_objs[0].first_name
+			assert user2 == user_objs[0].sis_username
 			self.log.info(
 				"*** OK: found expected user %r for filter_type=%r with school specific filter.",
 				user2,

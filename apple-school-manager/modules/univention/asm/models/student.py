@@ -157,7 +157,7 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
 		if student.school:
 			location_ids = [student.school] + location_ids
 		if ou_whitelist:
-			location_ids = [l for l in location_ids if l in ou_whitelist]
+			location_ids = [loc for loc in location_ids if loc in ou_whitelist]
 			if not location_ids:
 				raise ValueError('Non of the users schools is in the whitelist: {} (schools: {!r}).'.format(
 					student, student.schools))

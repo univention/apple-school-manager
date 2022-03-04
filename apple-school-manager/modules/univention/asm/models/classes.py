@@ -47,7 +47,7 @@ from .base import AsmModel
 from .staff import get_filtered_staff
 
 try:
-	from typing import Any, AnyStr, Iterable, Optional, Dict, List
+	from typing import Any, AnyStr, Iterable, Optional
 except ImportError:
 	pass
 
@@ -62,15 +62,15 @@ class AsmClass(AsmModel):
 	_class_number_empty = None
 
 	def __init__(
-			self,
-			class_id,  # type: AnyStr
-			course_id,  # type: AnyStr
-			location_id,  # type: AnyStr
-			class_number=None,  # type: Optional[AnyStr]
-			instructor_id=None,  # type: Optional[AnyStr]
-			instructor_id_2=None,  # type: Optional[AnyStr]
-			instructor_id_3=None,  # type: Optional[AnyStr]
-			additional_instructor_ids=None  # type: Optional[Iterable[AnyStr]]
+		self,
+		class_id,  # type: AnyStr
+		course_id,  # type: AnyStr
+		location_id,  # type: AnyStr
+		class_number=None,  # type: Optional[AnyStr]
+		instructor_id=None,  # type: Optional[AnyStr]
+		instructor_id_2=None,  # type: Optional[AnyStr]
+		instructor_id_3=None,  # type: Optional[AnyStr]
+		additional_instructor_ids=None  # type: Optional[Iterable[AnyStr]]
 	):
 		# type: (...) -> None
 		"""

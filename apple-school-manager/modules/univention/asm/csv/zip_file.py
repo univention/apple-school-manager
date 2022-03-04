@@ -108,7 +108,7 @@ class AsmZipFile(object):
 				self.logger.error("Error during creation of csv files. Abort asm-upload.")
 				sys.exit(1)
 		self.logger.debug('Writing ZIP file to %s...', file_path)
-		with open(file_path,  'wb') as fp, zipfile.ZipFile(fp, 'w', zipfile.ZIP_DEFLATED) as zf:
+		with open(file_path, 'wb') as fp, zipfile.ZipFile(fp, 'w', zipfile.ZIP_DEFLATED) as zf:
 			os.fchmod(fp.fileno(), 0o600)
 			for path in sorted(self.csv_files):
 				zf.write(path, os.path.basename(path))

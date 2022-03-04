@@ -55,11 +55,11 @@ class AsmCourse(AsmModel):
 	header = ('course_id', 'course_number', 'course_name', 'location_id')
 
 	def __init__(
-			self,
-			course_id,  # type: AnyStr
-			location_id,  # type: AnyStr
-			course_number=None,  # type: Optional[AnyStr]
-			course_name=None,  # type: Optional[AnyStr]
+		self,
+		course_id,  # type: AnyStr
+		location_id,  # type: AnyStr
+		course_number=None,  # type: Optional[AnyStr]
+		course_name=None,  # type: Optional[AnyStr]
 	):
 		# type: (...) -> None
 		"""

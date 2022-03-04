@@ -143,7 +143,7 @@ def get_person_id(dn, role, additional_attrs):  # type: (str, str, List[str]) ->
 	attrs = list(map(str, [person_id_attr] + additional_attrs))  # unicode2str for python-ldap
 	lo, po = get_ldap_connection()
 	res = lo.get(dn, attrs)
-	res = {k: [v.decode('utf-8')] for k, [v] in res.items()} # byte2str for python-ldap
+	res = {k: [v.decode('utf-8')] for k, [v] in res.items()}  # byte2str for python-ldap
 	if not res.get(person_id_attr):
 		raise ValueError('Attribute {!r} from {!r} is not set or empty on {!r}.'.format(person_id_attr, ucrv, dn))
 	return person_id_attr, res

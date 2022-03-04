@@ -38,7 +38,6 @@ Data in CSV files is always sorted by 1) school and 2) user/class name.
 """
 
 
-
 import json
 import logging
 import os
@@ -295,8 +294,8 @@ class AsmRostersCsvFile(AsmCsvFile):
 		for school in self.get_schools():
 			student_dns = {student.dn for student in self.get_students(school)}
 			for ucs_obj in sorted(
-					SchoolClass.get_all(self.lo, school.name) + WorkGroup.get_all(self.lo, school.name),
-					key=attrgetter('name')
+				SchoolClass.get_all(self.lo, school.name) + WorkGroup.get_all(self.lo, school.name),
+				key=attrgetter('name')
 			):
 				for user_dn in sorted(ucs_obj.users):
 					if user_dn in student_dns:

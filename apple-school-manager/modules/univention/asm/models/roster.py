@@ -54,10 +54,10 @@ class AsmRoster(AsmModel):
 	header = ('roster_id', 'class_id', 'student_id')
 
 	def __init__(
-			self,
-			roster_id,  # type: AnyStr
-			class_id,  # type: AnyStr
-			student_id,  # type: AnyStr
+		self,
+		roster_id,  # type: AnyStr
+		class_id,  # type: AnyStr
+		student_id,  # type: AnyStr
 	):
 		# type: (...) -> None
 		"""

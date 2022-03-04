@@ -63,16 +63,16 @@ class AsmStaff(AsmModel, AnonymizeMixIn):
 	ucr_anonymize_key_base = 'asm/attributes/staff/anonymize'
 
 	def __init__(
-			self,
-			person_id,  # type: AnyStr
-			first_name,  # type: AnyStr
-			last_name,  # type: AnyStr
-			location_id,  # type: AnyStr
-			person_number=None,  # type: Optional[AnyStr]
-			middle_name=None,  # type: Optional[AnyStr]
-			email_address=None,  # type: Optional[AnyStr]
-			sis_username=None,  # type: Optional[AnyStr]
-			additional_location_ids=None  # type: Optional[Iterable[AnyStr]]
+		self,
+		person_id,  # type: AnyStr
+		first_name,  # type: AnyStr
+		last_name,  # type: AnyStr
+		location_id,  # type: AnyStr
+		person_number=None,  # type: Optional[AnyStr]
+		middle_name=None,  # type: Optional[AnyStr]
+		email_address=None,  # type: Optional[AnyStr]
+		sis_username=None,  # type: Optional[AnyStr]
+		additional_location_ids=None  # type: Optional[Iterable[AnyStr]]
 	):
 		# type: (...) -> None
 		"""
@@ -152,7 +152,7 @@ class AsmStaff(AsmModel, AnonymizeMixIn):
 		email = prepend_to_mail_domain(teacher.email) if teacher.email else None
 		location_ids = [teacher.school] + sorted(s for s in teacher.schools if s != teacher.school)
 		if ou_whitelist:
-			location_ids = [l for l in location_ids if l in ou_whitelist]
+			location_ids = [loc for loc in location_ids if loc in ou_whitelist]
 			if not location_ids:
 				raise ValueError('Non of the users schools is in the whitelist: {} (schools: {!r}).'.format(
 					teacher, teacher.schools))
@@ -161,9 +161,9 @@ class AsmStaff(AsmModel, AnonymizeMixIn):
 		person_id_attr, teacher_lo = get_person_id(teacher.dn, 'staff', additional_attrs)
 		person_id = teacher_lo[person_id_attr][0]
 		middle_name = (
-				teacher_lo.get('middleName', [''])[0] or
-				teacher_lo.get('initials', [''])[0] or
-				teacher_lo.get('oxMiddleName', [''])[0]
+			teacher_lo.get('middleName', [''])[0] or
+			teacher_lo.get('initials', [''])[0] or
+			teacher_lo.get('oxMiddleName', [''])[0]
 		)
 		return cls(**cls.anonymize(
 			teacher,

@@ -60,4 +60,4 @@ class SFTP(object):
 
 	def upload(self, filename, remote_folder='/'):
 		remote_filename = os.path.join(remote_folder, 'archive.zip')
-		self.sftpClient.put(filename, remote_filename, confirm=False)	# bug #54553
+		self.sftpClient.put(filename, remote_filename, confirm=False)  # bug #54553

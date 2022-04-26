@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (2.0.0-11) unstable; urgency=medium
+
+  * Bug #54553: don't verify that file was uploaded
+
+ -- Carlos García-Mauriño <garcia-maurino.extern@univention.de>  Wed, 20 Apr 2022 17:11:41 +0300
+
 univention-apple-school-manager-connector (2.0.0-10) unstable; urgency=medium
 
   * Bug #52920: cache teachers in school
@@ -6,7 +12,7 @@ univention-apple-school-manager-connector (2.0.0-10) unstable; urgency=medium
 
 univention-apple-school-manager-connector (2.0.0-9) unstable; urgency=medium
 
-  * Bug #52920: fix inconsistent ldap filters 
+  * Bug #52920: fix inconsistent ldap filters
 
  -- Tobias Wenzel <wenzel@univention.de>  Mon, 12 Apr 2021 12:47:53 +0200
 

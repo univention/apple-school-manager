@@ -1,3 +1,10 @@
+<b>Version 3.0.1</b>
+<ul>
+	<li>
+		Use UCR configuration variables for Apple School Manager log rotation.
+	</li>
+</ul>
+
 <b>Version 2.2.4</b>
 <ul>
 	<li>

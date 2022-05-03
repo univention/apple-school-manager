@@ -30,7 +30,7 @@
 
 import sys
 import logging
-from logging.handlers import TimedRotatingFileHandler
+from logging import FileHandler
 from paramiko.ssh_exception import SSHException, NoValidConnectionsError
 from univention.asm.asm_upload import ASMUpload
 from univention.asm.utils import get_ucr
@@ -66,7 +66,7 @@ def get_config():
 def setup_logging(level_console=logging.INFO, level_file=logging.DEBUG):
 	handler_console = logging.StreamHandler()
 	handler_console.setLevel(level_console)
-	handler_file = TimedRotatingFileHandler(LOGFILE_PATH, when="D", interval=7, backupCount=4)
+	handler_file = FileHandler(LOGFILE_PATH)
 	handler_file.setLevel(level_file)
 	formatter_file = logging.Formatter('%(asctime)s %(levelname)-5s %(module)s.%(funcName)s:%(lineno)d - %(message)s')
 	handler_file.setFormatter(formatter_file)

@@ -1,7 +1,10 @@
 <b>Version 2.2.5</b>
 <ul>
 	<li>
-		Bug fix release. Fix errors in SFTP update.
+		Use UCR configuration variables for Apple School Manager log rotation.
+	</li>
+	<li>
+		Fix errors in SFTP update.
 	</li>
 </ul>
 

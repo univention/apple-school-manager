@@ -2,3 +2,7 @@ Type: file
 File: etc/cron.d/asm-upload
 Variables: asm/sync_daily
 Variables: asm/sync_daily/hour
+
+Type: file
+File: etc/logrotate.d/asm
+Variables: logrotate/.*

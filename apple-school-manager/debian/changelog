@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (3.0.1) unstable; urgency=medium
+
+  * Bug #54704: use ucr configuration for asm log rotation
+
+ -- Carlos García-Mauriño <garcia-maurino.extern@univention.de>  Wed, 04 May 2022 09:10:00 +0200
+
 univention-apple-school-manager-connector (3.0.0) unstable; urgency=medium
 
   * Bug #54062: migrated apple-school-manager to UCS 5.0 

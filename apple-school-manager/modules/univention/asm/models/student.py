@@ -38,7 +38,7 @@ See https://support.apple.com/en-us/HT207029
 
 import logging
 from .base import AsmModel, AnonymizeMixIn
-from ..utils import check_domain, get_default_password_policy, get_person_id, get_ldap_connection, prepend_to_mail_domain
+from ..utils import check_domain, get_default_password_policy, get_person_id, get_ldap_connection, prepend_to_mail_domain, get_ucr
 from ucsschool.lib.models.user import Student
 
 try:
@@ -46,6 +46,8 @@ try:
 except ImportError:
 	pass
 
+ucr = get_ucr()
+grade_level_attribute = ucr.get("asm/attributes/student/grade_level")
 
 class AsmStudent(AsmModel, AnonymizeMixIn):
 	"""Class to represent an ASM student entry."""
@@ -162,6 +164,8 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
 				raise ValueError('Non of the users schools is in the whitelist: {} (schools: {!r}).'.format(
 					student, student.schools))
 		additional_attrs = ['middleName', 'initials', 'oxMiddleName']
+		if grade_level_attribute:
+			additional_attrs.append(grade_level_attribute)
 		additional_attrs.extend({v[1:].strip() for v in cls.anonymize_mapping().values() if v and v.startswith('%')})
 		person_id_attr, student_lo = get_person_id(student.dn, 'student', additional_attrs)
 		person_id = student_lo[person_id_attr][0]
@@ -170,6 +174,7 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
 			student_lo.get('initials', [''])[0] or
 			student_lo.get('oxMiddleName', [''])[0]
 		)
+		grade_level = student_lo.get(grade_level_attribute, [None])[0]
 		return cls(**cls.anonymize(
 			student,
 			student_lo,
@@ -179,7 +184,7 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
 			location_id=location_ids[0],
 			person_number=person_id,
 			middle_name=middle_name,
-			grade_level=None,  # TODO: make conf. by UCR which LDAP attr to use
+			grade_level=grade_level,
 			email_address=email,
 			sis_username=student.name,
 			password_policy=None,  # UCS password policy doesn't fit and nothing else is ...

@@ -7,13 +7,14 @@
 ##   - univention-apple-school-manager-connector
 ## bugs: [47622]
 
-from ucsschool.lib.models.user import Student
-from univention.config_registry import handler_set, handler_unset
-import univention.testing.ucr as ucr_test
 import univention.testing.strings as uts
+import univention.testing.ucr as ucr_test
 import univention.testing.utils as utils
+from ucsschool.lib.models.user import Student
 from univention.asm.models.student import AsmStudent
-from univention.asm.utils import get_default_password_policy, get_person_id, update_ucr
+from univention.asm.utils import (get_default_password_policy, get_person_id,
+                                  update_ucr)
+from univention.config_registry import handler_set, handler_unset
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
 
@@ -21,8 +22,18 @@ class Test(ImportTestbase):
     ou_C = None
 
     def test(self):
+
         subdomain = uts.random_name()
-        handler_set(["asm/attributes/user/email/prepend_domain={}".format(subdomain)])
+        handler_set(
+            [
+                f"asm/attributes/user/email/prepend_domain={subdomain}",
+            ]
+        )
+        handler_unset(
+            [
+                "asm/attributes/student/grade_level",
+            ]
+        )
 
         assert (
             get_default_password_policy() == "4"
@@ -75,7 +86,34 @@ class Test(ImportTestbase):
             student1.firstname,
             middle_name,
             student1.lastname,
+            "",  # grade level
             "",
+            student1_name,
+            "4",
+            school1,
+        ]
+        if got_student1 == expected_student1:
+            self.log.info("OK: student1 CSV line is as expected.")
+        else:
+            self.fail(
+                "CSV line for student1,\nexp: {!r}\ngot: {!r}.".format(expected_student1, got_student1)
+            )
+
+        handler_set(
+            [
+                "asm/attributes/student/grade_level=sn",
+            ]
+        )
+        update_ucr()
+        or_student1 = AsmStudent.from_dn(student1_dn)
+        got_student1 = or_student1.as_csv_line()
+        expected_student1 = [
+            s1_name,
+            s1_name,
+            student1.firstname,
+            middle_name,
+            student1.lastname,
+            student1.lastname,  # grade level
             "",
             student1_name,
             "4",
@@ -98,7 +136,7 @@ class Test(ImportTestbase):
             student2.firstname,
             "",
             student2.lastname,
-            "",
+            student2.lastname,  # grade level
             email_sub,
             student2_name,
             "",
@@ -124,7 +162,7 @@ class Test(ImportTestbase):
             student1.name,
             "",
             "No Name",
-            "",
+            student1.lastname,  # grade level
             "",
             student1.name,
             "6",
@@ -155,7 +193,7 @@ class Test(ImportTestbase):
             student1.name,
             "",
             last_name_anon,
-            "",
+            student1.lastname,  # grade level
             "",
             student1.name,
             "8",

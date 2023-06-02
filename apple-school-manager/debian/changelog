@@ -1,3 +1,10 @@
+univention-apple-school-manager-connector (3.0.2) unstable; urgency=medium
+
+  * Bug #56073: Synchronize grade level. Configured with
+    `asm/attributes/student/grade_level`.
+
+ -- Carlos García-Mauriño <garcia-maurino.extern@univention.de>  Thu, 01 Jun 2023 08:46:55 +0200
+
 univention-apple-school-manager-connector (3.0.1) unstable; urgency=medium
 
   * Bug #54704: use ucr configuration for asm log rotation

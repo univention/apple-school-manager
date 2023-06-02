@@ -1,3 +1,10 @@
+<b>Version 3.0.2</b>
+<ul>
+	<li>
+		Synchronize grade level. Configured with <code>asm/attributes/student/grade_level</code>.
+	</li>
+</ul>
+
 <b>Version 3.0.1</b>
 <ul>
 	<li>

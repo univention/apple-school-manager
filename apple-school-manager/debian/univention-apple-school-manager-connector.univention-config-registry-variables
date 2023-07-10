@@ -117,3 +117,10 @@ Description[de]=Definiert ein Muster, nach dem der Kursname berechnet wird. Stan
 Description[en]=Defines a pattern according to which the course name is calculated. Default: {ou}-{name}
 Type=str
 Categories=service-administration
+
+
+[asm/attributes/student/grade_level]
+Description[de]=Definiert das LDAP Attribut für das Schuljahr. Standard: none.
+Description[en]=Defines the grade level LDAP attribute. Default: none.
+Type=str
+Categories=service-administration

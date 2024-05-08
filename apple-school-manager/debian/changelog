@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (3.0.3) unstable; urgency=medium
+
+  * Issue #9: add python3-dns dependency
+
+ -- Tobias Wenzel <wenzel@univention.de>  Wed, 08 May 2024 14:24:51 +0200
+
 univention-apple-school-manager-connector (3.0.2) unstable; urgency=medium
 
   * Bug #56073: Synchronize grade level. Configured with

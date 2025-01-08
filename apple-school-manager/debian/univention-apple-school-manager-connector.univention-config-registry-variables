@@ -124,3 +124,9 @@ Description[de]=Definiert das LDAP Attribut für das Schuljahr. Standard: none.
 Description[en]=Defines the grade level LDAP attribute. Default: none.
 Type=str
 Categories=service-administration
+
+[asm/config_file]
+Description[de]=Pfad zur Konfigurationsdatei
+Description[en]=Path to the config file
+Type=str
+Categories=service-administration

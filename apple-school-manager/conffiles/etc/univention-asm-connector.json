@@ -1,0 +1,18 @@
+@!@
+import json
+username = configRegistry.get("asm/username")
+password = configRegistry.get("asm/password", "/etc/asm.secret")
+school_whitelist = configRegistry.get("asm/school_whitelist")
+
+if username and password:
+    conf = {
+        "username": username,
+        "password": password,
+    }
+    # school_whitelist may be empty
+    if school_whitelist:
+        school_whitelist = [i.strip() for i in school_whitelist.split(",")]
+        conf["school_whitelist"] = school_whitelist
+    print(json.dumps([conf]))
+
+@!@

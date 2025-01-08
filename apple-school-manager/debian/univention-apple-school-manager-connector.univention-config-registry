@@ -6,3 +6,9 @@ Variables: asm/sync_daily/hour
 Type: file
 File: etc/logrotate.d/asm
 Variables: logrotate/.*
+
+Type: file
+File: etc/univention-asm-connector.json
+Variables: asm/username
+Variables: asm/password
+Variables: asm/school_whitelist

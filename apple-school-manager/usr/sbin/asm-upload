@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 #
-# Copyright 2018-2020 Univention GmbH
+# Copyright 2018-2024 Univention GmbH
 #
 # http://www.univention.de/
 #
@@ -30,37 +30,50 @@
 
 import sys
 import logging
+import json
+from json import JSONDecodeError
 from logging import FileHandler
 from paramiko.ssh_exception import SSHException, NoValidConnectionsError
 from univention.asm.asm_upload import ASMUpload
 from univention.asm.utils import get_ucr
+from univention.config_registry.frontend import handler_dump
 
 
 LOGFILE_PATH = '/var/log/univention/asm.log'
 PASSWORD_FILE_PATH = '/etc/asm.secret'
-UCR_USERNAME_KEY = 'asm/username'
-UCR_OU_WHITELIST_KEY = 'asm/school_whitelist'
-UCR_STORE_ZIP_KEY = 'asm/store_zip'
+CONFIG_FILE_PATH = '/etc/univention-asm-connector.json'
+
+ucr = get_ucr()
 
 
 class ASMCredentialError(Exception):
 	pass
 
 
-def get_config():
-	ucr = get_ucr()
-	with open(PASSWORD_FILE_PATH, 'r') as passwordFile:
-		password = passwordFile.read().strip("\n")
-	username = ucr[UCR_USERNAME_KEY]
-	whitelist = ucr[UCR_OU_WHITELIST_KEY]
-	delete_zip = not ucr.is_true(UCR_STORE_ZIP_KEY)
-	if whitelist is not None:
-		whitelist = [school.strip(" ") for school in whitelist.split(",") if school]
-	if not username:
-		raise ASMCredentialError("Please set a username in the app settings")
-	if not password:
-		raise ASMCredentialError("Please set a password in the app settings")
-	return username, password, whitelist, delete_zip
+def get_configs():
+	delete_zip = ucr.is_false('asm/store_zip')
+	config_file = ucr.get('asm/config_file', CONFIG_FILE_PATH)
+	configs = []
+	try:
+		with open(config_file, "r") as fd:
+			json_conf = json.load(fd)
+	except JSONDecodeError:
+		raise ASMCredentialError("Invalid json config")
+	except FileNotFoundError:
+		raise ASMCredentialError(f"Config file could not be found at {config_file}")
+	for _conf in json_conf:
+		try:
+			username = _conf['username']
+			password_file = _conf['password']
+			with open(password_file, "r") as fd:
+				password = fd.read().strip()
+			school_whitelist = _conf['school_whitelist']
+			configs.append((username, password, school_whitelist))
+		except (KeyError, AttributeError):
+			raise ASMCredentialError("Incomplete configuration")
+		except FileNotFoundError:
+			raise ASMCredentialError(f"Password file could not be found at {password_file}")
+	return configs, delete_zip
 
 
 def setup_logging(level_console=logging.INFO, level_file=logging.DEBUG):
@@ -80,18 +93,19 @@ def main():
 	logger = logging.getLogger('univention.asm.upload_script')
 	setup_logging()
 	try:
-		config = get_config()
+		configs, delete_zip = get_configs()
 	except ASMCredentialError as exc:
 		logger.error(exc)
 		sys.exit(1)
-	asmUpload = ASMUpload(*config)
-	try:
-		zip_path = asmUpload.upload()
-	except (SSHException, NoValidConnectionsError) as exc:
-		logger.error("SFTP upload failed: {}".format(exc))
-		sys.exit(1)
-	if not config[3] and zip_path is not None:
-		logger.info("The uploaded zip is stored in: {}".format(zip_path))
+	for config in configs:
+		asmUpload = ASMUpload(*config, delete_zip_file=delete_zip)
+		try:
+			zip_path = asmUpload.upload()
+		except (SSHException, NoValidConnectionsError) as exc:
+			logger.error("SFTP upload failed: {}".format(exc))
+			sys.exit(1)
+		if not delete_zip and zip_path is not None:
+			logger.info("The uploaded zip is stored in: {}".format(zip_path))
 
 
 if __name__ == '__main__':

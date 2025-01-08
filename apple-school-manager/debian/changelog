@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (3.1.0) unstable; urgency=medium
+
+  * feat: allow configuration of multiple asm connections
+
+ -- Jannik Ahlers <ahlers@univention.de>  Wed, 15 Jan 2025 14:15:48 +0100
+
 univention-apple-school-manager-connector (3.0.3) unstable; urgency=medium
 
   * Issue #9: add python3-dns dependency

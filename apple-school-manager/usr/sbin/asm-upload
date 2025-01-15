@@ -36,7 +36,6 @@ from logging import FileHandler
 from paramiko.ssh_exception import SSHException, NoValidConnectionsError
 from univention.asm.asm_upload import ASMUpload
 from univention.asm.utils import get_ucr
-from univention.config_registry.frontend import handler_dump
 
 
 LOGFILE_PATH = '/var/log/univention/asm.log'

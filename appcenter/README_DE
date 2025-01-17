@@ -86,7 +86,7 @@
 		<p>
 			Wenn Sie die Anonymisierung aktivieren möchten, setzen Sie bitte folgende zwei UCR-Variablen
 			<code>asm/attributes/staff/anonymize</code> &amp;
-			<code>asm/attributes/student/anonymize<code> unter Übersicht → System (Lila) → Univention
+			<code>asm/attributes/student/anonymize</code> unter Übersicht → System (Lila) → Univention
 			Configuration Registry. Anschließend wird nur noch der Benutzername der Benutzer
 			synchronisiert.
 		</p>
@@ -97,8 +97,40 @@
 	<dd>
 		<p>
 			Die Synchronisation der Klassennummern kann mit der UCR-Variable
-			<code>asm/attributes/classes/class_number_empty<code> unter Übersicht → System (Lila) →
+			<code>asm/attributes/classes/class_number_empty</code> unter Übersicht → System (Lila) →
 			Univention Configuration Registry deaktiviert werden.
+		</p>
+	</dd>
+	<dt>
+		<b>Erweiterte Konfiguration</b>
+	</dt>
+	<dd>
+		<p>
+			Für die Konfiguration des Apple School Manager Connectors für die Verbindung mit mehreren
+			Apple School Manager Instanzen, hinterlegen Sie den Pfad zu einer JSON-Konfigurationsdatei
+			in der UCR-Variable <code>asm/config_file</code>.
+			In der JSON-Datei konfigurieren Sie die Zugangsdaten sowie die Schulen, die mit der
+			jeweiligen Instanz synchronisiert werden sollen:
+			<pre>
+[
+    {
+        "username": "<Benutzername der ersten ASM-Instanz>",
+        "password": "<Pfad zur Passwort-Datei>",
+        "school_whitelist": [
+            "<Schulkürzel 1>"
+        ]
+    },
+    {
+        "username": "<Benutzername der zweiten ASM-Instanz>",
+        "password": "<Pfad zur Passwort-Datei>",
+        "school_whitelist": [
+            "<Schulkürzel 2>",
+            "<Schulkürzel 3>"
+        ]
+    }
+]
+			</pre>
+			<b>Achtung:</b> Wenn Sie die UCR-Variable setzen, wird die Konfiguration durch die App Settings deaktiviert.
 		</p>
 	</dd>
 </dl>

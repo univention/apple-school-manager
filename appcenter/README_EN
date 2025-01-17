@@ -93,4 +93,36 @@
 	</dd>
 	<dl>
 	</dl>
+	<dt>
+		<b>Advanced Configuration</b>
+	</dt>
+	<dd>
+		<p>
+			<pre>
+			To configure the Apple School Manager Connector for the connection with multiple Apple
+			School Manager instances, store the path to a JSON configuration file in the UCR variable
+			<code>asm/config_file</code>.
+			In the JSON file, configure the access data and the schools that are to be synchronized with
+			the respective instance:
+[
+    {
+        "username": "<Username of the first ASM instance>",
+        "password": "<path of the password file>",
+        "school_whitelist": [
+            "<school 1>"
+        ]
+    },
+    {
+        "username": "<Username of the second ASM instance>",
+        "password": "<path of the password file>",
+        "school_whitelist": [
+            "<school 2>",
+            "<school 3>"
+        ]
+    }
+]
+			</pre>
+			<b>Attention:</b> Setting the UCR variable deactivates configuration using the app settings.
+		</p>
+	</dd>
 </dl>

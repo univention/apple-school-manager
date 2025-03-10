@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (5.0.0) unstable; urgency=low
+
+  * Issue univention/ucsschool#1401: Update to UCS@school 5.2
+
+ -- Sönke Schwardt-Krummrich <schwardt@univention.de>  Mon, 10 Mar 2025 13:16:05 +0100
+
 univention-apple-school-manager-connector (4.0.0) unstable; urgency=low
 
   * Issue univention/ucsschool#1401: bump version for UCS@school 5.1

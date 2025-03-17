@@ -1,44 +1,39 @@
 #!/usr/share/ucs-test/runner python3
-## -*- coding: utf-8 -*-
 ## desc: test student model/CSV generation
-## tags: [apptest]
-## exposure: dangerous
+## tags: [apptest]  # noqa: ERA001
+## exposure: dangerous  # noqa: ERA001
 ## packages:
 ##   - univention-apple-school-manager-connector
-## bugs: [47622]
+## bugs: [47622]  # noqa: ERA001
 
 import univention.testing.strings as uts
 import univention.testing.ucr as ucr_test
-import univention.testing.utils as utils
 from ucsschool.lib.models.user import Student
 from univention.asm.models.student import AsmStudent
-from univention.asm.utils import (get_default_password_policy, get_person_id,
-                                  update_ucr)
+from univention.asm.utils import get_default_password_policy, get_person_id, update_ucr
 from univention.config_registry import handler_set, handler_unset
+from univention.testing import utils
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
 
 class Test(ImportTestbase):
     ou_C = None
 
-    def test(self):
-
+    def test(self) -> None:
         subdomain = uts.random_name()
         handler_set(
             [
                 f"asm/attributes/user/email/prepend_domain={subdomain}",
-            ]
+            ],
         )
         handler_unset(
             [
                 "asm/attributes/student/grade_level",
-            ]
+            ],
         )
 
-        assert (
-            get_default_password_policy() == "4"
-        ), "Unset asm/attributes/student/password_policy is {!r}, expected '4'.".format(
-            get_default_password_policy()
+        assert get_default_password_policy() == "4", (
+            f"Unset asm/attributes/student/password_policy is {get_default_password_policy()!r}, expected '4'."
         )
 
         school1 = self.ou_A.name
@@ -46,10 +41,12 @@ class Test(ImportTestbase):
 
         student1_name, student1_dn = self.schoolenv.create_student(school1)
         email_local = uts.random_name()
-        email = "{}@{}".format(email_local, self.maildomain)
-        email_sub = "{}@{}.{}".format(email_local, subdomain, self.maildomain)
+        email = f"{email_local}@{self.maildomain}"
+        email_sub = f"{email_local}@{subdomain}.{self.maildomain}"
         student2_name, student2_dn = self.schoolenv.create_student(
-            school2, schools=[school1, school2], mailaddress=email
+            school2,
+            schools=[school1, school2],
+            mailaddress=email,
         )
         self.log.info("Created student1: %r (%s)", student1_name, student1_dn)
         self.log.info("Created student2: %r (%s)", student2_name, student2_dn)
@@ -96,13 +93,13 @@ class Test(ImportTestbase):
             self.log.info("OK: student1 CSV line is as expected.")
         else:
             self.fail(
-                "CSV line for student1,\nexp: {!r}\ngot: {!r}.".format(expected_student1, got_student1)
+                f"CSV line for student1,\nexp: {expected_student1!r}\ngot: {got_student1!r}.",
             )
 
         handler_set(
             [
                 "asm/attributes/student/grade_level=sn",
-            ]
+            ],
         )
         update_ucr()
         or_student1 = AsmStudent.from_dn(student1_dn)
@@ -123,7 +120,7 @@ class Test(ImportTestbase):
             self.log.info("OK: student1 CSV line is as expected.")
         else:
             self.fail(
-                "CSV line for student1,\nexp: {!r}\ngot: {!r}.".format(expected_student1, got_student1)
+                f"CSV line for student1,\nexp: {expected_student1!r}\ngot: {got_student1!r}.",
             )
 
         handler_set(["asm/attributes/student/password_policy=-"])
@@ -147,11 +144,11 @@ class Test(ImportTestbase):
             self.log.info("OK: student2 CSV line is as expected.")
         else:
             self.fail(
-                "CSV line for student2,\nexp: {!r}\ngot: {!r}.".format(expected_student2, got_student2)
+                f"CSV line for student2,\nexp: {expected_student2!r}\ngot: {got_student2!r}.",
             )
 
         handler_set(
-            ["asm/attributes/student/anonymize=true", "asm/attributes/student/password_policy=6"]
+            ["asm/attributes/student/anonymize=true", "asm/attributes/student/password_policy=6"],
         )
         update_ucr()
         or_student1 = AsmStudent.from_dn(student1_dn)
@@ -172,17 +169,15 @@ class Test(ImportTestbase):
             self.log.info("OK: student1 anonymized CSV line is as expected.")
         else:
             self.fail(
-                "CSV line for student1 anonymized,\nexp: {!r}\ngot: {!r}.".format(
-                    expected_student1, got_student1
-                )
+                f"CSV line for student1 anonymized,\nexp: {expected_student1!r}\ngot: {got_student1!r}.",
             )
 
         last_name_anon = uts.random_name()
         handler_set(
             [
-                "asm/attributes/student/anonymize/last_name={}".format(last_name_anon),
+                f"asm/attributes/student/anonymize/last_name={last_name_anon}",
                 "asm/attributes/student/password_policy=8",
-            ]
+            ],
         )
         update_ucr()
         or_student1 = AsmStudent.from_dn(student1_dn)
@@ -203,9 +198,7 @@ class Test(ImportTestbase):
             self.log.info("OK: student1 anonymized CSV line with static last_name is as expected.")
         else:
             self.fail(
-                "CSV line with static last_name for student1 anonymized,\nexp: {!r}\ngot: {!r}.".format(
-                    expected_student1, got_student1
-                )
+                f"CSV line with static last_name for student1 anonymized,\nexp: {expected_student1!r}\ngot: {got_student1!r}.",
             )
 
 
@@ -219,7 +212,7 @@ if __name__ == "__main__":
                 "asm/attributes/student/password_policy",
             ]
             + [
-                "asm/attributes/student/anonymize{}".format(value)
+                f"asm/attributes/student/anonymize{value}"
                 for value in (
                     "",
                     "/email_address",
@@ -228,6 +221,6 @@ if __name__ == "__main__":
                     "/middle_name",
                     "/sis_username",
                 )
-            ]
+            ],
         )
         Test().run()

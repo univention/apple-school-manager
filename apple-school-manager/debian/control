@@ -3,45 +3,50 @@ Section: univention
 Priority: optional
 Build-Depends:
  debhelper (>> 9),
- univention-config-dev,
- ucslint,
  dh-python,
+ ucslint,
+ univention-config-dev,
  univention-management-console-dev,
 Maintainer: Univention GmbH <packages@univention.de>
 Standards-Version: 3.8.2
 
 Package: univention-apple-school-manager-connector
 Architecture: all
-Depends: ${misc:Depends},
- python3-univention-apple-school-manager-connector
+Depends:
+ python3-univention-apple-school-manager-connector,
+ ${misc:Depends},
 Description: Provision Apple School Manager accounts.
  Synchronize user accounts to the Apple School Manager server.
 Homepage: https://school.apple.com/
 
 Package: python3-univention-apple-school-manager-connector
 Architecture: all
-Depends: ${misc:Depends},
- ucs-school-import,
- univention-config,
+Depends:
+ python3-dns,
+ python3-paramiko,
+ python3-ucsschool,
  python3-univention,
  python3-univention-lib,
  shell-univention-lib,
+ ucs-school-import,
+ univention-config,
  univention-join,
- python3-ucsschool,
- python3-paramiko,
- python3-dns,
-Recommends: ntp
+ ${misc:Depends},
+Recommends:
+ ntp,
 Description: Provision Apple School Manager accounts.
  Synchronize user accounts to the Apple School Manager server.
 Homepage: https://school.apple.com/
 
 Package: ucs-test-apple-school-manager
 Architecture: all
-Depends: ucs-test-libs,
+Depends:
  ucs-test-framework,
+ ucs-test-libs,
  ucs-test-ucsschool (>= 6.0.0-2),
- ${misc:Depends}
-Provides: ucs-test-module
+ ${misc:Depends},
+Provides:
+ ucs-test-module,
 Description: Univention Apple School Manager App tests for ucs-test
  This package includes some Apple School Manager related tests for
  ucs-test.

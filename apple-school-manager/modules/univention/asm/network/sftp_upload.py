@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Copyright 2018-2020 Univention GmbH
 #
@@ -28,36 +27,36 @@
 # <http://www.gnu.org/licenses/>.
 
 """
-Univention Apple School Manager Connector
+Univention Apple School Manager Connector.
 
 sftp upload
 """
 
 import os
+
 import paramiko
 
 
-class SFTP(object):
+class SFTP:
+    def __init__(self, hostname, username, password, host_key_line) -> None:
+        self.client = paramiko.client.SSHClient()
+        self._set_host_key(host_key_line)
+        self.client.connect(hostname, username=username, password=password)
+        self.sftpClient = self.client.open_sftp()
 
-	def __init__(self, hostname, username, password, host_key_line):
-		self.client = paramiko.client.SSHClient()
-		self._set_host_key(host_key_line)
-		self.client.connect(hostname, username=username, password=password)
-		self.sftpClient = self.client.open_sftp()
+    def __enter__(self):
+        self.client.__enter__()
+        return self
 
-	def __enter__(self):
-		self.client.__enter__()
-		return self
+    def __exit__(self, *args):
+        self.client.__exit__(*args)
 
-	def __exit__(self, *args):
-		self.client.__exit__(*args)
+    def _set_host_key(self, host_key_line) -> None:
+        hostKeyEntry = paramiko.hostkeys.HostKeyEntry.from_line(host_key_line)
+        host_keys = self.client.get_host_keys()
+        for hostname in hostKeyEntry.hostnames:
+            host_keys.add(hostname, hostKeyEntry.key.get_name(), hostKeyEntry.key)
 
-	def _set_host_key(self, host_key_line):
-		hostKeyEntry = paramiko.hostkeys.HostKeyEntry.from_line(host_key_line)
-		host_keys = self.client.get_host_keys()
-		for hostname in hostKeyEntry.hostnames:
-			host_keys.add(hostname, hostKeyEntry.key.get_name(), hostKeyEntry.key)
-
-	def upload(self, filename, remote_folder='/'):
-		remote_filename = os.path.join(remote_folder, 'archive.zip')
-		self.sftpClient.put(filename, remote_filename, confirm=False)  # bug #54553
+    def upload(self, filename, remote_folder="/") -> None:
+        remote_filename = os.path.join(remote_folder, "archive.zip")
+        self.sftpClient.put(filename, remote_filename, confirm=False)  # bug #54553

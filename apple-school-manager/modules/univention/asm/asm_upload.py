@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Copyright 2018-2020 Univention GmbH
 #
@@ -28,46 +27,45 @@
 # <http://www.gnu.org/licenses/>.
 
 """
-Univention Apple School Manager Connector
+Univention Apple School Manager Connector.
 
 export school data to asm
 """
 
-
-import os
 import logging
+import os
 from datetime import datetime
+
+from univention.config_registry import handler_set
 
 from .csv.zip_file import AsmZipFile
 from .network.sftp_upload import SFTP
-from univention.config_registry import handler_set
 
 
-class ASMUpload(object):
+class ASMUpload:
+    def __init__(self, username, password, ou_whitelist=None, delete_zip_file=True) -> None:
+        with open("/etc/asm_public_key") as asm_public_key_file:
+            self.host_key_line = asm_public_key_file.read()
+        self.hostname = "upload.appleschoolcontent.com"
+        self.username = username
+        self.password = password
+        self.ou_whitelist = ou_whitelist
+        self.delete_zip_file = delete_zip_file
+        self.logger = logging.getLogger(__name__)
 
-	def __init__(self, username, password, ou_whitelist=None, delete_zip_file=True):
-		with open("/etc/asm_public_key", "r") as asm_public_key_file:
-			self.host_key_line = asm_public_key_file.read()
-		self.hostname = "upload.appleschoolcontent.com"
-		self.username = username
-		self.password = password
-		self.ou_whitelist = ou_whitelist
-		self.delete_zip_file = delete_zip_file
-		self.logger = logging.getLogger(__name__)
+    def upload(self, folder_path="/var/lib/asm"):
+        file_path = os.path.join(folder_path, f"asm_{datetime.isoformat(datetime.now())}.zip")
+        zip_path = AsmZipFile(file_path, self.ou_whitelist).write_zip()
+        self.logger.info("Uploading ZIP file to %s...", self.hostname)
+        with SFTP(self.hostname, self.username, self.password, self.host_key_line) as sftp:
+            self.logger.debug("Connected to %s.", self.hostname)
+            sftp.upload(zip_path)
+            self.logger.info("Finished uploading ZIP file.")
 
-	def upload(self, folder_path="/var/lib/asm"):
-		file_path = os.path.join(folder_path, "asm_{}.zip".format(datetime.isoformat(datetime.now())))
-		zip_path = AsmZipFile(file_path, self.ou_whitelist).write_zip()
-		self.logger.info('Uploading ZIP file to %s...', self.hostname)
-		with SFTP(self.hostname, self.username, self.password, self.host_key_line) as sftp:
-			self.logger.debug('Connected to %s.', self.hostname)
-			sftp.upload(zip_path)
-			self.logger.info('Finished uploading ZIP file.')
-
-		self.logger.debug('Disconnected.')
-		handler_set(["asm/last_upload={}".format(datetime.isoformat(datetime.now()))])
-		if self.delete_zip_file:
-			os.remove(zip_path)
-			self.logger.debug('Deleted ZIP file.')
-		else:
-			return zip_path
+        self.logger.debug("Disconnected.")
+        handler_set([f"asm/last_upload={datetime.isoformat(datetime.now())}"])
+        if self.delete_zip_file:
+            os.remove(zip_path)
+            self.logger.debug("Deleted ZIP file.")
+            return None
+        return zip_path

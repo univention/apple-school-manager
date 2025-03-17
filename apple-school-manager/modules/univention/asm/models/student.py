@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Copyright 2018-2020 Univention GmbH
 #
@@ -28,26 +27,30 @@
 # <http://www.gnu.org/licenses/>.
 
 """
-Univention Apple School Manager Connector
+Univention Apple School Manager Connector.
 
 Class to represent an ASM student.
 
 See https://support.apple.com/en-us/HT207029
 """
 
-
+import contextlib
 import logging
 
 from ucsschool.lib.models.user import Student
 
-from ..utils import (check_domain, get_default_password_policy,
-                     get_ldap_connection, get_person_id, get_ucr,
-                     prepend_to_mail_domain)
+from univention.asm.utils import (
+    check_domain,
+    get_default_password_policy,
+    get_ldap_connection,
+    get_person_id,
+    get_ucr,
+    prepend_to_mail_domain,
+)
+
 from .base import AnonymizeMixIn, AsmModel
 
-try:
-    from typing import Any, AnyStr, Iterable, Optional
-except ImportError:
+with contextlib.suppress(ImportError):
     pass
 
 
@@ -119,7 +122,7 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
             assert len(additional_location_ids) < 15, "No more than 14 additional locations are allowed."
         else:
             additional_location_ids = []
-        super(AsmStudent, self).__init__(
+        super().__init__(
             person_id,
             first_name,
             last_name,
@@ -147,13 +150,13 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
         if additional_location_ids:
             # add members, so that default as_csv_line() will work
             location_id_attrs = [
-                "location_id_{}".format(num) for num in range(2, 2 + len(additional_location_ids))
+                f"location_id_{num}" for num in range(2, 2 + len(additional_location_ids))
             ]
             for loc_id_attr, loc_id in zip(location_id_attrs, additional_location_ids):
                 setattr(self, loc_id_attr, loc_id)
             # update header
             self.header = list(self.header) + [
-                "location_id_{}".format(num) for num in range(2, 2 + len(additional_location_ids))
+                f"location_id_{num}" for num in range(2, 2 + len(additional_location_ids))
             ]
 
     @classmethod
@@ -175,18 +178,17 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
         student = Student.from_dn(dn, None, lo)
         if student.email and not check_domain(student.email):
             logger = logging.getLogger(__name__)
-            logger.warn("Invalid email domain in %r for DN %r.", student.email, dn)
+            logger.warning("Invalid email domain in %r for DN %r.", student.email, dn)
         email = prepend_to_mail_domain(student.email) if student.email else None
         location_ids = sorted(s for s in student.schools if s != student.school)
         if student.school:
-            location_ids = [student.school] + location_ids
+            location_ids = [student.school, *location_ids]
         if ou_whitelist:
             location_ids = [loc for loc in location_ids if loc in ou_whitelist]
             if not location_ids:
+                msg = f"Non of the users schools is in the whitelist: {student} (schools: {student.schools!r})."
                 raise ValueError(
-                    "Non of the users schools is in the whitelist: {} (schools: {!r}).".format(
-                        student, student.schools
-                    )
+                    msg,
                 )
         additional_attrs = ["middleName", "initials", "oxMiddleName"]
         ucr = get_ucr()
@@ -194,7 +196,7 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
         if grade_level_attribute:
             additional_attrs.append(grade_level_attribute)
         additional_attrs.extend(
-            {v[1:].strip() for v in cls.anonymize_mapping().values() if v and v.startswith("%")}
+            {v[1:].strip() for v in cls.anonymize_mapping().values() if v and v.startswith("%")},
         )
         person_id_attr, student_lo = get_person_id(student.dn, "student", additional_attrs)
         person_id = student_lo[person_id_attr][0]
@@ -219,5 +221,5 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
                 sis_username=student.name,
                 password_policy=None,  # UCS password policy doesn't fit and nothing else is ...
                 additional_location_ids=location_ids[1:],  # ... stored in LDAP regarding password length
-            )
+            ),
         )

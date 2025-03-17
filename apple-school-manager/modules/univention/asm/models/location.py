@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Copyright 2018-2020 Univention GmbH
 #
@@ -28,48 +27,49 @@
 # <http://www.gnu.org/licenses/>.
 
 """
-Univention Apple School Manager Connector
+Univention Apple School Manager Connector.
 
 Class to represent an ASM location.
 
 See https://support.apple.com/en-us/HT207029
 """
 
+import contextlib
 
-from .base import AsmModel
-from ..utils import get_ldap_connection
 from ucsschool.lib.models.school import School
 
-try:
-	from typing import Any, AnyStr
-except ImportError:
-	pass
+from univention.asm.utils import get_ldap_connection
+
+from .base import AsmModel
+
+with contextlib.suppress(ImportError):
+    pass
 
 
 class AsmLocation(AsmModel):
-	"""Class to represent an ASM location entry."""
+    """Class to represent an ASM location entry."""
 
-	header = ('location_id', 'location_name')
+    header = ("location_id", "location_name")
 
-	def __init__(self, location_id, location_name):  # type: (AnyStr, AnyStr) -> None
-		"""
-		:param str location_id: A unique identifier made of numbers and/or
-			letters that contains no spaces (required).
-		:param str location_name: The name of the location (required).
-		"""
-		super(AsmLocation, self).__init__(location_id, location_name)
-		self.location_id = location_id
-		self.location_name = location_name
+    def __init__(self, location_id, location_name):  # type: (AnyStr, AnyStr) -> None
+        """
+        :param str location_id: A unique identifier made of numbers and/or
+                letters that contains no spaces (required).
+        :param str location_name: The name of the location (required).
+        """
+        super().__init__(location_id, location_name)
+        self.location_id = location_id
+        self.location_name = location_name
 
-	@classmethod
-	def from_dn(cls, dn, *args, **kwargs):  # type: (AnyStr, *Any, **Any) -> AsmLocation
-		"""
-		Get AsmLocation object created from data in LDAP object.
+    @classmethod
+    def from_dn(cls, dn, *args, **kwargs):  # type: (AnyStr, *Any, **Any) -> AsmLocation
+        """
+        Get AsmLocation object created from data in LDAP object.
 
-		:param str dn: DN to the School/OU object to represent
-		:return: AsmLocation instance
-		:rtype: AsmLocation
-		"""
-		lo, po = get_ldap_connection()
-		school = School.from_dn(dn, None, lo)
-		return cls(school.name, school.display_name or school.name)
+        :param str dn: DN to the School/OU object to represent
+        :return: AsmLocation instance
+        :rtype: AsmLocation
+        """
+        lo, po = get_ldap_connection()
+        school = School.from_dn(dn, None, lo)
+        return cls(school.name, school.display_name or school.name)

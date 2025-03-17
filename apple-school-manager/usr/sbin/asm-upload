@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-# -*- coding: utf-8 -*-
 #
 # Copyright 2018-2020 Univention GmbH
 #
@@ -28,71 +27,75 @@
 # /usr/share/common-licenses/AGPL-3; if not, see
 # <http://www.gnu.org/licenses/>.
 
-import sys
 import logging
+import sys
 from logging import FileHandler
-from paramiko.ssh_exception import SSHException, NoValidConnectionsError
+
+from paramiko.ssh_exception import NoValidConnectionsError, SSHException
 from univention.asm.asm_upload import ASMUpload
 from univention.asm.utils import get_ucr
 
-
-LOGFILE_PATH = '/var/log/univention/asm.log'
-PASSWORD_FILE_PATH = '/etc/asm.secret'
-UCR_USERNAME_KEY = 'asm/username'
-UCR_OU_WHITELIST_KEY = 'asm/school_whitelist'
-UCR_STORE_ZIP_KEY = 'asm/store_zip'
+LOGFILE_PATH = "/var/log/univention/asm.log"
+PASSWORD_FILE_PATH = "/etc/asm.secret"  # noqa: S105
+UCR_USERNAME_KEY = "asm/username"
+UCR_OU_WHITELIST_KEY = "asm/school_whitelist"
+UCR_STORE_ZIP_KEY = "asm/store_zip"
 
 
 class ASMCredentialError(Exception):
-	pass
+    pass
 
 
 def get_config():
-	ucr = get_ucr()
-	with open(PASSWORD_FILE_PATH, 'r') as passwordFile:
-		password = passwordFile.read().strip("\n")
-	username = ucr[UCR_USERNAME_KEY]
-	whitelist = ucr[UCR_OU_WHITELIST_KEY]
-	delete_zip = not ucr.is_true(UCR_STORE_ZIP_KEY)
-	if whitelist is not None:
-		whitelist = [school.strip(" ") for school in whitelist.split(",") if school]
-	if not username:
-		raise ASMCredentialError("Please set a username in the app settings")
-	if not password:
-		raise ASMCredentialError("Please set a password in the app settings")
-	return username, password, whitelist, delete_zip
+    ucr = get_ucr()
+    with open(PASSWORD_FILE_PATH) as passwordFile:
+        password = passwordFile.read().strip("\n")
+    username = ucr[UCR_USERNAME_KEY]
+    whitelist = ucr[UCR_OU_WHITELIST_KEY]
+    delete_zip = not ucr.is_true(UCR_STORE_ZIP_KEY)
+    if whitelist is not None:
+        whitelist = [school.strip(" ") for school in whitelist.split(",") if school]
+    if not username:
+        msg = "Please set a username in the app settings"
+        raise ASMCredentialError(msg)
+    if not password:
+        msg = "Please set a password in the app settings"
+        raise ASMCredentialError(msg)
+    return username, password, whitelist, delete_zip
 
 
-def setup_logging(level_console=logging.INFO, level_file=logging.DEBUG):
-	handler_console = logging.StreamHandler()
-	handler_console.setLevel(level_console)
-	handler_file = FileHandler(LOGFILE_PATH)
-	handler_file.setLevel(level_file)
-	formatter_file = logging.Formatter('%(asctime)s %(levelname)-5s %(module)s.%(funcName)s:%(lineno)d - %(message)s')
-	handler_file.setFormatter(formatter_file)
-	logger = logging.getLogger('univention.asm')
-	logger.setLevel(logging.DEBUG)
-	logger.addHandler(handler_console)
-	logger.addHandler(handler_file)
+def setup_logging(level_console=logging.INFO, level_file=logging.DEBUG) -> None:
+    handler_console = logging.StreamHandler()
+    handler_console.setLevel(level_console)
+    handler_file = FileHandler(LOGFILE_PATH)
+    handler_file.setLevel(level_file)
+    formatter_file = logging.Formatter(
+        "%(asctime)s %(levelname)-5s %(module)s.%(funcName)s:%(lineno)d - %(message)s",
+    )
+    handler_file.setFormatter(formatter_file)
+    logger = logging.getLogger("univention.asm")
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(handler_console)
+    logger.addHandler(handler_file)
 
 
-def main():
-	logger = logging.getLogger('univention.asm.upload_script')
-	setup_logging()
-	try:
-		config = get_config()
-	except ASMCredentialError as exc:
-		logger.error(exc)
-		sys.exit(1)
-	asmUpload = ASMUpload(*config)
-	try:
-		zip_path = asmUpload.upload()
-	except (SSHException, NoValidConnectionsError) as exc:
-		logger.error("SFTP upload failed: {}".format(exc))
-		sys.exit(1)
-	if not config[3] and zip_path is not None:
-		logger.info("The uploaded zip is stored in: {}".format(zip_path))
+def main() -> None:
+    logger = logging.getLogger("univention.asm.upload_script")
+    setup_logging()
+    try:
+        config = get_config()
+    except ASMCredentialError as exc:
+        logger.exception(exc)
+        sys.exit(1)
+    asmUpload = ASMUpload(*config)
+    try:
+        zip_path = asmUpload.upload()
+    except (SSHException, NoValidConnectionsError) as exc:
+        logger.exception(f"SFTP upload failed: {exc}")
+        sys.exit(1)
+    if not config[3] and zip_path is not None:
+        logger.info(f"The uploaded zip is stored in: {zip_path}")
 
 
-if __name__ == '__main__':
-	main()
+if __name__ == "__main__":
+    main()

@@ -1,93 +1,109 @@
 #!/usr/share/ucs-test/runner python3
-## -*- coding: utf-8 -*-
 ## desc: test roster model/CSV generation
-## tags: [apptest]
-## exposure: dangerous
+## tags: [apptest]  # noqa: ERA001
+## exposure: dangerous  # noqa: ERA001
 ## packages:
 ##   - univention-apple-school-manager-connector
-## bugs: [47622]
+## bugs: [47622]  # noqa: ERA001
 
-from ldap.filter import filter_format
-from univention.config_registry import handler_unset
-import univention.testing.ucr as ucr_test
 import univention.testing.strings as uts
-import univention.testing.utils as utils
+import univention.testing.ucr as ucr_test
+from ldap.filter import filter_format
 from univention.asm.models.roster import AsmRoster
 from univention.asm.utils import get_person_id
+from univention.config_registry import handler_unset
+from univention.testing import utils
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
 
 class Test(ImportTestbase):
-	ou_B = None
-	ou_C = None
+    ou_B = None
+    ou_C = None
 
-	def test(self):
-		school1 = self.ou_A.name
-		school_class1 = '{}-{}'.format(school1, uts.random_username())
+    def test(self) -> None:
+        school1 = self.ou_A.name
+        school_class1 = f"{school1}-{uts.random_username()}"
 
-		self.log.info('*** Creating two students in same school_class and workgroup: %r %r...', school_class1)
-		student1_name, student1_dn = self.schoolenv.create_student(school1, classes=school_class1)
-		student2_name, student2_dn = self.schoolenv.create_student(school1, classes=school_class1)
-		# "users" are created in the reverse order!?!?!?!
-		s1_id_attr, s1_lo = get_person_id(student1_dn, 'student', [])
-		s1_name = s1_lo[s1_id_attr][0]
-		s2_id_attr, s2_lo = get_person_id(student2_dn, 'student', [])
-		s2_name = s2_lo[s2_id_attr][0]
-		work_group1_description = uts.random_name()
-		work_group1_name, work_group1_dn = self.schoolenv.create_workgroup(
-			school1, description=work_group1_description, users=[student2_dn, student1_dn])
-		self.log.info('Created student1: %r (%s, %s)', student1_name, student1_dn, s1_name)
-		self.log.info('Created student2: %r (%s, %s)', student2_name, student2_dn, s2_name)
-		self.log.info(
-			'Created school_class1=%r',
-			self.lo.search(filter_format('(&(objectClass=univentionGroup)(cn=%s))', (school_class1,)), attr=['memberUid'])
-		)
-		self.log.info(
-			'Created work_group1=%r',
-			self.lo.search(filter_format('(&(objectClass=univentionGroup)(cn=%s))', (work_group1_name,)), attr=['memberUid'])
-		)
+        self.log.info(
+            "*** Creating two students in same school_class and workgroup: %r %r...",
+            school_class1,
+        )
+        student1_name, student1_dn = self.schoolenv.create_student(school1, classes=school_class1)
+        student2_name, student2_dn = self.schoolenv.create_student(school1, classes=school_class1)
+        # "users" are created in the reverse order!?!?!?!
+        s1_id_attr, s1_lo = get_person_id(student1_dn, "student", [])
+        s1_name = s1_lo[s1_id_attr][0]
+        s2_id_attr, s2_lo = get_person_id(student2_dn, "student", [])
+        s2_name = s2_lo[s2_id_attr][0]
+        work_group1_description = uts.random_name()
+        work_group1_name, work_group1_dn = self.schoolenv.create_workgroup(
+            school1,
+            description=work_group1_description,
+            users=[student2_dn, student1_dn],
+        )
+        self.log.info("Created student1: %r (%s, %s)", student1_name, student1_dn, s1_name)
+        self.log.info("Created student2: %r (%s, %s)", student2_name, student2_dn, s2_name)
+        self.log.info(
+            "Created school_class1=%r",
+            self.lo.search(
+                filter_format("(&(objectClass=univentionGroup)(cn=%s))", (school_class1,)),
+                attr=["memberUid"],
+            ),
+        )
+        self.log.info(
+            "Created work_group1=%r",
+            self.lo.search(
+                filter_format("(&(objectClass=univentionGroup)(cn=%s))", (work_group1_name,)),
+                attr=["memberUid"],
+            ),
+        )
 
-		filter_s = filter_format('(&(objectClass=univentionGroup)(cn=%s))', (school_class1,))
-		res = self.lo.searchDn(filter=filter_s)
-		if len(res) != 1:
-			self.fail('School class 1 not found: search with filter={!r} did not return 1 result:\n{}'.format(
-				filter_s, res))
-		school_class1_dn = res[0]
-		utils.verify_ldap_object(school_class1_dn, {'memberUid': [student1_name, student2_name]})
+        filter_s = filter_format("(&(objectClass=univentionGroup)(cn=%s))", (school_class1,))
+        res = self.lo.searchDn(filter=filter_s)
+        if len(res) != 1:
+            self.fail(
+                f"School class 1 not found: search with filter={filter_s!r} did not return 1 result:\n{res}",
+            )
+        school_class1_dn = res[0]
+        utils.verify_ldap_object(school_class1_dn, {"memberUid": [student1_name, student2_name]})
 
-		utils.verify_ldap_object(work_group1_dn, {'memberUid': [student1_name, student2_name]})
+        utils.verify_ldap_object(work_group1_dn, {"memberUid": [student1_name, student2_name]})
 
-		roster1 = AsmRoster.from_dn(class_dn=school_class1_dn, student_dn=student1_dn)
-		got_roster1 = roster1.as_csv_line()
-		expected_roster1 = ['{}-{}'.format(school_class1, s1_name), school_class1, s1_name]
-		if got_roster1 == expected_roster1:
-			self.log.info('OK: roster1 CSV line is as expected.')
-		else:
-			self.fail('Expected CSV line for roster1: {!r}, got: {!r}.'.format(expected_roster1, got_roster1))
+        roster1 = AsmRoster.from_dn(class_dn=school_class1_dn, student_dn=student1_dn)
+        got_roster1 = roster1.as_csv_line()
+        expected_roster1 = [f"{school_class1}-{s1_name}", school_class1, s1_name]
+        if got_roster1 == expected_roster1:
+            self.log.info("OK: roster1 CSV line is as expected.")
+        else:
+            self.fail(f"Expected CSV line for roster1: {expected_roster1!r}, got: {got_roster1!r}.")
 
-		roster2 = AsmRoster.from_dn(class_dn=school_class1_dn, student_dn=student2_dn)
-		got_roster2 = roster2.as_csv_line()
-		expected_roster2 = ['{}-{}'.format(school_class1, s2_name), school_class1, s2_name]
-		if got_roster2 == expected_roster2:
-			self.log.info('OK: roster2 CSV line is as expected.')
-		else:
-			self.fail('Expected CSV line for roster2: {!r}, got: {!r}.'.format(expected_roster2, got_roster2))
+        roster2 = AsmRoster.from_dn(class_dn=school_class1_dn, student_dn=student2_dn)
+        got_roster2 = roster2.as_csv_line()
+        expected_roster2 = [f"{school_class1}-{s2_name}", school_class1, s2_name]
+        if got_roster2 == expected_roster2:
+            self.log.info("OK: roster2 CSV line is as expected.")
+        else:
+            self.fail(f"Expected CSV line for roster2: {expected_roster2!r}, got: {got_roster2!r}.")
 
-		workgroup1 = AsmRoster.from_dn(class_dn=work_group1_dn, student_dn=student2_dn)
-		got_workgroup1 = workgroup1.as_csv_line()
-		expected_workgroup1 = ['{}-{}'.format(work_group1_name, s2_name), work_group1_name, s2_name]
-		if got_workgroup1 == expected_workgroup1:
-			self.log.info('OK: workgroup1 CSV line is as expected.')
-		else:
-			self.fail('Expected CSV line for workgroup1: {!r}, got: {!r}.'.format(expected_workgroup1, got_workgroup1))
+        workgroup1 = AsmRoster.from_dn(class_dn=work_group1_dn, student_dn=student2_dn)
+        got_workgroup1 = workgroup1.as_csv_line()
+        expected_workgroup1 = [f"{work_group1_name}-{s2_name}", work_group1_name, s2_name]
+        if got_workgroup1 == expected_workgroup1:
+            self.log.info("OK: workgroup1 CSV line is as expected.")
+        else:
+            self.fail(
+                f"Expected CSV line for workgroup1: {expected_workgroup1!r}, got: {got_workgroup1!r}.",
+            )
 
 
-if __name__ == '__main__':
-	with ucr_test.UCSTestConfigRegistry():
-		handler_unset([
-			"asm/attributes/user/email/prepend_domain",
-			"asm/attributes/classes/class_number_empty",
-			"asm/attributes/staff/anonymize",
-			"asm/attributes/student/anonymize",
-		])
-		Test().run()
+if __name__ == "__main__":
+    with ucr_test.UCSTestConfigRegistry():
+        handler_unset(
+            [
+                "asm/attributes/user/email/prepend_domain",
+                "asm/attributes/classes/class_number_empty",
+                "asm/attributes/staff/anonymize",
+                "asm/attributes/student/anonymize",
+            ],
+        )
+        Test().run()

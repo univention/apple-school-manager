@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Copyright 2018-2020 Univention GmbH
 #
@@ -28,21 +27,21 @@
 # <http://www.gnu.org/licenses/>.
 
 """
-Univention Apple School Manager Connector
+Univention Apple School Manager Connector.
 
 Utility functions.
 """
 
 # don't import __future__.unicode_literals here, DNS lib cannot handle it!
+import contextlib
+
 import DNS
-from univention.config_registry import ConfigRegistry
 from ucsschool.importer.utils.ldap_connection import get_machine_connection, get_readonly_connection
 
-try:
-	from typing import Dict, List, Tuple
-	from ucsschool.importer.utils.ldap_connection import LoType, PoType
-except ImportError:
-	pass
+from univention.config_registry import ConfigRegistry
+
+with contextlib.suppress(ImportError):
+    pass
 
 _external_dns_resolvers = []  # type: List[str]
 _known_domains = {}  # type: Dict[str, bool]
@@ -50,117 +49,122 @@ _ucr = None  # type: ConfigRegistry
 
 
 def get_ldap_connection():  # type: () -> (Tuple[LoType, PoType])
-	if get_ucr()['server/role'] in ('domaincontroller_master', 'domaincontroller_backup'):
-		return get_readonly_connection()
-	else:
-		return get_machine_connection()
+    if get_ucr()["server/role"] in ("domaincontroller_master", "domaincontroller_backup"):
+        return get_readonly_connection()
+    return get_machine_connection()
 
 
 def check_domain(email):  # type: (str) -> bool
-	"""
-	Verify that the second level domain in ``email`` exists.
+    """
+    Verify that the second level domain in ``email`` exists.
 
-	:param str email: an email address
-	:return: whether the second level domain in the email addresses domain exists
-	:rtype: bool
-	:raises ValueError: if the email address has an invalid format
-	"""
-	local_part, domain = split_email(email)
-	domain_to_check = '.'.join(domain.split('.')[-2:])
-	if domain_to_check not in _known_domains:
-		dns_servers = get_static_dns_resolvers()
-		requester = DNS.DnsRequest(server=dns_servers, timeout=5)
-		dns_result = requester.req(name=str(domain_to_check), qtype='A')  # type: DNS.Lib.DnsResult
-		_known_domains[domain_to_check] = bool(dns_result.answers)
-	return _known_domains[domain_to_check]
+    :param str email: an email address
+    :return: whether the second level domain in the email addresses domain exists
+    :rtype: bool
+    :raises ValueError: if the email address has an invalid format
+    """
+    local_part, domain = split_email(email)
+    domain_to_check = ".".join(domain.split(".")[-2:])
+    if domain_to_check not in _known_domains:
+        dns_servers = get_static_dns_resolvers()
+        requester = DNS.DnsRequest(server=dns_servers, timeout=5)
+        dns_result = requester.req(name=str(domain_to_check), qtype="A")  # type: DNS.Lib.DnsResult
+        _known_domains[domain_to_check] = bool(dns_result.answers)
+    return _known_domains[domain_to_check]
 
 
 def get_static_dns_resolvers():  # type: () -> List[str]
-	"""
-	Get external DNS resolvers from UCR
+    """
+    Get external DNS resolvers from UCR.
 
-	:return: list of IP addresses
-	:rtype: list(str)
-	"""
-	if not _external_dns_resolvers:
-		ucr = get_ucr()
-		_external_dns_resolvers.extend([
-			ns for ns in (ucr.get('dns/forwarder1', ''), ucr.get('dns/forwarder2', ''), ucr.get('dns/forwarder3', ''))
-			if ns.strip()
-		])
-	return _external_dns_resolvers
+    :return: list of IP addresses
+    :rtype: list(str)
+    """
+    if not _external_dns_resolvers:
+        ucr = get_ucr()
+        _external_dns_resolvers.extend(
+            [
+                ns
+                for ns in (
+                    ucr.get("dns/forwarder1", ""),
+                    ucr.get("dns/forwarder2", ""),
+                    ucr.get("dns/forwarder3", ""),
+                )
+                if ns.strip()
+            ],
+        )
+    return _external_dns_resolvers
 
 
 def get_ucr():  # type: () -> ConfigRegistry
-	global _ucr
-	if not _ucr:
-		_ucr = update_ucr()
-	return _ucr
+    global _ucr
+    if not _ucr:
+        _ucr = update_ucr()
+    return _ucr
 
 
 def update_ucr():  # type: () -> ConfigRegistry
-	global _ucr
-	if not _ucr:
-		_ucr = ConfigRegistry()
-	_ucr.load()
-	return _ucr
+    global _ucr
+    if not _ucr:
+        _ucr = ConfigRegistry()
+    _ucr.load()
+    return _ucr
 
 
 def prepend_to_mail_domain(email):  # type: (str) -> str
-	"""
-	Prepend subdomain from UCRV
-	``asm/attributes/user/email/prepend_domain`` to domain in email
-	address.
+    """
+    Prepend subdomain from UCRV
+    ``asm/attributes/user/email/prepend_domain`` to domain in email
+    address.
 
-	:param str email: email address
-	:return: if UCRV is set: modified email address, else unchanged email
-	:rtype: str
-	"""
-	if not email:
-		return email
-	ucr = get_ucr()
-	subdomain = ucr.get('asm/attributes/user/email/prepend_domain', '').strip(' .')
-	if subdomain:
-		local_part, domain = split_email(email)
-		return '{}@{}.{}'.format(local_part, subdomain, domain)
-	else:
-		return email
+    :param str email: email address
+    :return: if UCRV is set: modified email address, else unchanged email
+    :rtype: str
+    """
+    if not email:
+        return email
+    ucr = get_ucr()
+    subdomain = ucr.get("asm/attributes/user/email/prepend_domain", "").strip(" .")
+    if subdomain:
+        local_part, domain = split_email(email)
+        return f"{local_part}@{subdomain}.{domain}"
+    return email
 
 
 def split_email(email):  # type: (str) -> Tuple[str, str]
-	local_part, at, domain = email.rpartition('@')
-	if not all((local_part, at, domain)) or '.' not in domain:
-		raise ValueError('Invalid email address: {!r}.'.format(email))
-	return local_part, domain
+    local_part, at, domain = email.rpartition("@")
+    if not all((local_part, at, domain)) or "." not in domain:
+        msg = f"Invalid email address: {email!r}."
+        raise ValueError(msg)
+    return local_part, domain
 
 
 def get_person_id(dn, role, additional_attrs):  # type: (str, str, List[str]) -> Tuple[str, Dict[str, str]]
-	assert role in ('staff', 'student')
-	additional_attrs = additional_attrs or []
-	ucrv = 'asm/attributes/{}/person_id/mapping'.format(role)
-	person_id_attr = get_ucr().get(ucrv, '%entryUUID')
-	person_id_attr = person_id_attr[1:].strip()
-	attrs = list(map(str, [person_id_attr] + additional_attrs))  # unicode2str for python-ldap
-	lo, po = get_ldap_connection()
-	res = lo.get(dn, attrs)
-	res = {k: [v.decode('utf-8')] for k, [v] in res.items()}  # byte2str for python-ldap
-	if not res.get(person_id_attr):
-		raise ValueError('Attribute {!r} from {!r} is not set or empty on {!r}.'.format(person_id_attr, ucrv, dn))
-	return person_id_attr, res
+    assert role in ("staff", "student")
+    additional_attrs = additional_attrs or []
+    ucrv = f"asm/attributes/{role}/person_id/mapping"
+    person_id_attr = get_ucr().get(ucrv, "%entryUUID")
+    person_id_attr = person_id_attr[1:].strip()
+    attrs = list(map(str, [person_id_attr, *additional_attrs]))  # unicode2str for python-ldap
+    lo, po = get_ldap_connection()
+    res = lo.get(dn, attrs)
+    res = {k: [v.decode("utf-8")] for k, [v] in res.items()}  # byte2str for python-ldap
+    if not res.get(person_id_attr):
+        msg = f"Attribute {person_id_attr!r} from {ucrv!r} is not set or empty on {dn!r}."
+        raise ValueError(msg)
+    return person_id_attr, res
 
 
 def get_default_password_policy():
-	ucr = get_ucr()
-	pp_ori = ucr.get('asm/attributes/student/password_policy', 4)
-	try:
-		if pp_ori == '-':
-			pp = ''
-		else:
-			pp = int(pp_ori)
-		if pp not in (4, 6, 8, ''):
-			raise ValueError
-	except ValueError:
-		raise ValueError(
-			"Value of UCR asm/attributes/student/password_policy must be 4, 6, 8 or '-' (found {!r}).".format(pp_ori)
-		)
-	return str(pp)
+    ucr = get_ucr()
+    pp_ori = ucr.get("asm/attributes/student/password_policy", 4)
+    try:
+        pp = "" if pp_ori == "-" else int(pp_ori)
+        if pp not in (4, 6, 8, ""):
+            raise ValueError
+    except ValueError:
+        msg = f"Value of UCR asm/attributes/student/password_policy must be 4, 6, 8 or '-' (found {pp_ori!r})."
+        raise ValueError(
+            msg,
+        )
+    return str(pp)

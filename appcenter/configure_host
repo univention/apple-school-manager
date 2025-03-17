@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-# -*- coding: utf-8 -*-
 #
 # Copyright 2018 Univention GmbH
 #
@@ -31,48 +30,49 @@
 import logging
 import subprocess
 import sys
+
 from univention.config_registry import ConfigRegistry
 
 
 def main():
-	configureASM = ConfigureASM()
-	configureASM.configure()
+    configureASM = ConfigureASM()
+    configureASM.configure()
 
 
 class ConfigureASMError(Exception):
-	pass
+    pass
 
 
-class ConfigureASM(object):
+class ConfigureASM:
+    def __init__(self):
+        self.ucr = ConfigRegistry()
+        self.ucr.load()
+        self.logger = logging.getLogger(__name__)
 
-	def __init__(self):
-		self.ucr = ConfigRegistry()
-		self.ucr.load()
-		self.logger = logging.getLogger(__name__)
+    def configure(self):
+        if self.ucr.is_true("asm/run_on_appsetting_save") and "settings" in sys.argv:
+            self.upload_to_asm()
+        if self.ucr.is_true("asm/sync_daily"):
+            try:
+                self.check_hour()
+            except ConfigureASMError:
+                self.logger.critical("Please use a valid hour for the daily asm sync (0-23).")
 
-	def configure(self):
-		if self.ucr.is_true("asm/run_on_appsetting_save") and "settings" in sys.argv:
-			self.upload_to_asm()
-		if self.ucr.is_true("asm/sync_daily"):
-			try:
-				self.check_hour()
-			except ConfigureASMError:
-				self.logger.critical("Please use a valid hour for the daily asm sync (0-23).")
+    def upload_to_asm(self):
+        self.logger.info("Start ASM upload")
+        try:
+            subprocess.check_call(["/usr/sbin/asm-upload"])
+        except subprocess.CalledProcessError:
+            self.logger.exception("ASM upload failed, see /var/log/univention/asm.log")
+        else:
+            self.logger.info("ASM upload done")
 
-	def upload_to_asm(self):
-		self.logger.info("Start ASM upload")
-		try:
-			subprocess.check_call(["/usr/sbin/asm-upload"])
-		except subprocess.CalledProcessError:
-			self.logger.error("ASM upload failed, see /var/log/univention/asm.log")
-		else:
-			self.logger.info("ASM upload done")
-
-	def check_hour(self):
-		hour = self.ucr["asm/sync_daily/hour"]
-		if hour is None or int(hour) < 0 or int(hour) > 23:
-			raise ConfigureASMError("Invalid hour for cron job")
+    def check_hour(self):
+        hour = self.ucr["asm/sync_daily/hour"]
+        if hour is None or int(hour) < 0 or int(hour) > 23:
+            msg = "Invalid hour for cron job"
+            raise ConfigureASMError(msg)
 
 
 if __name__ == "__main__":
-	main()
+    main()

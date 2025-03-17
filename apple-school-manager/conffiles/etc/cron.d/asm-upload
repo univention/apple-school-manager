@@ -6,18 +6,18 @@ PATH=/usr/sbin:/usr/bin:/sbin:/bin
 
 @!@
 if not configRegistry.is_true("asm/sync_daily"):
-	print("# Automatic sync deactivated")
+    print("# Automatic sync deactivated")
 else:
-	hour = configRegistry.get("asm/sync_daily/hour", "")
-	try:
-		hour = int(hour)
-	except ValueError:
-		hour = None
-	else:
-		if hour < 0 or hour > 23:
-			hour = None
-	if hour is None:
-		print("# Please set a valid hour for the sync")
-	else:
-		print("0 {} * * * root /usr/sbin/asm-upload".format(hour))
+    hour = configRegistry.get("asm/sync_daily/hour", "")
+    try:
+        hour = int(hour)
+    except ValueError:
+        hour = None
+    else:
+        if hour < 0 or hour > 23:
+            hour = None
+    if hour is None:
+        print("# Please set a valid hour for the sync")
+    else:
+        print("0 {} * * * root /usr/sbin/asm-upload".format(hour))
 @!@

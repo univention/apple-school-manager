@@ -1,0 +1,60 @@
+[tool.ruff]
+line-length = 105
+indent-width = 4
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "D203",  # ignore 1 blank line required before class docstring, conflicts with D211
+    "D212",  # multiline docstring should not start at first line!
+    "COM812",  # Trailing comma missing, formatter will deal with it
+
+    "ANN",  # missing type annotation, TODO: add annotations
+    "D100", "D101", "D102", "D103", "D104", "D105", "D106", "D107", # ignore missing docstring, TODO: add docstrings
+    "E501",  # ignore line length if formatter couldn't deal with it, TODO: fix line length manual?
+
+    # TODO: fix or decide if we keep these ignores
+    "S101",    # assert
+    "PTH123",  # builtin-open
+    "D205",    # missing-blank-line-after-summary
+    "G004",    # logging-f-string
+    "SIM115",  # open-file-with-context-handler
+    "ARG003",  # unused-class-method-argument
+    "PTH118",  # os-path-join
+    "N815",    # mixed-case-variable-in-class-scope
+    "PLR0915", # too-many-statements
+    "B904",    # raise-without-from-inside-except
+    "PTH104",  # os-rename
+    "PTH110",  # os-path-exists
+    "PERF401", # manual-list-comprehension
+    "PLR2004", # magic-value-comparison
+    "C901",    # complex-structure
+    "PLR0913", # too-many-arguments
+    "RUF012",  # mutable-class-default
+    "FBT002",  # boolean-default-value-positional-argument
+    "DTZ005",  # call-datetime-now-without-tzinfo
+    "PT018",   # pytest-composite-assertion
+    "PTH112",  # os-path-isdir
+    "PTH119",  # os-path-basename
+    "PTH208",  # os-listdir
+    "D401",    # non-imperative-mood
+    "PLR0912", # too-many-branches
+    "PLW0603", # global-statement
+    "PLW2901", # redefined-loop-name
+    "S106",    # hardcoded-password-func-arg
+    "S311",    # suspicious-non-cryptographic-random-usage
+    "S603",    # subprocess-without-shell-equals-true
+    "S607",    # start-process-with-partial-path
+    "FBT003",  # boolean-positional-value-in-call
+    "PTH102",  # os-mkdir
+    "PTH107",  # os-remove
+    "PTH108",  # os-unlink
+    "N806",    # non-lowercase-variable-in-function
+    "PLE1206", # logging-too-few-args
+    "TRY301",  # raise-within-try
+    "TRY401",  # verbose-log-message
+]
+
+#[tool.mypy]
+#strict = true
+#ignore_missing_imports = true

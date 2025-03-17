@@ -8,6 +8,8 @@ workflow:
 include:
   - project: univention/dist/docker-services
     file: pre-commit.yml
+  - project: univention/internal/ucsschool-ci-utils
+    file: fragments/openstack.yaml
 
 stages:
   - lint
@@ -17,3 +19,22 @@ stages:
 run pre-commit:
   stage: lint
   extends: .pre-commit
+
+integration_tests:
+  extends: .run_openstack_cfg
+  stage: test
+  needs: []
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: manual
+      allow_failure: False
+  variables:
+    TARGET_VERSION: "5.2-1"
+    OPENSTACK_CFG_FILE: ".gitlab-ci/ucsschool-singleserver.cfg"
+  script:
+    - mkdir results
+    - !reference [.run_openstack_cfg, script]
+    - .gitlab-ci/parse_junit.py
+  artifacts:
+    reports:
+      junit: results/**/test-reports/**/*.xml

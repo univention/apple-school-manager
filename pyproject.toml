@@ -9,6 +9,7 @@ ignore = [
     "D203",  # ignore 1 blank line required before class docstring, conflicts with D211
     "D212",  # multiline docstring should not start at first line!
     "COM812",  # Trailing comma missing, formatter will deal with it
+    "T20",  # allow use of print()
 
     "ANN",  # missing type annotation, TODO: add annotations
     "D100", "D101", "D102", "D103", "D104", "D105", "D106", "D107", # ignore missing docstring, TODO: add docstrings

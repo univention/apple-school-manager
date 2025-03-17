@@ -18,12 +18,12 @@ from univention.config_registry import handler_set
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
 
-def set_and_update_ucr(ucr_v):  # type: (str) -> None
+def set_and_update_ucr(ucr_v: str) -> None:
     handler_set([ucr_v])
     update_ucr()
 
 
-def get_person_id_by_dn(dn, role):  # type: (str, str) -> str
+def get_person_id_by_dn(dn: str, role: str) -> str:
     id_attr, t1_lo = get_person_id(dn, role, [])
     return t1_lo[id_attr][0]
 

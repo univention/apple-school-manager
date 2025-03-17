@@ -33,28 +33,26 @@ Utility functions.
 """
 
 # don't import __future__.unicode_literals here, DNS lib cannot handle it!
-import contextlib
 
 import DNS
 from ucsschool.importer.utils.ldap_connection import get_machine_connection, get_readonly_connection
 
+from univention.admin.uldap import access as LoType  # noqa: N812
+from univention.admin.uldap import position as PoType  # noqa: N812
 from univention.config_registry import ConfigRegistry
 
-with contextlib.suppress(ImportError):
-    pass
-
-_external_dns_resolvers = []  # type: List[str]
-_known_domains = {}  # type: Dict[str, bool]
-_ucr = None  # type: ConfigRegistry
+_external_dns_resolvers: list[str] = []
+_known_domains: dict[str, bool] = {}
+_ucr: ConfigRegistry = None
 
 
-def get_ldap_connection():  # type: () -> (Tuple[LoType, PoType])
+def get_ldap_connection() -> tuple[LoType, PoType]:
     if get_ucr()["server/role"] in ("domaincontroller_master", "domaincontroller_backup"):
         return get_readonly_connection()
     return get_machine_connection()
 
 
-def check_domain(email):  # type: (str) -> bool
+def check_domain(email: str) -> bool:
     """
     Verify that the second level domain in ``email`` exists.
 
@@ -68,12 +66,12 @@ def check_domain(email):  # type: (str) -> bool
     if domain_to_check not in _known_domains:
         dns_servers = get_static_dns_resolvers()
         requester = DNS.DnsRequest(server=dns_servers, timeout=5)
-        dns_result = requester.req(name=str(domain_to_check), qtype="A")  # type: DNS.Lib.DnsResult
+        dns_result: DNS.Lib.DnsResult = requester.req(name=str(domain_to_check), qtype="A")
         _known_domains[domain_to_check] = bool(dns_result.answers)
     return _known_domains[domain_to_check]
 
 
-def get_static_dns_resolvers():  # type: () -> List[str]
+def get_static_dns_resolvers() -> list[str]:
     """
     Get external DNS resolvers from UCR.
 
@@ -96,14 +94,14 @@ def get_static_dns_resolvers():  # type: () -> List[str]
     return _external_dns_resolvers
 
 
-def get_ucr():  # type: () -> ConfigRegistry
+def get_ucr() -> ConfigRegistry:
     global _ucr
     if not _ucr:
         _ucr = update_ucr()
     return _ucr
 
 
-def update_ucr():  # type: () -> ConfigRegistry
+def update_ucr() -> ConfigRegistry:
     global _ucr
     if not _ucr:
         _ucr = ConfigRegistry()
@@ -111,7 +109,7 @@ def update_ucr():  # type: () -> ConfigRegistry
     return _ucr
 
 
-def prepend_to_mail_domain(email):  # type: (str) -> str
+def prepend_to_mail_domain(email: str) -> str:
     """
     Prepend subdomain from UCRV
     ``asm/attributes/user/email/prepend_domain`` to domain in email
@@ -131,7 +129,7 @@ def prepend_to_mail_domain(email):  # type: (str) -> str
     return email
 
 
-def split_email(email):  # type: (str) -> Tuple[str, str]
+def split_email(email: str) -> tuple[str, str]:
     local_part, at, domain = email.rpartition("@")
     if not all((local_part, at, domain)) or "." not in domain:
         msg = f"Invalid email address: {email!r}."
@@ -139,7 +137,7 @@ def split_email(email):  # type: (str) -> Tuple[str, str]
     return local_part, domain
 
 
-def get_person_id(dn, role, additional_attrs):  # type: (str, str, List[str]) -> Tuple[str, Dict[str, str]]
+def get_person_id(dn: str, role: str, additional_attrs: list[str]) -> tuple[str, dict[str, str]]:
     assert role in ("staff", "student")
     additional_attrs = additional_attrs or []
     ucrv = f"asm/attributes/{role}/person_id/mapping"

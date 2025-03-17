@@ -34,37 +34,34 @@ Classes the produce ASM ZIP files containing CSV files.
 See https://support.apple.com/en-us/HT207029
 """
 
-import contextlib
 import logging
 import os
 import shutil
 import sys
 import tempfile
 import zipfile
+from collections.abc import Iterable
 
 from univention.admin import uexceptions
 
 from .csv_file import create_csv_files
 
-with contextlib.suppress(ImportError):
-    pass
-
 
 class AsmZipFile:
     """Class to create a ZIP file with ASM CSV files."""
 
-    def __init__(self, file_path, ou_whitelist=None):  # type: (AnyStr, Optional[Iterable[AnyStr]]) -> None
+    def __init__(self, file_path: str, ou_whitelist: Iterable[str] | None = None) -> None:
         """
         :param str file_path: file path to write ZIP to
         :param ou_whitelist: list of schools/OUs that should be considered when looking for LDAP objects. No limit if empty or None.
         :type ou_whitelist: list(str) or None
         """
-        self.file_path = file_path
+        self.file_path: str = file_path
         self.ou_whitelist = ou_whitelist
-        self.csv_files = []
+        self.csv_files: Iterable[str] = []
         self.logger = logging.getLogger(__name__)
 
-    def create_csv_files(self, tmp_dir):  # type: (str) -> Iterable[AnyStr]
+    def create_csv_files(self, tmp_dir: str) -> Iterable[str]:
         """
         Create ASM CSV files.
 
@@ -79,7 +76,7 @@ class AsmZipFile:
         self.logger.debug("Created CSV files: %s.", ", ".join(sorted(self.csv_files)))
         return self.csv_files
 
-    def write_zip(self, file_path=None, delete_csv_files=True):  # type: (Optional[AnyStr], Optional[bool]) -> AnyStr
+    def write_zip(self, file_path: str | None = None, delete_csv_files: bool | None = True) -> str:
         """
         Compress CSV files into a ZIP file. An existing file will be overwritten.
 

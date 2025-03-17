@@ -1,6 +1,7 @@
 [tool.ruff]
 line-length = 105
 indent-width = 4
+target-version = "py311"
 
 [tool.ruff.lint]
 select = ["ALL"]
@@ -55,6 +56,6 @@ ignore = [
     "TRY401",  # verbose-log-message
 ]
 
-#[tool.mypy]
-#strict = true
-#ignore_missing_imports = true
+[tool.mypy]
+strict = false
+ignore_missing_imports = true

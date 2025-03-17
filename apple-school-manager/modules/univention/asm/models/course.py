@@ -34,8 +34,8 @@ Class to represent an ASM course.
 See https://support.apple.com/en-us/HT207029
 """
 
-import contextlib
 import logging
+from typing import Any, Self
 
 from ucsschool.lib.models.base import UnknownModel
 from ucsschool.lib.models.group import SchoolClass, WorkGroup
@@ -44,23 +44,19 @@ from univention.asm.utils import get_ldap_connection, get_ucr
 
 from .base import AsmModel
 
-with contextlib.suppress(ImportError):
-    pass
-
 
 class AsmCourse(AsmModel):
     """Class to represent an ASM course entry."""
 
-    header = ("course_id", "course_number", "course_name", "location_id")
+    header = ["course_id", "course_number", "course_name", "location_id"]
 
     def __init__(
         self,
-        course_id,  # type: AnyStr
-        location_id,  # type: AnyStr
-        course_number=None,  # type: Optional[AnyStr]
-        course_name=None,  # type: Optional[AnyStr]
-    ):
-        # type: (...) -> None
+        course_id: str,
+        location_id: str,
+        course_number: str | None = None,
+        course_name: str | None = None,
+    ) -> None:
         """
         :param str course_id: A unique identifier for the course. This must
                 match the corresponding `course_id` used in the Classes file
@@ -81,7 +77,7 @@ class AsmCourse(AsmModel):
         self.course_name = course_name
 
     @classmethod
-    def from_dn(cls, dn, *args, **kwargs):  # type: (AnyStr, *Any, **Any) -> AsmCourse
+    def from_dn(cls, dn: str, *args: Any, **kwargs: Any) -> Self:
         """
         Get AsmCourse object created from data in LDAP object.
 

@@ -7,6 +7,7 @@
 ## bugs: [48346]  # noqa: ERA001
 
 import logging
+from typing import TypeAlias, cast
 
 import univention.testing.strings as uts
 import univention.testing.ucr as ucr_test
@@ -19,7 +20,7 @@ from univention.config_registry import handler_set
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
 
-def set_and_update_ucr(ucr_v):  # type: (str) -> None
+def set_and_update_ucr(ucr_v: str) -> None:
     handler_set([ucr_v])
     update_ucr()
 
@@ -71,10 +72,10 @@ class Test(ImportTestbase):
             asm_logger.addHandler(handler)
 
         #  For staff, students and roster
-        for klass, user1, user2, filter_type in [
+        for klass, user1, user2, filter_type in (
             (AsmStaffCsvFile, teacher1_name, teacher2_name, "staff"),
             (AsmStudentsCsvFile, student1_name, student2_name, "students"),
-        ]:
+        ):
             get_filtered_staff.cache_clear()
             self.log.info(
                 "===> klass=%r user1=%r user2=%r filter_type=%r",
@@ -83,7 +84,7 @@ class Test(ImportTestbase):
                 user2,
                 filter_type,
             )
-            csv_class = klass("")
+            csv_class = cast("TypeAlias[klass]", klass(""))
             ucr_v = f"asm/ldap_filter/{filter_type}=NONSENSE"
             set_and_update_ucr(ucr_v)
             #  invalid filter raised exception

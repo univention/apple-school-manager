@@ -32,24 +32,22 @@ Univention Apple School Manager Connector.
 Base class for all ASM models.
 """
 
-import contextlib
 import inspect
+from collections.abc import Iterable
+from typing import Any, Self
 
 from univention.asm.utils import get_ucr
-
-with contextlib.suppress(ImportError):
-    pass
 
 
 class AsmModel:
     """Base class for all ASM models."""
 
-    header = ()  # type: Iterable[AnyStr]
+    header: list[str] = []
 
-    def __init__(self, *args, **kwargs):  # type: (*Any, **Any) -> None
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         pass
 
-    def __repr__(self):  # type: () -> AnyStr
+    def __repr__(self) -> str:
         if not self.header:
             members = [
                 m
@@ -57,13 +55,13 @@ class AsmModel:
                 if not m[0].startswith("_") and m[0] != "header"
             ]
         else:
-            members = list(zip(self.header, [getattr(self, m) for m in self.header]))
+            members = list(zip(self.header, [getattr(self, m) for m in self.header], strict=False))
         return "{}({})".format(
             self.__class__.__name__,
             ", ".join(f"{k}={v!r}" for k, v in members),
         )
 
-    def get_header(self):  # type: () -> Iterable[AnyStr]
+    def get_header(self) -> Iterable[str]:
         """
         Get the header for a CSV representation of the object.
 
@@ -73,7 +71,7 @@ class AsmModel:
         return self.header
 
     @classmethod
-    def from_dn(cls, dn, *args, **kwargs):  # type: (AnyStr, *Any, **Any) -> AsmModel
+    def from_dn(cls, dn: str, *args: Any, **kwargs: Any) -> Self:
         """
         Get AsmModel object created from data in LDAP object.
 
@@ -83,7 +81,7 @@ class AsmModel:
         """
         raise NotImplementedError
 
-    def as_csv_line(self):  # type: () -> Iterable[AnyStr]
+    def as_csv_line(self) -> Iterable[str]:
         """
         Get this object represented as a list of strings.
 
@@ -101,7 +99,7 @@ class AsmModel:
                 msg,
             )
 
-    def as_dict(self):  # type: () -> Dict[AnyStr, AnyStr]
+    def as_dict(self) -> dict[str, str]:
         """
         Get this object represented as a dict of strings.
 
@@ -124,8 +122,7 @@ class AnonymizeMixIn:
     ucr_anonymize_key_base = ""
 
     @classmethod
-    def anonymize(cls, user, ldap_attrs, **kwargs):
-        # type: (User, Dict[AnyStr, Any], **Any) -> Dict[AnyStr, AnyStr]
+    def anonymize(cls, user: AsmModel, ldap_attrs: dict[str, Any], **kwargs: Any) -> dict[str, str]:
         """
         Change values of function arguments to anonymize/pseudonymize user if
         UCRV asm/attributes/<staff/student>/anonymize is true. Will return
@@ -154,7 +151,7 @@ class AnonymizeMixIn:
         return kwargs
 
     @classmethod
-    def anonymize_mapping(cls):  # type: () -> Dict[AnyStr, Union[AnyStr, None]]
+    def anonymize_mapping(cls) -> dict[str, str | None]:
         if not cls.ucr_anonymize_key_base:
             msg = 'Class attribute "ucr_anonymize_key_base" must be set.'
             raise NotImplementedError(msg)

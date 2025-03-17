@@ -53,6 +53,8 @@ class SFTP:
 
     def _set_host_key(self, host_key_line) -> None:
         hostKeyEntry = paramiko.hostkeys.HostKeyEntry.from_line(host_key_line)
+        if hostKeyEntry is None:
+            return
         host_keys = self.client.get_host_keys()
         for hostname in hostKeyEntry.hostnames:
             host_keys.add(hostname, hostKeyEntry.key.get_name(), hostKeyEntry.key)

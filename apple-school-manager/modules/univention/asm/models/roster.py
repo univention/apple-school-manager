@@ -34,7 +34,7 @@ Class to represent an ASM roster.
 See https://support.apple.com/en-us/HT207029
 """
 
-import contextlib
+from typing import Any, Self
 
 from ucsschool.lib.models.base import UnknownModel
 from ucsschool.lib.models.group import SchoolClass, WorkGroup
@@ -44,22 +44,18 @@ from univention.asm.utils import get_ldap_connection, get_person_id
 
 from .base import AsmModel
 
-with contextlib.suppress(ImportError):
-    pass
-
 
 class AsmRoster(AsmModel):
     """Class to represent an ASM roster entry."""
 
-    header = ("roster_id", "class_id", "student_id")
+    header = ["roster_id", "class_id", "student_id"]
 
     def __init__(
         self,
-        roster_id,  # type: AnyStr
-        class_id,  # type: AnyStr
-        student_id,  # type: AnyStr
-    ):
-        # type: (...) -> None
+        roster_id: str,
+        class_id: str,
+        student_id: str,
+    ) -> None:
         """
         :param str roster_id: A unique identifier for the roster in your SIS
                 or other course database (if available) (required).
@@ -73,20 +69,20 @@ class AsmRoster(AsmModel):
         self.student_id = student_id
 
     @classmethod
-    def from_dn(cls, class_dn, student_dn, *args, **kwargs):  # type: (AnyStr, AnyStr, *Any, **Any) -> AsmRoster
+    def from_dn(cls, dn: str, student_dn: str, *args: Any, **kwargs: Any) -> Self:
         """
         Get AsmRoster object created from data in LDAP object.
 
-        :param str class_dn: DN to the SchoolClass/Workgroup object to represent
+        :param str dn: DN to the SchoolClass/Workgroup object to represent
         :param str student_dn: DN to the student object to represent
         :return: AsmRoster instance
         :rtype: AsmRoster
         """
         lo, po = get_ldap_connection()
         try:
-            school_class = SchoolClass.from_dn(class_dn, None, lo)
+            school_class = SchoolClass.from_dn(dn, None, lo)
         except UnknownModel:
-            school_class = WorkGroup.from_dn(class_dn, None, lo)
+            school_class = WorkGroup.from_dn(dn, None, lo)
         student = Student.from_dn(student_dn, None, lo)
         person_id_attr, student_lo = get_person_id(student.dn, "student", [])
         person_id = student_lo[person_id_attr][0]

@@ -34,8 +34,9 @@ Class to represent an ASM student.
 See https://support.apple.com/en-us/HT207029
 """
 
-import contextlib
 import logging
+from collections.abc import Collection, Iterable
+from typing import Any, Self
 
 from ucsschool.lib.models.user import Student
 
@@ -50,14 +51,11 @@ from univention.asm.utils import (
 
 from .base import AnonymizeMixIn, AsmModel
 
-with contextlib.suppress(ImportError):
-    pass
-
 
 class AsmStudent(AsmModel, AnonymizeMixIn):
     """Class to represent an ASM student entry."""
 
-    header = (
+    header = [
         "person_id",
         "person_number",
         "first_name",
@@ -68,24 +66,23 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
         "sis_username",
         "password_policy",
         "location_id",
-    )
+    ]
     ucr_anonymize_key_base = "asm/attributes/student/anonymize"
 
     def __init__(
         self,
-        person_id,  # type: AnyStr
-        first_name,  # type: AnyStr
-        last_name,  # type: AnyStr
-        location_id,  # type: AnyStr
-        person_number=None,  # type: Optional[AnyStr]
-        middle_name=None,  # type: Optional[AnyStr]
-        grade_level=None,  # type: Optional[AnyStr]
-        email_address=None,  # type: Optional[AnyStr]
-        sis_username=None,  # type: Optional[AnyStr]
-        password_policy=None,  # type: Optional[AnyStr]
-        additional_location_ids=None,  # type: Optional[Iterable[AnyStr]]
-    ):
-        # type: (...) -> None
+        person_id: str,
+        first_name: str,
+        last_name: str,
+        location_id: str,
+        person_number: str | None = None,
+        middle_name: str | None = None,
+        grade_level: str | None = None,
+        email_address: str | None = None,
+        sis_username: str | None = None,
+        password_policy: str | None = None,
+        additional_location_ids: Collection[str] | None = None,
+    ) -> None:
         """
         :param str person_id: The unique identifier for a specific student.
                 This `person_id` should match the unique identifier in your SIS if
@@ -152,16 +149,17 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
             location_id_attrs = [
                 f"location_id_{num}" for num in range(2, 2 + len(additional_location_ids))
             ]
-            for loc_id_attr, loc_id in zip(location_id_attrs, additional_location_ids):
+            for loc_id_attr, loc_id in zip(location_id_attrs, additional_location_ids, strict=False):
                 setattr(self, loc_id_attr, loc_id)
             # update header
-            self.header = list(self.header) + [
+            self.header = self.header + [
                 f"location_id_{num}" for num in range(2, 2 + len(additional_location_ids))
             ]
 
     @classmethod
-    def from_dn(cls, dn, ou_whitelist=None, *args, **kwargs):
-        # type: (str, Optional[Iterable[AnyStr]], *Any, **Any) -> AsmStudent
+    def from_dn(
+        cls, dn: str, ou_whitelist: Iterable[str] | None = None, *args: Any, **kwargs: Any
+    ) -> Self:
         """
         Get AsmStudent object created from data in LDAP object.
 

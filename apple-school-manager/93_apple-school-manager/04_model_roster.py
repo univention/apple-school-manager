@@ -69,7 +69,7 @@ class Test(ImportTestbase):
 
         utils.verify_ldap_object(work_group1_dn, {"memberUid": [student1_name, student2_name]})
 
-        roster1 = AsmRoster.from_dn(class_dn=school_class1_dn, student_dn=student1_dn)
+        roster1 = AsmRoster.from_dn(dn=school_class1_dn, student_dn=student1_dn)
         got_roster1 = roster1.as_csv_line()
         expected_roster1 = [f"{school_class1}-{s1_name}", school_class1, s1_name]
         if got_roster1 == expected_roster1:
@@ -77,7 +77,7 @@ class Test(ImportTestbase):
         else:
             self.fail(f"Expected CSV line for roster1: {expected_roster1!r}, got: {got_roster1!r}.")
 
-        roster2 = AsmRoster.from_dn(class_dn=school_class1_dn, student_dn=student2_dn)
+        roster2 = AsmRoster.from_dn(dn=school_class1_dn, student_dn=student2_dn)
         got_roster2 = roster2.as_csv_line()
         expected_roster2 = [f"{school_class1}-{s2_name}", school_class1, s2_name]
         if got_roster2 == expected_roster2:
@@ -85,7 +85,7 @@ class Test(ImportTestbase):
         else:
             self.fail(f"Expected CSV line for roster2: {expected_roster2!r}, got: {got_roster2!r}.")
 
-        workgroup1 = AsmRoster.from_dn(class_dn=work_group1_dn, student_dn=student2_dn)
+        workgroup1 = AsmRoster.from_dn(dn=work_group1_dn, student_dn=student2_dn)
         got_workgroup1 = workgroup1.as_csv_line()
         expected_workgroup1 = [f"{work_group1_name}-{s2_name}", work_group1_name, s2_name]
         if got_workgroup1 == expected_workgroup1:

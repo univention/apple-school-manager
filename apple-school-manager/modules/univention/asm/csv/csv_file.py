@@ -36,19 +36,21 @@ See https://support.apple.com/en-us/HT207029
 Data in CSV files is always sorted by 1) school and 2) user/class name.
 """
 
-import contextlib
 import json
 import logging
 import os
+from collections.abc import Iterable, Iterator
 from operator import attrgetter
+from typing import Any, cast
 
 from ucsschool.importer.writer.csv_writer import CsvWriter
 from ucsschool.importer.writer.result_exporter import ResultExporter
 from ucsschool.lib.models.group import SchoolClass, WorkGroup
 from ucsschool.lib.models.school import School
-from ucsschool.lib.models.user import Student
+from ucsschool.lib.models.user import Student, Teacher
 
 from univention.admin import uexceptions
+from univention.asm.models.base import AsmModel
 from univention.asm.models.classes import AsmClass
 from univention.asm.models.course import AsmCourse
 from univention.asm.models.location import AsmLocation
@@ -56,10 +58,6 @@ from univention.asm.models.roster import AsmRoster
 from univention.asm.models.staff import AsmStaff, get_filtered_staff
 from univention.asm.models.student import AsmStudent
 from univention.asm.utils import get_ldap_connection, get_ucr
-
-with contextlib.suppress(ImportError):
-    pass
-
 
 __all__ = (
     "AsmClassCsvFile",
@@ -75,11 +73,11 @@ __all__ = (
 class _AsmCsvWriter(ResultExporter):
     """CSV file writer."""
 
-    def __init__(self, header, *arg, **kwargs):  # type: (Iterable[AnyStr], *Any, **Any) -> None
+    def __init__(self, header: Iterable[str], *arg: Any, **kwargs: Any) -> None:
         self.header = header
         super().__init__(*arg, **kwargs)
 
-    def get_header(self):  # type: () -> Iterable[AnyStr]
+    def get_header(self) -> Iterable[str]:
         """
         Data for an optional header (line) before the main data.
 
@@ -87,7 +85,7 @@ class _AsmCsvWriter(ResultExporter):
         """
         return self.header
 
-    def get_iter(self, objs):  # type: (Iterable[AsmModel]) -> Iterable[AsmModel]
+    def get_iter(self, objs: Iterable[AsmModel]) -> Iterable[AsmModel]:
         """
         Iterator over relevant objects.
 
@@ -97,7 +95,7 @@ class _AsmCsvWriter(ResultExporter):
         """
         return objs
 
-    def get_writer(self):  # type: () -> CsvWriter
+    def get_writer(self) -> CsvWriter:
         """
         Object that will write the data to disk in the desired format.
 
@@ -106,7 +104,7 @@ class _AsmCsvWriter(ResultExporter):
         """
         return CsvWriter(field_names=self.get_header())
 
-    def serialize(self, obj):  # type: (AsmModel) -> Iterator[str]
+    def serialize(self, obj: AsmModel) -> dict[str, str]:
         """
         Make a dict of attr_name->strings from an object delivered by the
         iterator from get_iter().
@@ -121,12 +119,12 @@ class _AsmCsvWriter(ResultExporter):
 class AsmCsvFile:
     """Base class for all ASM CSV file generator classes."""
 
-    header = ()
-    asm_model_class = None
-    ucs_classes = []
+    header: list[str] = []
+    asm_model_class: type[AsmModel] | None = None
+    ucs_classes: list[SchoolClass | WorkGroup] = []
     lo = None
 
-    def __init__(self, file_path, ou_whitelist=None):  # type: (AnyStr, Optional[Iterable[AnyStr]]) -> None
+    def __init__(self, file_path: str, ou_whitelist: Iterable[str] | None = None) -> None:
         """
         :param str file_path: file path to write CSV to
         :param ou_whitelist: list of schools/OUs that should be considered
@@ -135,14 +133,14 @@ class AsmCsvFile:
         """
         self.file_path = file_path
         self.ou_whitelist = ou_whitelist
-        self.obj = []
+        self.obj: list[AsmModel] = []
         self.logger = logging.getLogger(__name__)
         self.ucr = get_ucr()
         if not self.lo:
             self.__class__.lo, po = get_ldap_connection()
         self.limbo_ou = self._get_limbo_ou()
 
-    def find_and_create_objects(self):  # type: () -> Iterator[AsmModel]
+    def find_and_create_objects(self) -> Iterator[AsmModel]:
         """
         Find LDAP objects and return created AsmModel objects.
 
@@ -162,7 +160,7 @@ class AsmCsvFile:
             for ucs_obj in ucs_objs:
                 yield self.asm_model_class.from_dn(ucs_obj.dn)
 
-    def get_schools(self):  # type: () -> Iterable[School]
+    def get_schools(self) -> Iterable[School]:
         """
         Get School objects, filtered by `self.ou_whitelist`.
 
@@ -174,7 +172,7 @@ class AsmCsvFile:
             schools = [s for s in schools if s.name in self.ou_whitelist]
         return sorted(schools, key=attrgetter("name"))
 
-    def write_csv(self, objs=None):  # type: (Optional[Iterable[AsmModel]]) -> None
+    def write_csv(self, objs: Iterable[AsmModel] | None = None) -> None:
         """
         Write CSV to `self.file_path`.
 
@@ -192,7 +190,7 @@ class AsmCsvFile:
         self.logger.info("Writing %d objects to %s...", len(res), os.path.basename(self.file_path))
         orcw.dump(res, self.file_path)
 
-    def _get_limbo_ou(self):  # type: () -> AnyStr
+    def _get_limbo_ou(self) -> str:
         """
         Get the "limbo_ou", in case we have a "Single source database, partial
         import user import" scenario.
@@ -223,10 +221,10 @@ class AsmCsvFile:
                     pass
         return ""
 
-    def get_staff(self, school):  # type: (School) -> Iterable[Teacher]
+    def get_staff(self, school: School) -> Iterable[Teacher]:
         return get_filtered_staff(self.lo, self.logger, school.name)
 
-    def get_students(self, school):  # type: (School) -> Iterable[Student]
+    def get_students(self, school: School) -> Iterable[Student]:
         global_ldap_filter_str = self.ucr.get("asm/ldap_filter/students", "")
         specific_ldap_filter = self.ucr.get(
             f"asm/ldap_filter/students/{school.name}",
@@ -253,6 +251,15 @@ class AsmClassCsvFile(AsmCsvFile):
     asm_model_class = AsmClass
     ucs_classes = [SchoolClass, WorkGroup]
 
+    def find_and_create_objects(self) -> Iterator[AsmClass]:
+        """
+        Find LDAP objects and return created AsmModel objects.
+
+        :return list of AsmModel objects
+        :rtype: list(AsmClass)
+        """
+        return cast("Iterator[AsmClass]", super().find_and_create_objects())
+
 
 class AsmCoursesCsvFile(AsmCsvFile):
     """CSV file generator for the `courses` file."""
@@ -261,13 +268,22 @@ class AsmCoursesCsvFile(AsmCsvFile):
     asm_model_class = AsmCourse
     ucs_classes = [SchoolClass, WorkGroup]
 
+    def find_and_create_objects(self) -> Iterator[AsmCourse]:
+        """
+        Find LDAP objects and return created AsmModel objects.
+
+        :return list of AsmModel objects
+        :rtype: list(AsmCourse)
+        """
+        return cast("Iterator[AsmCourse]", super().find_and_create_objects())
+
 
 class AsmLocationsCsvFile(AsmCsvFile):
     """CSV file generator for the `locations` file."""
 
     header = AsmLocation.header
 
-    def find_and_create_objects(self):  # type: () -> Iterator[AsmLocation]
+    def find_and_create_objects(self) -> Iterator[AsmLocation]:
         """
         Find LDAP objects and return created AsmModel objects.
 
@@ -284,7 +300,7 @@ class AsmRostersCsvFile(AsmCsvFile):
 
     header = AsmRoster.header
 
-    def find_and_create_objects(self):  # type: () -> Iterator[AsmRoster]
+    def find_and_create_objects(self) -> Iterator[AsmRoster]:
         """
         Find LDAP objects and return created AsmModel objects.
 
@@ -307,21 +323,21 @@ class AsmStaffCsvFile(AsmCsvFile):
 
     header = AsmStaff.header
 
-    def find_and_create_objects(self):  # type: () -> Iterator[AsmStaff]
+    def find_and_create_objects(self) -> Iterator[AsmStaff]:
         """
         Find LDAP objects and return created AsmModel objects.
 
         :return list of AsmModel objects
         :rtype: list(AsmStaff)
         """
-        dns = set()
+        staff_members = set()
         for school in self.get_schools():
             for teacher in self.get_staff(school):
                 t_schools = [teacher.school, *sorted(s for s in teacher.schools if s != teacher.school)]
                 if self.ou_whitelist:
                     t_schools = [s for s in t_schools if s in self.ou_whitelist]
-                dns.add((t_schools[0], teacher.name, teacher.dn))
-        dns = [dn for school, name, dn in sorted(dns)]  # sorted by 1. school, 2. username
+                staff_members.add((t_schools[0], teacher.name, teacher.dn))
+        dns = [dn for school, name, dn in sorted(staff_members)]  # sorted by 1. school, 2. username
         for dn in dns:
             yield AsmStaff.from_dn(dn, ou_whitelist=self.ou_whitelist)
 
@@ -331,21 +347,21 @@ class AsmStudentsCsvFile(AsmCsvFile):
 
     header = AsmStudent.header
 
-    def find_and_create_objects(self):  # type: () -> Iterator[AsmStudent]
+    def find_and_create_objects(self) -> Iterator[AsmStudent]:
         """
         Find LDAP objects and return created AsmModel objects.
 
         :return list of AsmModel objects
         :rtype: list(AsmStudent)
         """
-        dns = set()
+        students = set()
         for school in self.get_schools():
             for student in self.get_students(school):
                 s_schools = [student.school, *sorted(s for s in student.schools if s != student.school)]
                 if self.ou_whitelist:
                     s_schools = [s for s in s_schools if s in self.ou_whitelist]
-                dns.add((s_schools[0], student.name, student.dn))
-        dns = [dn for school, name, dn in sorted(dns)]  # sorted by 1. school, 2. username
+                students.add((s_schools[0], student.name, student.dn))
+        dns = [dn for school, name, dn in sorted(students)]  # sorted by 1. school, 2. username
         for dn in dns:
             yield AsmStudent.from_dn(dn, ou_whitelist=self.ou_whitelist)
 
@@ -360,8 +376,7 @@ csv_file_generators = {
 }
 
 
-def create_csv_files(target_directory, ou_whitelist=None):
-    # type: (AnyStr, Optional[Iterable[AnyStr]]) -> Iterable[AnyStr]
+def create_csv_files(target_directory: str, ou_whitelist: Iterable[str] | None = None) -> Iterable[str]:
     """
     Create CSV files in `target_directory`. Directory must either not exist or
     be empty.

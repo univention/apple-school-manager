@@ -34,8 +34,9 @@ Class to represent an ASM class.
 See https://support.apple.com/en-us/HT207029
 """
 
-import contextlib
 import logging
+from collections.abc import Collection
+from typing import Any, Self
 
 from ucsschool.lib.models.base import UnknownModel
 from ucsschool.lib.models.group import SchoolClass, WorkGroup
@@ -45,14 +46,11 @@ from univention.asm.utils import get_ldap_connection, get_person_id, get_ucr
 from .base import AsmModel
 from .staff import get_filtered_staff
 
-with contextlib.suppress(ImportError):
-    pass
-
 
 class AsmClass(AsmModel):
     """Class to represent an ASM class entry."""
 
-    header = (
+    header = [
         "class_id",
         "class_number",
         "course_id",
@@ -60,21 +58,20 @@ class AsmClass(AsmModel):
         "instructor_id_2",
         "instructor_id_3",
         "location_id",
-    )
+    ]
     _class_number_empty = None
 
     def __init__(
         self,
-        class_id,  # type: AnyStr
-        course_id,  # type: AnyStr
-        location_id,  # type: AnyStr
-        class_number=None,  # type: Optional[AnyStr]
-        instructor_id=None,  # type: Optional[AnyStr]
-        instructor_id_2=None,  # type: Optional[AnyStr]
-        instructor_id_3=None,  # type: Optional[AnyStr]
-        additional_instructor_ids=None,  # type: Optional[Iterable[AnyStr]]
-    ):
-        # type: (...) -> None
+        class_id: str,
+        course_id: str,
+        location_id: str,
+        class_number: str | None = None,
+        instructor_id: str | None = None,
+        instructor_id_2: str | None = None,
+        instructor_id_3: str | None = None,
+        additional_instructor_ids: Collection[str] | None = None,
+    ) -> None:
         """
         :param str class_id: A unique identifier for the class (required).
         :param str course_id: The `course_id` of the course this class belongs
@@ -125,15 +122,17 @@ class AsmClass(AsmModel):
             instructor_id_attrs = [
                 f"instructor_id_{num}" for num in range(4, 4 + len(additional_instructor_ids))
             ]
-            for instr_id_attr, instr_id in zip(instructor_id_attrs, additional_instructor_ids):
+            for instr_id_attr, instr_id in zip(
+                instructor_id_attrs, additional_instructor_ids, strict=False
+            ):
                 setattr(self, instr_id_attr, instr_id)
             # update header
-            self.header = list(self.header) + [
+            self.header = self.header + [
                 f"instructor_id_{num}" for num in range(4, 4 + len(additional_instructor_ids))
             ]
 
     @classmethod
-    def from_dn(cls, dn, *args, **kwargs):  # type: (AnyStr, *Any, **Any) -> AsmClass
+    def from_dn(cls, dn: str, *args: Any, **kwargs: Any) -> Self:
         """
         Get AsmClass object created from data in LDAP object.
 

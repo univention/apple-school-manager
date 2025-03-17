@@ -1,0 +1,19 @@
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "web"
+    - if: $CI_PIPELINE_SOURCE == "webide"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_OPEN_MERGE_REQUESTS
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_PROTECTED == "true"
+
+include:
+  - project: univention/dist/docker-services
+    file: pre-commit.yml
+
+stages:
+  - lint
+  - build
+  - test
+
+run pre-commit:
+  stage: lint
+  extends: .pre-commit

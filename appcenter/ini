@@ -1,0 +1,73 @@
+[Application]
+ID = apple-school-manager
+Code = 1T
+Version = <VERSION>
+Name = Apple School Manager Connector
+Vendor = Univention GmbH
+Website = https://www.univention.com/
+Maintainer = Univention
+Description = Apple School Manager Connector
+WebsiteMaintainer = https://www.univention.com/
+SupportUrl = https://www.univention.com/products/support/community-support/
+SupportedArchitectures = amd64
+RequiredApps = ucsschool
+ServerRole = domaincontroller_master, domaincontroller_backup, domaincontroller_slave
+WebsiteVendor = https://www.univention.com/
+LongDescription = <p>
+	With the app Apple School Manager Connector for UCS@school, you automatically provision users to <a href="https://school.apple.com/">Apple School Manager (ASM)</a>. The UCS@school Identity Management (IDM) assumes the role of a student information system (SIS) and uses the SFTP interface provided by Apple. The Connector requires an Apple School Manager account for an educational institution.
+	</p>
+	<h3>
+	Synchronization of all user data from IDM to ASM
+	</h3>
+	<p>
+	In its standard configuration, the Connector synchronizes all user accounts of the activated schools to the ASM every night. Schools, classes, work groups and users (teachers and students) are synchronized.
+	</p>
+	<p>
+	If users are deleted in the IDM of UCS, they are immediately deactivated in the Apple School Manager and then deleted after 30 days.
+	</p>
+	<h3>
+	Apple IDs, Passwords and Device Management
+	</h3>
+	<p>
+	The Apple IDs are generated automatically and consist of username@mail.domain by default. The Apple ID passwords are managed autonomously in the Apple School Manager.
+	</p>
+	<p>
+	For device management, Univention recommends Mobile Device Management (MDM). Every MDM can be used as long as it has an API to the ASM. Univention recommends using an MDM solution from the <a href="https://www.univention.com/products/univention-app-center/app-catalog/>Univention App Center</a>, as these are subject to constant maintenance by the manufacturers and are integrated into UCS@school and its Identity Management.
+	</p>
+Categories = Education, Administration
+Logo = logo.svg
+LogoDetailPage = logo_detail_page.svg
+License = free
+Contact = feedback@univention.de
+DefaultPackages = univention-apple-school-manager-connector
+NotifyVendor = True
+NotificationEmail = appcenter-reporting@univention.de
+Thumbnails = thumbnail_2.png, thumbnail_1.png, thumbnail_3.png
+AppCategories = Device Management, Education
+SupportedUcsVersions =
+SupportType = univention
+
+[de]
+LongDescription = <p>
+	Mit der App Apple School Manager Connector für UCS@school provisionieren Sie automatisiert Benutzer zu <a href="https://school.apple.com/">Apple School Manager (ASM)</a>. Dabei nimmt das UCS@school Identity Management (IDM) die Rolle eines Studierendeninformationssystems (SIS) an und nutzt die von Apple zur Verfügung gestellte SFTP-Schnittstelle. Voraussetzung für den Connector ist ein Konto für eine Bildungseinrichtung in dem Apple School Manager.
+	</p>
+	<h3>
+	Synchronisation der kompletten Benutzerdaten vom IDM zu ASM
+	</h3>
+	<p>
+	Der Connector synchronisiert in seiner Standardkonfiguration jede Nacht alle Nutzerkonten der aktivierten Schulen zum ASM. Dabei werden Schulen, Klassen, Arbeitsgruppen und Benutzer (Lehrkräfte und SchülerInnen) synchronisiert.
+	</p>
+	<p>
+	Sind Benutzer im IDM von UCS gelöscht, werden diese im Apple School Manager zunächst deaktiviert und nach 30 Tagen ebenfalls gelöscht.
+	</p>
+	<h3>
+	Apple-IDs, Passwörter und Gerätemanagment
+	</h3>
+	<p>
+	Die Apple-IDs werden automatisch generiert und bestehen standardmäßig aus benutzername@mail.domain. Die Passwörter der Apple-ID werden selbstständig im Apple School Manager verwaltet.
+	</p>
+	<p>
+	Für das Gerätemanagement empfiehlt Univention ein Mobile Device Management (MDM). Grundsätzlich kann jedes MDM verwendet werden, das über eine Schnittstelle zum ASM verfügt. Univention empfiehlt eine MDM-Lösung aus dem <a href="https://www.univention.de/produkte/univention-app-center/app-katalog/">Univention App Center</a> zu nutzen, da diese einer stetigen Pflege durch die Hersteller unterstehen und in UCS@school und in seinem Identity Management integriert sind.
+	</p>
+WebInterfaceName = https://school.apple.com/
+

@@ -43,7 +43,13 @@ from .network.sftp_upload import SFTP
 
 
 class ASMUpload:
-    def __init__(self, username, password, ou_whitelist=None, delete_zip_file=True) -> None:
+    def __init__(
+        self,
+        username: str,
+        password: str,
+        ou_whitelist: list[str] | None = None,
+        delete_zip_file: bool = True,  # noqa: FBT001
+    ) -> None:
         with open("/etc/asm_public_key") as asm_public_key_file:
             self.host_key_line = asm_public_key_file.read()
         self.hostname = "upload.appleschoolcontent.com"
@@ -53,7 +59,7 @@ class ASMUpload:
         self.delete_zip_file = delete_zip_file
         self.logger = logging.getLogger(__name__)
 
-    def upload(self, folder_path="/var/lib/asm"):
+    def upload(self, folder_path: str = "/var/lib/asm") -> str | None:
         file_path = os.path.join(folder_path, f"asm_{datetime.isoformat(datetime.now())}.zip")
         zip_path = AsmZipFile(file_path, self.ou_whitelist).write_zip()
         self.logger.info("Uploading ZIP file to %s...", self.hostname)

@@ -70,12 +70,12 @@ __all__ = (
 )
 
 
-class _AsmCsvWriter(ResultExporter):
+class _AsmCsvWriter(ResultExporter):  # type: ignore[misc]
     """CSV file writer."""
 
-    def __init__(self, header: Iterable[str], *arg: Any, **kwargs: Any) -> None:
+    def __init__(self, header: Iterable[str], *args: Any, **kwargs: Any) -> None:
         self.header = header
-        super().__init__(*arg, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def get_header(self) -> Iterable[str]:
         """
@@ -216,10 +216,10 @@ class AsmCsvFile:
             with open(config_file, "rb") as fp:
                 config = json.load(fp)
                 try:
-                    return config["limbo_ou"]
+                    limbo_ou: str = config["limbo_ou"]
                 except KeyError:
-                    pass
-        return ""
+                    limbo_ou = ""
+        return limbo_ou
 
     def get_staff(self, school: School) -> Iterable[Teacher]:
         return get_filtered_staff(self.lo, self.logger, school.name)

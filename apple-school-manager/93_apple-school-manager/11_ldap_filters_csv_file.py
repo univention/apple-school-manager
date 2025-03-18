@@ -15,7 +15,7 @@ from ldap.filter import filter_format
 from univention.admin import uexceptions
 from univention.asm.csv.csv_file import AsmRostersCsvFile, AsmStaffCsvFile, AsmStudentsCsvFile
 from univention.asm.models.staff import get_filtered_staff
-from univention.asm.utils import get_person_id, update_ucr
+from univention.asm.utils import update_ucr
 from univention.config_registry import handler_set
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
@@ -25,12 +25,7 @@ def set_and_update_ucr(ucr_v: str) -> None:
     update_ucr()
 
 
-def get_person_id_by_dn(dn, role):
-    id_attr, t1_lo = get_person_id(dn, role, [])
-    return t1_lo[id_attr][0]
-
-
-class Test(ImportTestbase):
+class Test(ImportTestbase):  # type: ignore[misc]
     def test(self) -> None:
         school1 = self.ou_A.name
         school_class1 = f"{school1}-{uts.random_username()}"

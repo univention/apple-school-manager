@@ -17,11 +17,11 @@ from univention.testing import utils
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
 
-def get_course_name(course_pattern, school, name):
+def get_course_name(course_pattern: str, school: str, name: str) -> str:
     return course_pattern.format(ou=school, name=name)
 
 
-class Test(ImportTestbase):
+class Test(ImportTestbase):  # type: ignore[misc]
     ou_B = None
     ou_C = None
 

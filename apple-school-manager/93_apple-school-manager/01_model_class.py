@@ -21,7 +21,7 @@ from univention.testing import utils
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
 
-class Test(ImportTestbase):
+class Test(ImportTestbase):  # type: ignore[misc]
     ou_C = None
 
     def test(self) -> None:

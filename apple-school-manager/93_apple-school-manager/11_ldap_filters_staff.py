@@ -28,7 +28,7 @@ def get_person_id_by_dn(dn: str, role: str) -> str:
     return t1_lo[id_attr][0]
 
 
-class Test(ImportTestbase):
+class Test(ImportTestbase):  # type: ignore[misc]
     def test(self) -> None:
         school1 = self.ou_A.name
         school_class1 = f"{school1}-{uts.random_username()}"

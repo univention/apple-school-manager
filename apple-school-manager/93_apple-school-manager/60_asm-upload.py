@@ -11,6 +11,7 @@ import filecmp
 import os
 import shutil
 import subprocess
+from types import TracebackType
 
 import univention.testing.strings as uts
 import univention.testing.ucr as ucr_test
@@ -23,7 +24,7 @@ from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
 
 class LocalHostAsASM:
-    def __init__(self, username, password, home_dir, school_name) -> None:
+    def __init__(self, username: str, password: str, home_dir: str, school_name: str) -> None:
         self.username = username
         self.password = password
         self.school_name = school_name
@@ -31,7 +32,7 @@ class LocalHostAsASM:
         self.home_dir = home_dir
         self.dropbox = os.path.join(home_dir, "dropbox")
 
-    def __enter__(self):
+    def __enter__(self) -> None:
         handler_set(
             [
                 "hosts/static/127.0.60.60=upload.appleschoolcontent.com",
@@ -55,7 +56,12 @@ class LocalHostAsASM:
         client.save_host_keys("/etc/asm_public_key")
         client.close()
 
-    def __exit__(self, *args):
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: TracebackType | None,
+    ) -> None:
         os.rename("/etc/asm_public_key.backup_60test", "/etc/asm_public_key")
         if os.path.exists("/etc/asm.secret.backup_60test"):
             os.rename("/etc/asm.secret.backup_60test", "/etc/asm.secret")
@@ -64,23 +70,28 @@ class LocalHostAsASM:
 
 
 class TempUserWritableFileAnywhere:
-    def __init__(self, path, uid, gid) -> None:
+    def __init__(self, path: str, uid: int, gid: int) -> None:
         self.path = path
         self.uid = uid
         self.gid = gid
 
-    def __enter__(self):
+    def __enter__(self) -> None:
         with open(self.path, "w") as fp:
             print(f"Creating file {self.path!r} with uid={self.uid!r} and gid={self.gid!r}...")
             os.fchown(fp.fileno(), self.uid, self.gid)
 
-    def __exit__(self, *args):
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: TracebackType | None,
+    ) -> None:
         with contextlib.suppress(OSError):
             print(f"Deleting file {self.path!r}...")
             os.unlink(self.path)
 
 
-class Test(ImportTestbase):
+class Test(ImportTestbase):  # type: ignore[misc]
     ou_B = None
     ou_C = None
 

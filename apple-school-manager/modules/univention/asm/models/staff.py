@@ -210,7 +210,7 @@ def get_filtered_staff(lo: LoType, logger: logging.Logger, school: str) -> Itera
         global_ldap_filter_str,
     )
     try:
-        filtered_teachers = Teacher.get_all(
+        filtered_teachers: Iterable[Teacher] = Teacher.get_all(
             lo,
             school,
             filter_str=specific_ldap_filter,

@@ -48,8 +48,10 @@ _ucr: ConfigRegistry = None
 
 def get_ldap_connection() -> tuple[LoType, PoType]:
     if get_ucr()["server/role"] in ("domaincontroller_master", "domaincontroller_backup"):
-        return get_readonly_connection()
-    return get_machine_connection()
+        lo, po = get_readonly_connection()
+    else:
+        lo, po = get_machine_connection()
+    return lo, po
 
 
 def check_domain(email: str) -> bool:
@@ -153,7 +155,7 @@ def get_person_id(dn: str, role: str, additional_attrs: list[str]) -> tuple[str,
     return person_id_attr, res
 
 
-def get_default_password_policy():
+def get_default_password_policy() -> str:
     ucr = get_ucr()
     pp_ori = ucr.get("asm/attributes/student/password_policy", 4)
     try:

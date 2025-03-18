@@ -11,7 +11,6 @@ ignore = [
     "COM812",  # Trailing comma missing, formatter will deal with it
     "T20",  # allow use of print()
 
-    "ANN",  # missing type annotation, TODO: add annotations
     "D100", "D101", "D102", "D103", "D104", "D105", "D106", "D107", # ignore missing docstring, TODO: add docstrings
     "E501",  # ignore line length if formatter couldn't deal with it, TODO: fix line length manual?
 
@@ -57,6 +56,11 @@ ignore = [
     "TRY401",  # verbose-log-message
 ]
 
+[tool.ruff.lint.flake8-annotations]
+allow-star-arg-any = true
+
 [tool.mypy]
-strict = false
+strict = true
 ignore_missing_imports = true
+files = ["**/*.py", "**/usr/sbin/asm-upload", "**/configure_host"]
+exclude = [".gitlab-ci/parse_junit.py"]

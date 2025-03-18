@@ -24,10 +24,10 @@ from univention.testing import utils
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
 
-class Test(ImportTestbase):
+class Test(ImportTestbase):  # type: ignore[misc]
     use_ou_cache = False  # use only uncached OUs to be certain no previous test left any object
 
-    def _get_user_attr(self, dn):
+    def _get_user_attr(self, dn: str) -> dict[str, str]:
         user = self.lo.get(dn)
         middle_name = (
             user.get("middleName", [""])[0]
@@ -35,9 +35,9 @@ class Test(ImportTestbase):
             or user.get("oxMiddleName", [""])[0]
         )
         return {
-            "first": user.get("givenName", [""])[0],
+            "first": user.get("givenName", [b""])[0].decode(),
             "middle": middle_name,
-            "last": user.get("sn", [""])[0],
+            "last": user.get("sn", [b""])[0].decode(),
             "email": user.get("mailPrimaryAddress", [""])[0],
         }
 
@@ -373,7 +373,7 @@ class Test(ImportTestbase):
         )
         self.log.info("OK: school class creation.")
 
-        def check_classes(class_csv_file_name) -> None:
+        def check_classes(class_csv_file_name: str) -> None:
             with open(class_csv_file_name) as class_csv_file:  # open csv-file in text mode
                 expected_school_classes = sorted(
                     [
@@ -432,7 +432,7 @@ class Test(ImportTestbase):
                         ),
                     )
 
-        def check_courses(course_csv_file_name) -> None:
+        def check_courses(course_csv_file_name: str) -> None:
             with open(course_csv_file_name) as course_csv_file:  # open csv-file in text mode
                 expected_courses = sorted(
                     [
@@ -458,7 +458,7 @@ class Test(ImportTestbase):
                         ),
                     )
 
-        def check_location(location_csv_file_name) -> None:
+        def check_location(location_csv_file_name: str) -> None:
             with open(location_csv_file_name) as location_csv_file:  # open csv-file in text mode
                 expected_locations = sorted(
                     [
@@ -483,9 +483,9 @@ class Test(ImportTestbase):
                         ),
                     )
 
-        def check_roster(roster_csv_file_name) -> None:
+        def check_roster(roster_csv_file_name: str) -> None:
             with open(roster_csv_file_name) as roster_csv_file:  # open csv-file in text mode
-                expected_roster = []
+                roster = []
                 for student_name in sorted(
                     (
                         (student1_name, s1_name),
@@ -497,7 +497,7 @@ class Test(ImportTestbase):
                     ),
                     key=itemgetter(0),
                 ):
-                    expected_roster.append(
+                    roster.append(
                         (
                             (school_class1, student_name[0]),  # sort key
                             [f"{school_class1}-{student_name[1]}", school_class1, student_name[1]],
@@ -513,23 +513,23 @@ class Test(ImportTestbase):
                     ),
                     key=itemgetter(0),
                 ):
-                    expected_roster.append(
+                    roster.append(
                         (
                             (school_class2, student_name[0]),  # sort key
                             [f"{school_class2}-{student_name[1]}", school_class2, student_name[1]],
                         ),
                     )
                 # school3 is not in the whitelist, so school3 must not be returned
-                expected_roster.append(
+                roster.append(
                     (
                         (school_class4, student3_name),  # sort key
                         [f"{school_class4}-{s3_name}", school_class4, s3_name],
                     ),
                 )
-                expected_roster.sort(
+                roster.sort(
                     key=itemgetter(0),
                 )  # sort by 1. school name, 2. class name, 3. student name
-                expected_roster = list(map(itemgetter(1), expected_roster))
+                expected_roster = list(map(itemgetter(1), roster))
                 got_roster = list(csv.reader(roster_csv_file))[1:]  # remove header line
                 if got_roster == expected_roster:
                     self.log.info("OK: roster CSV file is as expected.")
@@ -545,7 +545,7 @@ class Test(ImportTestbase):
                         ),
                     )
 
-        def check_staff(staff_csv_file_name) -> None:
+        def check_staff(staff_csv_file_name: str) -> None:
             with open(staff_csv_file_name) as staff_csv_file:  # open csv-file in text mode
                 expected_staff = []
                 teachers = map(
@@ -587,9 +587,9 @@ class Test(ImportTestbase):
                         [
                             t_id,
                             t_id,
-                            atts["first"].decode(),
+                            atts["first"],
                             atts["middle"],
-                            atts["last"].decode(),
+                            atts["last"],
                             atts["email"],
                             t_name,
                             s1,
@@ -611,7 +611,7 @@ class Test(ImportTestbase):
                         ),
                     )
 
-        def check_student(student_csv_file_name) -> None:
+        def check_student(student_csv_file_name: str) -> None:
             assert get_default_password_policy() == "4", (
                 f"Unset asm/attributes/student/password_policy is {get_default_password_policy()!r}, expected '4'."
             )
@@ -661,9 +661,9 @@ class Test(ImportTestbase):
                         [
                             t_id,
                             t_id,
-                            atts["first"].decode(),
+                            atts["first"],
                             atts["middle"],
-                            atts["last"].decode(),
+                            atts["last"],
                             "",
                             atts["email"],
                             t_name,

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# ruff: noqa: ANN001, ANN201
 import pathlib
 import sys
 import xml.etree.ElementTree as ET  # nosec

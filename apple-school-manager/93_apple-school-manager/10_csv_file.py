@@ -29,10 +29,10 @@ from univention.testing import utils
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
 
-class Test(ImportTestbase):
+class Test(ImportTestbase):  # type: ignore[misc]
     use_ou_cache = False  # use only uncached OUs to be certain no previous test left any object
 
-    def _get_user_attr(self, dn):
+    def _get_user_attr(self, dn: str) -> dict[str, str]:
         user = self.lo.get(dn)
         middle_name = (
             user.get("middleName", [""])[0]
@@ -502,7 +502,7 @@ class Test(ImportTestbase):
                 AsmRostersCsvFile(roster_csv_file.name, schools).write_csv()
                 roster_csv_file.flush()
                 roster_csv_file.seek(0)
-                expected_roster = []
+                roster = []
                 for student_name in sorted(
                     (
                         (student1_name, s1_name),
@@ -514,7 +514,7 @@ class Test(ImportTestbase):
                     ),
                     key=itemgetter(0),
                 ):
-                    expected_roster.append(
+                    roster.append(
                         (
                             (school_class1, student_name[0]),  # sort key
                             [f"{school_class1}-{student_name[1]}", school_class1, student_name[1]],
@@ -530,23 +530,23 @@ class Test(ImportTestbase):
                     ),
                     key=itemgetter(0),
                 ):
-                    expected_roster.append(
+                    roster.append(
                         (
                             (school_class2, student_name[0]),  # sort key
                             [f"{school_class2}-{student_name[1]}", school_class2, student_name[1]],
                         ),
                     )
                 # school3 is not in the whitelist, so school3 must not be returned
-                expected_roster.append(
+                roster.append(
                     (
                         (school_class4, student3_name),  # sort key
                         [f"{school_class4}-{s3_name}", school_class4, s3_name],
                     ),
                 )
-                expected_roster.sort(
+                roster.sort(
                     key=itemgetter(0),
                 )  # sort by 1. school name, 2. class name, 3. student name
-                expected_roster = list(map(itemgetter(1), expected_roster))
+                expected_roster = list(map(itemgetter(1), roster))
                 got_roster = list(csv.reader(roster_csv_file))[1:]  # remove header line
                 if got_roster == expected_roster:
                     self.log.info("OK: roster CSV file is as expected.")

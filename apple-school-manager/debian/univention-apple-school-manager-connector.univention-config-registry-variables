@@ -91,7 +91,7 @@ Categories=service-administration
 [asm/attributes/student/password_policy]
 Description[de]=Länge des von Apple automatisch generierten Passworts für neue Schülerinnen und Schüler. (Eine password policy für Lehrkräfte wird von Apple nicht unterstützt.) Erlaubte Werte sind 4, 6, 8 und Bindestrich ('-'). Bindestrich bedeutet, dass der Standardwert der im Apple School Manager für eine Schule konfiguriert wurde, verwendet werden soll (wird ins CSV als leeres Feld geschreiben). Standard: 4.
 Description[en]=Length of password created by Apple automatically for new students. (A password policy for teachers is not supported by Apple.) Allowed values are 4, 6, 8 and the dash ('-'). The dash means, that the default value configures in the Apple School Manager for a school will be used (will be written as empty field to CSV). Default: 4.
-Type=int
+Type=str
 Categories=service-administration
 
 [asm/attributes/student/person_id/mapping]

@@ -61,7 +61,9 @@ create_app_version:
 .integration_tests:
   extends: .run_openstack_cfg
   stage: test
-  needs: []
+  needs:
+    - create_app_version
+    - update_appcenter
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: manual

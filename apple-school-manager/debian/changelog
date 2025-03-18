@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (5.0.1) unstable; urgency=medium
+
+  * Issue univention/ucsschool#1401: Enable automatic linting and formating
+
+ -- Jürn Brodersen <brodersen@univention.de>  Tue, 18 Mar 2025 16:04:47 +0100
+
 univention-apple-school-manager-connector (5.0.0) unstable; urgency=low
 
   * Issue univention/ucsschool#1401: Update to UCS@school 5.2

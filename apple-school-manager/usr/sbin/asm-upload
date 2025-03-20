@@ -33,6 +33,7 @@ from logging import FileHandler
 
 from paramiko.ssh_exception import NoValidConnectionsError, SSHException
 from univention.asm.asm_upload import ASMUpload
+from univention.asm.network.sftp_upload import MissingPublicSshKeyError
 from univention.asm.utils import get_ucr
 
 LOGFILE_PATH = "/var/log/univention/asm.log"
@@ -87,10 +88,10 @@ def main() -> None:
     except ASMCredentialError as exc:
         logger.exception(exc)
         sys.exit(1)
-    asmUpload = ASMUpload(*config)
     try:
+        asmUpload = ASMUpload(*config)
         zip_path = asmUpload.upload()
-    except (SSHException, NoValidConnectionsError) as exc:
+    except (SSHException, NoValidConnectionsError, MissingPublicSshKeyError) as exc:
         logger.exception(f"SFTP upload failed: {exc}")
         sys.exit(1)
     if not config[3] and zip_path is not None:

@@ -39,7 +39,9 @@ from datetime import datetime
 from univention.config_registry import handler_set
 
 from .csv.zip_file import AsmZipFile
-from .network.sftp_upload import SFTP
+from .network.sftp_upload import SFTP, MissingPublicSshKeyError
+
+ASM_PUBLIC_KEY = "/etc/asm_public_key"
 
 
 class ASMUpload:
@@ -50,8 +52,12 @@ class ASMUpload:
         ou_whitelist: list[str] | None = None,
         delete_zip_file: bool = True,  # noqa: FBT001
     ) -> None:
-        with open("/etc/asm_public_key") as asm_public_key_file:
-            self.host_key_line = asm_public_key_file.read()
+        try:
+            with open(ASM_PUBLIC_KEY) as asm_public_key_file:
+                self.host_key_line = asm_public_key_file.read()
+        except FileNotFoundError:
+            err_msg = f"Could not find {ASM_PUBLIC_KEY}"
+            raise MissingPublicSshKeyError(err_msg)
         self.hostname = "upload.appleschoolcontent.com"
         self.username = username
         self.password = password

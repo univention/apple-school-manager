@@ -39,6 +39,10 @@ from typing import Self
 import paramiko
 
 
+class MissingPublicSshKeyError(Exception):
+    pass
+
+
 class SFTP:
     def __init__(self, hostname: str, username: str, password: str, host_key_line: str) -> None:
         self.client = paramiko.client.SSHClient()
@@ -61,7 +65,8 @@ class SFTP:
     def _set_host_key(self, host_key_line: str) -> None:
         hostKeyEntry = paramiko.hostkeys.HostKeyEntry.from_line(host_key_line)
         if hostKeyEntry is None:
-            return
+            err_msg = "Could not load apple public ssh key"
+            raise MissingPublicSshKeyError(err_msg)
         host_keys = self.client.get_host_keys()
         for hostname in hostKeyEntry.hostnames:
             host_keys.add(hostname, hostKeyEntry.key.get_name(), hostKeyEntry.key)

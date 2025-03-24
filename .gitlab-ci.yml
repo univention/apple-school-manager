@@ -45,7 +45,7 @@ create_app_version:
   stage: prepare
   extends: .create_app_version
 
-._update_appcenter:
+update_appcenter:
   stage: build
   extends: .update_appcenter
   needs:
@@ -58,7 +58,7 @@ create_app_version:
     - ls
     - "mv build-asm/*.deb appcenter/ || true"
 
-.integration_tests:
+integration_tests:
   extends: .run_openstack_cfg
   stage: test
   needs:
@@ -98,7 +98,7 @@ deb_build_git:
     paths:
       - build-asm
 
-.deb_repo_import:
+deb_repo_import:
   stage: build
   variables:
     GIT_STRATEGY: none
@@ -118,7 +118,7 @@ deb_build_git:
       -s $SCOPE
       -p $PACKAGE
 
-.deb_repo_build:
+deb_repo_build:
   stage: build
   needs:
     - job: deb_repo_import

@@ -163,6 +163,7 @@ announce_app_mail:
   variables:
     SUBJECT: "App Release: Apple School Manager Connector"
     RECIPIENT: "app-announcement@univention.de"
+    SENDER: "ucsschool-maintainers@univention.de"
   before_script:
     - |
       cat >mail.txt<< EOF
@@ -186,6 +187,16 @@ check_release:
     - do_release
     - create_app_version
   extends: .check_release
+
+create_gitlab_release:
+  stage: production
+  extends: .create_gitlab_release
+  needs: [do_release]
+  release:
+    assets:
+      links:
+        - name: "Changelog"
+          url: "https://git.knut.univention.de/univention/components/apple-school-manager/-/blob/$CI_COMMIT_TAG/appcenter/README_UPDATE_EN"
 
 delete_app_version:
   stage: cleanup

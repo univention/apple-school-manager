@@ -17,13 +17,12 @@ Those look a lot like OneRoster files, but they're not.
 Should all happen as a pipeline.
 Check the ci/cd configuration if you need to repeat any steps manually.
 
-## Publish App
+## Release a new app version
 
-```bash
-cd /var/univention/buildsystem2/mirror/appcenter
-copy_from_appcenter.test.sh 5.2 <ASM app component ID> # for example apple-school-manager_20250318153240
-sudo update_mirror.sh -v appcenter
-```
+* Create a new tag with the version number you want to release, e.g.: 1.1.0
+* Wait for the tag pipeline until it reaches the `do_release` job
+* Is everything looking good so far? The next will make the new version public!
+* Start the `do_release` job
 
 ## Update etc/asm_public_key
 

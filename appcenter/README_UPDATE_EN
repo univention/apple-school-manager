@@ -1,3 +1,11 @@
+<b>Version 5.0.2</b>
+<ul>
+	<li>
+		Follow up release for version 5.0.1. Due to a component id mismatch in the appcenter,
+		an update from UCS 5.0 was not possible.
+	</li>
+</ul>
+
 <b>Version 5.0.1</b>
 <ul>
 	<li>

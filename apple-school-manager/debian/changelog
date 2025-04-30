@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (5.0.2) unstable; urgency=medium
+
+  * Bug #58240: No package changes; rebuild to fix component id mismatch
+
+ -- Ole Schwiegert <schwiegert@univention.de>  Thu, 30 Apr 2025 17:50:00 +0100
+
 univention-apple-school-manager-connector (5.0.1) unstable; urgency=medium
 
   * Issue univention/ucsschool#1401: Enable automatic linting and formating

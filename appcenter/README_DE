@@ -3,7 +3,7 @@
 </h3>
 <p>
 	Um die Synchronisation mit Apple School Manager einzurichten, geben Sie bitte in den
-	<a href="https://docs.software-univention.de/app-provider.html#app-settings" target="_blank">App
+	<a href="https://docs.software-univention.de/manual/latest/de/software/app-center.html" target="_blank">App
 	Settings</a> den Apple School Manager SFTP Benutzernamen und das Passwort ein. Weitere Information,
 	wie Sie diese Anmeldedaten erhalten, finden Sie auf der
 	<a href="https://support.apple.com/de-de/HT207029" target="_blank">Supportseite von Apple</a>.
@@ -110,26 +110,28 @@
 			Apple School Manager Instanzen, hinterlegen Sie den Pfad zu einer JSON-Konfigurationsdatei
 			in der UCR-Variable <code>asm/config_file</code>.
 			In der JSON-Datei konfigurieren Sie die Zugangsdaten sowie die Schulen, die mit der
-			jeweiligen Instanz synchronisiert werden sollen:
+			jeweiligen Instanz synchronisiert werden sollen.
+			Als Beispiel dient die neu angelegte Datei <code>/etc/my-asm-connector.json</code>.
+			Die Kennwörter der  Apple School Manager SFTP Upload Accounts werden in einer Datei abgelegt, z.B. <code>/etc/asm_connection1.secret</code>.
+			Aktivieren lässt sich die Konfiguration durch das Setzen der folgenden UCR Variable: <code>ucr set asm/config_file=/etc/my-asm-connector.json</code>.
 			<pre>
 [
-    {
-        "username": "<Benutzername der ersten ASM-Instanz>",
-        "password": "<Pfad zur Passwort-Datei>",
-        "school_whitelist": [
-            "<Schulkürzel 1>"
+    &#123;
+        &quot;username&quot;: &quot;&lt;Benutzername der ersten ASM-Instanz&gt;&quot;,
+        &quot;password&quot;: &quot;&lt;Pfad zur Passwort-Datei&gt;&quot;,
+        &quot;school_whitelist&quot;: [
+            &quot;&lt;Schulkürzel 1&gt;&quot;
         ]
-    },
-    {
-        "username": "<Benutzername der zweiten ASM-Instanz>",
-        "password": "<Pfad zur Passwort-Datei>",
-        "school_whitelist": [
-            "<Schulkürzel 2>",
-            "<Schulkürzel 3>"
+    &#125;,
+    &#123;
+        &quot;username&quot;: &quot;&lt;Benutzername der zweiten ASM-Instanz&gt;&quot;,
+        &quot;password&quot;: &quot;&lt;Pfad zur Passwort-Datei&gt;&quot;,
+        &quot;school_whitelist&quot;: [
+            &quot;&lt;Schulkürzel 2&gt;&quot;,
+            &quot;&lt;Schulkürzel 3&gt;&quot;
         ]
-    }
-]
-			</pre>
+    &#125;
+]</pre>
 			<b>Achtung:</b> Wenn Sie die UCR-Variable setzen, wird die Konfiguration durch die App Settings deaktiviert.
 		</p>
 	</dd>

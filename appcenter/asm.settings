@@ -31,11 +31,6 @@ Type = Status
 Description = Last Apple School Manager upload. For more information check /var/log/univention/asm.log
 Description[de] = Letzter upload zum Apple School Manager. Für mehr Informationen siehe /var/log/univention/asm.log
 
-[asm/advanced_config]
-Type = Status
-Description = Details regarding the advanced configuration can be found in the manual.
-Description[de] = Details zur erweiterten Konfiguration finden Sie im Handbuch.
-
 [asm/sync_daily]
 Type = Bool
 Description = Automatically run the Apple School Manager sync daily.

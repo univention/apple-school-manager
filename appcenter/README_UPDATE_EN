@@ -1,8 +1,7 @@
 <b>Version 3.1.0</b>
 <ul>
 	<li>
-		New feature: Connection to multiple Apple School Manager instances can be configured through a JSON
-		file.
+		New feature: Allow connection to multiple Apple School Manager instances.
 	</li>
 </ul>
 

@@ -4,7 +4,7 @@
 <p>
 	To set up synchronization with the Apple School Manager, please enter the Apple School Manager SFTP
 	username and password in the
-	<a href="https://docs.software-univention.de/app-provider.html#app-settings" target="_blank">App
+	<a href="https://docs.software-univention.de/manual/latest/en/software/app-center.html" target="_blank">App
 	Settings</a>. For more information on how to obtain these credentials, please visit
 	<a href="https://support.apple.com/en-us/HT207029" target="_blank">Apple's support page</a>.
 </p>
@@ -98,31 +98,33 @@
 	</dt>
 	<dd>
 		<p>
-			<pre>
 			To configure the Apple School Manager Connector for the connection with multiple Apple
 			School Manager instances, store the path to a JSON configuration file in the UCR variable
-			<code>asm/config_file</code>.
-			In the JSON file, configure the access data and the schools that are to be synchronized with
-			the respective instance:
+		<code>asm/config_file</code>.
+			In the JSON file, configure the access data and the schools that are to be synchronized with the respective
+			instance.
+			As an example, we could write the following JSON configuration into a new file <code>/etc/my-asm-connector.json</code>.
+			The passwords to the Apple School Manager SFTP upload accounts have to be stored in a file, e.g. <code>/etc/asm_connection1.secret</code>.
+			Activate the configuration by setting the UCR variable: <code>ucr set asm/config_file=/etc/my-asm-connector.json</code>.
+			<pre>
 [
-    {
-        "username": "<Username of the first ASM instance>",
-        "password": "<path of the password file>",
-        "school_whitelist": [
-            "<school 1>"
+    &#123;
+        &quot;username&quot;: &quot;&lt;asm_connection1_username&gt;&quot;,
+        &quot;password&quot;: &quot;&lt;/etc/asm_connection1.secret&gt;&quot;,
+        &quot;school_whitelist&quot;: [
+            &quot;&lt;school 1&gt;&quot;
         ]
-    },
-    {
-        "username": "<Username of the second ASM instance>",
-        "password": "<path of the password file>",
-        "school_whitelist": [
-            "<school 2>",
-            "<school 3>"
+    &#125;,
+    &#123;
+        &quot;username&quot;: &quot;&lt;asm_connection2_username&gt;&quot;,
+        &quot;password&quot;: &quot;&lt;/etc/asm_connection2.secret&gt;&quot;,
+        &quot;school_whitelist&quot;: [
+            &quot;&lt;school 2&gt;&quot;,
+            &quot;&lt;school 3&gt;&quot;
         ]
-    }
-]
-			</pre>
-			<b>Attention:</b> Setting the UCR variable deactivates configuration using the app settings.
+    &#125;
+]</pre>
+			<b>Attention:</b> Setting the UCR <code>asm/config_file</code> variable deactivates the configuration using the App settings.
 		</p>
 	</dd>
 </dl>

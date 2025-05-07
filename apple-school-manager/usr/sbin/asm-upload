@@ -52,6 +52,7 @@ class ASMCredentialError(Exception):
 def get_configs():
 	delete_zip = ucr.is_false('asm/store_zip')
 	config_file = ucr.get('asm/config_file', CONFIG_FILE_PATH)
+	logger.info(f"Using config file {config_file}")
 	configs = []
 	try:
 		with open(config_file, "r") as fd:
@@ -88,9 +89,11 @@ def setup_logging(level_console=logging.INFO, level_file=logging.DEBUG):
 	logger.addHandler(handler_file)
 
 
+logger = logging.getLogger('univention.asm.upload_script')
+setup_logging()
+
+
 def main():
-	logger = logging.getLogger('univention.asm.upload_script')
-	setup_logging()
 	try:
 		configs, delete_zip = get_configs()
 	except ASMCredentialError as exc:

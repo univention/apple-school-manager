@@ -126,7 +126,7 @@ Type=str
 Categories=service-administration
 
 [asm/config_file]
-Description[de]=Pfad zur Konfigurationsdatei
-Description[en]=Path to the config file
+Description[de]=Diese Konfigurationsdatei konfiguriert die Verbindungen des Apple School Manger Connectors. Diese Variable zu setzen, deaktiviert die Konfiguration des Connectors durch die App Settings.
+Description[en]=This config file configures the Apple School Manager connections. Setting this variable deactivates the configuration through the app settings.
 Type=str
 Categories=service-administration

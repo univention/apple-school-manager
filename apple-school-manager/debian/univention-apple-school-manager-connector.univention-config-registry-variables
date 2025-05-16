@@ -11,8 +11,8 @@ Type=bool
 Categories=service-administration
 
 [asm/attributes/staff/anonymize]
-Description[de]=Das Anonymisieren der Attribute 'first_name', 'middle_name', 'last_name' und 'email_address' bei Lehrkräften einschalten. Das Anonymisieren funktioniert durch das Ersetzen der Attribute durch andere Werte. Diese Ersetzungswerte können mit asm/attributes/student/anonymize/<Attribut> konfiguriert werden. Wenn ein Ersetzungswert mit '%' beginnt, wird das nachfolgende Wort als LDAP-Attribut interpretiert und der Wert aus dem LDAP-Objekt des Nutzers verwendet (z.B. '%uid' für den Benutzernamen). Ohne '%' am Anfang wird der Wert selbst verwendet.  Standard: false (keine Anonymisierung).
-Description[en]=Enable the anonymization of the attributes 'first_name', 'middle_name', 'last_name', 'email_address' and 'sis_username' for teachers. Anonymization works by replacing the attributes with different values. Those values can be configured through asm/attributes/student/anonymize/<attribute>. If a replacement value starts with '%' the following word will be interpreted as LDAP attribute and the value from the users LDAP object will be used. Without '%' at the beginning the value itself will be used. Default: false (no anonymization).
+Description[de]=Das Anonymisieren der Attribute 'first_name', 'middle_name', 'last_name' und 'email_address' bei Lehrkräften einschalten. Das Anonymisieren funktioniert durch das Ersetzen der Attribute durch andere Werte. Diese Ersetzungswerte können mit asm/attributes/student/anonymize/<Attribut> konfiguriert werden. Wenn ein Ersetzungswert mit '%' beginnt, wird das nachfolgende Wort als LDAP-Attribut interpretiert und der Wert aus dem LDAP-Objekt des Nutzers verwendet (z.B. '%uid' für den Benutzernamen). Ohne '%' am Anfang wird der Wert selbst verwendet.  Standard: yes (Anonymisierung ist aktiv).
+Description[en]=Enable the anonymization of the attributes 'first_name', 'middle_name', 'last_name', 'email_address' and 'sis_username' for teachers. Anonymization works by replacing the attributes with different values. Those values can be configured through asm/attributes/student/anonymize/<attribute>. If a replacement value starts with '%' the following word will be interpreted as LDAP attribute and the value from the users LDAP object will be used. Without '%' at the beginning the value itself will be used. Default: yes (anonymization is activated).
 Type=bool
 Categories=service-administration
 
@@ -129,4 +129,13 @@ Categories=service-administration
 Description[de]=Diese Konfigurationsdatei konfiguriert die Verbindungen des Apple School Manger Connectors. Diese Variable zu setzen, deaktiviert die Konfiguration des Connectors durch die App Settings.
 Description[en]=This config file configures the Apple School Manager connections. Setting this variable deactivates the configuration through the app settings.
 Type=str
+Categories=service-administration
+
+[asm/teacher_limit]
+Description[de]=Maximale Anzahl an Lehrkräften, die pro Klasse synchronisiert werden kann. Default: 15
+Description[en]=Maximum number of teachers that can be synced per class. Default: 15
+Type=uint
+Min=3
+Max=50
+Default=15
 Categories=service-administration

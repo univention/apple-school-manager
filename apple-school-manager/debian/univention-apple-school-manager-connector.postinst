@@ -39,6 +39,7 @@ ucr set "asm/attributes/staff/anonymize?yes" \
 	"asm/attributes/student/anonymize?yes" \
 	"asm/attributes/student/anonymize/first_name?%uid" \
 	"asm/attributes/student/anonymize/last_name?-" \
-	"asm/attributes/student/anonymize/sis_username?%uid"
+	"asm/attributes/student/anonymize/sis_username?%uid" \
+	"asm/teacher_limit?15"
 
 exit 0

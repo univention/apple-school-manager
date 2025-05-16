@@ -149,18 +149,19 @@ class AsmClass(AsmModel):
 			person_id_attr, teacher_lo = get_person_id(user_dn, 'staff', [])
 			teachers.append(teacher_lo[person_id_attr][0])
 		instructor_id = instructor_id_2 = instructor_id_3 = additional_instructor_ids = None
+		teacher_limit = ucr.get_int('asm/teacher_limit', 15)
 		if teachers:
 			try:
 				instructor_id = teachers[0]
 				instructor_id_2 = teachers[1]
 				instructor_id_3 = teachers[2]
-				additional_instructor_ids = teachers[3:15]
+				additional_instructor_ids = teachers[3:teacher_limit]
 			except IndexError:
 				pass
-			if len(teachers) > 15:
+			if len(teachers) > teacher_limit:
 				logger.warn(
-					'Class %r has more than 15 teachers. Only 15 will be synchronized. This is a limitation of the '
-					'Apple School Manager service.', school_class.name)
+					'Class %r has more than %s teachers. Only %s will be synchronized. This is a limitation of the '
+					'Apple School Manager service.', (school_class.name, teacher_limit, teacher_limit))
 		return cls(
 			class_id=school_class.name,
 			course_id=school_class.name,

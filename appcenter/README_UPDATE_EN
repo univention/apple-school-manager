@@ -1,3 +1,10 @@
+<b>Version 5.0.3</b>
+<ul>
+	<li>
+		Prevent installation on a central Replica Directory Node.
+	</li>
+</ul>
+
 <b>Version 5.0.2</b>
 <ul>
 	<li>

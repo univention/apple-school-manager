@@ -5,7 +5,8 @@ to the Apple School Manager server
 to synchronize UCS@schoool users to Apple.
 Those look a lot like OneRoster files, but they're not.
 
-* can be installed on DC master and DC backup
+* can be installed on DC master and DC backup and school servers
+* can not be installed on a central replica
 * configuration with UCR variables
 * app settings as configuration wizard (to set the UCR variables)
 * scripts for daily cronjobs to upload fresh CSV/ZIP files

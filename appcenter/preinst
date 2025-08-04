@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# SPDX-FileCopyrightText: 2025 Univention GmbH
+# SPDX-License-Identifier: AGPL-3.0-only
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        "--error-file")
+            shift
+            errorfile="$1"
+            shift
+            ;;
+        *)
+            shift
+            ;;
+    esac
+done
+
+if dpkg-query --show --showformat='${db:Status-Status}' ucs-school-central-replica 2>/dev/null | grep -q installed; then
+    message="The application 'Apple School Manager Connector' can not be installed on a central Replica Directory Node. Please install it on a Primary Directory Node, Backup Directory Node, or school server instead."
+    echo "$message" > "$errorfile"
+    exit 1
+fi

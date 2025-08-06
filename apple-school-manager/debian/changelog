@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (5.0.3) unstable; urgency=medium
+
+  * Bug #56347: Prevent installation on central replica
+
+ -- Marius Meschter <marius.meschter@univention.de>  Wed, 06 Aug 2025 14:33:21 +0200
+
 univention-apple-school-manager-connector (5.0.2) unstable; urgency=medium
 
   * Bug #58240: No package changes; rebuild to fix component id mismatch

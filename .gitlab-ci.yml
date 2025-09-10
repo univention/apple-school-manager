@@ -9,7 +9,7 @@ workflow:
 include:
   - project: univention/infrastructure/docker-services
     file: pre-commit.yml
-  - project: univention/dev/internal/ucsschool-ci-utils
+  - project: univention/dev/tooling/ci-components
     file:
       - fragments/openstack.yaml
       - fragments/appcenter.yaml
@@ -32,9 +32,9 @@ variables:
   PACKAGE: "univention-apple-school-manager-connector"
   UCS_RELEASE: "5.2"
   SCOPE: "univention-asm"
-  DEB_IMAGE: gitregistry.knut.univention.de/univention/dev/internal/ucsschool-ci-utils/deb-builder-5.2
+  DEB_IMAGE: gitregistry.knut.univention.de/univention/dev/tooling/ci-components/deb-builder-5.2
   UCSLINT_IMAGE: gitregistry.knut.univention.de/univention/dev/ucs
-  APPCENTER_CONTROL_IMAGE: "gitregistry.knut.univention.de/univention/dev/internal/ucsschool-ci-utils/univention-appcenter-control"
+  APPCENTER_CONTROL_IMAGE: "gitregistry.knut.univention.de/univention/dev/tooling/ci-components/univention-appcenter-control"
 
 run pre-commit:
   stage: lint

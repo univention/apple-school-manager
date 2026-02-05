@@ -42,6 +42,7 @@ from typing import Any, Self
 from ucsschool.lib.models.base import WrongModel
 from ucsschool.lib.models.user import Teacher, TeachersAndStaff
 
+import univention.asm.api_constraints as asm_api_constraints
 from univention.admin import uexceptions
 from univention.admin.uldap import access as LoType  # noqa: N812
 from univention.asm.utils import (
@@ -106,7 +107,7 @@ class AsmStaff(AsmModel, AnonymizeMixIn):
                 (optional).
         """
         if additional_location_ids:
-            assert len(additional_location_ids) < 15, "No more than 14 additional locations are allowed."
+            asm_api_constraints.validate_additional_location_limit(additional_location_ids)
         else:
             additional_location_ids = []
         super().__init__(

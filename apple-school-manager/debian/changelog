@@ -1,3 +1,9 @@
+univention-apple-school-manager-connector (5.1.0) unstable; urgency=medium
+
+  * Issue univention/dev/education/apple-school-manager#14 / Bug #58988: Raise the possible location_ids for students and staff members in ASM
+
+ -- Jan Gietzel <jan.gietzel@univention.de>  Fri, 06 Feb 2026 09:30:00 +0200
+
 univention-apple-school-manager-connector (5.0.3) unstable; urgency=medium
 
   * Bug #56347: Prevent installation on central replica

@@ -40,6 +40,7 @@ from typing import Any, Self
 
 from ucsschool.lib.models.user import Student
 
+import univention.asm.api_constraints as asm_api_constraints
 from univention.asm.utils import (
     check_domain,
     get_default_password_policy,
@@ -116,7 +117,7 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
         :type location_ids: list(str)
         """
         if additional_location_ids:
-            assert len(additional_location_ids) < 15, "No more than 14 additional locations are allowed."
+            asm_api_constraints.validate_additional_location_limit(additional_location_ids)
         else:
             additional_location_ids = []
         super().__init__(

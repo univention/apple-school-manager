@@ -13,7 +13,9 @@ import unittest
 from collections.abc import Callable, Collection
 
 from univention.asm.api_constraints import (
+    ADDITIONAL_INSTRUCTOR_LIMIT,
     ADDITIONAL_LOCATION_LIMIT,
+    validate_additional_instructor_limit,
     validate_additional_location_limit,
 )
 
@@ -37,6 +39,12 @@ class TestApiConstraints(unittest.TestCase):
         self._assert_validator_enforces_limit(
             validator=validate_additional_location_limit,
             limit=ADDITIONAL_LOCATION_LIMIT,
+        )
+
+    def test_validate_additional_instructor_limit_enforces_limit(self) -> None:
+        self._assert_validator_enforces_limit(
+            validator=validate_additional_instructor_limit,
+            limit=ADDITIONAL_INSTRUCTOR_LIMIT,
         )
 
 

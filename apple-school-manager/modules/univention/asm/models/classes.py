@@ -41,6 +41,7 @@ from typing import Any, Self
 from ucsschool.lib.models.base import UnknownModel
 from ucsschool.lib.models.group import SchoolClass, WorkGroup
 
+import univention.asm.api_constraints as asm_api_constraints
 from univention.asm.utils import get_ldap_connection, get_person_id, get_ucr
 
 from .base import AsmModel
@@ -94,9 +95,7 @@ class AsmClass(AsmModel):
         :type additional_instructor_ids: list(str)
         """
         if additional_instructor_ids:
-            assert len(additional_instructor_ids) < 13, (
-                "No more than 12 additional instructors are allowed."
-            )
+            asm_api_constraints.validate_additional_instructor_limit(additional_instructor_ids)
         else:
             additional_instructor_ids = []
         super().__init__(

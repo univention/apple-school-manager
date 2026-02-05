@@ -140,7 +140,9 @@ def split_email(email: str) -> tuple[str, str]:
 
 
 def get_person_id(dn: str, role: str, additional_attrs: list[str]) -> tuple[str, dict[str, str]]:
-    assert role in ("staff", "student")
+    if role not in ("staff", "student"):
+        msg = f"role {role!r} must be 'staff' or 'student'."
+        raise AssertionError(msg)
     additional_attrs = additional_attrs or []
     ucrv = f"asm/attributes/{role}/person_id/mapping"
     person_id_attr = get_ucr().get(ucrv, "%entryUUID")

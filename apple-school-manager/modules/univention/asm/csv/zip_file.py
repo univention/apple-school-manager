@@ -74,7 +74,7 @@ class AsmZipFile:
         self.csv_files = create_csv_files(tmp_dir, self.ou_whitelist)
         if not self.csv_files:
             msg = "No CSV files were created."
-            raise AssertionError(msg)
+            raise FileNotFoundError(msg)
         self.logger.debug("Created CSV files: %s.", ", ".join(sorted(self.csv_files)))
         return self.csv_files
 
@@ -94,7 +94,7 @@ class AsmZipFile:
         tmp_dir = tempfile.mkdtemp()
         if not file_path:
             msg = "ZIP file path is empty."
-            raise AssertionError(msg)
+            raise ValueError(msg)
         self.logger.info("Creating ZIP file in %s...", file_path)
         if self.csv_files:
             self.logger.debug("Using existing CSV files: %s.", ", ".join(sorted(self.csv_files)))

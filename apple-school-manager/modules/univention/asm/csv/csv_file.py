@@ -137,7 +137,7 @@ class AsmCsvFile:
         self.logger = logging.getLogger(__name__)
         self.ucr = get_ucr()
         if not self.lo:
-            self.__class__.lo, po = get_ldap_connection()
+            self.__class__.lo, _po = get_ldap_connection()
         self.limbo_ou = self._get_limbo_ou()
 
     def find_and_create_objects(self) -> Iterator[AsmModel]:

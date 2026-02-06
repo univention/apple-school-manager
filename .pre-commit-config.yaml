@@ -3,7 +3,7 @@ default_install_hook_types:
   - commit-msg
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: check-added-large-files
       - id: check-json
@@ -16,29 +16,29 @@ repos:
       - id: pretty-format-json
         args: [--autofix]
   - repo: https://git.knut.univention.de/univention/dist/pre-commit-ucr
-    rev: "0.1.0"
+    rev: "0.1.7"
     hooks:
       - id: ucr-ruff-fix
         additional_dependencies: ["ruff==0.11.0"]
       - id: ucr-ruff-format
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: "v0.11.0"
+    rev: "v0.15.0"
     hooks:
       - id: ruff-format
-      - id: ruff
+      - id: ruff-check
         args: ["--fix"]
-      - id: ruff
+      - id: ruff-check
         alias: "ruff-unsafe"
         stages: [manual]
         args: ["--fix", "--unsafe-fixes"]
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.15.0
+    rev: v1.19.1
     hooks:
       - id: mypy
         additional_dependencies: ["types-paramiko"]
         exclude: ".gitlab-ci/parse_junit.py"
   - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: v0.10.0.1
+    rev: v0.11.0.1
     hooks:
       - id: shellcheck
   - repo: https://git.knut.univention.de/univention/dist/pre-commit-debian.git
@@ -48,7 +48,7 @@ repos:
       - id: debian-changelog
 
   - repo: https://github.com/jackdewinter/pymarkdown
-    rev: v0.9.29
+    rev: v0.9.35
     hooks:
       - id: pymarkdown
         args:
@@ -56,7 +56,7 @@ repos:
           - MD013,MD024,MD034
           - scan
   - repo: https://github.com/compilerla/conventional-pre-commit
-    rev: v4.0.0
+    rev: v4.3.0
     hooks:
       - id: conventional-pre-commit
         stages: [ commit-msg ]
@@ -67,7 +67,7 @@ repos:
         stages: [ commit-msg ]
         name: issue-reference
         language: pygrep
-        entry: '.*\n\n(Issue \w+(/\w+)*#\d+|Bug #\d+)\n+(\n.*)*\Z'
+        entry: '.*\n(\n(Issue ([a-zA-Z_/-]+)#\d+|Bug #\d+))+\n?(\n#.*)*\Z'
         args: ["--multiline", "--negate"]
 default_language_version:
   python: python3.11

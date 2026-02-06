@@ -85,7 +85,7 @@ class AsmCourse(AsmModel):
         :return: AsmCourse instance
         :rtype: AsmCourse
         """
-        lo, po = get_ldap_connection()
+        lo, _po = get_ldap_connection()
         try:
             school_class = SchoolClass.from_dn(dn, None, lo)
         except UnknownModel:

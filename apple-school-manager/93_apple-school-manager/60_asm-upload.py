@@ -102,7 +102,7 @@ class Test(ImportTestbase):  # type: ignore[misc]
             classes=school_class,
             password="univention",
         )
-        lo, po = getMachineConnection()
+        lo, _po = getMachineConnection()
         user_attrs = lo.get(student1_dn, attr=["homeDirectory", "uidNumber", "gidNumber"])
         home_dir = user_attrs["homeDirectory"][0].decode()
         uid = int(user_attrs["uidNumber"][0])

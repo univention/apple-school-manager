@@ -172,7 +172,7 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
         :raises WrongModel: when `dn` does not belong to a student
         :raises ValueError: when non of the users `schools` is in the whitelist
         """
-        lo, po = get_ldap_connection()
+        lo, _po = get_ldap_connection()
         student = Student.from_dn(dn, None, lo)
         if student.email and not check_domain(student.email):
             logger = logging.getLogger(__name__)

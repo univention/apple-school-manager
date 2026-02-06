@@ -63,7 +63,7 @@ def check_domain(email: str) -> bool:
     :rtype: bool
     :raises ValueError: if the email address has an invalid format
     """
-    local_part, domain = split_email(email)
+    _local_part, domain = split_email(email)
     domain_to_check = ".".join(domain.split(".")[-2:])
     if domain_to_check not in _known_domains:
         dns_servers = get_static_dns_resolvers()
@@ -146,7 +146,7 @@ def get_person_id(dn: str, role: str, additional_attrs: list[str]) -> tuple[str,
     person_id_attr = get_ucr().get(ucrv, "%entryUUID")
     person_id_attr = person_id_attr[1:].strip()
     attrs = list(map(str, [person_id_attr, *additional_attrs]))  # unicode2str for python-ldap
-    lo, po = get_ldap_connection()
+    lo, _po = get_ldap_connection()
     res = lo.get(dn, attrs)
     res = {k: [v.decode("utf-8")] for k, [v] in res.items()}  # byte2str for python-ldap
     if not res.get(person_id_attr):

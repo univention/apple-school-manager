@@ -158,7 +158,7 @@ class AsmStaff(AsmModel, AnonymizeMixIn):
                 teacherandstaff
         :raises ValueError: when non of the users `schools` is in the whitelist
         """
-        lo, po = get_ldap_connection()
+        lo, _po = get_ldap_connection()
         try:
             teacher = Teacher.from_dn(dn, None, lo)
         except WrongModel:

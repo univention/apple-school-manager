@@ -37,7 +37,7 @@ class Test(ImportTestbase):  # type: ignore[misc]
             school1,
             classes=school_class1,
         )
-        teacher2_name, teacher2_dn = self.schoolenv.create_teacher_and_staff(
+        _teacher2_name, teacher2_dn = self.schoolenv.create_teacher_and_staff(
             school1,
             classes=school_class1,
         )

@@ -7,13 +7,28 @@ workflow:
     - if: $CI_COMMIT_TAG
 
 include:
-  - project: univention/infrastructure/docker-services
-    file: pre-commit.yml
   - project: univention/dev/tooling/ci-components
     file:
       - fragments/openstack.yaml
-      - fragments/appcenter.yaml
-      - fragments/misc.yaml
+  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/pre-commit@2
+  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/app-release@2
+    inputs:
+      app_id: "apple-school-manager"
+      mail_sender: "ucsschool-team@univention.de"
+      author_alias: "UCS@school Team"
+      mail_subject: "Apple School Manager Connector update"
+      changelog_link: "https://git.knut.univention.de/univention/dev/education/apple-school-manager/-/blob/5.2/appcenter/README_UPDATE_EN?ref_type=heads"
+      mail_recipient: "app-announcement@univention.de"
+      chat_destination: "#ucsschool"
+      ucs_base_version: "5.2"
+      release_tag_constraint: '\d.\d+v\d+'
+      app_staging_version: "999.0.0-staging"
+  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/debian-package@2
+    inputs:
+      ucs_base_version: "5.2"
+      scope: "univention-asm"
+      additional_upload_needs:
+        - create_app_version
 
 stages:
   - lint
@@ -22,40 +37,13 @@ stages:
   - test
   - appcenter
   - production
+  - release
   - cleanup
 
 variables:
-  APP_BASE_VERSION: "999.0.0-staging"
-  APP_UCS_VERSION: "5.2"
-  APP_ID: "apple-school-manager"
-  APP_NAME: "5.2/$APP_ID"
   PACKAGE: "univention-apple-school-manager-connector"
-  UCS_RELEASE: "5.2"
-  SCOPE: "univention-asm"
-  DEB_IMAGE: gitregistry.knut.univention.de/univention/dev/tooling/ci-components/deb-builder-5.2
+  DEBIAN_SOURCE_DIRECTORIES: "apple-school-manager/"
   UCSLINT_IMAGE: gitregistry.knut.univention.de/univention/dev/ucs
-  APPCENTER_CONTROL_IMAGE: "gitregistry.knut.univention.de/univention/dev/tooling/ci-components/univention-appcenter-control"
-
-run pre-commit:
-  stage: lint
-  extends: .pre-commit
-
-create_app_version:
-  stage: prepare
-  extends: .create_app_version
-
-update_appcenter:
-  stage: build
-  extends: .update_appcenter
-  needs:
-    - job: create_app_version
-    - job: deb_build_git
-      optional: yes
-    - job: deb_repo_build
-      optional: yes
-  before_script:
-    - ls
-    - "mv build-asm/*.deb appcenter/ || true"
 
 integration_tests:
   extends: .run_openstack_cfg
@@ -68,7 +56,7 @@ integration_tests:
       when: manual
       allow_failure: False
   variables:
-    TARGET_VERSION: "5.2-1"
+    TARGET_VERSION: "5.2-4"
     OPENSTACK_CFG_FILE: ".gitlab-ci/ucsschool-singleserver.cfg"
   script:
     - mkdir results
@@ -77,129 +65,6 @@ integration_tests:
   artifacts:
     reports:
       junit: results/**/test-reports/**/*.xml
-
-deb_build_git:
-  stage: build
-  image: $DEB_IMAGE
-  rules:
-    - if: $CI_COMMIT_TAG == null
-      changes:
-        - apple-school-manager/**/*
-  script:
-    - apt-get update
-    - cd apple-school-manager
-    - apt-get -q --assume-yes build-dep .
-    - dpkg-buildpackage -us -uc
-    - install -d -m 755 build
-    - mv ../*.tar.*z ../*.dsc ../*.deb ../*.buildinfo ../*.changes build/
-    - mv build "$CI_PROJECT_DIR/build-asm"
-  artifacts:
-    paths:
-      - build-asm
-
-deb_repo_import:
-  stage: build
-  variables:
-    GIT_STRATEGY: none
-  rules:
-    - if: $CI_COMMIT_TAG
-      changes:
-        - apple-school-manager/debian/changelog
-  tags:
-    - omar
-  script:
-    - >
-      repo_admin.py
-      -G $CI_REPOSITORY_URL
-      -b $CI_COMMIT_TAG
-      -P apple-school-manager
-      -r ${UCS_RELEASE}-0-0
-      -s $SCOPE
-      -p $PACKAGE
-
-deb_repo_build:
-  stage: build
-  needs:
-    - job: deb_repo_import
-      artifacts: false
-  variables:
-    GIT_STRATEGY: none
-  rules:
-    - if: $CI_COMMIT_TAG
-      changes:
-        - apple-school-manager/debian/changelog
-  tags:
-    - ladda
-  script:
-    - >
-      build-package-ng
-      --no-pbuilder-update
-      -r ${UCS_RELEASE}-0-0
-      -s $SCOPE
-      -p $PACKAGE
-    - rm build-asm/* || true
-    - install -d -m 755 build-asm || true
-    - cp /var/univention/buildsystem2/apt/ucs_${UCS_RELEASE}-0-${SCOPE}/*/*.deb build-asm/
-  artifacts:
-    paths:
-      - build-asm
-
-announce_app_chat:
-  stage: cleanup
-  rules:
-    - if: "$CI_COMMIT_TAG"
-  extends: .send_chat_message
-  variables:
-    ALIAS: "UCS@school Team"
-    DESTINATION: "#ucsschool"
-    MESSAGE: "The Apple School Manager Connector app was released in version $APP_VERSION. Changes can be found in the [Changelog](https://git.knut.univention.de/univention/components/apple-school-manager/-/blob/$UCS_RELEASE/appcenter/README_UPDATE_EN?ref_type=heads)."
-
-announce_app_mail:
-  stage: cleanup
-  rules:
-    - if: "$CI_COMMIT_TAG"
-  extends: .send_mail
-  variables:
-    SUBJECT: "App Release: Apple School Manager Connector"
-    RECIPIENT: "app-announcement@univention.de"
-    SENDER: "ucsschool-maintainers@univention.de"
-  before_script:
-    - |
-      cat >mail.txt<< EOF
-      Hello,
-      the Apple School Manager Connector has been released in version ${APP_VERSION}.
-
-      For changes, see https://git.knut.univention.de/univention/components/apple-school-manager/-/blob/$UCS_RELEASE/appcenter/README_UPDATE_EN?ref_type=heads
-
-      Best regards
-
-      The UCS@school Team
-      EOF
-
-do_release:
-  stage: production
-  extends: .do_release
-
-check_release:
-  stage: production
-  needs:
-    - do_release
-    - create_app_version
-  extends: .check_release
-
-create_gitlab_release:
-  stage: production
-  extends: .create_gitlab_release
-  needs: [do_release]
-  release:
-    assets:
-      links:
-        - name: "Changelog"
-          url: "https://git.knut.univention.de/univention/components/apple-school-manager/-/blob/$CI_COMMIT_TAG/appcenter/README_UPDATE_EN"
-
-delete_app_version:
-  stage: cleanup
-  extends: .delete_app_version
 
 ucs_test_deb_lint:
   stage: lint

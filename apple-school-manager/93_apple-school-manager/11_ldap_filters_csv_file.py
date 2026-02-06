@@ -29,19 +29,19 @@ class Test(ImportTestbase):  # type: ignore[misc]
     def test(self) -> None:
         school1 = self.ou_A.name
         school_class1 = f"{school1}-{uts.random_username()}"
-        teacher1_name, teacher1_dn = self.schoolenv.create_teacher(
+        teacher1_name, _teacher1_dn = self.schoolenv.create_teacher(
             school1,
             classes=school_class1,
         )
-        teacher2_name, teacher2_dn = self.schoolenv.create_teacher_and_staff(
+        teacher2_name, _teacher2_dn = self.schoolenv.create_teacher_and_staff(
             school1,
             classes=school_class1,
         )
-        student1_name, student1_dn = self.schoolenv.create_student(
+        student1_name, _student1_dn = self.schoolenv.create_student(
             school1,
             classes=school_class1,
         )
-        student2_name, student2_dn = self.schoolenv.create_student(
+        student2_name, _student2_dn = self.schoolenv.create_student(
             school1,
             classes=school_class1,
         )

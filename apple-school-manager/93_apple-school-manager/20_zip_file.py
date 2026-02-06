@@ -94,7 +94,7 @@ class Test(ImportTestbase):  # type: ignore[misc]
             schools=[school2, school3],
             classes=f"{school_class2},{school_class3}",
         )
-        teacher7_name, teacher7_dn = self.schoolenv.create_teacher_and_staff(
+        teacher7_name, _teacher7_dn = self.schoolenv.create_teacher_and_staff(
             school3,
             classes=school_class3,
         )
@@ -122,7 +122,7 @@ class Test(ImportTestbase):  # type: ignore[misc]
         )
         student6_name, student6_dn = self.schoolenv.create_student(school1, classes=school_class1)
         student7_name, student7_dn = self.schoolenv.create_student(school2, classes=school_class2)
-        student8_name, student8_dn = self.schoolenv.create_student(school3, classes=school_class3)
+        student8_name, _student8_dn = self.schoolenv.create_student(school3, classes=school_class3)
 
         t1_id_attr, t1_lo = get_person_id(teacher1_dn, "staff", [])
         t1_name = t1_lo[t1_id_attr][0]

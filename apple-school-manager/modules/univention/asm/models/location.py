@@ -67,6 +67,6 @@ class AsmLocation(AsmModel):
         :return: AsmLocation instance
         :rtype: AsmLocation
         """
-        lo, po = get_ldap_connection()
+        lo, _po = get_ldap_connection()
         school = School.from_dn(dn, None, lo)
         return cls(school.name, school.display_name or school.name)

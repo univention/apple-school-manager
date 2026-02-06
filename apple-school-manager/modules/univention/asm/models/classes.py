@@ -140,7 +140,7 @@ class AsmClass(AsmModel):
         :return: AsmClass instance
         :rtype: AsmClass
         """
-        lo, po = get_ldap_connection()
+        lo, _po = get_ldap_connection()
         ucr = get_ucr()
         logger = logging.getLogger(__name__)
         try:

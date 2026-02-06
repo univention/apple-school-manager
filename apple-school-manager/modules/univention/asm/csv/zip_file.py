@@ -76,7 +76,7 @@ class AsmZipFile:
         self.logger.debug("Created CSV files: %s.", ", ".join(sorted(self.csv_files)))
         return self.csv_files
 
-    def write_zip(self, file_path: str | None = None, delete_csv_files: bool | None = True) -> str:
+    def write_zip(self, file_path: str | None = None, delete_csv_files: bool | None = True) -> str:  # noqa: FBT001
         """
         Compress CSV files into a ZIP file. An existing file will be overwritten.
 

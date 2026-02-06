@@ -69,5 +69,27 @@ repos:
         language: pygrep
         entry: '.*\n(\n(Issue ([a-zA-Z_/-]+)#\d+|Bug #\d+))+\n?(\n#.*)*\Z'
         args: ["--multiline", "--negate"]
+  - repo: https://git.knut.univention.de/univention/infrastructure/pre-commit-hooks/pre-commit-copyright
+    rev: 0.2.0
+    hooks:
+      - id: reuse-toml-dry-run
+      - id: reuse-toml
+        stages: [ manual ]
+      - id: update-copyright-year
+        stages: [ manual ]
+  - repo: https://github.com/fsfe/reuse-tool
+    rev: v6.2.0
+    hooks:
+      - id: reuse
+        alias: reuse-annotate
+        name: "reuse annotate"
+        args: ["annotate", "-c", "Univention GmbH", "-l", "AGPL-3.0-only", "--skip-unrecognised", "--skip-existing", "--template", "univention"]
+        pass_filenames: true
+        description: "Annotate all unlicensed files as AGPL-3.0-only with Univention GmbH copyright"
+        stages: [ manual ]
+      - id: reuse
+        alias: reuse-lint
+        stages: [ manual ]
+      - id: reuse-lint-file
 default_language_version:
   python: python3.11

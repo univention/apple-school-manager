@@ -6,6 +6,10 @@
 ##   - univention-apple-school-manager-connector
 ## bugs: [47622]  # noqa: ERA001
 
+# SPDX-FileCopyrightText: 2026 Univention GmbH
+# SPDX-License-Identifier: AGPL-3.0-only
+
+
 import csv
 from operator import itemgetter
 from tempfile import NamedTemporaryFile

@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 Univention GmbH
+# SPDX-License-Identifier: AGPL-3.0-only
+
 from collections.abc import Collection
 
 # https://support.apple.com/en-us/101183

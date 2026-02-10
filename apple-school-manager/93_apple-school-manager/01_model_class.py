@@ -6,6 +6,10 @@
 ##   - univention-apple-school-manager-connector
 ## bugs: [47622, 48511]  # noqa: ERA001
 
+# SPDX-FileCopyrightText: 2026 Univention GmbH
+# SPDX-License-Identifier: AGPL-3.0-only
+
+
 import random
 
 import univention.testing.strings as uts

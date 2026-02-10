@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+
+# SPDX-FileCopyrightText: 2026 Univention GmbH
+# SPDX-License-Identifier: AGPL-3.0-only
+
 # ruff: noqa: ANN001, ANN201
 import pathlib
 import sys

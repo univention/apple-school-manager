@@ -1,23 +1,42 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-# SPDX-FileCopyrightText: 2025-2026 Univention GmbH
 # SPDX-License-Identifier: AGPL-3.0-only
+# SPDX-FileCopyrightText: 2026 Univention GmbH
+#
+# Script that runs in docker host before installing the app.
+#
 
 while [ $# -gt 0 ]; do
-    case "$1" in
+	case "$1" in
         "--error-file")
-            shift
-            errorfile="$1"
-            shift
-            ;;
-        *)
-            shift
-            ;;
-    esac
+			shift
+			errorfile="$1"
+			shift
+			;;
+        "--old-version")
+			shift
+			old_version="$1"
+			shift
+			;;
+		*)
+			shift
+			;;
+	esac
 done
 
-if dpkg-query --show --showformat='${db:Status-Status}' ucs-school-central-replica 2>/dev/null | grep -q installed; then
-    message="The application 'Apple School Manager Connector' can not be installed on a central Replica Directory Node. Please install it on a Primary Directory Node, Backup Directory Node, or school server instead."
-    echo "$message" > "$errorfile"
-    exit 1
+# Issue univention/dev/education/apple-school-manager#15
+# block the update to the newest version of Apple School Manager Connector if
+# the installed version if UCS@school is smaller than 5.2v5
+SCHOOL_LIB_VERSION_MINIMUM="15.2.0"
+SCHOOL_LIB_VERSION="$(LANG=C dpkg-query -W -f '${Version}\n' python3-ucsschool-lib 2>&1)"
+if dpkg --compare-versions "$SCHOOL_LIB_VERSION" lt-nl "$SCHOOL_LIB_VERSION_MINIMUM" ; then
+        message="
+Apple School Manager Connector update aborted:
+Please update UCS@school ID app​ to at least version 5.2v5
+before retrying the Apple School Manager Connector update (your currently installed version is ${old_version}).
+"
+        echo -e "$message" > "$errorfile"
+        exit 1
 fi
+
+exit 0

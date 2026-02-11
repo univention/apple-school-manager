@@ -32,7 +32,7 @@ from univention.asm.models.location import AsmLocation
 from univention.asm.models.roster import AsmRoster
 from univention.asm.models.staff import AsmStaff, get_filtered_staff
 from univention.asm.models.student import AsmStudent
-from univention.asm.utils import get_ldap_connection, get_ucr
+from univention.asm.utils import get_ldap_connection, get_ucr, is_central_replica
 
 __all__ = (
     "AsmClassCsvFile",
@@ -142,7 +142,11 @@ class AsmCsvFile:
         :return list of School objects
         :rtype: list(School)
         """
-        schools = [s for s in School.get_all(self.lo) if s.name != self.limbo_ou]
+        schools = [
+            s
+            for s in School.get_all(self.lo, filter_local=not is_central_replica())
+            if s.name != self.limbo_ou
+        ]
         if self.ou_whitelist:
             schools = [s for s in schools if s.name in self.ou_whitelist]
         return sorted(schools, key=attrgetter("name"))
@@ -177,7 +181,7 @@ class AsmCsvFile:
         # because that would trigger the configuration checks, and the import
         # might not be configured properly.
 
-        school_names = [s.name for s in School.get_all(self.lo)]
+        school_names = [s.name for s in School.get_all(self.lo, filter_local=not is_central_replica())]
         config_files = [
             "/usr/share/ucs-school-import/configs/global_defaults.json",
             "/var/lib/ucs-school-import/configs/global.json",

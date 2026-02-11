@@ -9,8 +9,11 @@ Utility functions.
 
 # don't import __future__.unicode_literals here, DNS lib cannot handle it!
 
+from functools import cache
+
 import DNS
 from ucsschool.importer.utils.ldap_connection import get_machine_connection, get_readonly_connection
+from ucsschool.lib.roles import context_type_school, create_ucsschool_role_string, role_dc_slave
 
 from univention.admin.uldap import access as LoType  # noqa: N812
 from univention.admin.uldap import position as PoType  # noqa: N812
@@ -19,6 +22,9 @@ from univention.config_registry import ConfigRegistry
 _external_dns_resolvers: list[str] = []
 _known_domains: dict[str, bool] = {}
 _ucr: ConfigRegistry = None
+
+
+UCS_ROLE__EMPTY_CONTEXT_VALUE = "-"
 
 
 def get_ldap_connection() -> tuple[LoType, PoType]:
@@ -145,3 +151,39 @@ def get_default_password_policy() -> str:
             msg,
         )
     return str(pp)
+
+
+@cache
+def is_central_replica() -> bool:
+    """
+    Check if the current server is the central replica.
+
+    :return: whether the current server is the central replica
+    :rtype: bool
+    """
+    ucr = get_ucr()
+
+    if ucr.get("server/role") != "domaincontroller_slave":
+        return False
+
+    def _gather_roles() -> list[str]:
+        host_dn = ucr.get("ldap/hostdn")
+        ldap, _ = get_ldap_connection()
+        roles = ldap.getAttr(
+            host_dn,
+            attr="ucsschoolRole",
+            required=True,
+        )
+        if len(roles) < 1:
+            msg = f"No ucsschoolRole set for {host_dn!r}."
+            raise ValueError(msg)
+        return [str(role.decode("utf-8")) for role in roles]
+
+    roles = _gather_roles()
+    return any(
+        role
+        == create_ucsschool_role_string(
+            role_dc_slave, UCS_ROLE__EMPTY_CONTEXT_VALUE, context_type_school
+        )
+        for role in roles
+    )

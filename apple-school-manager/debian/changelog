@@ -1,3 +1,10 @@
+univention-apple-school-manager-connector (5.1.1) unstable; urgency=medium
+
+  * Bug #58505: Support running ASMC on central replica node
+    Issue univention/dev/education/apple-school-manager#15
+
+ -- Jan Gietzel <jan.gietzel@univention.de>  Mon, 12 Feb 2026 11:20:05 +0100
+
 univention-apple-school-manager-connector (5.1.0) unstable; urgency=medium
 
   * Issue univention/dev/education/apple-school-manager#14 / Bug #58988: Raise the possible location_ids for students and staff members in ASM

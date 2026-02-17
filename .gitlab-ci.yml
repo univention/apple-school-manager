@@ -27,6 +27,7 @@ include:
     inputs:
       ucs_base_version: "5.2"
       scope: "univention-asm"
+      yaml_based_upload: false
       additional_upload_needs:
         - create_app_version
 
@@ -41,7 +42,6 @@ stages:
   - cleanup
 
 variables:
-  PACKAGE: "univention-apple-school-manager-connector"
   DEBIAN_SOURCE_DIRECTORIES: "apple-school-manager/"
   UCSLINT_IMAGE: gitregistry.knut.univention.de/univention/dev/ucs
 

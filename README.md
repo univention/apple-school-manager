@@ -35,3 +35,22 @@ The apple school manger upload logs are usually not very helpful.
 To get better error message, disconnect the SFTP upload and
 got through the apple school manager wizard again.
 The wizard will give you better error messages.
+
+## No email error
+
+All users must be uploaded with an email set.
+Make sure that the asm is allowed to upload email addresses,
+either by mapping an email or disabling the anonymize function
+
+```bash
+ucr set asm/attributes/students/anonymize=false
+ucr set asm/attributes/staff/anonymize=false
+```
+
+## SFTP login
+
+* Click on you name in the lower left corner
+* Select "Preferences"
+* Select "Managed Apple Accounts"
+* Click the menu for "Apple formatted CSV"
+* Click "Upload CSV", a new frame opens with the sftp account data.

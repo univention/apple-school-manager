@@ -21,7 +21,6 @@ include:
       mail_recipient: "app-announcement@univention.de"
       chat_destination: "#ucsschool"
       ucs_base_version: "5.2"
-      release_tag_constraint: '\d.\d+v\d+'
       app_staging_version: "999.0.0-staging"
   - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/debian-package@2
     inputs:

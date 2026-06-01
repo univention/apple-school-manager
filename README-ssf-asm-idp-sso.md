@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2026 Univention GmbH
+SPDX-License-Identifier: AGPL-3.0-only
+-->
+
 # Requirements
 
 * UCS + ASM Connector + Keycloak App
@@ -7,9 +12,7 @@
 * A verified domain in ASM
 * A apple device for the initial onboarding
 
-# Keycloak image
-
-## Create image
+## Create Keycloak image with SSF support
 
 As long as the **SSF** feature is not part of the nubus keycloak image, we need:
 * got to keycloak-app repo
@@ -19,7 +22,8 @@ As long as the **SSF** feature is not part of the nubus keycloak image, we need:
 * copy archive to UCS server
 * or download image: `curl http://t04.service-univention.de/nightly-image.tar --output /tmp/nightly-image.tar`
 
-## Copy to and setup on UCS
+## Copy to and setup image on UCS
+
 On the UCS server
 
 * import image `docker load -i nightly-image.tar`
@@ -29,17 +33,17 @@ On the UCS server
 -error-level=warn --log-level=info,org.keycloak.ssf:trace` to the "command" (to enable the SSF feature)
 * run `univention-app reinitialize keycloak`
 
-# Setup UCS keycloak
+## Setup UCS keycloak
 
-## Realm
+### Realm
 
 * In Realm Settings, set **SSF Transmitter** to **On**.
 * You now have a new metadata endpoint for SSF, similar to OpenId
-  * OpenID Endpoint Configuration 
-  * SSF Configuration Metadata 
+  * OpenID Endpoint Configuration
+  * SSF Configuration Metadata
 * You will need the URL of these endpoints later
 
-## OIDC client for ASM
+### OIDC client for ASM
 
 * Create a OIDC client:
 * Client ID/Name: `apple-asm`
@@ -50,11 +54,11 @@ On the UCS server
 * PKCE: **Off** (Apple currently does not appear to support PKCE for OIDC federations)
 * Copy the client secret from the **Credentials** tab.
 
-## Client scopes
+### Client scopes
 
 * create client scopes `ssf.manage`, `ssf.read` with `Include in token scope` enabled
 
-## Configure SSF Receiver support for the client
+### Configure SSF Receiver support for the client
 
 * Configure SSF Receiver support for the client:
   * **SSF Receiver**: **On**
@@ -75,7 +79,7 @@ On the UCS server
   * **Emit events enabled**: **On**
   * **Emit-only events**: `CaepSessionRevoked` (lets you control when user sign-outs are propagated via API).
 
-## ASM admin user
+### ASM admin user
 
 This user is used to establish the ASM to Keycloak connection via the Authorization Code Flow, producing an access/refresh token bound to an offline user session.
 * Create a user, e.g. username `asm`, and complete the profile as needed.
@@ -83,9 +87,9 @@ This user is used to establish the ASM to Keycloak connection via the Authorizat
 * Assign the client role `apple-asm/ssf-admin`.
 * Set firstname, lastname and email
 
-# ABM Setup
+## ABM Setup
 
-## IDP setup
+### IDP setup
 
 * Go to https://school.apple.com and login
 * Navigate to **Preferences->Managed Apple Accounts**.
@@ -108,7 +112,7 @@ This user is used to establish the ASM to Keycloak connection via the Authorizat
 
 At this point, Apple has created an SSF stream for the `apple-asm` SSF receiver OIDC client. The stream is visible in the client's **SSF Streams** tab.
 
-## Connect IDP to domain
+### Connect IDP to domain
 
 * Navigate to **Preferences->Managed Apple Accounts**.
 * Select your target domain and click **Manage**.
@@ -117,22 +121,22 @@ At this point, Apple has created an SSF stream for the `apple-asm` SSF receiver 
 
 Federation is now enabled for your domain. The ABM account should receive a **Federation Enabled** confirmation email.
 
-# Onboarding a User via Device
+## Onboarding a User via Device
 
 Users can now onboard their Apple devices via Keycloak. The following describes
 the flow for an unpaired device.
 
 See: https://support.apple.com/guide/iphone/sign-in-and-manage-your-apple-account-iph76e54c61e/ios
 
-- Open **Settings**.
-- Tap **Apple Account**.
-- Tap **Sign In Manually**.
-- Enter an email address that matches the federated ABM domain, e.g. `user@your-domain.com`, then tap **Proceed**.
-- A hint appears: **Apple account for `<Company Name>`**  tap **Proceed**.
-- The Keycloak login page is shown with the username pre-filled.
-- After signing in with the correct password, a processing screen displays the user's first and last name.
-- After a short delay, enter your device PIN.
-- **Settings Apple Account** now shows the connected user with the correct email address.
+* Open **Settings**.
+* Tap **Apple Account**.
+* Tap **Sign In Manually**.
+* Enter an email address that matches the federated ABM domain, e.g. `user@your-domain.com`, then tap **Proceed**.
+* A hint appears: **Apple account for `<Company Name>`**  tap **Proceed**.
+* The Keycloak login page is shown with the username pre-filled.
+* After signing in with the correct password, a processing screen displays the user's first and last name.
+* After a short delay, enter your device PIN.
+* **Settings Apple Account** now shows the connected user with the correct email address.
 
 The ABM user account is now linked to the federated Keycloak user and can be
 managed through Apple Business Manager.

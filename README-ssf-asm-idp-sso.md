@@ -1,49 +1,58 @@
 # Requirements
 
 * UCS + ASM Connector + Keycloak App
-  * `ucr set asm/attributes/student/anonymize=false` for emails to be transmitted, we need those as apple id
-  * `ucr set asm/attributes/staff/anonymize=false` for emails to be transmitted, we need those as apple id
+  * We need to transfer the users email, this is used as apple id, deactivate anonymization in the ASM connector
+    * `ucr set asm/attributes/student/anonymize=false` for emails to be transmitted, we need those as apple id
+    * `ucr set asm/attributes/staff/anonymize=false` for emails to be transmitted, we need those as apple id
 * A verified domain in ASM
 * A apple device for the initial onboarding
 
 # Keycloak image
 
-* as long as the SSF feature is not part of the nubus keycloak image, we need to ...
+## Create image
+
+As long as the **SSF** feature is not part of the nubus keycloak image, we need:
 * got to keycloak-app repo
 * download keycloak nightly build keycloak-999.0.0-SNAPSHOT.tar.gz
-* build container locally `docker buildx build docker/keycloak --build-arg KEYCLOAK_VERSION=999.0.0-SNAPSHOT -t nightly-keycloak --no-cache`
-* export image to archive `docker save -o night-image.tar nightly-keycloak:latest`
+* build the container locally: `docker buildx build docker/keycloak --build-arg KEYCLOAK_VERSION=999.0.0-SNAPSHOT -t nightly-keycloak --no-cache`
+* export image to archive: `docker save -o night-image.tar nightly-keycloak:latest`
 * copy archive to UCS server
-* on the UCS server
-  * import image `docker load -i night-image.tar`
-  * in `/var/cache/univention-appcenter/appcenter.software-univention.de/5.0/keycloak_20260226143602.compose` (or whatever keycloak version is installed)
-    * replace `image*` with `image: "nightly-keycloak:latest"`
-    * add `--spi-datastore-legacy-allow-migrate-existing-database-to-snapshot=true --feature-ssf enabled --spi-events-listener-jboss-logging-success-level=info --spi-events-listener-jboss-logging
--error-level=warn --log-level=info,org.keycloak.ssf:trace` to "command"
-  * run `univention-app reinitialize keycloak`
+* or download image: `curl http://t04.service-univention.de/nightly-image.tar --output /tmp/nightly-image.tar`
+
+## Copy to and setup on UCS
+On the UCS server
+
+* import image `docker load -i nightly-image.tar`
+* in `/var/cache/univention-appcenter/appcenter.software-univention.de/5.0/keycloak_20260226143602.compose` (or whatever keycloak version is installed)
+  * replace `image*` with `image: "nightly-keycloak:latest"`
+  * add `--spi-datastore-legacy-allow-migrate-existing-database-to-snapshot=true --feature-ssf enabled --spi-events-listener-jboss-logging-success-level=info --spi-events-listener-jboss-logging
+-error-level=warn --log-level=info,org.keycloak.ssf:trace` to the "command" (to enable the SSF feature)
+* run `univention-app reinitialize keycloak`
 
 # Setup UCS keycloak
 
 ## Realm
 
 * In Realm Settings, set **SSF Transmitter** to **On**.
-* Copy the SSF configuration URL: `https://site/realms/ssf-poc/.well-known/ssf-configuration`
-* Copy the OpenID configuration URL: `https://site/realms/ssf-poc/.well-known/openid-configuration`
+* You now have a new metadata endpoint for SSF, similar to OpenId
+  * OpenID Endpoint Configuration 
+  * SSF Configuration Metadata 
+* You will need the URL of these endpoints later
 
 ## OIDC client for ASM
 
 * Create a OIDC client:
-* Client ID: `apple-asm`
+* Client ID/Name: `apple-asm`
 * Client Authentication: **On**
 * Authentication Flow: **Standard Flow** enabled
-* Valid redirect URIs: `https://gsa-ws.apple.com/grandslam/GsService2/acs/*` (or https://gsa-ws.apple.com/grandslam/GsService2/acs)
+* Valid redirect URIs: `https://gsa-ws.apple.com/grandslam/GsService2/acs`
 * Valid post logout redirect URIs: `+`
 * PKCE: **Off** (Apple currently does not appear to support PKCE for OIDC federations)
 * Copy the client secret from the **Credentials** tab.
 
 ## Client scopes
 
-* create client scopes `ssf.manage`, `ssf.read` with `Include in token scope`
+* create client scopes `ssf.manage`, `ssf.read` with `Include in token scope` enabled
 
 ## Configure SSF Receiver support for the client
 

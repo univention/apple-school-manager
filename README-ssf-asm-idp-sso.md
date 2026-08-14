@@ -3,13 +3,15 @@ SPDX-FileCopyrightText: 2026 Univention GmbH
 SPDX-License-Identifier: AGPL-3.0-only
 -->
 
+# Keycloak as IDP for ASM
+
 **Shared Signals Framework** (SSF) is the OpenID Foundation standard for sharing real-time security events, state changes, and risk signals between Keycloak (acting as an Identity Provider) and external applications, microservices, or downstream Relying Parties (RPs).
 
 SSF is a requirement for using Keycloak as IDP in Apple School.
 
 This document is a first draft of a documentation for setting up Keycloak and Apple School Manager such that Keycloak acts as IDP.
 
-# Requirements
+## Requirements
 
 * UCS + ASM Connector + Keycloak App
   * We need to transfer the users email, this is used as apple id, deactivate anonymization in the ASM connector
@@ -18,17 +20,17 @@ This document is a first draft of a documentation for setting up Keycloak and Ap
 * A verified domain in ASM
 * A apple device for the initial onboarding
 
-# Keycloak with SSF support
+## Keycloak with SSF support
 
-## UCS Keycloak App > 26.7.1
+### UCS Keycloak App > 26.7.1
 
 The SSF feature is now part of the official Keycloak release, as **experimental** feature.
 
 Can be activated in the UCS app with the `keycloak/server/feature/ssf` setting and in N4K.
 
-## UCS Keycloak App <> 26.7.1
+### UCS Keycloak App <> 26.7.1
 
-### Create Keycloak image with SSF support
+#### Create Keycloak image with SSF support
 
 As long as the **SSF** feature is not part of the nubus keycloak image, we need:
 * got to keycloak-app repo
@@ -38,7 +40,7 @@ As long as the **SSF** feature is not part of the nubus keycloak image, we need:
 * copy archive to UCS server
 * or download image: `curl http://t04.service-univention.de/nightly-image.tar --output /tmp/nightly-image.tar`
 
-### Copy to and setup image on UCS
+#### Copy to and setup image on UCS
 
 On the UCS server
 
@@ -49,9 +51,9 @@ On the UCS server
 -error-level=warn --log-level=info,org.keycloak.ssf:trace` to the "command" (to enable the SSF feature)
 * run `univention-app reinitialize keycloak`
 
-# Setup UCS keycloak
+## Setup UCS keycloak
 
-## Realm
+### Realm
 
 * In Realm Settings, set **SSF Transmitter** to **On**.
 * You now have a new metadata endpoint for SSF, similar to OpenId
@@ -59,7 +61,7 @@ On the UCS server
   * SSF Configuration Metadata
 * You will need the URL of these endpoints later
 
-## OIDC client for ASM
+### OIDC client for ASM
 
 * Create a OIDC client:
 * Client ID/Name: `apple-asm`
@@ -70,11 +72,11 @@ On the UCS server
 * PKCE: **Off** (Apple currently does not appear to support PKCE for OIDC federations)
 * Copy the client secret from the **Credentials** tab.
 
-## Client scopes
+### Client scopes
 
 * create client scopes `ssf.manage`, `ssf.read` with `Include in token scope` enabled
 
-## Configure SSF Receiver support for the client
+### Configure SSF Receiver support for the client
 
 * Configure SSF Receiver support for the client:
   * **SSF Receiver**: **On**
@@ -95,7 +97,7 @@ On the UCS server
   * **Emit events enabled**: **On**
   * **Emit-only events**: `CaepSessionRevoked` (lets you control when user sign-outs are propagated via API).
 
-## ASM admin user
+### ASM admin user
 
 This user is used to establish the ASM to Keycloak connection via the Authorization Code Flow, producing an access/refresh token bound to an offline user session.
 * Create a user, e.g. username `asm`, and complete the profile as needed.
@@ -103,9 +105,9 @@ This user is used to establish the ASM to Keycloak connection via the Authorizat
 * Assign the client role `apple-asm/ssf-admin`.
 * Set firstname, lastname and email
 
-# ABM Setup
+## ASM Setup
 
-## IDP setup
+### IDP setup
 
 * Go to https://school.apple.com and login
 * Navigate to **Preferences->Managed Apple Accounts**.
@@ -128,7 +130,7 @@ This user is used to establish the ASM to Keycloak connection via the Authorizat
 
 At this point, Apple has created an SSF stream for the `apple-asm` SSF receiver OIDC client. The stream is visible in the client's **SSF Streams** tab.
 
-## Connect IDP to domain
+### Connect IDP to domain
 
 * Navigate to **Preferences->Managed Apple Accounts**.
 * Select your target domain and click **Manage**.
@@ -137,7 +139,7 @@ At this point, Apple has created an SSF stream for the `apple-asm` SSF receiver 
 
 Federation is now enabled for your domain. The ABM account should receive a **Federation Enabled** confirmation email.
 
-# Onboarding a User via Device
+## Onboarding a User via Device
 
 Users can now onboard their Apple devices via Keycloak. The following describes
 the flow for an unpaired device.

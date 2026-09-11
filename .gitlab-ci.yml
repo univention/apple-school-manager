@@ -22,6 +22,7 @@ include:
       chat_destination: "#ucsschool"
       ucs_base_version: "5.2"
       app_staging_version: "999.0.0-staging"
+  - local: /.gitlab-ci/gitlab-ci-docs.yml
   - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/debian-package@2
     inputs:
       ucs_base_version: "5.2"
@@ -36,6 +37,7 @@ stages:
   - build
   - test
   - appcenter
+  - merge
   - production
   - release
   - cleanup
@@ -43,6 +45,7 @@ stages:
 variables:
   DEBIAN_SOURCE_DIRECTORIES: "apple-school-manager/"
   UCSLINT_IMAGE: gitregistry.knut.univention.de/univention/dev/ucs
+  DOC_NAME: "apple-school-manager-connector"
 
 integration_tests:
   extends: .run_openstack_cfg

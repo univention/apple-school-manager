@@ -1,0 +1,29 @@
+.. SPDX-FileCopyrightText: 2026 Univention GmbH
+..
+.. SPDX-License-Identifier: AGPL-3.0-only
+
+.. _index:
+
+##############################################
+Apple School Manager Connector for UCS\@school
+##############################################
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents
+   :numbered:
+
+   introduction
+   installation
+   configuration
+   synchronization
+   identity-provider
+   troubleshooting
+   changelog
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Appendix
+
+   glossary
+   bibliography

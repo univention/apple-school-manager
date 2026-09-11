@@ -1,17 +1,30 @@
 # Univention Apple School Manager Connector
 
-An app that allows uploading ZIP compressed CSV files
+An app that uploads ZIP compressed CSV files
 to the Apple School Manager server
-to synchronize UCS@schoool users to Apple.
+to synchronize UCS@school users to Apple.
 Those look a lot like OneRoster files, but they're not.
 
-* can be installed on DC master and DC backup and school servers
-* can not be installed on a central replica
-* configuration with UCR variables
-* app settings as configuration wizard (to set the UCR variables)
-* scripts for daily cronjobs to upload fresh CSV/ZIP files
+The user facing documentation lives in [`doc/docs`](doc/docs)
+and covers installation, configuration, the exported data,
+the Keycloak identity provider setup and troubleshooting.
 
 [Meta bug for initial development](http://forge.univention.org/bugzilla/show_bug.cgi?id=47620)
+
+## Build the documentation
+
+```bash
+make -C doc html
+make -C doc latexpdf
+make -C doc livehtml-docs
+make -C doc spelling
+make -C doc linkcheck
+```
+
+The targets run the Sphinx toolchain in a container,
+so a local Sphinx installation is not required.
+The pipeline builds, checks and publishes the same sources,
+see `.gitlab-ci/gitlab-ci-docs.yml`.
 
 ## Build and upload to the appcenter
 
@@ -25,32 +38,34 @@ Check the ci/cd configuration if you need to repeat any steps manually.
 * Is everything looking good so far? The next will make the new version public!
 * Start the `do_release` job
 
+Add the new version to `appcenter/README_UPDATE_EN`
+and to `doc/docs/changelog.rst`.
+
 ## Update etc/asm_public_key
 
 You can call generate_asm_host_key.py
 
-## Troubleshooting
+## Keycloak with SSF support before app version 26.7.1
 
-The apple school manger upload logs are usually not very helpful.
-To get better error message, disconnect the SFTP upload and
-got through the apple school manager wizard again.
-The wizard will give you better error messages.
+`doc/docs/identity-provider.rst` documents the supported setup,
+which needs the Keycloak app in version 26.7.1 or later.
+On an older Keycloak, build an image with the SSF feature yourself:
 
-## No email error
+* go to the keycloak-app repo
+* download the keycloak nightly build `keycloak-999.0.0-SNAPSHOT.tar.gz`
+* build the container locally:
+  `docker buildx build docker/keycloak --build-arg KEYCLOAK_VERSION=999.0.0-SNAPSHOT -t nightly-keycloak --no-cache`
+* export the image to an archive: `docker save -o night-image.tar nightly-keycloak:latest`
+* copy the archive to the UCS server,
+  or download it there:
+  `curl http://t04.service-univention.de/nightly-image.tar --output /var/tmp/nightly-image.tar`
 
-All users must be uploaded with an email set.
-Make sure that the asm is allowed to upload email addresses,
-either by mapping an email or disabling the anonymize function
+On the UCS server:
 
-```bash
-ucr set asm/attributes/students/anonymize=false
-ucr set asm/attributes/staff/anonymize=false
-```
-
-## SFTP login
-
-* Click on you name in the lower left corner
-* Select "Preferences"
-* Select "Managed Apple Accounts"
-* Click the menu for "Apple formatted CSV"
-* Click "Upload CSV", a new frame opens with the sftp account data.
+* import the image: `docker load -i nightly-image.tar`
+* in `/var/cache/univention-appcenter/appcenter.software-univention.de/5.0/keycloak_20260226143602.compose`
+  (or whatever keycloak version is installed)
+  * replace `image*` with `image: "nightly-keycloak:latest"`
+  * append to the `command` to enable the SSF feature:
+    `--spi-datastore-legacy-allow-migrate-existing-database-to-snapshot=true --feature-ssf enabled --spi-events-listener-jboss-logging-success-level=info --spi-events-listener-jboss-logging-error-level=warn --log-level=info,org.keycloak.ssf:trace`
+* run `univention-app reinitialize keycloak`

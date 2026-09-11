@@ -1,0 +1,218 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2026, Univention GmbH
+# This file is distributed under the same license as the Apple School
+# Manager Connector package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Apple School Manager Connector 5.1.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-11 10:35+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: de\n"
+"Language-Team: de <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: ../../troubleshooting.rst:9
+msgid "Troubleshooting"
+msgstr ""
+
+#: ../../troubleshooting.rst:11
+msgid ""
+"This chapter describes where the connector records what it does and what "
+"to do about the problems that occur most often."
+msgstr ""
+
+#: ../../troubleshooting.rst:17
+msgid "Log file"
+msgstr ""
+
+#: ../../troubleshooting.rst:19
+msgid ""
+"The connector writes to :file:`/var/log/univention/asm.log`. The file "
+"holds the debug level protocol of every run, including the LDAP objects "
+"that the connector skipped and why. The app settings show the time of the"
+" last upload in ``asm/last_upload``."
+msgstr ""
+
+#: ../../troubleshooting.rst:24
+msgid ""
+"The log rotation follows the ``logrotate/*`` UCR variables of the system."
+" The connector writes its own configuration to "
+":file:`/etc/logrotate.d/asm`."
+msgstr ""
+
+#: ../../troubleshooting.rst:27
+msgid "Follow a synchronization run"
+msgstr ""
+
+#: ../../troubleshooting.rst:35
+msgid "Get better error messages from Apple School Manager"
+msgstr ""
+
+#: ../../troubleshooting.rst:37
+msgid ""
+"Apple School Manager reports errors in the uploaded data sparsely. The "
+"wizard that imports a CSV file interactively is more explicit about what "
+"it rejects."
+msgstr ""
+
+#: ../../troubleshooting.rst:41
+msgid ""
+"To use it, disconnect the SFTP upload in Apple School Manager and run "
+"through the :guilabel:`Apple formatted CSV` wizard again with the archive"
+" from :ref:`synchronization-inspect`. The wizard names the file, the row,"
+" and the column that it objects to."
+msgstr ""
+
+#: ../../troubleshooting.rst:49
+msgid "Users don't appear in Apple School Manager"
+msgstr ""
+
+#: ../../troubleshooting.rst:51
+msgid "Check the following, in this order:"
+msgstr ""
+
+#: ../../troubleshooting.rst:53
+msgid ""
+"**The user has no primary email address.** Apple School Manager uses the "
+"email address as the Apple Account, so the connector skips users without "
+"one."
+msgstr ""
+
+#: ../../troubleshooting.rst:57
+msgid ""
+"**The domain of the email address doesn't resolve.** The connector checks"
+" the second-level domain of every address in the :term:`DNS` and writes a"
+" warning to the log file if it can't resolve it. Search the log file for "
+"``Invalid email domain``."
+msgstr ""
+
+#: ../../troubleshooting.rst:62
+msgid ""
+"**Anonymization removed the email address.** With "
+"``asm/attributes/student/anonymize`` or "
+"``asm/attributes/staff/anonymize`` enabled, the connector exports the "
+"replacement value instead of the address, which is empty by default. See "
+":ref:`configuration-anonymization`."
+msgstr ""
+
+#: ../../troubleshooting.rst:69
+msgid "Turn anonymization off"
+msgstr ""
+
+#: ../../troubleshooting.rst:75
+msgid ""
+"**The school isn't on the list.** With ``asm/school_whitelist`` set, the "
+"connector only exports the listed schools. See :ref:`configuration-"
+"school-list`."
+msgstr ""
+
+#: ../../troubleshooting.rst:80
+msgid ""
+"**An LDAP filter excludes the user.** See :ref:`configuration-ldap-"
+"filter`. The log file names every user that a filter excluded."
+msgstr ""
+
+#: ../../troubleshooting.rst:87
+msgid "The run stops with a credential error"
+msgstr ""
+
+#: ../../troubleshooting.rst:89
+msgid ""
+"The connector stops before it collects any data if the user name or the "
+"password is missing."
+msgstr ""
+
+#: ../../troubleshooting.rst:92 ../../troubleshooting.rst:128
+msgid "Message in the log file"
+msgstr ""
+
+#: ../../troubleshooting.rst:97
+msgid ""
+"Enter the credentials in the app settings, as described in :ref"
+":`installation-configure-credentials`. If the credentials are set but "
+"Apple rejects them, generate new ones in Apple School Manager and enter "
+"those."
+msgstr ""
+
+#: ../../troubleshooting.rst:106
+msgid "The upload stops with a missing host key"
+msgstr ""
+
+#: ../../troubleshooting.rst:108
+msgid ""
+"The connector verifies the host key of the SFTP server against "
+":file:`/etc/asm_public_key`. The package ships that file. If it's missing"
+" or no longer matches the server, the upload fails with ``Could not find "
+"/etc/asm_public_key`` or with an SSH exception."
+msgstr ""
+
+#: ../../troubleshooting.rst:115
+msgid ""
+"Reinstall the package to restore the file. If Apple changed the host key,"
+" report it so that a new version of the app can ship the new key."
+msgstr ""
+
+#: ../../troubleshooting.rst:122
+msgid "The run stops with an invalid LDAP filter"
+msgstr ""
+
+#: ../../troubleshooting.rst:124
+msgid ""
+"An LDAP filter with a syntax error stops the synchronization before the "
+"connector uploads anything. The log file names the variable and the "
+"filter."
+msgstr ""
+
+#: ../../troubleshooting.rst:133
+msgid ""
+"Correct the filter, or unset the variable to fall back to the global "
+"filter. See :ref:`configuration-ldap-filter`."
+msgstr ""
+
+#: ../../troubleshooting.rst:140
+msgid "Classes have fewer teachers than expected"
+msgstr ""
+
+#: ../../troubleshooting.rst:142
+msgid ""
+"Apple School Manager supports at most 15 teachers per class. The "
+"connector exports the first 15 and writes a warning to the log file that "
+"names the class. This is a limitation of Apple School Manager, not of the"
+" connector."
+msgstr ""
+
+#: ../../troubleshooting.rst:148
+msgid ""
+"An LDAP filter for teachers can also reduce the number. The log file "
+"records every teacher that a filter excluded from a class."
+msgstr ""
+
+#: ../../troubleshooting.rst:154
+msgid "Where to get help"
+msgstr ""
+
+#: ../../troubleshooting.rst:156
+msgid ""
+"The `Univention Help <https://help.univention.com/>`_ forum for questions"
+" from the community."
+msgstr ""
+
+#: ../../troubleshooting.rst:159
+msgid "Your Univention support contract for a supported environment."
+msgstr ""
+
+#: ../../troubleshooting.rst:161
+msgid ""
+"When you report a problem, attach the relevant part of "
+":file:`/var/log/univention/asm.log`."
+msgstr ""
+

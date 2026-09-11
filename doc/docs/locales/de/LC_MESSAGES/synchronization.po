@@ -1,0 +1,540 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2026, Univention GmbH
+# This file is distributed under the same license as the Apple School
+# Manager Connector package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Apple School Manager Connector 5.1.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-11 10:35+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: de\n"
+"Language-Team: de <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: ../../synchronization.rst:9
+msgid "Synchronization"
+msgstr ""
+
+#: ../../synchronization.rst:11
+msgid ""
+"A synchronization run reads the school data from the LDAP directory, "
+"writes it to CSV files, packs the files into a ZIP archive, and uploads "
+"the archive to Apple School Manager. This chapter describes the run "
+"itself and the data that it transfers."
+msgstr ""
+
+#: ../../synchronization.rst:21
+msgid "Run the synchronization"
+msgstr ""
+
+#: ../../synchronization.rst:23
+msgid "Three things start a synchronization run:"
+msgstr ""
+
+#: ../../synchronization.rst:25
+msgid "The cron job from :ref:`configuration-schedule`."
+msgstr ""
+
+#: ../../synchronization.rst:27
+msgid "Saving the app settings, if you enabled ``asm/run_on_appsetting_save``."
+msgstr ""
+
+#: ../../synchronization.rst:30
+msgid "The command :command:`asm-upload` on the command line."
+msgstr ""
+
+#: ../../synchronization.rst:32
+msgid "Start a synchronization run manually"
+msgstr ""
+
+#: ../../synchronization.rst:37
+msgid ""
+"The command writes progress messages to the terminal and a more detailed "
+"protocol to :file:`/var/log/univention/asm.log`. It exits with a non-zero"
+" status if the credentials are missing or if the upload fails."
+msgstr ""
+
+#: ../../synchronization.rst:46
+msgid "What happens during a run"
+msgstr ""
+
+#: ../../synchronization.rst:48
+msgid ""
+"The connector reads the user name from ``asm/username`` and the password "
+"from :file:`/etc/asm.secret`. A missing value stops the run."
+msgstr ""
+
+#: ../../synchronization.rst:52
+msgid ""
+"The connector collects the schools, classes, work groups, teachers, and "
+"students from the LDAP directory, restricted by ``asm/school_whitelist`` "
+"and by the LDAP filters from :ref:`configuration-ldap-filter`."
+msgstr ""
+
+#: ../../synchronization.rst:57
+msgid ""
+"The connector writes the six CSV files from :ref:`synchronization-csv-"
+"files` to a temporary directory."
+msgstr ""
+
+#: ../../synchronization.rst:60
+#, python-brace-format
+msgid ""
+"The connector packs the CSV files into "
+":file:`/var/lib/asm/asm_{timestamp}.zip` and removes the temporary "
+"directory."
+msgstr ""
+
+#: ../../synchronization.rst:64
+msgid ""
+"The connector opens an SFTP connection to "
+"``upload.appleschoolcontent.com`` and uploads the archive as "
+":file:`archive.zip`. It verifies the host key against "
+":file:`/etc/asm_public_key`."
+msgstr ""
+
+#: ../../synchronization.rst:69
+msgid ""
+"The connector sets ``asm/last_upload`` to the current time and deletes "
+"the archive, unless you enabled ``asm/store_zip``."
+msgstr ""
+
+#: ../../synchronization.rst:73
+msgid ""
+"Every run transfers the complete data set. The connector doesn't track "
+"what changed since the last run."
+msgstr ""
+
+#: ../../synchronization.rst:79
+msgid "How Apple School Manager applies the data"
+msgstr ""
+
+#: ../../synchronization.rst:81
+msgid ""
+"Apple School Manager compares the uploaded data with the accounts that it"
+" holds:"
+msgstr ""
+
+#: ../../synchronization.rst:84
+msgid "A user that appears for the first time gets a new account."
+msgstr ""
+
+#: ../../synchronization.rst:86
+msgid ""
+"A user that is no longer in the upload is deactivated immediately and "
+"deleted after 30 days."
+msgstr ""
+
+#: ../../synchronization.rst:89
+msgid ""
+"A user whose attributes changed keeps the account, as long as the "
+"``person_id`` column is unchanged. See :ref:`configuration-person-id`."
+msgstr ""
+
+#: ../../synchronization.rst:96
+msgid "The CSV files"
+msgstr ""
+
+#: ../../synchronization.rst:98
+msgid ""
+"The archive contains the following six files. Apple documents their "
+"format in :cite:t:`apple-sis-csv`. The connector sorts the rows of each "
+"file by school and then by user or class name."
+msgstr ""
+
+#: ../../synchronization.rst:103
+msgid "Files in the uploaded archive"
+msgstr ""
+
+#: ../../synchronization.rst:107
+msgid "File"
+msgstr ""
+
+#: ../../synchronization.rst:108
+msgid "Content"
+msgstr ""
+
+#: ../../synchronization.rst:110
+msgid ":file:`locations.csv`"
+msgstr ""
+
+#: ../../synchronization.rst:111
+msgid "One row per school."
+msgstr ""
+
+#: ../../synchronization.rst:113
+msgid ":file:`courses.csv`"
+msgstr ""
+
+#: ../../synchronization.rst:114
+msgid "One row per school class and work group."
+msgstr ""
+
+#: ../../synchronization.rst:116
+msgid ":file:`classes.csv`"
+msgstr ""
+
+#: ../../synchronization.rst:117
+msgid "One row per school class and work group, with the teachers of that class."
+msgstr ""
+
+#: ../../synchronization.rst:120
+msgid ":file:`staff.csv`"
+msgstr ""
+
+#: ../../synchronization.rst:121
+msgid "One row per teacher."
+msgstr ""
+
+#: ../../synchronization.rst:123
+msgid ":file:`students.csv`"
+msgstr ""
+
+#: ../../synchronization.rst:124
+msgid "One row per student."
+msgstr ""
+
+#: ../../synchronization.rst:126
+msgid ":file:`rosters.csv`"
+msgstr ""
+
+#: ../../synchronization.rst:127
+msgid "One row per membership of a student in a school class or work group."
+msgstr ""
+
+#: ../../synchronization.rst:132
+msgid "Locations"
+msgstr ""
+
+#: ../../synchronization.rst:134
+msgid "Columns of :file:`locations.csv`"
+msgstr ""
+
+#: ../../synchronization.rst:138 ../../synchronization.rst:157
+#: ../../synchronization.rst:183 ../../synchronization.rst:223
+#: ../../synchronization.rst:267 ../../synchronization.rst:318
+msgid "Column"
+msgstr ""
+
+#: ../../synchronization.rst:139 ../../synchronization.rst:158
+#: ../../synchronization.rst:184 ../../synchronization.rst:224
+#: ../../synchronization.rst:268 ../../synchronization.rst:319
+msgid "Source in UCS\\@school"
+msgstr ""
+
+#: ../../synchronization.rst:141 ../../synchronization.rst:171
+#: ../../synchronization.rst:204 ../../synchronization.rst:249
+#: ../../synchronization.rst:301
+msgid "``location_id``"
+msgstr ""
+
+#: ../../synchronization.rst:142
+msgid "Name of the school, for example ``gym123``."
+msgstr ""
+
+#: ../../synchronization.rst:144
+msgid "``location_name``"
+msgstr ""
+
+#: ../../synchronization.rst:145
+msgid ""
+"Display name of the school. Falls back to the name if the school has no "
+"display name."
+msgstr ""
+
+#: ../../synchronization.rst:151
+msgid "Courses"
+msgstr ""
+
+#: ../../synchronization.rst:153
+msgid "Columns of :file:`courses.csv`"
+msgstr ""
+
+#: ../../synchronization.rst:160 ../../synchronization.rst:194
+msgid "``course_id``"
+msgstr ""
+
+#: ../../synchronization.rst:161
+msgid ""
+"Name of the school class or work group, including the school prefix, for "
+"example ``gym123-1a``."
+msgstr ""
+
+#: ../../synchronization.rst:164
+msgid "``course_number``"
+msgstr ""
+
+#: ../../synchronization.rst:165
+msgid "Same value as ``course_id``."
+msgstr ""
+
+#: ../../synchronization.rst:167
+msgid "``course_name``"
+msgstr ""
+
+#: ../../synchronization.rst:168
+msgid ""
+"Built from ``asm/attributes/course-name-pattern``. See :ref"
+":`configuration-course-names`."
+msgstr ""
+
+#: ../../synchronization.rst:172 ../../synchronization.rst:205
+msgid "Name of the school."
+msgstr ""
+
+#: ../../synchronization.rst:177
+msgid "Classes"
+msgstr ""
+
+#: ../../synchronization.rst:179
+msgid "Columns of :file:`classes.csv`"
+msgstr ""
+
+#: ../../synchronization.rst:186 ../../synchronization.rst:325
+msgid "``class_id``"
+msgstr ""
+
+#: ../../synchronization.rst:187 ../../synchronization.rst:195
+#: ../../synchronization.rst:326
+msgid "Name of the school class or work group."
+msgstr ""
+
+#: ../../synchronization.rst:189
+msgid "``class_number``"
+msgstr ""
+
+#: ../../synchronization.rst:190
+msgid ""
+"Empty by default. See ``asm/attributes/classes/class_number_empty`` in "
+":ref:`configuration-course-names`."
+msgstr ""
+
+#: ../../synchronization.rst:197
+msgid "``instructor_id``, ``instructor_id_2``, ``instructor_id_3``"
+msgstr ""
+
+#: ../../synchronization.rst:198
+msgid "The ``person_id`` of the first three teachers of the class."
+msgstr ""
+
+#: ../../synchronization.rst:200
+msgid "``instructor_id_4`` to ``instructor_id_15``"
+msgstr ""
+
+#: ../../synchronization.rst:201
+msgid ""
+"The ``person_id`` of the remaining teachers. The connector only writes as"
+" many columns as it needs."
+msgstr ""
+
+#: ../../synchronization.rst:209
+msgid ""
+"Apple School Manager supports at most 15 teachers per class. If a class "
+"has more, the connector synchronizes the first 15 and writes a warning to"
+" the log file."
+msgstr ""
+
+#: ../../synchronization.rst:217
+msgid "Staff"
+msgstr ""
+
+#: ../../synchronization.rst:219
+msgid "Columns of :file:`staff.csv`"
+msgstr ""
+
+#: ../../synchronization.rst:226 ../../synchronization.rst:270
+msgid "``person_id``"
+msgstr ""
+
+#: ../../synchronization.rst:227
+msgid ""
+"The attribute from ``asm/attributes/staff/person_id/mapping``, "
+"``entryUUID`` by default."
+msgstr ""
+
+#: ../../synchronization.rst:230 ../../synchronization.rst:274
+msgid "``person_number``"
+msgstr ""
+
+#: ../../synchronization.rst:231 ../../synchronization.rst:275
+msgid "Same value as ``person_id``."
+msgstr ""
+
+#: ../../synchronization.rst:233 ../../synchronization.rst:277
+msgid "``first_name``"
+msgstr ""
+
+#: ../../synchronization.rst:234
+msgid "First name of the teacher."
+msgstr ""
+
+#: ../../synchronization.rst:236 ../../synchronization.rst:280
+msgid "``middle_name``"
+msgstr ""
+
+#: ../../synchronization.rst:237 ../../synchronization.rst:281
+msgid "First value of ``middleName``, ``initials``, or ``oxMiddleName``."
+msgstr ""
+
+#: ../../synchronization.rst:239 ../../synchronization.rst:283
+msgid "``last_name``"
+msgstr ""
+
+#: ../../synchronization.rst:240
+msgid "Last name of the teacher."
+msgstr ""
+
+#: ../../synchronization.rst:242 ../../synchronization.rst:290
+msgid "``email_address``"
+msgstr ""
+
+#: ../../synchronization.rst:243 ../../synchronization.rst:291
+msgid ""
+"Primary email address, modified by "
+"``asm/attributes/user/email/prepend_domain``."
+msgstr ""
+
+#: ../../synchronization.rst:246 ../../synchronization.rst:294
+msgid "``sis_username``"
+msgstr ""
+
+#: ../../synchronization.rst:247
+msgid "User name of the teacher."
+msgstr ""
+
+#: ../../synchronization.rst:250
+msgid "Primary school of the teacher."
+msgstr ""
+
+#: ../../synchronization.rst:252 ../../synchronization.rst:304
+msgid "``location_id_2`` and following"
+msgstr ""
+
+#: ../../synchronization.rst:253
+msgid "The other schools of the teacher, in alphabetical order."
+msgstr ""
+
+#: ../../synchronization.rst:255
+msgid ""
+"The file holds teachers and teachers with an additional staff role. Staff"
+" members without a teacher role aren't part of the export."
+msgstr ""
+
+#: ../../synchronization.rst:261
+msgid "Students"
+msgstr ""
+
+#: ../../synchronization.rst:263
+msgid "Columns of :file:`students.csv`"
+msgstr ""
+
+#: ../../synchronization.rst:271
+msgid ""
+"The attribute from ``asm/attributes/student/person_id/mapping``, "
+"``entryUUID`` by default."
+msgstr ""
+
+#: ../../synchronization.rst:278
+msgid "First name of the student."
+msgstr ""
+
+#: ../../synchronization.rst:284
+msgid "Last name of the student."
+msgstr ""
+
+#: ../../synchronization.rst:286
+msgid "``grade_level``"
+msgstr ""
+
+#: ../../synchronization.rst:287
+msgid ""
+"The attribute from ``asm/attributes/student/grade_level``. Empty if the "
+"variable is unset."
+msgstr ""
+
+#: ../../synchronization.rst:295
+msgid "User name of the student."
+msgstr ""
+
+#: ../../synchronization.rst:297
+msgid "``password_policy``"
+msgstr ""
+
+#: ../../synchronization.rst:298
+msgid ""
+"The value of ``asm/attributes/student/password_policy``. See :ref"
+":`configuration-password-policy`."
+msgstr ""
+
+#: ../../synchronization.rst:302
+msgid "Primary school of the student."
+msgstr ""
+
+#: ../../synchronization.rst:305
+msgid "The other schools of the student, in alphabetical order."
+msgstr ""
+
+#: ../../synchronization.rst:307
+msgid "Exam users aren't part of the export."
+msgstr ""
+
+#: ../../synchronization.rst:312
+msgid "Rosters"
+msgstr ""
+
+#: ../../synchronization.rst:314
+msgid "Columns of :file:`rosters.csv`"
+msgstr ""
+
+#: ../../synchronization.rst:321
+msgid "``roster_id``"
+msgstr ""
+
+#: ../../synchronization.rst:322
+msgid "The class name and the ``person_id`` of the student, joined with a hyphen."
+msgstr ""
+
+#: ../../synchronization.rst:328
+msgid "``student_id``"
+msgstr ""
+
+#: ../../synchronization.rst:329
+msgid "The ``person_id`` of the student."
+msgstr ""
+
+#: ../../synchronization.rst:331
+msgid ""
+"The file only holds students. Teachers reach a class through the "
+"``instructor_id`` columns of :file:`classes.csv`."
+msgstr ""
+
+#: ../../synchronization.rst:338
+msgid "Inspect the uploaded data"
+msgstr ""
+
+#: ../../synchronization.rst:340
+msgid ""
+"To look at what the connector uploads, enable ``asm/store_zip`` in the "
+"app settings and run the synchronization. The connector then keeps the "
+"archive in :file:`/var/lib/asm/`."
+msgstr ""
+
+#: ../../synchronization.rst:345
+msgid "List the archives and unpack the newest one"
+msgstr ""
+
+#: ../../synchronization.rst:353
+msgid ""
+"The archives contain personal data. Delete them when you no longer need "
+"them, and turn ``asm/store_zip`` off again."
+msgstr ""
+

@@ -1,0 +1,131 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2026, Univention GmbH
+# This file is distributed under the same license as the Apple School
+# Manager Connector package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Apple School Manager Connector 5.1.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-11 10:35+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: de\n"
+"Language-Team: de <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: ../../glossary.rst:9
+msgid "Glossary"
+msgstr ""
+
+#: ../../glossary.rst:18
+msgid "App Center"
+msgstr ""
+
+#: ../../glossary.rst:20
+msgid ""
+"The Univention App Center, the component of :term:`UCS` with which you "
+"install and configure apps."
+msgstr ""
+
+#: ../../glossary.rst:13
+msgid "Apple School Manager"
+msgstr ""
+
+#: ../../glossary.rst:15
+msgid ""
+"The web service with which educational institutions manage their Managed "
+"Apple Accounts, devices, and content. Abbreviated as ASM."
+msgstr ""
+
+#: ../../glossary.rst:22
+msgid "DNS"
+msgstr ""
+
+#: ../../glossary.rst:24
+msgid "Domain Name System, the service that resolves host names to IP addresses."
+msgstr ""
+
+#: ../../glossary.rst:26
+msgid "Keycloak"
+msgstr ""
+
+#: ../../glossary.rst:28
+msgid ""
+"The identity and access management software that UCS ships as an app. It "
+"provides the single sign-on of the domain."
+msgstr ""
+
+#: ../../glossary.rst:30
+msgid "OIDC"
+msgstr ""
+
+#: ../../glossary.rst:32
+msgid "OpenID Connect, the identity layer on top of OAuth 2.0."
+msgstr ""
+
+#: ../../glossary.rst:34
+msgid "PKCE"
+msgstr ""
+
+#: ../../glossary.rst:36
+msgid ""
+"Proof Key for Code Exchange, an extension of the OAuth 2.0 authorization "
+"code flow."
+msgstr ""
+
+#: ../../glossary.rst:38
+msgid "SSF"
+msgstr ""
+
+#: ../../glossary.rst:40
+msgid ""
+"Shared Signals Framework, the standard of the OpenID Foundation for "
+"sharing security events between an identity provider and the applications"
+" that rely on it."
+msgstr ""
+
+#: ../../glossary.rst:43
+msgid "UCR"
+msgstr ""
+
+#: ../../glossary.rst:45
+msgid ""
+"Univention Configuration Registry, the central configuration database of "
+":term:`UCS`."
+msgstr ""
+
+#: ../../glossary.rst:47
+msgid "UCS"
+msgstr ""
+
+#: ../../glossary.rst:49
+msgid ""
+"Univention Corporate Server, the server operating system with integrated "
+"identity management."
+msgstr ""
+
+#: ../../glossary.rst:51
+msgid "UCS@school"
+msgstr ""
+
+#: ../../glossary.rst:53
+msgid "The extension of :term:`UCS` for schools and school authorities."
+msgstr ""
+
+#: ../../glossary.rst:54
+msgid "UMC"
+msgstr ""
+
+#: ../../glossary.rst:56
+msgid ""
+"Univention Management Console, the web interface for the administration "
+"of :term:`UCS`."
+msgstr ""
+

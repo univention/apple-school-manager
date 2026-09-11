@@ -1,0 +1,162 @@
+.. SPDX-FileCopyrightText: 2026 Univention GmbH
+..
+.. SPDX-License-Identifier: AGPL-3.0-only
+
+.. _troubleshooting:
+
+***************
+Troubleshooting
+***************
+
+This chapter describes where the connector records what it does
+and what to do about the problems that occur most often.
+
+.. _troubleshooting-log:
+
+Log file
+========
+
+The connector writes to :file:`/var/log/univention/asm.log`.
+The file holds the debug level protocol of every run,
+including the LDAP objects that the connector skipped and why.
+The app settings show the time of the last upload in ``asm/last_upload``.
+
+The log rotation follows the ``logrotate/*`` UCR variables of the system.
+The connector writes its own configuration to :file:`/etc/logrotate.d/asm`.
+
+.. code-block:: console
+   :caption: Follow a synchronization run
+
+   $ tail -f /var/log/univention/asm.log
+
+.. _troubleshooting-apple-messages:
+
+Get better error messages from Apple School Manager
+===================================================
+
+Apple School Manager reports errors in the uploaded data sparsely.
+The wizard that imports a CSV file interactively is more explicit about what it
+rejects.
+
+To use it, disconnect the SFTP upload in Apple School Manager
+and run through the :guilabel:`Apple formatted CSV` wizard again
+with the archive from :ref:`synchronization-inspect`.
+The wizard names the file, the row, and the column that it objects to.
+
+.. _troubleshooting-users-missing:
+
+Users don't appear in Apple School Manager
+==========================================
+
+Check the following, in this order:
+
+#. **The user has no primary email address.**
+   Apple School Manager uses the email address as the Apple Account,
+   so the connector skips users without one.
+
+#. **The domain of the email address doesn't resolve.**
+   The connector checks the second-level domain of every address in the
+   :term:`DNS` and writes a warning to the log file if it can't resolve it.
+   Search the log file for ``Invalid email domain``.
+
+#. **Anonymization removed the email address.**
+   With ``asm/attributes/student/anonymize`` or
+   ``asm/attributes/staff/anonymize`` enabled,
+   the connector exports the replacement value instead of the address,
+   which is empty by default.
+   See :ref:`configuration-anonymization`.
+
+   .. code-block:: console
+      :caption: Turn anonymization off
+
+      $ ucr set asm/attributes/student/anonymize=false
+      $ ucr set asm/attributes/staff/anonymize=false
+
+#. **The school isn't on the list.**
+   With ``asm/school_whitelist`` set,
+   the connector only exports the listed schools.
+   See :ref:`configuration-school-list`.
+
+#. **An LDAP filter excludes the user.**
+   See :ref:`configuration-ldap-filter`.
+   The log file names every user that a filter excluded.
+
+.. _troubleshooting-credentials:
+
+The run stops with a credential error
+=====================================
+
+The connector stops before it collects any data
+if the user name or the password is missing.
+
+.. code-block:: text
+   :caption: Message in the log file
+
+   Please set a username in the app settings
+
+Enter the credentials in the app settings,
+as described in :ref:`installation-configure-credentials`.
+If the credentials are set but Apple rejects them,
+generate new ones in Apple School Manager
+and enter those.
+
+.. _troubleshooting-host-key:
+
+The upload stops with a missing host key
+========================================
+
+The connector verifies the host key of the SFTP server against
+:file:`/etc/asm_public_key`.
+The package ships that file.
+If it's missing or no longer matches the server,
+the upload fails with ``Could not find /etc/asm_public_key``
+or with an SSH exception.
+
+Reinstall the package to restore the file.
+If Apple changed the host key,
+report it so that a new version of the app can ship the new key.
+
+.. _troubleshooting-ldap-filter:
+
+The run stops with an invalid LDAP filter
+=========================================
+
+An LDAP filter with a syntax error stops the synchronization
+before the connector uploads anything.
+The log file names the variable and the filter.
+
+.. code-block:: text
+   :caption: Message in the log file
+
+   Invalid LDAP-filter for students: '(ucsschoolRole=student'
+
+Correct the filter,
+or unset the variable to fall back to the global filter.
+See :ref:`configuration-ldap-filter`.
+
+.. _troubleshooting-no-csv:
+
+Classes have fewer teachers than expected
+=========================================
+
+Apple School Manager supports at most 15 teachers per class.
+The connector exports the first 15
+and writes a warning to the log file that names the class.
+This is a limitation of Apple School Manager,
+not of the connector.
+
+An LDAP filter for teachers can also reduce the number.
+The log file records every teacher that a filter excluded from a class.
+
+.. _troubleshooting-support:
+
+Where to get help
+=================
+
+* The `Univention Help <https://help.univention.com/>`_ forum
+  for questions from the community.
+
+* Your Univention support contract for a supported environment.
+
+When you report a problem,
+attach the relevant part of :file:`/var/log/univention/asm.log`.

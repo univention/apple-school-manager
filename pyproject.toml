@@ -56,6 +56,10 @@ ignore = [
     "TRY401",  # verbose-log-message
 ]
 
+[tool.ruff.lint.per-file-ignores]
+# Sphinx loads conf.py by path, so it is not part of a package.
+"doc/**/conf.py" = ["INP001"]
+
 [tool.ruff.lint.flake8-annotations]
 allow-star-arg-any = true
 

@@ -1,2 +1,3 @@
-If you wish to anonymize you users data (except the username), take a look at the UCR variables
-<code>asm/attributes/staff/anonymize</code> and <code>asm/attributes/student/anonymize</code>.
+See the
+<a href="https://docs.software-univention.de/apple-school-manager-connector/" target="_blank">Apple
+School Manager Connector manual</a> for the configuration of the app.

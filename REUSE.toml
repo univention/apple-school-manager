@@ -23,8 +23,6 @@ path = [
     "appcenter/README_INSTALL_EN",
     "appcenter/README_POST_INSTALL_DE",
     "appcenter/README_POST_INSTALL_EN",
-    "appcenter/README_UPDATE_DE",
-    "appcenter/README_UPDATE_EN",
     "appcenter/asm.settings",
     "README.md",
     "pyproject.toml",

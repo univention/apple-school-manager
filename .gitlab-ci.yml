@@ -17,11 +17,13 @@ include:
       mail_sender: "ucsschool-team@univention.de"
       author_alias: "UCS@school Team"
       mail_subject: "Apple School Manager Connector update"
-      changelog_link: "https://git.knut.univention.de/univention/dev/education/apple-school-manager/-/blob/5.2/appcenter/README_UPDATE_EN?ref_type=heads"
+      changelog_link: "https://docs.software-univention.de/apple-school-manager-connector/changelog.html"
       mail_recipient: "app-announcement@univention.de"
       chat_destination: "#ucsschool"
       ucs_base_version: "5.2"
       app_staging_version: "999.0.0-staging"
+      additional_update_appcenter_needs:
+        - job: build_changelog_html
   - local: /.gitlab-ci/gitlab-ci-docs.yml
   - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/debian-package@2
     inputs:
@@ -46,6 +48,24 @@ variables:
   DEBIAN_SOURCE_DIRECTORIES: "apple-school-manager/"
   UCSLINT_IMAGE: gitregistry.knut.univention.de/univention/dev/ucs
   DOC_NAME: "apple-school-manager-connector"
+
+# Renders doc/docs/changelog.rst into the 'changelog.html' fragment that
+# 'appcenter/README_UPDATE_EN.jinja' extends, so the App Center update text and
+# the manual cannot drift apart. 'update_appcenter' needs it, see the
+# 'app-release' inputs above.
+#
+# No 'rules': every appcenter upload renders 'README_UPDATE_EN.jinja', which
+# fails without the fragment, so this has to run whenever 'update_appcenter'
+# does.
+build_changelog_html:
+  stage: build
+  image: $SPHINX_BASE
+  script:
+    - pip install lxml
+    - ./build_changelog_html.py
+  artifacts:
+    paths:
+      - changelog.html
 
 integration_tests:
   extends: .run_openstack_cfg

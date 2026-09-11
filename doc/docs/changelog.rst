@@ -70,7 +70,6 @@ v3.0.2
 
 * The connector exports the grade level,
   configured with ``asm/attributes/student/grade_level``.
-  See :ref:`configuration-grade-level`.
 
 .. _changelog-v3.0.1:
 
@@ -103,7 +102,6 @@ v2.2.2
   which the connector derives from the school class,
   follows the pattern in ``asm/attributes/course-name-pattern``.
   The default is ``{ou}-{name}``.
-  See :ref:`configuration-course-names`.
 
 .. _changelog-v2.2.1:
 
@@ -124,7 +122,6 @@ v2.2.0
   Set them globally or per school with ``asm/ldap_filter/students`` and
   ``asm/ldap_filter/staff``.
   An invalid filter stops the synchronization without an export.
-  See :ref:`configuration-ldap-filter`.
 
 .. _changelog-v2.1.0:
 
@@ -133,7 +130,6 @@ v2.1.0
 
 * The connector fills the ``password_policy`` column for new students from
   ``asm/attributes/student/password_policy``.
-  See :ref:`configuration-password-policy`.
 
 .. _changelog-v2.0.0:
 

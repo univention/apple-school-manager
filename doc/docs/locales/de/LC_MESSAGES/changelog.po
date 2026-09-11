@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Apple School Manager Connector 5.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-11 10:35+0000\n"
+"POT-Creation-Date: 2026-09-11 11:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -97,119 +97,149 @@ msgstr ""
 #: ../../changelog.rst:71
 msgid ""
 "The connector exports the grade level, configured with "
-"``asm/attributes/student/grade_level``. See :ref:`configuration-grade-"
-"level`."
+"``asm/attributes/student/grade_level``."
 msgstr ""
 
-#: ../../changelog.rst:78
+#: ../../changelog.rst:77
 msgid "v3.0.1"
 msgstr ""
 
-#: ../../changelog.rst:80
+#: ../../changelog.rst:79
 msgid ""
 "The log rotation of the connector follows the ``logrotate/*`` UCR "
 "variables."
 msgstr ""
 
-#: ../../changelog.rst:85
+#: ../../changelog.rst:84
 msgid "v2.2.4"
 msgstr ""
 
-#: ../../changelog.rst:87
+#: ../../changelog.rst:86
 msgid ""
 "The connector applies configured LDAP filters correctly when it loads "
 "classes."
 msgstr ""
 
-#: ../../changelog.rst:93
+#: ../../changelog.rst:92
 msgid "v2.2.3"
 msgstr ""
 
-#: ../../changelog.rst:95
+#: ../../changelog.rst:94
 msgid "Fixed the handling of unexpected errors."
 msgstr ""
 
-#: ../../changelog.rst:100
+#: ../../changelog.rst:99
 msgid "v2.2.2"
 msgstr ""
 
-#: ../../changelog.rst:102
+#: ../../changelog.rst:101
 #, python-brace-format
 msgid ""
 "The name of a course, which the connector derives from the school class, "
 "follows the pattern in ``asm/attributes/course-name-pattern``. The "
-"default is ``{ou}-{name}``. See :ref:`configuration-course-names`."
+"default is ``{ou}-{name}``."
 msgstr ""
 
-#: ../../changelog.rst:111
+#: ../../changelog.rst:109
 msgid "v2.2.1"
 msgstr ""
 
-#: ../../changelog.rst:113
+#: ../../changelog.rst:111
 msgid "The connector applies configured LDAP filters to :file:`rosters.csv`."
 msgstr ""
 
-#: ../../changelog.rst:118
+#: ../../changelog.rst:116
 msgid "v2.2.0"
 msgstr ""
 
-#: ../../changelog.rst:120
+#: ../../changelog.rst:118
 msgid ""
 "The connector uses the name of the school class as the course name. It "
 "used the description of the school class before."
 msgstr ""
 
-#: ../../changelog.rst:123
+#: ../../changelog.rst:121
 msgid ""
 "LDAP filters give you finer control over the exported teachers and "
 "students. Set them globally or per school with "
 "``asm/ldap_filter/students`` and ``asm/ldap_filter/staff``. An invalid "
-"filter stops the synchronization without an export. See :ref"
-":`configuration-ldap-filter`."
+"filter stops the synchronization without an export."
 msgstr ""
 
-#: ../../changelog.rst:132
+#: ../../changelog.rst:129
 msgid "v2.1.0"
 msgstr ""
 
-#: ../../changelog.rst:134
+#: ../../changelog.rst:131
 msgid ""
 "The connector fills the ``password_policy`` column for new students from "
-"``asm/attributes/student/password_policy``. See :ref:`configuration-"
-"password-policy`."
+"``asm/attributes/student/password_policy``."
 msgstr ""
 
-#: ../../changelog.rst:141
+#: ../../changelog.rst:137
 msgid "v2.0.0"
 msgstr ""
 
-#: ../../changelog.rst:143
+#: ../../changelog.rst:139
 msgid "First release for UCS 4.4. Functionally identical to version 1.2."
 msgstr ""
 
-#: ../../changelog.rst:149
+#: ../../changelog.rst:145
 msgid "v1.2.0"
 msgstr ""
 
-#: ../../changelog.rst:151
+#: ../../changelog.rst:147
 msgid ""
 "The connector handles classes with more than 15 teachers correctly. It "
 "exports 15 of them, which is the limit of Apple School Manager."
 msgstr ""
 
-#: ../../changelog.rst:158
+#: ../../changelog.rst:154
 msgid "v1.1.0"
 msgstr ""
 
-#: ../../changelog.rst:160
+#: ../../changelog.rst:156
 msgid "You can install the app on a Replica Directory Node."
 msgstr ""
 
-#: ../../changelog.rst:165
+#: ../../changelog.rst:161
 msgid "v1.0.0"
 msgstr ""
 
-#: ../../changelog.rst:167
+#: ../../changelog.rst:163
 msgid "First release."
 msgstr ""
+
+#~ msgid ""
+#~ "The connector exports the grade level,"
+#~ " configured with "
+#~ "``asm/attributes/student/grade_level``. See :ref"
+#~ ":`configuration-grade-level`."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The name of a course, which the"
+#~ " connector derives from the school "
+#~ "class, follows the pattern in "
+#~ "``asm/attributes/course-name-pattern``. The "
+#~ "default is ``{ou}-{name}``. See :ref"
+#~ ":`configuration-course-names`."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "LDAP filters give you finer control "
+#~ "over the exported teachers and students."
+#~ " Set them globally or per school "
+#~ "with ``asm/ldap_filter/students`` and "
+#~ "``asm/ldap_filter/staff``. An invalid filter "
+#~ "stops the synchronization without an "
+#~ "export. See :ref:`configuration-ldap-filter`."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The connector fills the ``password_policy``"
+#~ " column for new students from "
+#~ "``asm/attributes/student/password_policy``. See :ref"
+#~ ":`configuration-password-policy`."
+#~ msgstr ""
 

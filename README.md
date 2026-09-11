@@ -38,8 +38,9 @@ Check the ci/cd configuration if you need to repeat any steps manually.
 * Is everything looking good so far? The next will make the new version public!
 * Start the `do_release` job
 
-Add the new version to `appcenter/README_UPDATE_EN`
-and to `doc/docs/changelog.rst`.
+Add the new version to `doc/docs/changelog.rst`.
+The pipeline renders it into the App Center update text,
+see `build_changelog_html.py`.
 
 ## Update etc/asm_public_key
 

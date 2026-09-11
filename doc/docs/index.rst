@@ -19,6 +19,14 @@ Apple School Manager Connector for UCS\@school
    synchronization
    identity-provider
    troubleshooting
+
+.. The changelog and the appendix stay out of the numbered toctree above.
+   Numbering turns every version heading into a section number, which says
+   nothing and changes with each release.
+
+.. toctree::
+   :maxdepth: 1
+
    changelog
 
 .. toctree::

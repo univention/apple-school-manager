@@ -79,8 +79,8 @@ Check the following, in this order:
       $ ucr set asm/attributes/staff/anonymize=false
 
 #. **The school isn't on the list.**
-   With ``asm/school_whitelist`` set,
-   the connector only exports the listed schools.
+   With ``school_whitelist`` set for the account,
+   the connector only exports the listed schools to it.
    See :ref:`configuration-school-list`.
 
 #. **An LDAP filter excludes the user.**
@@ -95,15 +95,17 @@ The run stops with a credential error
 =====================================
 
 The connector stops before it collects any data
-if the user name or the password is missing.
+if :file:`/etc/asm-connections.json` is missing or invalid,
+or if a password file is missing or empty.
+The message in the log file names the file and the entry.
 
 .. code-block:: text
    :caption: Message in the log file
 
-   Please set a username in the app settings
+   No Apple School Manager account configured. Create /etc/asm-connections.json as described in the Apple School Manager Connector manual.
 
-Enter the credentials in the app settings,
-as described in :ref:`installation-configure-credentials`.
+Configure the accounts,
+as described in :ref:`configuration-accounts`.
 If the credentials are set but Apple rejects them,
 generate new ones in Apple School Manager
 and enter those.

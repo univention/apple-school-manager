@@ -10,6 +10,19 @@ Changelog
 
 This chapter lists the changes of every released version of the app.
 
+.. _changelog-v5.2.0:
+
+v5.2.0
+======
+
+* The connector synchronizes to several Apple School Manager accounts.
+  Each account receives only the schools that you assign to it.
+
+* The accounts are configured in :file:`/etc/asm-connections.json`.
+  The app settings ``asm/username``, ``asm/password``,
+  and ``asm/school_whitelist`` are gone.
+  The update moves their values to the new file.
+
 .. _changelog-v5.1.1:
 
 v5.1.1

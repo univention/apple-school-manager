@@ -34,7 +34,9 @@ You can install the connector on the following system roles:
    Two installations therefore overwrite each other's data.
    If you want to synchronize additional schools,
    add them to the existing installation
-   as described in :ref:`configuration-school-list`.
+   as described in :ref:`configuration-school-list`,
+   or add another Apple School Manager account
+   as described in :ref:`configuration-accounts`.
 
 On a school Replica Directory Node,
 the connector only sees the school of that node.
@@ -53,9 +55,9 @@ Install the app
 
 #. Click :guilabel:`Install`.
 
-The App Center installs the app
-and then opens the app settings,
-where you enter the credentials from the next section.
+After the installation,
+obtain the credentials as described in the next section
+and enter them as described in :ref:`installation-configure-credentials`.
 
 .. note::
 
@@ -89,17 +91,29 @@ For background information, see :cite:t:`apple-sftp-upload`.
 Enter the credentials
 =====================
 
-#. Open the App Center in UMC and select the app.
+#. Store the password in :file:`/etc/asm.secret`
+   with read permission for the ``root`` user only.
 
-#. Click :guilabel:`App settings`.
+   .. code-block:: console
+      :caption: Store the password
 
-#. Enter the user name in the :guilabel:`asm/username` field
-   and the password in the :guilabel:`asm/password` field.
+      $ install -m 600 /dev/null /etc/asm.secret
+      $ editor /etc/asm.secret
 
-#. Click :guilabel:`Apply changes`.
+#. Write the user name and the path of the password file to
+   :file:`/etc/asm-connections.json`.
 
-The connector stores the password in :file:`/etc/asm.secret`
-with read permission for the ``root`` user only.
+   .. code-block:: json
+      :caption: One Apple School Manager account in :file:`/etc/asm-connections.json`
 
-After you've saved the settings,
-continue with :ref:`configuration`.
+      [
+          {
+              "username": "sftp-user",
+              "password_file": "/etc/asm.secret"
+          }
+      ]
+
+:ref:`configuration-accounts` describes the file in detail,
+including how to limit the account to individual schools
+and how to add further accounts.
+Then continue with :ref:`configuration`.

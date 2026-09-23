@@ -38,20 +38,20 @@ The command writes progress messages to the terminal
 and a more detailed log to :file:`/var/log/univention/asm.log`.
 It exits with a non-zero status
 if the credentials are missing
-or if the upload fails.
+or if the upload to any account fails.
 
 .. _synchronization-run-steps:
 
 What happens during a run
 -------------------------
 
-#. The connector reads the user name from ``asm/username``
-   and the password from :file:`/etc/asm.secret`.
-   A missing value stops the run.
+#. The connector reads the accounts from :file:`/etc/asm-connections.json`,
+   as described in :ref:`configuration-accounts`.
+   A missing or invalid entry stops the run.
 
 #. The connector collects the schools, classes, work groups, teachers, and
    students from the LDAP directory,
-   restricted by ``asm/school_whitelist``
+   restricted by the ``school_whitelist`` of the account
    and by the LDAP filters from :ref:`configuration-ldap-filter`.
 
 #. The connector writes the six CSV files from
@@ -72,6 +72,9 @@ What happens during a run
 #. The connector sets ``asm/last_upload`` to the current time
    and deletes the archive,
    unless you enabled ``asm/store_zip``.
+
+With several accounts,
+the connector repeats the steps 2 to 6 for each account.
 
 Every run transfers the complete data set.
 The connector doesn't track what changed since the last run.

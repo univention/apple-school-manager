@@ -8,12 +8,112 @@
 Configuration
 *************
 
-The connector reads its configuration from two places.
-The app settings in the :term:`App Center` hold the settings that you need for
-everyday operation,
-such as the credentials and the synchronization schedule.
+The connector reads its configuration from three places.
+The file :file:`/etc/asm-connections.json` holds the Apple School Manager
+accounts and the schools that the connector synchronizes to each of them.
+The app settings in the :term:`App Center` hold the synchronization schedule
+and a few switches for everyday operation.
 The :term:`UCR` holds the settings that control which users the connector
 exports and how it maps their attributes.
+
+.. _configuration-accounts:
+
+Apple School Manager accounts
+=============================
+
+The connector uploads to every Apple School Manager account that is listed in
+:file:`/etc/asm-connections.json`.
+Usually that is a single account.
+If the schools on your UCS\@school system belong to different institutions,
+each with its own Apple School Manager account,
+list one entry per account.
+The connector then uploads a separate archive to every account,
+each restricted to the schools that you assign to that account.
+
+To configure the accounts:
+
+#. Store the SFTP password of each account in a file of its own
+   that only ``root`` can read.
+   :ref:`installation-credentials` describes where to find the password.
+
+   .. code-block:: console
+      :caption: Store the password of an account
+
+      $ install -m 600 /dev/null /etc/asm-gym123.secret
+      $ editor /etc/asm-gym123.secret
+
+#. Write :file:`/etc/asm-connections.json` with one entry per account.
+
+   .. code-block:: json
+      :caption: Two Apple School Manager accounts in :file:`/etc/asm-connections.json`
+
+      [
+          {
+              "username": "sftp-user-of-account-1",
+              "password_file": "/etc/asm-gym123.secret",
+              "school_whitelist": ["gym123"]
+          },
+          {
+              "username": "sftp-user-of-account-2",
+              "password_file": "/etc/asm-gs456.secret",
+              "school_whitelist": ["gs456", "rs789"]
+          }
+      ]
+
+Each entry takes the following keys:
+
+.. list-table:: Keys of an account entry
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - Key
+     - Required
+     - Description
+
+   * - ``username``
+     - Yes
+     - The SFTP user name of the account.
+
+   * - ``password_file``
+     - Yes
+     - Path to the file that holds the SFTP password of the account.
+
+   * - ``school_whitelist``
+     - See description
+     - List of school abbreviations to synchronize to the account,
+       as described in :ref:`configuration-school-list`.
+       Required if the file lists more than one account.
+       With a single account and no list,
+       the connector synchronizes every school.
+
+The connector reads the file at the start of each run,
+so a change takes effect with the next synchronization.
+It checks the complete file before it uploads anything.
+A missing file, a missing or unknown key, a missing password file,
+or a user name that appears twice stops the run with an error message.
+If the upload to one account fails,
+the connector still uploads to the remaining accounts
+and exits with a non-zero status at the end.
+
+The app settings and UCR variables apply to every account alike.
+
+.. _configuration-accounts-migration:
+
+Update from an earlier version
+------------------------------
+
+Up to version 5.1.1,
+the app settings ``asm/username``, ``asm/password``,
+and ``asm/school_whitelist`` held the single account.
+The update to version 5.2.0 moves them to
+:file:`/etc/asm-connections.json`
+and removes the UCR variables ``asm/username`` and ``asm/school_whitelist``.
+The password stays in :file:`/etc/asm.secret`,
+and the new file refers to it.
+You don't need to do anything.
+
+If :file:`/etc/asm-connections.json` already exists,
+the update leaves it unchanged.
 
 .. _configuration-app-settings:
 
@@ -30,22 +130,6 @@ select the app in the App Center and click :guilabel:`App settings`.
    * - Setting
      - Default
      - Description
-
-   * - ``asm/username``
-     - Unset
-     - The SFTP user name from Apple School Manager.
-       See :ref:`installation-credentials`.
-
-   * - ``asm/password``
-     - Unset
-     - The SFTP password from Apple School Manager.
-       The connector stores it in :file:`/etc/asm.secret`.
-
-   * - ``asm/school_whitelist``
-     - Unset
-     - Comma-separated list of school abbreviations to synchronize.
-       If unset, the connector synchronizes every school.
-       See :ref:`configuration-school-list`.
 
    * - ``asm/sync_daily``
      - ``False``
@@ -103,18 +187,22 @@ Limit the synchronization to individual schools
 ===============================================
 
 By default, the connector synchronizes every school that it can see.
-To restrict it to individual schools,
-list their abbreviations in the ``asm/school_whitelist`` setting,
-separated by commas.
+To restrict an account to individual schools,
+list their abbreviations in the ``school_whitelist`` key of the account in
+:file:`/etc/asm-connections.json`.
 
 To look up the abbreviations,
 open :menuselection:`School administration --> Schools` in :term:`UMC`.
 The abbreviation is the name of the school object, for example ``gym123``.
 
-.. code-block::
-   :caption: Example value for ``asm/school_whitelist``
+.. code-block:: json
+   :caption: Account restricted to two schools
 
-   gym123,gs456
+   {
+       "username": "sftp-user",
+       "password_file": "/etc/asm.secret",
+       "school_whitelist": ["gym123", "gs456"]
+   }
 
 A user who belongs to several schools appears in the export only with those
 schools that are on the list.

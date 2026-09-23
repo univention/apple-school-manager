@@ -2,9 +2,10 @@
 	Nach der Installation
 </h3>
 <p>
-	Um die Synchronisation mit Apple School Manager einzurichten, geben Sie in den
-	<a href="https://docs.software-univention.de/app-provider.html#app-settings" target="_blank">App
-	Settings</a> den Apple School Manager SFTP Benutzernamen und das Passwort ein.
+	Um die Synchronisation mit Apple School Manager einzurichten, tragen Sie den Apple School Manager
+	SFTP Benutzernamen und den Pfad zu einer Datei mit dem Passwort in
+	<code>/etc/asm-connections.json</code> ein. Die Datei kann mehrere Apple School Manager Konten
+	enthalten.
 </p>
 <p>
 	Das

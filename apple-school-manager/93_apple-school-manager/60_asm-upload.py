@@ -11,6 +11,7 @@
 
 import contextlib
 import filecmp
+import json
 import os
 import shutil
 import subprocess
@@ -21,6 +22,7 @@ import univention.testing.ucr as ucr_test
 from paramiko.client import AutoAddPolicy, SSHClient
 from ucsschool.lib.models.utils import exec_cmd
 from univention.admin.uldap import getMachineConnection
+from univention.asm.config import CONFIG_FILE_PATH
 from univention.config_registry import handler_set
 from univention.testing import utils
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
@@ -39,17 +41,27 @@ class LocalHostAsASM:
         handler_set(
             [
                 "hosts/static/127.0.60.60=upload.appleschoolcontent.com",
-                f"asm/username={self.username}",
                 "asm/store_zip=yes",
-                f"asm/school_whitelist={self.school_name}",
                 f"auth/sshd/user/{self.username}=yes",
             ],
         )
         os.rename("/etc/asm_public_key", "/etc/asm_public_key.backup_60test")
-        if os.path.exists("/etc/asm.secret"):
-            os.rename("/etc/asm.secret", "/etc/asm.secret.backup_60test")
-        with open("/etc/asm.secret", "w") as asm_secret_file:
+        if os.path.exists(CONFIG_FILE_PATH):
+            os.rename(CONFIG_FILE_PATH, f"{CONFIG_FILE_PATH}.backup_60test")
+        self.password_file = f"/etc/asm-{self.username}.secret"
+        with open(self.password_file, "w") as asm_secret_file:
             asm_secret_file.write(self.password)
+        with open(CONFIG_FILE_PATH, "w") as config_file:
+            json.dump(
+                [
+                    {
+                        "username": self.username,
+                        "password_file": self.password_file,
+                        "school_whitelist": [self.school_name],
+                    },
+                ],
+                config_file,
+            )
         client = SSHClient()
         client.set_missing_host_key_policy(AutoAddPolicy())  # noqa: S507
         client.connect("upload.appleschoolcontent.com", username=self.username, password=self.password)
@@ -66,8 +78,10 @@ class LocalHostAsASM:
         traceback: TracebackType | None,
     ) -> None:
         os.rename("/etc/asm_public_key.backup_60test", "/etc/asm_public_key")
-        if os.path.exists("/etc/asm.secret.backup_60test"):
-            os.rename("/etc/asm.secret.backup_60test", "/etc/asm.secret")
+        os.unlink(CONFIG_FILE_PATH)
+        os.unlink(self.password_file)
+        if os.path.exists(f"{CONFIG_FILE_PATH}.backup_60test"):
+            os.rename(f"{CONFIG_FILE_PATH}.backup_60test", CONFIG_FILE_PATH)
         with contextlib.suppress(OSError):
             shutil.rmtree(self.dropbox)
 

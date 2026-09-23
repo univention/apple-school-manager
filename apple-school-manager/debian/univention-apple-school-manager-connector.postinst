@@ -41,4 +41,8 @@ ucr set "asm/attributes/staff/anonymize?yes" \
 	"asm/attributes/student/anonymize/last_name?-" \
 	"asm/attributes/student/anonymize/sis_username?%uid"
 
+if [ "$1" = "configure" ] && [ -n "$2" ] && dpkg --compare-versions "$2" lt 5.2.0; then
+	python3 -c 'from univention.asm.config import migrate_app_settings; migrate_app_settings()'
+fi
+
 exit 0

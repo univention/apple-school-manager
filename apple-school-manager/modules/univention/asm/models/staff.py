@@ -20,11 +20,11 @@ from ucsschool.lib.models.user import Teacher, TeachersAndStaff
 import univention.asm.api_constraints as asm_api_constraints
 from univention.admin import uexceptions
 from univention.admin.uldap import access as LoType  # noqa: N812
+from univention.asm.config import Settings
 from univention.asm.utils import (
     check_domain,
     get_ldap_connection,
     get_person_id,
-    get_ucr,
     prepend_to_mail_domain,
 )
 
@@ -44,7 +44,6 @@ class AsmStaff(AsmModel, AnonymizeMixIn):
         "sis_username",
         "location_id",
     ]
-    ucr_anonymize_key_base = "asm/attributes/staff/anonymize"
 
     def __init__(
         self,
@@ -118,22 +117,21 @@ class AsmStaff(AsmModel, AnonymizeMixIn):
             ]
 
     @classmethod
-    def from_dn(
-        cls, dn: str, ou_whitelist: Iterable[str] | None = None, *args: Any, **kwargs: Any
-    ) -> Self:
+    def from_dn(cls, dn: str, settings: Settings | None = None, *args: Any, **kwargs: Any) -> Self:
         """
         Get AsmStaff object created from data in LDAP object.
 
         :param str dn: DN to the Teacher/TeachersAndStaff object to represent
-        :param ou_whitelist: list of schools/OUs that should be considered when
-                looking at ou-overlapping users. No limit if empty or None.
-        :type ou_whitelist: list(str) or None
+        :param settings: settings of the Apple School Manager account, only
+                schools that the account receives are exported. All schools with
+                the default settings if None.
         :return: AsmStaff instance
         :rtype: AsmStaff
         :raises WrongModel: when `dn` does not belong to a teacher or
                 teacherandstaff
-        :raises ValueError: when non of the users `schools` is in the whitelist
+        :raises ValueError: when non of the users `schools` is synchronized to the account
         """
+        settings = settings or Settings()
         lo, _po = get_ldap_connection()
         try:
             teacher = Teacher.from_dn(dn, None, lo)
@@ -142,18 +140,23 @@ class AsmStaff(AsmModel, AnonymizeMixIn):
         if teacher.email and not check_domain(teacher.email):
             logger = logging.getLogger(__name__)
             logger.warning("Invalid email domain in %r for DN %r.", teacher.email, dn)
-        email = prepend_to_mail_domain(teacher.email) if teacher.email else None
-        location_ids = [teacher.school, *sorted(s for s in teacher.schools if s != teacher.school)]
-        if ou_whitelist:
-            location_ids = [loc for loc in location_ids if loc in ou_whitelist]
-            if not location_ids:
-                msg = f"Non of the users schools is in the whitelist: {teacher} (schools: {teacher.schools!r})."
-                raise ValueError(msg)
-        additional_attrs = ["middleName", "initials", "oxMiddleName"]
-        additional_attrs.extend(
-            {v[1:].strip() for v in cls.anonymize_mapping().values() if v and v.startswith("%")},
+        email = (
+            prepend_to_mail_domain(teacher.email, settings.email_prepend_domain)
+            if teacher.email
+            else None
         )
-        person_id_attr, teacher_lo = get_person_id(teacher.dn, "staff", additional_attrs)
+        location_ids = [teacher.school, *sorted(s for s in teacher.schools if s != teacher.school)]
+        location_ids = [loc for loc in location_ids if settings.includes(loc)]
+        if not location_ids:
+            msg = f"Non of the users schools is synchronized to the account: {teacher} (schools: {teacher.schools!r})."
+            raise ValueError(msg)
+        additional_attrs = ["middleName", "initials", "oxMiddleName"]
+        additional_attrs.extend(cls.anonymize_ldap_attributes(settings.staff))
+        person_id_attr, teacher_lo = get_person_id(
+            teacher.dn,
+            settings.staff.person_id_attribute,
+            additional_attrs,
+        )
         person_id = teacher_lo[person_id_attr][0]
         middle_name = (
             teacher_lo.get("middleName", [""])[0]
@@ -164,6 +167,7 @@ class AsmStaff(AsmModel, AnonymizeMixIn):
             **cls.anonymize(
                 teacher,
                 teacher_lo,
+                settings.staff,
                 person_id=person_id,
                 first_name=teacher.firstname,
                 last_name=teacher.lastname,
@@ -178,13 +182,12 @@ class AsmStaff(AsmModel, AnonymizeMixIn):
 
 
 @cache
-def get_filtered_staff(lo: LoType, logger: logging.Logger, school: str) -> Iterable[Teacher]:
-    ucr = get_ucr()
-    global_ldap_filter_str = ucr.get("asm/ldap_filter/staff", "")
-    specific_ldap_filter = ucr.get(
-        f"asm/ldap_filter/staff/{school}",
-        global_ldap_filter_str,
-    )
+def get_filtered_staff(
+    lo: LoType,
+    logger: logging.Logger,
+    school: str,
+    specific_ldap_filter: str = "",
+) -> Iterable[Teacher]:
     try:
         filtered_teachers: Iterable[Teacher] = Teacher.get_all(
             lo,

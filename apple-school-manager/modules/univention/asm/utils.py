@@ -92,20 +92,17 @@ def update_ucr() -> ConfigRegistry:
     return _ucr
 
 
-def prepend_to_mail_domain(email: str) -> str:
+def prepend_to_mail_domain(email: str, subdomain: str) -> str:
     """
-    Prepend subdomain from UCRV
-    ``asm/attributes/user/email/prepend_domain`` to domain in email
-    address.
+    Prepend `subdomain` to the domain in an email address.
 
     :param str email: email address
-    :return: if UCRV is set: modified email address, else unchanged email
+    :param str subdomain: subdomain to prepend, the setting ``email_prepend_domain``
+    :return: if `subdomain` is set: modified email address, else unchanged email
     :rtype: str
     """
     if not email:
         return email
-    ucr = get_ucr()
-    subdomain = ucr.get("asm/attributes/user/email/prepend_domain", "").strip(" .")
     if subdomain:
         local_part, domain = split_email(email)
         return f"{local_part}@{subdomain}.{domain}"
@@ -120,37 +117,29 @@ def split_email(email: str) -> tuple[str, str]:
     return local_part, domain
 
 
-def get_person_id(dn: str, role: str, additional_attrs: list[str]) -> tuple[str, dict[str, str]]:
-    if role not in ("staff", "student"):
-        msg = f"role {role!r} must be 'staff' or 'student'."
-        raise ValueError(msg)
-    additional_attrs = additional_attrs or []
-    ucrv = f"asm/attributes/{role}/person_id/mapping"
-    person_id_attr = get_ucr().get(ucrv, "%entryUUID")
-    person_id_attr = person_id_attr[1:].strip()
-    attrs = list(map(str, [person_id_attr, *additional_attrs]))  # unicode2str for python-ldap
+def get_person_id(
+    dn: str,
+    person_id_attribute: str,
+    additional_attrs: list[str],
+) -> tuple[str, dict[str, list[str]]]:
+    """
+    Read the ``person_id`` and `additional_attrs` of a user from LDAP.
+
+    :param str dn: DN of the user
+    :param str person_id_attribute: LDAP attribute that holds the ``person_id``,
+        the setting ``person_id_attribute``
+    :param additional_attrs: further LDAP attributes to read
+    :return: `person_id_attribute` and the attributes that were read
+    :raises ValueError: if the user has no value in `person_id_attribute`
+    """
+    attrs = list(map(str, [person_id_attribute, *(additional_attrs or [])]))
     lo, _po = get_ldap_connection()
     res = lo.get(dn, attrs)
     res = {k: [v.decode("utf-8")] for k, [v] in res.items()}  # byte2str for python-ldap
-    if not res.get(person_id_attr):
-        msg = f"Attribute {person_id_attr!r} from {ucrv!r} is not set or empty on {dn!r}."
+    if not res.get(person_id_attribute):
+        msg = f"Attribute {person_id_attribute!r} (person_id_attribute) is not set or empty on {dn!r}."
         raise ValueError(msg)
-    return person_id_attr, res
-
-
-def get_default_password_policy() -> str:
-    ucr = get_ucr()
-    pp_ori = ucr.get("asm/attributes/student/password_policy", 4)
-    try:
-        pp = "" if pp_ori == "-" else int(pp_ori)
-        if pp not in (4, 6, 8, ""):
-            raise ValueError
-    except ValueError:
-        msg = f"Value of UCR asm/attributes/student/password_policy must be 4, 6, 8 or '-' (found {pp_ori!r})."
-        raise ValueError(
-            msg,
-        )
-    return str(pp)
+    return person_id_attribute, res
 
 
 @cache

@@ -15,7 +15,8 @@ from typing import Any, Self
 from ucsschool.lib.models.base import UnknownModel
 from ucsschool.lib.models.group import SchoolClass, WorkGroup
 
-from univention.asm.utils import get_ldap_connection, get_ucr
+from univention.asm.config import Settings
+from univention.asm.utils import get_ldap_connection
 
 from .base import AsmModel
 
@@ -52,21 +53,24 @@ class AsmCourse(AsmModel):
         self.course_name = course_name
 
     @classmethod
-    def from_dn(cls, dn: str, *args: Any, **kwargs: Any) -> Self:
+    def from_dn(cls, dn: str, settings: Settings | None = None, *args: Any, **kwargs: Any) -> Self:
         """
         Get AsmCourse object created from data in LDAP object.
 
         :param str dn: DN to the SchoolClass/Workgroup object to represent
+        :param settings: settings of the Apple School Manager account, the
+                default settings if None
         :return: AsmCourse instance
         :rtype: AsmCourse
         """
+        settings = settings or Settings()
         lo, _po = get_ldap_connection()
         try:
             school_class = SchoolClass.from_dn(dn, None, lo)
         except UnknownModel:
             school_class = WorkGroup.from_dn(dn, None, lo)
 
-        course_pattern = get_ucr().get("asm/attributes/course-name-pattern", "{ou}-{name}")
+        course_pattern = settings.school(school_class.school).course_name_pattern
         try:
             name = school_class.name.split("-", 1)[1]
         except IndexError:

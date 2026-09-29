@@ -11,7 +11,7 @@ import inspect
 from collections.abc import Iterable
 from typing import Any, Self
 
-from univention.asm.utils import get_ucr
+from univention.asm.config import RoleSettings
 
 
 class AsmModel:
@@ -94,24 +94,27 @@ class AsmModel:
 
 
 class AnonymizeMixIn:
-    ucr_anonymize_key_base = ""
-
     @classmethod
-    def anonymize(cls, user: AsmModel, ldap_attrs: dict[str, Any], **kwargs: Any) -> dict[str, str]:
+    def anonymize(
+        cls,
+        user: AsmModel,
+        ldap_attrs: dict[str, Any],
+        settings: RoleSettings,
+        **kwargs: Any,
+    ) -> dict[str, str]:
         """
-        Change values of function arguments to anonymize/pseudonymize user if
-        UCRV asm/attributes/<staff/student>/anonymize is true. Will return
-        unchanged function arguments otherwise.
+        Replace the values of the function arguments by the anonymization
+        values if the setting ``anonymize`` is enabled. Will return unchanged
+        function arguments otherwise.
 
         :param User user: user object
         :param dict ldap_attrs: dictionary with the users LDAP attributes
+        :param settings: the settings of the users role
         :return: dictionary with [modified] function arguments
         :rtype: dict
-        :raises NotImplementedError: if cls.ucr_anonymize_key_base is unset
         """
-        ucr = get_ucr()
-        if ucr.is_true(cls.ucr_anonymize_key_base):
-            for k, v in list(cls.anonymize_mapping().items()):
+        if settings.anonymize:
+            for k, v in settings.anonymize_values.items():
                 if v and v.startswith("%"):
                     attr = v[1:].strip()
                     try:
@@ -125,17 +128,9 @@ class AnonymizeMixIn:
                 kwargs[k] = v
         return kwargs
 
-    @classmethod
-    def anonymize_mapping(cls) -> dict[str, str | None]:
-        if not cls.ucr_anonymize_key_base:
-            msg = 'Class attribute "ucr_anonymize_key_base" must be set.'
-            raise NotImplementedError(msg)
-        cls.ucr_anonymize_key_base = cls.ucr_anonymize_key_base.rstrip("/")
-        ucr = get_ucr()
-        return {
-            "first_name": ucr.get(f"{cls.ucr_anonymize_key_base}/first_name", "%uid"),
-            "middle_name": ucr.get(f"{cls.ucr_anonymize_key_base}/middle_name", None),
-            "last_name": ucr.get(f"{cls.ucr_anonymize_key_base}/last_name", "No Name"),
-            "email_address": ucr.get(f"{cls.ucr_anonymize_key_base}/email_address", None),
-            "sis_username": ucr.get(f"{cls.ucr_anonymize_key_base}/sis_username", "%uid"),
-        }
+    @staticmethod
+    def anonymize_ldap_attributes(settings: RoleSettings) -> set[str]:
+        """Return the LDAP attributes that the anonymization values refer to."""
+        if not settings.anonymize:
+            return set()
+        return {v[1:].strip() for v in settings.anonymize_values.values() if v and v.startswith("%")}

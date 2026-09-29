@@ -10,11 +10,10 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 import univention.testing.strings as uts
-import univention.testing.ucr as ucr_test
 from ucsschool.lib.models.user import Teacher, TeachersAndStaff
+from univention.asm.config import DEFAULT_ANONYMIZE_VALUES, RoleSettings, Settings
 from univention.asm.models.staff import AsmStaff
-from univention.asm.utils import get_person_id, update_ucr
-from univention.config_registry import handler_set, handler_unset
+from univention.asm.utils import get_person_id
 from univention.testing import utils
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
@@ -24,7 +23,7 @@ class Test(ImportTestbase):  # type: ignore[misc]
 
     def test(self) -> None:
         subdomain = uts.random_name()
-        handler_set([f"asm/attributes/user/email/prepend_domain={subdomain}"])
+        settings = Settings(email_prepend_domain=subdomain, staff=RoleSettings(anonymize=False))
 
         school1 = self.ou_A.name
         school2 = self.ou_B.name
@@ -38,9 +37,9 @@ class Test(ImportTestbase):  # type: ignore[misc]
             schools=[school1, school2],
             mailaddress=email,
         )
-        t1_id_attr, t1_lo = get_person_id(teacher1_dn, "staff", [])
+        t1_id_attr, t1_lo = get_person_id(teacher1_dn, "entryUUID", [])
         t1_name = t1_lo[t1_id_attr][0]
-        t2_id_attr, t2_lo = get_person_id(teacher2_dn, "staff", [])
+        t2_id_attr, t2_lo = get_person_id(teacher2_dn, "entryUUID", [])
         t2_name = t2_lo[t2_id_attr][0]
         self.log.info("Created teacher1: %r (%s, %s)", teacher1_name, teacher1_dn, t1_name)
         self.log.info("Created teacher2: %r (%s, %s)", teacher2_name, teacher2_dn, t2_name)
@@ -64,7 +63,7 @@ class Test(ImportTestbase):  # type: ignore[misc]
 
         teacher2 = TeachersAndStaff.from_dn(teacher2_dn, None, self.lo)
 
-        or_teacher1 = AsmStaff.from_dn(teacher1_dn)
+        or_teacher1 = AsmStaff.from_dn(teacher1_dn, settings)
         got_teacher1 = or_teacher1.as_csv_line()
         expected_teacher1 = [
             t1_name,
@@ -81,7 +80,7 @@ class Test(ImportTestbase):  # type: ignore[misc]
         else:
             self.fail(f"CSV line for teacher1,\nexp: {expected_teacher1!r}\ngot: {got_teacher1!r}.")
 
-        or_teacher2 = AsmStaff.from_dn(teacher2_dn)
+        or_teacher2 = AsmStaff.from_dn(teacher2_dn, settings)
         got_teacher2 = or_teacher2.as_csv_line()
         expected_teacher2 = [
             t2_name,
@@ -99,11 +98,10 @@ class Test(ImportTestbase):  # type: ignore[misc]
         else:
             self.fail(f"CSV line for teacher2,\nexp: {expected_teacher2!r}\ngot: {got_teacher2!r}.")
 
-        handler_set(["asm/attributes/staff/anonymize=true"])
-        update_ucr()
-        or_teacher1 = AsmStaff.from_dn(teacher1_dn)
+        settings = Settings(email_prepend_domain=subdomain, staff=RoleSettings(anonymize=True))
+        or_teacher1 = AsmStaff.from_dn(teacher1_dn, settings)
         got_teacher1 = or_teacher1.as_csv_line()
-        expected_teacher1 = [t1_name, t1_name, teacher1.name, "", "No Name", "", teacher1.name, school1]
+        expected_teacher1 = [t1_name, t1_name, teacher1.name, "", "-", "", teacher1.name, school1]
         if got_teacher1 == expected_teacher1:
             self.log.info("OK: teacher1 anonymized CSV line is as expected.")
         else:
@@ -112,16 +110,21 @@ class Test(ImportTestbase):  # type: ignore[misc]
             )
 
         first_name_anon = uts.random_name()
-        handler_set([f"asm/attributes/staff/anonymize/first_name={first_name_anon}"])
-        update_ucr()
-        or_teacher1 = AsmStaff.from_dn(teacher1_dn)
+        settings = Settings(
+            email_prepend_domain=subdomain,
+            staff=RoleSettings(
+                anonymize=True,
+                anonymize_values={**DEFAULT_ANONYMIZE_VALUES, "first_name": first_name_anon},
+            ),
+        )
+        or_teacher1 = AsmStaff.from_dn(teacher1_dn, settings)
         got_teacher1 = or_teacher1.as_csv_line()
         expected_teacher1 = [
             t1_name,
             t1_name,
             first_name_anon,
             "",
-            "No Name",
+            "-",
             "",
             teacher1.name,
             school1,
@@ -135,25 +138,4 @@ class Test(ImportTestbase):  # type: ignore[misc]
 
 
 if __name__ == "__main__":
-    with ucr_test.UCSTestConfigRegistry():
-        handler_unset(
-            [
-                "asm/attributes/user/email/prepend_domain",
-                "asm/attributes/classes/class_number_empty",
-                "asm/attributes/student/anonymize",
-            ],
-        )
-        handler_unset(
-            [
-                f"asm/attributes/staff/anonymize{value}"
-                for value in (
-                    "",
-                    "/email_address",
-                    "/first_name",
-                    "/last_name",
-                    "/middle_name",
-                    "/sis_username",
-                )
-            ],
-        )
-        Test().run()
+    Test().run()

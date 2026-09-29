@@ -25,6 +25,7 @@ from ucsschool.lib.models.school import School
 from ucsschool.lib.models.user import Student, Teacher
 
 from univention.admin import uexceptions
+from univention.asm.config import Settings
 from univention.asm.models.base import AsmModel
 from univention.asm.models.classes import AsmClass
 from univention.asm.models.course import AsmCourse
@@ -32,7 +33,7 @@ from univention.asm.models.location import AsmLocation
 from univention.asm.models.roster import AsmRoster
 from univention.asm.models.staff import AsmStaff, get_filtered_staff
 from univention.asm.models.student import AsmStudent
-from univention.asm.utils import get_ldap_connection, get_ucr, is_central_replica
+from univention.asm.utils import get_ldap_connection, is_central_replica
 
 __all__ = (
     "AsmClassCsvFile",
@@ -99,18 +100,17 @@ class AsmCsvFile:
     ucs_classes: list[SchoolClass | WorkGroup] = []
     lo = None
 
-    def __init__(self, file_path: str, ou_whitelist: Iterable[str] | None = None) -> None:
+    def __init__(self, file_path: str, settings: Settings | None = None) -> None:
         """
         :param str file_path: file path to write CSV to
-        :param ou_whitelist: list of schools/OUs that should be considered
-                when looking for LDAP objects. No limit if empty or None.
-        :type ou_whitelist: list(str) or None
+        :param settings: settings of the Apple School Manager account, only
+                schools that the account receives are considered. All schools
+                with the default settings if None.
         """
         self.file_path = file_path
-        self.ou_whitelist = ou_whitelist
+        self.settings = settings or Settings()
         self.obj: list[AsmModel] = []
         self.logger = logging.getLogger(__name__)
-        self.ucr = get_ucr()
         if not self.lo:
             self.__class__.lo, _po = get_ldap_connection()
         self.limbo_ou = self._get_limbo_ou()
@@ -133,11 +133,11 @@ class AsmCsvFile:
             if ucs_objs and hasattr(ucs_objs[0], "name"):
                 ucs_objs.sort(key=attrgetter("name"))
             for ucs_obj in ucs_objs:
-                yield self.asm_model_class.from_dn(ucs_obj.dn)
+                yield self.asm_model_class.from_dn(ucs_obj.dn, self.settings)
 
     def get_schools(self) -> Iterable[School]:
         """
-        Get School objects, filtered by `self.ou_whitelist`.
+        Get the School objects that the account receives.
 
         :return list of School objects
         :rtype: list(School)
@@ -147,8 +147,7 @@ class AsmCsvFile:
             for s in School.get_all(self.lo, filter_local=not is_central_replica())
             if s.name != self.limbo_ou
         ]
-        if self.ou_whitelist:
-            schools = [s for s in schools if s.name in self.ou_whitelist]
+        schools = [s for s in schools if self.settings.includes(s.name)]
         return sorted(schools, key=attrgetter("name"))
 
     def write_csv(self, objs: Iterable[AsmModel] | None = None) -> None:
@@ -201,14 +200,15 @@ class AsmCsvFile:
         return limbo_ou
 
     def get_staff(self, school: School) -> Iterable[Teacher]:
-        return get_filtered_staff(self.lo, self.logger, school.name)
+        return get_filtered_staff(
+            self.lo,
+            self.logger,
+            school.name,
+            self.settings.school(school.name).staff_ldap_filter,
+        )
 
     def get_students(self, school: School) -> Iterable[Student]:
-        global_ldap_filter_str = self.ucr.get("asm/ldap_filter/students", "")
-        specific_ldap_filter = self.ucr.get(
-            f"asm/ldap_filter/students/{school.name}",
-            global_ldap_filter_str,
-        )
+        specific_ldap_filter = self.settings.school(school.name).student_ldap_filter
         try:
             return [
                 student
@@ -294,7 +294,7 @@ class AsmRostersCsvFile(AsmCsvFile):
             ):
                 for user_dn in sorted(ucs_obj.users):
                     if user_dn in student_dns:
-                        yield AsmRoster.from_dn(ucs_obj.dn, user_dn)
+                        yield AsmRoster.from_dn(ucs_obj.dn, user_dn, self.settings)
 
 
 class AsmStaffCsvFile(AsmCsvFile):
@@ -313,12 +313,11 @@ class AsmStaffCsvFile(AsmCsvFile):
         for school in self.get_schools():
             for teacher in self.get_staff(school):
                 t_schools = [teacher.school, *sorted(s for s in teacher.schools if s != teacher.school)]
-                if self.ou_whitelist:
-                    t_schools = [s for s in t_schools if s in self.ou_whitelist]
+                t_schools = [s for s in t_schools if self.settings.includes(s)]
                 staff_members.add((t_schools[0], teacher.name, teacher.dn))
         dns = [dn for school, name, dn in sorted(staff_members)]  # sorted by 1. school, 2. username
         for dn in dns:
-            yield AsmStaff.from_dn(dn, ou_whitelist=self.ou_whitelist)
+            yield AsmStaff.from_dn(dn, self.settings)
 
 
 class AsmStudentsCsvFile(AsmCsvFile):
@@ -337,12 +336,11 @@ class AsmStudentsCsvFile(AsmCsvFile):
         for school in self.get_schools():
             for student in self.get_students(school):
                 s_schools = [student.school, *sorted(s for s in student.schools if s != student.school)]
-                if self.ou_whitelist:
-                    s_schools = [s for s in s_schools if s in self.ou_whitelist]
+                s_schools = [s for s in s_schools if self.settings.includes(s)]
                 students.add((s_schools[0], student.name, student.dn))
         dns = [dn for school, name, dn in sorted(students)]  # sorted by 1. school, 2. username
         for dn in dns:
-            yield AsmStudent.from_dn(dn, ou_whitelist=self.ou_whitelist)
+            yield AsmStudent.from_dn(dn, self.settings)
 
 
 csv_file_generators = {
@@ -355,16 +353,16 @@ csv_file_generators = {
 }
 
 
-def create_csv_files(target_directory: str, ou_whitelist: Iterable[str] | None = None) -> Iterable[str]:
+def create_csv_files(target_directory: str, settings: Settings | None = None) -> Iterable[str]:
     """
     Create CSV files in `target_directory`. Directory must either not exist or
     be empty.
 
     :param str target_directory: path to a directory in which to create the
             CSV files
-    :param ou_whitelist: list of schools/OUs that should be considered when
-            looking at ou-overlapping users. No limit if empty or None.
-    :type ou_whitelist: list(str) or None
+    :param settings: settings of the Apple School Manager account, only
+            schools that the account receives are considered. All schools with
+            the default settings if None.
     :return: list of files created
     :rtype: list(str)
     :raises ValueError: if `target_directory` exists and is not a directory or
@@ -381,14 +379,15 @@ def create_csv_files(target_directory: str, ou_whitelist: Iterable[str] | None =
     else:
         os.mkdir(target_directory, 0o600)
 
-    logger.info(
-        "Creating CSV files%s...",
-        " for OUs {}".format(", ".join(ou_whitelist)) if ou_whitelist else "",
-    )
+    settings = settings or Settings()
+    schools = sorted(settings.schools)
+    if settings.other_schools is not None:
+        schools.append("all other schools" if schools else "all schools")
+    logger.info("Creating CSV files for %s...", ", ".join(schools))
     results = []
     for filename, cls in csv_file_generators.items():
         path = os.path.join(target_directory, filename)
         results.append(path)
-        cls(path, ou_whitelist).write_csv()
+        cls(path, settings).write_csv()
     logger.info("Finished creating CSV files.")
     return results

@@ -13,6 +13,7 @@ from datetime import datetime
 
 from univention.config_registry import handler_set
 
+from .config import Settings
 from .csv.zip_file import AsmZipFile
 from .network.sftp_upload import SFTP, MissingPublicSshKeyError
 
@@ -24,7 +25,7 @@ class ASMUpload:
         self,
         username: str,
         password: str,
-        ou_whitelist: list[str] | None = None,
+        settings: Settings | None = None,
         delete_zip_file: bool = True,  # noqa: FBT001
     ) -> None:
         try:
@@ -36,13 +37,13 @@ class ASMUpload:
         self.hostname = "upload.appleschoolcontent.com"
         self.username = username
         self.password = password
-        self.ou_whitelist = ou_whitelist
+        self.settings = settings
         self.delete_zip_file = delete_zip_file
         self.logger = logging.getLogger(__name__)
 
     def upload(self, folder_path: str = "/var/lib/asm") -> str | None:
         file_path = os.path.join(folder_path, f"asm_{datetime.isoformat(datetime.now())}.zip")
-        zip_path = AsmZipFile(file_path, self.ou_whitelist).write_zip()
+        zip_path = AsmZipFile(file_path, self.settings).write_zip()
         self.logger.info("Uploading ZIP file to %s...", self.hostname)
         with SFTP(self.hostname, self.username, self.password, self.host_key_line) as sftp:
             self.logger.debug("Connected to %s.", self.hostname)

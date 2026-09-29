@@ -53,13 +53,12 @@ class LocalHostAsASM:
             asm_secret_file.write(self.password)
         with open(CONFIG_FILE_PATH, "w") as config_file:
             json.dump(
-                [
-                    {
-                        "username": self.username,
-                        "password_file": self.password_file,
-                        "school_whitelist": [self.school_name],
+                {
+                    "accounts": {
+                        "test": {"username": self.username, "password_file": self.password_file},
                     },
-                ],
+                    "schools": {self.school_name: {"account": "test"}},
+                },
                 config_file,
             )
         client = SSHClient()

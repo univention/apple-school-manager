@@ -13,14 +13,12 @@
 import random
 
 import univention.testing.strings as uts
-import univention.testing.ucr as ucr_test
 from ldap.filter import filter_format
 from ucsschool.lib.models.group import SchoolClass
 from ucsschool.lib.models.user import User
 from univention.asm.models.classes import AsmClass
 from univention.asm.models.staff import get_filtered_staff
 from univention.asm.utils import get_person_id
-from univention.config_registry import handler_unset
 from univention.testing import utils
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
@@ -71,15 +69,15 @@ class Test(ImportTestbase):  # type: ignore[misc]
         student1_name, student1_dn = self.schoolenv.create_student(school1, classes=school_class1)
         student2_name, student2_dn = self.schoolenv.create_student(school2, classes=school_class2)
         # "users" are created in the reverse order!?!?!?!
-        t1_id_attr, t1_lo = get_person_id(teacher1_dn, "staff", [])
+        t1_id_attr, t1_lo = get_person_id(teacher1_dn, "entryUUID", [])
         t1_name = t1_lo[t1_id_attr][0]
-        t2_id_attr, t2_lo = get_person_id(teacher2_dn, "staff", [])
+        t2_id_attr, t2_lo = get_person_id(teacher2_dn, "entryUUID", [])
         t2_name = t2_lo[t2_id_attr][0]
-        t3_id_attr, t3_lo = get_person_id(teacher3_dn, "staff", [])
+        t3_id_attr, t3_lo = get_person_id(teacher3_dn, "entryUUID", [])
         t3_name = t3_lo[t3_id_attr][0]
-        t4_id_attr, t4_lo = get_person_id(teacher4_dn, "staff", [])
+        t4_id_attr, t4_lo = get_person_id(teacher4_dn, "entryUUID", [])
         t4_name = t4_lo[t4_id_attr][0]
-        t5_id_attr, t5_lo = get_person_id(teacher5_dn, "staff", [])
+        t5_id_attr, t5_lo = get_person_id(teacher5_dn, "entryUUID", [])
         t5_name = t5_lo[t5_id_attr][0]
         work_group1_name, work_group1_dn = self.schoolenv.create_workgroup(
             school1,
@@ -244,7 +242,7 @@ class Test(ImportTestbase):  # type: ignore[misc]
         or_class1 = AsmClass.from_dn(school_class1_dn)
         got_school_class1 = or_class1.as_csv_line()
         for t_dn in new_teacher_dns[:10]:  # <-- dropping last teacher!
-            t_id_attr, t_lo = get_person_id(t_dn, "staff", [])
+            t_id_attr, t_lo = get_person_id(t_dn, "entryUUID", [])
             t_name = t_lo[t_id_attr][0]
             expected_school_class1.append(t_name)
         if got_school_class1 == expected_school_class1:
@@ -256,13 +254,4 @@ class Test(ImportTestbase):  # type: ignore[misc]
 
 
 if __name__ == "__main__":
-    with ucr_test.UCSTestConfigRegistry():
-        handler_unset(
-            [
-                "asm/attributes/user/email/prepend_domain",
-                "asm/attributes/classes/class_number_empty",
-                "asm/attributes/staff/anonymize",
-                "asm/attributes/student/anonymize",
-            ],
-        )
-        Test().run()
+    Test().run()

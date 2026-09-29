@@ -66,21 +66,24 @@ Check the following, in this order:
    Search the log file for ``Invalid email domain``.
 
 #. **Anonymization removed the email address.**
-   With ``asm/attributes/student/anonymize`` or
-   ``asm/attributes/staff/anonymize`` enabled,
+   Anonymization is enabled by default.
+   With ``student.anonymize`` or ``staff.anonymize`` enabled for the account,
    the connector exports the replacement value instead of the address,
    which is empty by default.
    See :ref:`configuration-anonymization`.
 
-   .. code-block:: console
-      :caption: Turn anonymization off
+   .. code-block:: json
+      :caption: Turn anonymization off in :file:`/etc/asm-connections.json`
 
-      $ ucr set asm/attributes/student/anonymize=false
-      $ ucr set asm/attributes/staff/anonymize=false
+      "defaults": {
+          "student": {"anonymize": false},
+          "staff": {"anonymize": false}
+      }
 
 #. **The school isn't on the list.**
-   With ``school_whitelist`` set for the account,
-   the connector only exports the listed schools to it.
+   The connector only exports schools that the ``schools`` section of the
+   settings file lists,
+   and only to the account that the school refers to.
    See :ref:`configuration-school-list`.
 
 #. **An LDAP filter excludes the user.**

@@ -45,13 +45,13 @@ or if the upload to any account fails.
 What happens during a run
 -------------------------
 
-#. The connector reads the accounts from :file:`/etc/asm-connections.json`,
-   as described in :ref:`configuration-accounts`.
+#. The connector reads the settings file :file:`/etc/asm-connections.json`,
+   as described in :ref:`configuration-file`.
    A missing or invalid entry stops the run.
 
 #. The connector collects the schools, classes, work groups, teachers, and
    students from the LDAP directory,
-   restricted by the ``school_whitelist`` of the account
+   restricted to the schools of the account
    and by the LDAP filters from :ref:`configuration-ldap-filter`.
 
 #. The connector writes the six CSV files from
@@ -179,7 +179,7 @@ so each course has exactly one class.
      - Same value as ``course_id``.
 
    * - ``course_name``
-     - Built from ``asm/attributes/course-name-pattern``.
+     - Built from ``course_name_pattern``.
        See :ref:`configuration-course-names`.
 
    * - ``location_id``
@@ -202,7 +202,7 @@ Classes
 
    * - ``class_number``
      - Empty by default.
-       See ``asm/attributes/classes/class_number_empty`` in
+       See ``class_number_empty`` in
        :ref:`configuration-course-names`.
 
    * - ``course_id``
@@ -238,7 +238,7 @@ Staff
      - Source in UCS\@school
 
    * - ``person_id``
-     - The attribute from ``asm/attributes/staff/person_id/mapping``,
+     - The attribute from ``staff.person_id_attribute``,
        ``entryUUID`` by default.
 
    * - ``person_number``
@@ -255,7 +255,7 @@ Staff
 
    * - ``email_address``
      - Primary email address,
-       modified by ``asm/attributes/user/email/prepend_domain``.
+       modified by ``email_prepend_domain``.
 
    * - ``sis_username``
      - User name of the teacher.
@@ -282,7 +282,7 @@ Students
      - Source in UCS\@school
 
    * - ``person_id``
-     - The attribute from ``asm/attributes/student/person_id/mapping``,
+     - The attribute from ``student.person_id_attribute``,
        ``entryUUID`` by default.
 
    * - ``person_number``
@@ -298,18 +298,18 @@ Students
      - Last name of the student.
 
    * - ``grade_level``
-     - The attribute from ``asm/attributes/student/grade_level``.
+     - The attribute from ``student.grade_level_attribute``.
        Empty if the variable is unset.
 
    * - ``email_address``
      - Primary email address,
-       modified by ``asm/attributes/user/email/prepend_domain``.
+       modified by ``email_prepend_domain``.
 
    * - ``sis_username``
      - User name of the student.
 
    * - ``password_policy``
-     - The value of ``asm/attributes/student/password_policy``.
+     - The value of ``student.password_policy``.
        See :ref:`configuration-password-policy`.
 
    * - ``location_id``

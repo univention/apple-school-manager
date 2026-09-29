@@ -121,34 +121,32 @@ msgstr ""
 " Logdatei nach ``Invalid email domain``."
 
 #: ../../troubleshooting.rst:63
-msgid ""
-"**Anonymization removed the email address.** With "
-"``asm/attributes/student/anonymize`` or "
-"``asm/attributes/staff/anonymize`` enabled, the connector exports the "
-"replacement value instead of the address, which is empty by default. See "
-":ref:`configuration-anonymization`."
-msgstr ""
-"**Die Anonymisierung hat die E-Mail-Adresse entfernt.** Ist "
-"``asm/attributes/student/anonymize`` oder ``asm/attributes/staff/anonymize``"
-" aktiviert, exportiert der Connector statt der Adresse den Ersatzwert, der "
-"standardmäßig leer ist. Siehe :ref:`configuration-anonymization`."
-
-#: ../../troubleshooting.rst:70
-msgid "Turn anonymization off"
-msgstr "Anonymisierung ausschalten"
-
-#: ../../troubleshooting.rst:76
 #, fuzzy
 msgid ""
-"**The school isn't on the list.** With ``school_whitelist`` set for the "
-"account, the connector only exports the listed schools to it. See :ref"
-":`configuration-school-list`."
+"**Anonymization removed the email address.** Anonymization is enabled by "
+"default. With ``student.anonymize`` or ``staff.anonymize`` enabled for "
+"the account, the connector exports the replacement value instead of the "
+"address, which is empty by default. See :ref:`configuration-"
+"anonymization`."
 msgstr ""
-"**Die Schule steht nicht auf der Liste.** Ist ``asm/school_whitelist`` "
-"gesetzt, exportiert der Connector nur die aufgeführten Schulen. Siehe "
-":ref:`configuration-school-list`."
+"**Die Anonymisierung hat die E-Mail-Adresse entfernt.** Ist "
+"``asm/attributes/student/anonymize`` oder "
+"``asm/attributes/staff/anonymize`` aktiviert, exportiert der Connector "
+"statt der Adresse den Ersatzwert, der standardmäßig leer ist. Siehe :ref"
+":`configuration-anonymization`."
 
-#: ../../troubleshooting.rst:81
+#: ../../troubleshooting.rst:70
+msgid "Turn anonymization off in :file:`/etc/asm-connections.json`"
+msgstr ""
+
+#: ../../troubleshooting.rst:78
+msgid ""
+"**The school isn't on the list.** The connector only exports schools that"
+" the ``schools`` section of the settings file lists, and only to the "
+"account that the school refers to. See :ref:`configuration-school-list`."
+msgstr ""
+
+#: ../../troubleshooting.rst:84
 msgid ""
 "**An LDAP filter excludes the user.** The log file doesn't name users "
 "whom a filter excluded. Run the filter with :command:`univention-"
@@ -160,22 +158,22 @@ msgstr ""
 ":command:`univention-ldapsearch` aus, um zu prüfen, welche Benutzer er "
 "auswählt. Siehe :ref:`configuration-ldap-filter`."
 
-#: ../../troubleshooting.rst:90
+#: ../../troubleshooting.rst:93
 msgid "The run stops with a credential error"
 msgstr "Der Lauf bricht mit einem Fehler bei den Zugangsdaten ab"
 
-#: ../../troubleshooting.rst:92
+#: ../../troubleshooting.rst:95
 msgid ""
 "The connector stops before it collects any data if :file:`/etc/asm-"
 "connections.json` is missing or invalid, or if a password file is missing"
 " or empty. The message in the log file names the file and the entry."
 msgstr ""
 
-#: ../../troubleshooting.rst:97 ../../troubleshooting.rst:135
+#: ../../troubleshooting.rst:100 ../../troubleshooting.rst:138
 msgid "Message in the log file"
 msgstr "Meldung in der Logdatei"
 
-#: ../../troubleshooting.rst:102
+#: ../../troubleshooting.rst:105
 #, fuzzy
 msgid ""
 "Configure the accounts, as described in :ref:`configuration-accounts`. If"
@@ -187,11 +185,11 @@ msgstr ""
 "gesetzt sind, Apple sie aber ablehnt, erzeugen Sie in Apple School "
 "Manager neue Zugangsdaten und geben Sie diese ein."
 
-#: ../../troubleshooting.rst:111
+#: ../../troubleshooting.rst:114
 msgid "The upload stops with a missing host key"
 msgstr "Der Upload bricht mit einem fehlenden Host-Schlüssel ab"
 
-#: ../../troubleshooting.rst:113
+#: ../../troubleshooting.rst:116
 msgid ""
 "The connector verifies the host key of the SFTP server against "
 ":file:`/etc/asm_public_key`. The package ships that file. If it's missing"
@@ -203,7 +201,7 @@ msgstr ""
 "oder passt sie nicht mehr zum Server, schlägt der Upload mit ``Could not "
 "find /etc/asm_public_key`` oder mit einem SSH-Fehler fehl."
 
-#: ../../troubleshooting.rst:120
+#: ../../troubleshooting.rst:123
 msgid ""
 "Reinstall the package to restore the file. If Apple changed the host key,"
 " report it to Univention, see :ref:`troubleshooting-support`, so that a "
@@ -214,11 +212,11 @@ msgstr ""
 ":ref:`troubleshooting-support`, damit eine neue Version der App den neuen "
 "Schlüssel mitliefern kann."
 
-#: ../../troubleshooting.rst:129
+#: ../../troubleshooting.rst:132
 msgid "The run stops with an invalid LDAP filter"
 msgstr "Der Lauf bricht mit einem ungültigen LDAP-Filter ab"
 
-#: ../../troubleshooting.rst:131
+#: ../../troubleshooting.rst:134
 msgid ""
 "An LDAP filter with a syntax error stops the synchronization before the "
 "connector uploads anything. The log file names the variable and the "
@@ -228,7 +226,7 @@ msgstr ""
 "der Connector etwas hochlädt. Die Logdatei nennt die Variable und den "
 "Filter."
 
-#: ../../troubleshooting.rst:140
+#: ../../troubleshooting.rst:143
 msgid ""
 "Correct the filter, or unset the variable to fall back to the global "
 "filter. See :ref:`configuration-ldap-filter`."
@@ -236,11 +234,11 @@ msgstr ""
 "Korrigieren Sie den Filter oder entfernen Sie die Variable, damit der "
 "globale Filter greift. Siehe :ref:`configuration-ldap-filter`."
 
-#: ../../troubleshooting.rst:147
+#: ../../troubleshooting.rst:150
 msgid "Classes have fewer teachers than expected"
 msgstr "Klassen haben weniger Lehrer als erwartet"
 
-#: ../../troubleshooting.rst:149
+#: ../../troubleshooting.rst:152
 msgid ""
 "Apple School Manager supports at most 15 teachers per class. The "
 "connector exports the first 15 and writes a warning to the log file that "
@@ -252,7 +250,7 @@ msgstr ""
 "der Klasse in die Logdatei. Das ist eine Einschränkung von Apple School "
 "Manager, nicht des Connectors."
 
-#: ../../troubleshooting.rst:155
+#: ../../troubleshooting.rst:158
 msgid ""
 "An LDAP filter for teachers can also reduce the number. The log file "
 "records every teacher whom a filter excluded from a class."
@@ -261,11 +259,11 @@ msgstr ""
 "verzeichnet jeden Lehrer, den ein Filter aus einer Klasse ausgeschlossen "
 "hat."
 
-#: ../../troubleshooting.rst:161
+#: ../../troubleshooting.rst:164
 msgid "Where to get help"
 msgstr "Hilfe erhalten"
 
-#: ../../troubleshooting.rst:163
+#: ../../troubleshooting.rst:166
 msgid ""
 "The `Univention Help <https://help.univention.com/>`_ forum for questions"
 " from the community."
@@ -273,11 +271,11 @@ msgstr ""
 "Das Forum `Univention Help <https://help.univention.com/>`_ für Fragen an "
 "die Community."
 
-#: ../../troubleshooting.rst:166
+#: ../../troubleshooting.rst:169
 msgid "Your Univention support contract for a supported environment."
 msgstr "Ihr Univention-Supportvertrag für eine unterstützte Umgebung."
 
-#: ../../troubleshooting.rst:168
+#: ../../troubleshooting.rst:171
 msgid ""
 "When you report a problem, attach the relevant part of "
 ":file:`/var/log/univention/asm.log`."
@@ -333,4 +331,20 @@ msgstr ""
 #~ "Der Connector bricht ab, bevor er "
 #~ "Daten sammelt, wenn der Benutzername "
 #~ "oder das Passwort fehlt."
+
+#~ msgid "Turn anonymization off"
+#~ msgstr "Anonymisierung ausschalten"
+
+#~ msgid ""
+#~ "**The school isn't on the list.** "
+#~ "With ``school_whitelist`` set for the "
+#~ "account, the connector only exports the"
+#~ " listed schools to it. See :ref"
+#~ ":`configuration-school-list`."
+#~ msgstr ""
+#~ "**Die Schule steht nicht auf der "
+#~ "Liste.** Ist ``asm/school_whitelist`` gesetzt, "
+#~ "exportiert der Connector nur die "
+#~ "aufgeführten Schulen. Siehe :ref:`configuration-"
+#~ "school-list`."
 

@@ -81,18 +81,17 @@ msgstr "Ablauf eines Synchronisationslaufs"
 
 #: ../../synchronization.rst:48
 msgid ""
-"The connector reads the accounts from :file:`/etc/asm-connections.json`, "
-"as described in :ref:`configuration-accounts`. A missing or invalid entry"
-" stops the run."
+"The connector reads the settings file :file:`/etc/asm-connections.json`, "
+"as described in :ref:`configuration-file`. A missing or invalid entry "
+"stops the run."
 msgstr ""
 
 #: ../../synchronization.rst:52
 #, fuzzy
 msgid ""
 "The connector collects the schools, classes, work groups, teachers, and "
-"students from the LDAP directory, restricted by the ``school_whitelist`` "
-"of the account and by the LDAP filters from :ref:`configuration-ldap-"
-"filter`."
+"students from the LDAP directory, restricted to the schools of the "
+"account and by the LDAP filters from :ref:`configuration-ldap-filter`."
 msgstr ""
 "Der Connector sammelt die Schulen, Schulklassen, Arbeitsgruppen, Lehrer "
 "und Schüler aus dem LDAP-Verzeichnis, eingeschränkt durch "
@@ -355,12 +354,11 @@ msgid "``course_name``"
 msgstr "``course_name``"
 
 #: ../../synchronization.rst:182
-msgid ""
-"Built from ``asm/attributes/course-name-pattern``. See :ref"
-":`configuration-course-names`."
+#, fuzzy
+msgid "Built from ``course_name_pattern``. See :ref:`configuration-course-names`."
 msgstr ""
-"Gebildet aus ``asm/attributes/course-name-pattern``. Siehe "
-":ref:`configuration-course-names`."
+"Gebildet aus ``asm/attributes/course-name-pattern``. Siehe :ref"
+":`configuration-course-names`."
 
 #: ../../synchronization.rst:186 ../../synchronization.rst:219
 msgid "Name of the school."
@@ -388,12 +386,13 @@ msgid "``class_number``"
 msgstr "``class_number``"
 
 #: ../../synchronization.rst:204
+#, fuzzy
 msgid ""
-"Empty by default. See ``asm/attributes/classes/class_number_empty`` in "
-":ref:`configuration-course-names`."
+"Empty by default. See ``class_number_empty`` in :ref:`configuration-"
+"course-names`."
 msgstr ""
-"Standardmäßig leer. Siehe ``asm/attributes/classes/class_number_empty`` in "
-":ref:`configuration-course-names`."
+"Standardmäßig leer. Siehe ``asm/attributes/classes/class_number_empty`` "
+"in :ref:`configuration-course-names`."
 
 #: ../../synchronization.rst:211
 msgid "``instructor_id``, ``instructor_id_2``, ``instructor_id_3``"
@@ -438,12 +437,13 @@ msgid "``person_id``"
 msgstr "``person_id``"
 
 #: ../../synchronization.rst:241
+#, fuzzy
 msgid ""
-"The attribute from ``asm/attributes/staff/person_id/mapping``, "
-"``entryUUID`` by default."
+"The attribute from ``staff.person_id_attribute``, ``entryUUID`` by "
+"default."
 msgstr ""
-"Das Attribut aus ``asm/attributes/staff/person_id/mapping``, standardmäßig "
-"``entryUUID``."
+"Das Attribut aus ``asm/attributes/staff/person_id/mapping``, "
+"standardmäßig ``entryUUID``."
 
 #: ../../synchronization.rst:244 ../../synchronization.rst:288
 msgid "``person_number``"
@@ -482,9 +482,8 @@ msgid "``email_address``"
 msgstr "``email_address``"
 
 #: ../../synchronization.rst:257 ../../synchronization.rst:305
-msgid ""
-"Primary email address, modified by "
-"``asm/attributes/user/email/prepend_domain``."
+#, fuzzy
+msgid "Primary email address, modified by ``email_prepend_domain``."
 msgstr ""
 "Primäre E-Mail-Adresse, angepasst durch "
 "``asm/attributes/user/email/prepend_domain``."
@@ -526,11 +525,12 @@ msgid "Columns of :file:`students.csv`"
 msgstr "Spalten von :file:`students.csv`"
 
 #: ../../synchronization.rst:285
+#, fuzzy
 msgid ""
-"The attribute from ``asm/attributes/student/person_id/mapping``, "
-"``entryUUID`` by default."
+"The attribute from ``student.person_id_attribute``, ``entryUUID`` by "
+"default."
 msgstr ""
-"Das Attribut aus ``asm/attributes/student/person_id/mapping``, "
+"Das Attribut aus ``asm/attributes/staff/person_id/mapping``, "
 "standardmäßig ``entryUUID``."
 
 #: ../../synchronization.rst:292
@@ -546,8 +546,9 @@ msgid "``grade_level``"
 msgstr "``grade_level``"
 
 #: ../../synchronization.rst:301
+#, fuzzy
 msgid ""
-"The attribute from ``asm/attributes/student/grade_level``. Empty if the "
+"The attribute from ``student.grade_level_attribute``. Empty if the "
 "variable is unset."
 msgstr ""
 "Das Attribut aus ``asm/attributes/student/grade_level``. Leer, wenn die "
@@ -562,12 +563,13 @@ msgid "``password_policy``"
 msgstr "``password_policy``"
 
 #: ../../synchronization.rst:312
+#, fuzzy
 msgid ""
-"The value of ``asm/attributes/student/password_policy``. See :ref"
-":`configuration-password-policy`."
+"The value of ``student.password_policy``. See :ref:`configuration-"
+"password-policy`."
 msgstr ""
-"Der Wert von ``asm/attributes/student/password_policy``. Siehe "
-":ref:`configuration-password-policy`."
+"Der Wert von ``asm/attributes/student/password_policy``. Siehe :ref"
+":`configuration-password-policy`."
 
 #: ../../synchronization.rst:316
 msgid "Primary school of the student."
@@ -675,4 +677,21 @@ msgstr ""
 #~ "aus ``asm/username`` und das Passwort "
 #~ "aus :file:`/etc/asm.secret`. Fehlt einer der"
 #~ " Werte, bricht der Lauf ab."
+
+#~ msgid ""
+#~ "The connector reads the accounts from"
+#~ " :file:`/etc/asm-connections.json`, as described"
+#~ " in :ref:`configuration-accounts`. A "
+#~ "missing or invalid entry stops the "
+#~ "run."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The attribute from "
+#~ "``asm/attributes/student/person_id/mapping``, ``entryUUID`` "
+#~ "by default."
+#~ msgstr ""
+#~ "Das Attribut aus "
+#~ "``asm/attributes/student/person_id/mapping``, standardmäßig "
+#~ "``entryUUID``."
 

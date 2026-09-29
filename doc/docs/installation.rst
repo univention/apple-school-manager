@@ -100,20 +100,29 @@ Enter the credentials
       $ install -m 600 /dev/null /etc/asm.secret
       $ editor /etc/asm.secret
 
-#. Write the user name and the path of the password file to
-   :file:`/etc/asm-connections.json`.
+#. Add the user name, the path of the password file, and the schools to the
+   settings file :file:`/etc/asm-connections.json`,
+   which the installation creates without an account.
 
    .. code-block:: json
       :caption: One Apple School Manager account in :file:`/etc/asm-connections.json`
 
-      [
-          {
-              "username": "sftp-user",
-              "password_file": "/etc/asm.secret"
+      {
+          "accounts": {
+              "main": {
+                  "username": "sftp-user",
+                  "password_file": "/etc/asm.secret"
+              }
+          },
+          "schools": {
+              "*": {"account": "main"}
           }
-      ]
+      }
 
-:ref:`configuration-accounts` describes the file in detail,
-including how to limit the account to individual schools
-and how to add further accounts.
+   The entry ``*`` in ``schools`` synchronizes every school to the account.
+
+:ref:`configuration-file` describes the file in detail,
+including how to limit the account to individual schools,
+how to add further accounts,
+and every setting for users and classes.
 Then continue with :ref:`configuration`.

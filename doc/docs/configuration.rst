@@ -8,94 +8,255 @@
 Configuration
 *************
 
-The connector reads its configuration from three places.
-The file :file:`/etc/asm-connections.json` holds the Apple School Manager
-accounts and the schools that the connector synchronizes to each of them.
+The connector reads its configuration from two places.
+The settings file :file:`/etc/asm-connections.json` holds the Apple School
+Manager accounts,
+the schools that the connector synchronizes to each of them,
+and every setting that controls which users the connector exports
+and how it maps their attributes.
 The app settings in the :term:`App Center` hold the synchronization schedule
 and a few switches for everyday operation.
-The :term:`UCR` holds the settings that control which users the connector
-exports and how it maps their attributes.
+
+.. _configuration-file:
+
+Settings file
+=============
+
+The settings file :file:`/etc/asm-connections.json` has three sections:
+
+``accounts``
+   The Apple School Manager accounts, each with its credentials and the
+   settings for the users that the account receives.
+   See :ref:`configuration-accounts`.
+
+``schools``
+   The schools to synchronize, each with the account that receives it
+   and the settings for its classes.
+   See :ref:`configuration-school-list`.
+
+``defaults``
+   Settings that apply to every account and every school,
+   unless an account or a school entry sets them itself.
+   See :ref:`configuration-defaults`.
+
+.. code-block:: json
+   :caption: Two Apple School Manager accounts in :file:`/etc/asm-connections.json`
+
+   {
+       "accounts": {
+           "north": {
+               "username": "sftp-user-north",
+               "password_file": "/etc/asm-north.secret"
+           },
+           "south": {
+               "username": "sftp-user-south",
+               "password_file": "/etc/asm-south.secret",
+               "student": {"anonymize": false}
+           }
+       },
+       "defaults": {
+           "student": {"password_policy": 6}
+       },
+       "schools": {
+           "gym123": {"account": "north"},
+           "gs456": {
+               "account": "south",
+               "course_name_pattern": "{name}",
+               "student": {"ldap_filter": "(uid=a*)"}
+           }
+       }
+   }
+
+A user who belongs to several schools of the same account
+appears only once in the upload to that account.
+The settings for users therefore apply per account,
+and the settings for classes and the LDAP filters apply per school.
+
+For every setting,
+the connector uses the value from the account or school entry,
+then the value from ``defaults``,
+and then the built-in default.
+
+The installation creates the file
+with read permission for the ``root`` user only.
+Edit it with a text editor.
+The connector reads the file at the start of each run,
+so a change takes effect with the next synchronization.
+It checks the complete file before it uploads anything.
+The following problems stop the run with an error message
+that names the file and the entry:
+
+* A missing file, or a file without an account or a school.
+* A missing or unknown key, or a value of the wrong type.
+* A school that refers to an account that the file doesn't define.
+* A missing or empty password file.
+* A user name that appears for more than one account.
+
+If the upload to one account fails,
+the connector still uploads to the remaining accounts
+and exits with a non-zero status at the end.
 
 .. _configuration-accounts:
 
 Apple School Manager accounts
-=============================
+-----------------------------
 
-The connector uploads to every Apple School Manager account that is listed in
-:file:`/etc/asm-connections.json`.
-Usually that is a single account.
+The ``accounts`` section maps a name of your choice to each account.
+Usually there is a single account.
 If the schools on your UCS\@school system belong to different institutions,
 each with its own Apple School Manager account,
-list one entry per account.
+add one entry per account.
 The connector then uploads a separate archive to every account,
-each restricted to the schools that you assign to that account.
+each restricted to the schools that refer to that account.
 
-To configure the accounts:
+To add an account:
 
-#. Store the SFTP password of each account in a file of its own
+#. Store the SFTP password of the account in a file of its own
    that only ``root`` can read.
    :ref:`installation-credentials` describes where to find the password.
 
    .. code-block:: console
       :caption: Store the password of an account
 
-      $ install -m 600 /dev/null /etc/asm-gym123.secret
-      $ editor /etc/asm-gym123.secret
+      $ install -m 600 /dev/null /etc/asm-north.secret
+      $ editor /etc/asm-north.secret
 
-#. Write :file:`/etc/asm-connections.json` with one entry per account.
+#. Add the account to the ``accounts`` section of the settings file.
 
-   .. code-block:: json
-      :caption: Two Apple School Manager accounts in :file:`/etc/asm-connections.json`
+#. Assign at least one school to the account,
+   as described in :ref:`configuration-school-list`.
 
-      [
-          {
-              "username": "sftp-user-of-account-1",
-              "password_file": "/etc/asm-gym123.secret",
-              "school_whitelist": ["gym123"]
-          },
-          {
-              "username": "sftp-user-of-account-2",
-              "password_file": "/etc/asm-gs456.secret",
-              "school_whitelist": ["gs456", "rs789"]
-          }
-      ]
-
-Each entry takes the following keys:
+An account entry takes the following keys.
+All keys except ``username`` and ``password_file`` are optional
+and can also go to ``defaults``.
 
 .. list-table:: Keys of an account entry
    :header-rows: 1
-   :widths: 25 15 60
+   :widths: 35 20 45
 
    * - Key
-     - Required
+     - Default
      - Description
 
    * - ``username``
-     - Yes
+     - Required
      - The SFTP user name of the account.
 
    * - ``password_file``
-     - Yes
+     - Required
      - Path to the file that holds the SFTP password of the account.
 
-   * - ``school_whitelist``
-     - See description
-     - List of school abbreviations to synchronize to the account,
-       as described in :ref:`configuration-school-list`.
-       Required if the file lists more than one account.
-       With a single account and no list,
-       the connector synchronizes every school.
+   * - ``email_prepend_domain``
+     - Empty
+     - See :ref:`configuration-email`.
 
-The connector reads the file at the start of each run,
-so a change takes effect with the next synchronization.
-It checks the complete file before it uploads anything.
-A missing file, a missing or unknown key, a missing password file,
-or a user name that appears twice stops the run with an error message.
-If the upload to one account fails,
-the connector still uploads to the remaining accounts
-and exits with a non-zero status at the end.
+   * - ``student.anonymize``, ``staff.anonymize``
+     - ``true``
+     - See :ref:`configuration-anonymization`.
 
-The app settings and UCR variables apply to every account alike.
+   * - ``student.anonymize_values``, ``staff.anonymize_values``
+     - See :ref:`configuration-anonymization`
+     - See :ref:`configuration-anonymization`.
+
+   * - ``student.person_id_attribute``, ``staff.person_id_attribute``
+     - ``entryUUID``
+     - See :ref:`configuration-person-id`.
+
+   * - ``student.password_policy``
+     - ``4``
+     - See :ref:`configuration-password-policy`.
+
+   * - ``student.grade_level_attribute``
+     - ``null``
+     - See :ref:`configuration-grade-level`.
+
+.. _configuration-school-list:
+
+Schools
+-------
+
+The ``schools`` section lists the schools to synchronize
+by their abbreviation
+and assigns each of them to an account.
+The connector only synchronizes schools that the section lists.
+
+To look up the abbreviations,
+open :menuselection:`School administration --> Schools` in :term:`UMC`.
+The abbreviation is the name of the school object, for example ``gym123``.
+
+The entry ``*`` stands for every school that the section doesn't list by name.
+With a single account,
+it synchronizes all schools to that account.
+
+.. code-block:: json
+   :caption: Every school to one account, one school with its own LDAP filter
+
+   "schools": {
+       "*": {"account": "north"},
+       "gym123": {
+           "account": "north",
+           "staff": {"ldap_filter": "(uid=t*)"}
+       }
+   }
+
+A user who belongs to several schools appears in the upload to an account
+only with the schools that belong to that account.
+If none of the user's schools belongs to the account,
+the connector skips the user for that account.
+
+A school entry takes the following keys.
+All keys except ``account`` are optional
+and can also go to ``defaults``.
+
+.. list-table:: Keys of a school entry
+   :header-rows: 1
+   :widths: 35 20 45
+
+   * - Key
+     - Default
+     - Description
+
+   * - ``account``
+     - Required
+     - Name of the account in the ``accounts`` section
+       that receives the school.
+
+   * - ``course_name_pattern``
+     - ``{ou}-{name}``
+     - See :ref:`configuration-course-names`.
+
+   * - ``class_number_empty``
+     - ``true``
+     - See :ref:`configuration-course-names`.
+
+   * - ``student.ldap_filter``, ``staff.ldap_filter``
+     - Empty
+     - See :ref:`configuration-ldap-filter`.
+
+.. _configuration-defaults:
+
+Defaults
+--------
+
+The ``defaults`` section takes every optional key of an account entry
+and of a school entry.
+A value in ``defaults`` applies to every account or every school
+that doesn't set the key itself.
+
+.. code-block:: json
+   :caption: Anonymize nobody, except the students of the account ``north``
+
+   "defaults": {
+       "student": {"anonymize": false},
+       "staff": {"anonymize": false}
+   },
+   "accounts": {
+       "north": {
+           "username": "sftp-user-north",
+           "password_file": "/etc/asm-north.secret",
+           "student": {"anonymize": true}
+       }
+   }
 
 .. _configuration-accounts-migration:
 
@@ -103,17 +264,75 @@ Update from an earlier version
 ------------------------------
 
 Up to version 5.1.1,
-the app settings ``asm/username``, ``asm/password``,
-and ``asm/school_whitelist`` held the single account.
-The update to version 5.2.0 moves them to
-:file:`/etc/asm-connections.json`
-and removes the UCR variables ``asm/username`` and ``asm/school_whitelist``.
-The password stays in :file:`/etc/asm.secret`,
-and the new file refers to it.
+app settings and UCR variables held the configuration.
+The update to version 5.2.0 moves their values to the settings file
+and removes the UCR variables.
 You don't need to do anything.
+The password stays in :file:`/etc/asm.secret`,
+and the settings file refers to it.
+The account gets the name ``default``.
+
+.. list-table:: Former app settings and UCR variables
+   :header-rows: 1
+   :widths: 50 50
+
+   * - Former setting
+     - Key in the settings file
+
+   * - ``asm/username``
+     - ``accounts.default.username``
+
+   * - ``asm/password``
+     - ``accounts.default.password_file``
+
+   * - ``asm/school_whitelist``
+     - One entry per school in ``schools``,
+       or the entry ``*`` if the list was empty
+
+   * - ``asm/attributes/user/email/prepend_domain``
+     - ``defaults.email_prepend_domain``
+
+   * - ``asm/attributes/ROLE/anonymize``
+     - ``defaults.ROLE.anonymize``
+
+   * - ``asm/attributes/ROLE/anonymize/ATTRIBUTE``
+     - ``defaults.ROLE.anonymize_values.ATTRIBUTE``
+
+   * - ``asm/attributes/ROLE/person_id/mapping``
+     - ``defaults.ROLE.person_id_attribute``,
+       without the leading ``%``
+
+   * - ``asm/attributes/student/password_policy``
+     - ``defaults.student.password_policy``,
+       ``null`` for the former ``-``
+
+   * - ``asm/attributes/student/grade_level``
+     - ``defaults.student.grade_level_attribute``
+
+   * - ``asm/attributes/course-name-pattern``
+     - ``defaults.course_name_pattern``
+
+   * - ``asm/attributes/classes/class_number_empty``
+     - ``defaults.class_number_empty``
+
+   * - ``asm/ldap_filter/students``, ``asm/ldap_filter/staff``
+     - ``defaults.student.ldap_filter``, ``defaults.staff.ldap_filter``
+
+   * - ``asm/ldap_filter/students/SCHOOL``,
+       ``asm/ldap_filter/staff/SCHOOL``
+     - ``schools.SCHOOL.student.ldap_filter``,
+       ``schools.SCHOOL.staff.ldap_filter``
+
+Replace ``ROLE`` with ``staff`` or ``student``,
+``ATTRIBUTE`` with an attribute from :ref:`configuration-anonymization`,
+and ``SCHOOL`` with the school abbreviation.
+
+The update drops an LDAP filter for a school
+that wasn't on the former school list,
+because the connector didn't synchronize that school.
 
 If :file:`/etc/asm-connections.json` already exists,
-the update leaves it unchanged.
+the update leaves it and the UCR variables unchanged.
 
 .. _configuration-app-settings:
 
@@ -122,6 +341,7 @@ App settings
 
 To open the app settings,
 select the app in the App Center and click :guilabel:`App settings`.
+The app settings apply to every account alike.
 
 .. list-table:: App settings of the Apple School Manager Connector
    :header-rows: 1
@@ -181,45 +401,15 @@ If you enable the daily run without a valid hour,
 the connector writes a comment to the cron file instead of a job,
 and no synchronization takes place.
 
-.. _configuration-school-list:
+.. _configuration-details:
 
-Limit the synchronization to individual schools
-===============================================
+Settings in detail
+==================
 
-By default, the connector synchronizes every school that it can see.
-To restrict an account to individual schools,
-list their abbreviations in the ``school_whitelist`` key of the account in
-:file:`/etc/asm-connections.json`.
-
-To look up the abbreviations,
-open :menuselection:`School administration --> Schools` in :term:`UMC`.
-The abbreviation is the name of the school object, for example ``gym123``.
-
-.. code-block:: json
-   :caption: Account restricted to two schools
-
-   {
-       "username": "sftp-user",
-       "password_file": "/etc/asm.secret",
-       "school_whitelist": ["gym123", "gs456"]
-   }
-
-A user who belongs to several schools appears in the export only with those
-schools that are on the list.
-If none of the user's schools is on the list,
-the connector skips the user.
-
-.. _configuration-ucr:
-
-Univention Configuration Registry variables
-===========================================
-
-The following sections describe the UCR variables of the connector.
-You set them in :menuselection:`System --> Univention Configuration Registry`
-in UMC,
-or on the command line with :command:`ucr set`.
-The connector reads them at the start of each run,
-so a change takes effect with the next synchronization.
+The following sections describe the optional keys of the settings file.
+Keys that start with ``student`` or ``staff``
+go into an object of that name,
+as in ``"student": {"anonymize": false}``.
 
 .. _configuration-email:
 
@@ -236,15 +426,13 @@ resolves in the :term:`DNS`.
 If it doesn't, the connector writes a warning to the log file
 and exports the address unchanged.
 
-.. envvar:: asm/attributes/user/email/prepend_domain
-
+``email_prepend_domain``
+   Per account.
    Inserts the value as a subdomain in front of the domain of every email
    address.
    With the value ``apple``, the connector exports the address
    ``jane@example.com`` as ``jane@apple.example.com``.
-
-   :Default value: Unset
-   :Type: string
+   Default: empty.
 
 .. _configuration-anonymization:
 
@@ -268,56 +456,56 @@ with values that you configure.
    If you use Keycloak as an identity provider for Apple School Manager,
    turn anonymization off.
 
-.. envvar:: asm/attributes/staff/anonymize
+``student.anonymize``, ``staff.anonymize``
+   Per account.
+   Enables anonymization for students and teachers.
+   Default: ``true``.
 
-   Enables anonymization for teachers.
-
-   :Default value: ``false``
-   :Type: boolean
-
-.. envvar:: asm/attributes/student/anonymize
-
-   Enables anonymization for students.
-
-   :Default value: ``false``
-   :Type: boolean
-
-For each anonymized attribute,
-a separate variable holds the replacement value.
-A value that starts with ``%`` names an LDAP attribute,
-and the connector exports the value of that attribute from the user's LDAP
-object.
-A value without a leading ``%`` is exported literally.
+``student.anonymize_values``, ``staff.anonymize_values``
+   Per account.
+   Replacement values for the anonymized attributes.
+   A value that starts with ``%`` names an LDAP attribute,
+   and the connector exports the value of that attribute from the user's LDAP
+   object.
+   A value without a leading ``%`` is exported literally.
+   ``null`` leaves the column empty.
+   You only need to list the attributes whose default you want to change.
 
 .. list-table:: Replacement values for anonymized attributes
    :header-rows: 1
-   :widths: 55 20 25
+   :widths: 40 30 30
 
-   * - UCR variable
+   * - Key in ``anonymize_values``
      - Default
      - Required
 
-   * - ``asm/attributes/ROLE/anonymize/first_name``
+   * - ``first_name``
      - ``%uid``
      - Yes
 
-   * - ``asm/attributes/ROLE/anonymize/middle_name``
-     - Empty
+   * - ``middle_name``
+     - ``null``
      - No
 
-   * - ``asm/attributes/ROLE/anonymize/last_name``
-     - ``No Name``
+   * - ``last_name``
+     - ``-``
      - Yes
 
-   * - ``asm/attributes/ROLE/anonymize/email_address``
-     - Empty
+   * - ``email_address``
+     - ``null``
      - No
 
-   * - ``asm/attributes/ROLE/anonymize/sis_username``
+   * - ``sis_username``
      - ``%uid``
      - No
 
-Replace ``ROLE`` with ``staff`` or ``student``.
+.. code-block:: json
+   :caption: Anonymize students with a fixed last name
+
+   "student": {
+       "anonymize": true,
+       "anonymize_values": {"last_name": "Student"}
+   }
 
 .. _configuration-person-id:
 
@@ -328,23 +516,14 @@ Apple School Manager identifies a user by the ``person_id`` column.
 The connector fills it with an LDAP attribute of the user
 that doesn't change when you rename the user.
 
-.. envvar:: asm/attributes/staff/person_id/mapping
-
-   LDAP attribute that identifies a teacher.
-
-   :Default value: ``%entryUUID``
-   :Type: string
-
-.. envvar:: asm/attributes/student/person_id/mapping
-
-   LDAP attribute that identifies a student.
-
-   :Default value: ``%entryUUID``
-   :Type: string
+``student.person_id_attribute``, ``staff.person_id_attribute``
+   Per account.
+   LDAP attribute that identifies a student or a teacher.
+   Default: ``entryUUID``.
 
 .. caution::
 
-   Don't change these variables on a running installation.
+   Don't change these keys on a running installation.
    Apple School Manager treats a user with a new ``person_id``
    as a different user
    and loses the association with the existing account.
@@ -357,33 +536,25 @@ Password policy for students
 Apple School Manager creates the password for a new student itself.
 The password policy determines how long that password is.
 
-.. envvar:: asm/attributes/student/password_policy
-
+``student.password_policy``
+   Per account.
    Length of the password that Apple creates for a new student.
-   The value ``-`` means that Apple School Manager uses the default of the
-   school.
-
-   :Default value: ``4``
-   :Possible values: ``4``, ``6``, ``8``, ``-``
-   :Type: string
+   Valid values are ``4``, ``6``, ``8``, and ``null``.
+   ``null`` means that Apple School Manager uses the default of the school.
+   Default: ``4``.
 
 Apple School Manager doesn't support a password policy for teachers.
-A value other than the ones listed makes the synchronization stop with an
-error.
 
 .. _configuration-grade-level:
 
 Grade level of students
 -----------------------
 
-.. envvar:: asm/attributes/student/grade_level
-
+``student.grade_level_attribute``
+   Per account.
    LDAP attribute that holds the grade level of a student.
    The connector exports its value in the ``grade_level`` column.
-   If unset, the column stays empty.
-
-   :Default value: Unset
-   :Type: string
+   Default: ``null``, which leaves the column empty.
 
 .. _configuration-course-names:
 
@@ -394,24 +565,20 @@ UCS\@school prefixes the name of a school class with the school abbreviation,
 for example ``gym123-1a``.
 The connector derives the course name from that name.
 
-.. envvar:: asm/attributes/course-name-pattern
-
+``course_name_pattern``
+   Per school.
    Pattern for the course name.
    The connector replaces ``{ou}`` with the school abbreviation
    and ``{name}`` with the class name without the school prefix.
+   Default: ``{ou}-{name}``.
 
-   :Default value: ``{ou}-{name}``
-   :Type: string
-
-.. envvar:: asm/attributes/classes/class_number_empty
-
+``class_number_empty``
+   Per school.
    Leaves the ``class_number`` column empty.
    Apple School Manager builds the name of a class from the course name and the
    class number,
    so an identical class number only repeats the course name.
-
-   :Default value: ``true``
-   :Type: boolean
+   Default: ``true``.
 
 .. _configuration-ldap-filter:
 
@@ -423,29 +590,20 @@ enough,
 you can select the users with an LDAP filter.
 The connector applies the filter in addition to the school list.
 
-.. envvar:: asm/ldap_filter/students
+``student.ldap_filter``, ``staff.ldap_filter``
+   Per school.
+   LDAP filter for the students or the teachers of the school.
+   A filter in ``defaults`` applies to every school
+   that doesn't set its own.
+   Default: empty, which selects every user.
 
-   LDAP filter for the students of every school.
-
-   :Default value: Unset
-   :Type: string
-
-.. envvar:: asm/ldap_filter/staff
-
-   LDAP filter for the teachers of every school.
-
-   :Default value: Unset
-   :Type: string
-
-A filter for an individual school overrides the global filter.
-Append the school abbreviation to the variable name for that,
-as in ``asm/ldap_filter/students/SCHOOL``.
-Replace ``SCHOOL`` with the school abbreviation, for example ``gym123``.
-
-.. code-block:: console
+.. code-block:: json
    :caption: Synchronize only the students of ``gym123`` with a primary email address
 
-   $ ucr set asm/ldap_filter/students/gym123='(mailPrimaryAddress=*)'
+   "gym123": {
+       "account": "north",
+       "student": {"ldap_filter": "(mailPrimaryAddress=*)"}
+   }
 
 The connector combines the filter with its own selection of the students or
 teachers of the school,
@@ -462,7 +620,8 @@ combine it with the role of the users and run it with
 
 .. caution::
 
-   An invalid LDAP filter stops the synchronization.
-   The connector uploads nothing in that case,
-   so the data in Apple School Manager stays as it was after the last
+   An invalid LDAP filter stops the upload to the account of that school.
+   The connector uploads nothing to that account in that case,
+   so its data in Apple School Manager stays as it was after the last
    successful run.
+   The other accounts still receive their upload.

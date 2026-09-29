@@ -18,10 +18,14 @@ v5.2.0
 * The connector synchronizes to several Apple School Manager accounts.
   Each account receives only the schools that you assign to it.
 
-* The accounts are configured in :file:`/etc/asm-connections.json`.
-  The app settings ``asm/username``, ``asm/password``,
-  and ``asm/school_whitelist`` are gone.
-  The update moves their values to the new file.
+* The settings file :file:`/etc/asm-connections.json` replaces the app
+  settings ``asm/username``, ``asm/password``, and ``asm/school_whitelist``
+  and all ``asm/attributes/*`` and ``asm/ldap_filter/*`` UCR variables.
+  The settings for users apply per account,
+  the settings for classes and the LDAP filters per school.
+  The update moves the former values to the new file.
+
+* An invalid LDAP filter only stops the upload to the affected account.
 
 .. _changelog-v5.1.1:
 

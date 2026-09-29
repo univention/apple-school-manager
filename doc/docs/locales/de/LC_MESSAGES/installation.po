@@ -183,19 +183,25 @@ msgstr ""
 
 #: ../../installation.rst:103
 msgid ""
-"Write the user name and the path of the password file to :file:`/etc/asm-"
-"connections.json`."
+"Add the user name, the path of the password file, and the schools to the "
+"settings file :file:`/etc/asm-connections.json`, which the installation "
+"creates without an account."
 msgstr ""
 
-#: ../../installation.rst:106
+#: ../../installation.rst:107
 msgid "One Apple School Manager account in :file:`/etc/asm-connections.json`"
 msgstr ""
 
-#: ../../installation.rst:116
+#: ../../installation.rst:122
+msgid "The entry ``*`` in ``schools`` synchronizes every school to the account."
+msgstr ""
+
+#: ../../installation.rst:124
 msgid ""
-":ref:`configuration-accounts` describes the file in detail, including how"
-" to limit the account to individual schools and how to add further "
-"accounts. Then continue with :ref:`configuration`."
+":ref:`configuration-file` describes the file in detail, including how to "
+"limit the account to individual schools, how to add further accounts, and"
+" every setting for users and classes. Then continue with "
+":ref:`configuration`."
 msgstr ""
 
 #~ msgid ""
@@ -242,4 +248,18 @@ msgstr ""
 #~ "Nachdem Sie die Einstellungen gespeichert "
 #~ "haben, fahren Sie mit :ref:`configuration` "
 #~ "fort."
+
+#~ msgid ""
+#~ "Write the user name and the path"
+#~ " of the password file to :file:`/etc"
+#~ "/asm-connections.json`."
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":ref:`configuration-accounts` describes the "
+#~ "file in detail, including how to "
+#~ "limit the account to individual schools"
+#~ " and how to add further accounts. "
+#~ "Then continue with :ref:`configuration`."
+#~ msgstr ""
 

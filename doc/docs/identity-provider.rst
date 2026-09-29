@@ -65,11 +65,13 @@ What you need
 * Anonymization turned off,
   because Apple School Manager needs the email address as the Apple Account:
 
-  .. code-block:: console
-     :caption: Turn anonymization off
+  .. code-block:: json
+     :caption: Turn anonymization off in :file:`/etc/asm-connections.json`
 
-     $ ucr set asm/attributes/student/anonymize=false
-     $ ucr set asm/attributes/staff/anonymize=false
+     "defaults": {
+         "student": {"anonymize": false},
+         "staff": {"anonymize": false}
+     }
 
   See :ref:`configuration-anonymization`.
 

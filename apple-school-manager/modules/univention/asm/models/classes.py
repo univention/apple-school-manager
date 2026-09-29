@@ -17,7 +17,8 @@ from ucsschool.lib.models.base import UnknownModel
 from ucsschool.lib.models.group import SchoolClass, WorkGroup
 
 import univention.asm.api_constraints as asm_api_constraints
-from univention.asm.utils import get_ldap_connection, get_person_id, get_ucr
+from univention.asm.config import Settings
+from univention.asm.utils import get_ldap_connection, get_person_id
 
 from .base import AsmModel
 from .staff import get_filtered_staff
@@ -35,7 +36,6 @@ class AsmClass(AsmModel):
         "instructor_id_3",
         "location_id",
     ]
-    _class_number_empty = None
 
     def __init__(
         self,
@@ -106,34 +106,40 @@ class AsmClass(AsmModel):
             ]
 
     @classmethod
-    def from_dn(cls, dn: str, *args: Any, **kwargs: Any) -> Self:
+    def from_dn(cls, dn: str, settings: Settings | None = None, *args: Any, **kwargs: Any) -> Self:
         """
         Get AsmClass object created from data in LDAP object.
 
         :param str dn: DN to the SchoolClass/Workgroup object to represent
+        :param settings: settings of the Apple School Manager account, the
+                default settings if None
         :return: AsmClass instance
         :rtype: AsmClass
         """
+        settings = settings or Settings()
         lo, _po = get_ldap_connection()
-        ucr = get_ucr()
         logger = logging.getLogger(__name__)
         try:
             school_class = SchoolClass.from_dn(dn, None, lo)
         except UnknownModel:
             school_class = WorkGroup.from_dn(dn, None, lo)
-        if cls._class_number_empty is None:
-            cls._class_number_empty = ucr.is_true("asm/attributes/classes/class_number_empty", True)
+        school_settings = settings.school(school_class.school)
         teachers = []
-        expected_teachers = get_filtered_staff(lo, logger, school_class.school)
+        expected_teachers = get_filtered_staff(
+            lo,
+            logger,
+            school_class.school,
+            school_settings.staff_ldap_filter,
+        )
         expected_teachers_dns = [teacher.dn for teacher in expected_teachers]
 
         for user_dn in school_class.users:
             if user_dn not in expected_teachers_dns:
                 logger.debug(
-                    f"User {user_dn} is excluded due to a ldap-filter set in UCR-V asm/ldap_filter/staff",
+                    f"User {user_dn} is excluded due to the staff ldap_filter of {school_class.school}",
                 )
                 continue
-            person_id_attr, teacher_lo = get_person_id(user_dn, "staff", [])
+            person_id_attr, teacher_lo = get_person_id(user_dn, settings.staff.person_id_attribute, [])
             teachers.append(teacher_lo[person_id_attr][0])
         instructor_id = instructor_id_2 = instructor_id_3 = additional_instructor_ids = None
         if teachers:
@@ -154,7 +160,7 @@ class AsmClass(AsmModel):
             class_id=school_class.name,
             course_id=school_class.name,
             location_id=school_class.school,
-            class_number="" if cls._class_number_empty else school_class.name,
+            class_number="" if school_settings.class_number_empty else school_class.name,
             instructor_id=instructor_id,
             instructor_id_2=instructor_id_2,
             instructor_id_3=instructor_id_3,

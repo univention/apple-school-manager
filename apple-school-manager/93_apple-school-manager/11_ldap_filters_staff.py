@@ -10,24 +10,36 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 import logging
+import tempfile
+from typing import Any
 
 import univention.testing.strings as uts
-import univention.testing.ucr as ucr_test
 from ldap.filter import filter_format
 from univention.admin import uexceptions
+from univention.asm.config import Settings, parse_config
 from univention.asm.models.staff import get_filtered_staff
-from univention.asm.utils import get_person_id, update_ucr
-from univention.config_registry import handler_set
+from univention.asm.utils import get_person_id
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
 
-def set_and_update_ucr(ucr_v: str) -> None:
-    handler_set([ucr_v])
-    update_ucr()
+def build_settings(
+    school: str,
+    defaults: dict[str, Any],
+    school_entry: dict[str, Any] | None = None,
+) -> Settings:
+    with tempfile.NamedTemporaryFile("w") as password_file:
+        password_file.write("secret")
+        password_file.flush()
+        config = {
+            "accounts": {"test": {"username": "test", "password_file": password_file.name}},
+            "defaults": defaults,
+            "schools": {school: {"account": "test", **(school_entry or {})}},
+        }
+        return parse_config(config)[0].settings
 
 
-def get_person_id_by_dn(dn: str, role: str) -> str:
-    id_attr, t1_lo = get_person_id(dn, role, [])
+def get_person_id_by_dn(dn: str) -> str:
+    id_attr, t1_lo = get_person_id(dn, "entryUUID", [])
     return t1_lo[id_attr][0]
 
 
@@ -44,8 +56,8 @@ class Test(ImportTestbase):  # type: ignore[misc]
             school1,
             classes=school_class1,
         )
-        teacher1_id = get_person_id_by_dn(teacher1_dn, "staff")
-        teacher2_id = get_person_id_by_dn(teacher2_dn, "staff")
+        teacher1_id = get_person_id_by_dn(teacher1_dn)
+        teacher2_id = get_person_id_by_dn(teacher2_dn)
 
         school_class = self.lo.search(
             filter_format("(&(objectClass=univentionGroup)(cn=%s))", (school_class1,)),
@@ -67,10 +79,15 @@ class Test(ImportTestbase):  # type: ignore[misc]
 
         get_filtered_staff.cache_clear()
         self.log.info("Test if global filter works for AsmClass")
-        ucr_v = "asm/ldap_filter/staff=NONSENSE"
-        set_and_update_ucr(ucr_v)
+        ldap_filter = "NONSENSE"
+        settings = build_settings(school1, {"staff": {"ldap_filter": ldap_filter}})
         try:
-            _ = get_filtered_staff(self.lo, self.log, school1)
+            _ = get_filtered_staff(
+                self.lo,
+                self.log,
+                school1,
+                settings.school(school1).staff_ldap_filter,
+            )
             self.fail(
                 "We expect an valueInvalidSyntax exception with an invalid filter for filter "
                 "type 'staff'",
@@ -79,10 +96,15 @@ class Test(ImportTestbase):  # type: ignore[misc]
             self.log.info("*** OK: expected exception was raised (AsmClass).")
 
         get_filtered_staff.cache_clear()
-        ucr_v = f"asm/ldap_filter/{filter_type}=uid={teacher1_name}"
-        set_and_update_ucr(ucr_v)
-        teachers = get_filtered_staff(self.lo, self.log, school1)
-        filtered_teacher_ids = [get_person_id_by_dn(teacher.dn, "staff") for teacher in teachers]
+        ldap_filter = f"uid={teacher1_name}"
+        settings = build_settings(school1, {"staff": {"ldap_filter": ldap_filter}})
+        teachers = get_filtered_staff(
+            self.lo,
+            self.log,
+            school1,
+            settings.school(school1).staff_ldap_filter,
+        )
+        filtered_teacher_ids = [get_person_id_by_dn(teacher.dn) for teacher in teachers]
         assert teacher1_id in filtered_teacher_ids
         assert len(filtered_teacher_ids) == 1, (
             f"Not exactly 1 staff object found: {filtered_teacher_ids}"
@@ -94,10 +116,15 @@ class Test(ImportTestbase):  # type: ignore[misc]
         )
 
         get_filtered_staff.cache_clear()
-        ucr_v = f"asm/ldap_filter/{filter_type}=(!(uid={teacher1_name}))"
-        set_and_update_ucr(ucr_v)
-        teachers = get_filtered_staff(self.lo, self.log, school1)
-        filtered_teacher_ids = [get_person_id_by_dn(teacher.dn, "staff") for teacher in teachers]
+        ldap_filter = f"(!(uid={teacher1_name}))"
+        settings = build_settings(school1, {"staff": {"ldap_filter": ldap_filter}})
+        teachers = get_filtered_staff(
+            self.lo,
+            self.log,
+            school1,
+            settings.school(school1).staff_ldap_filter,
+        )
+        filtered_teacher_ids = [get_person_id_by_dn(teacher.dn) for teacher in teachers]
         assert teacher1_id not in filtered_teacher_ids
         assert teacher2_id in filtered_teacher_ids
         self.log.info(
@@ -108,10 +135,19 @@ class Test(ImportTestbase):  # type: ignore[misc]
 
         get_filtered_staff.cache_clear()
         self.log.info("Test if overriding with school specific filter works")
-        ucr_v = f"asm/ldap_filter/{filter_type}/{school1}=uid={teacher1_name}"
-        set_and_update_ucr(ucr_v)
-        teachers = get_filtered_staff(self.lo, self.log, school1)
-        filtered_teacher_ids = [get_person_id_by_dn(teacher.dn, "staff") for teacher in teachers]
+        ldap_filter = f"uid={teacher1_name}"
+        settings = build_settings(
+            school1,
+            {"staff": {"ldap_filter": f"(!(uid={teacher1_name}))"}},
+            {"staff": {"ldap_filter": ldap_filter}},
+        )
+        teachers = get_filtered_staff(
+            self.lo,
+            self.log,
+            school1,
+            settings.school(school1).staff_ldap_filter,
+        )
+        filtered_teacher_ids = [get_person_id_by_dn(teacher.dn) for teacher in teachers]
         assert teacher1_id in filtered_teacher_ids
         assert len(filtered_teacher_ids) == 1, (
             f"Not exactly 1 staff object found: {filtered_teacher_ids}"
@@ -123,10 +159,19 @@ class Test(ImportTestbase):  # type: ignore[misc]
         )
 
         get_filtered_staff.cache_clear()
-        ucr_v = f"asm/ldap_filter/{filter_type}/{school1}=(!(uid={teacher1_name}))"
-        set_and_update_ucr(ucr_v)
-        teachers = get_filtered_staff(self.lo, self.log, school1)
-        filtered_teacher_ids = [get_person_id_by_dn(teacher.dn, "staff") for teacher in teachers]
+        ldap_filter = f"(!(uid={teacher1_name}))"
+        settings = build_settings(
+            school1,
+            {"staff": {"ldap_filter": f"(!(uid={teacher1_name}))"}},
+            {"staff": {"ldap_filter": ldap_filter}},
+        )
+        teachers = get_filtered_staff(
+            self.lo,
+            self.log,
+            school1,
+            settings.school(school1).staff_ldap_filter,
+        )
+        filtered_teacher_ids = [get_person_id_by_dn(teacher.dn) for teacher in teachers]
         assert teacher1_id not in filtered_teacher_ids
         assert teacher2_id in filtered_teacher_ids
         self.log.info(
@@ -138,5 +183,4 @@ class Test(ImportTestbase):  # type: ignore[misc]
 
 
 if __name__ == "__main__":
-    with ucr_test.UCSTestConfigRegistry():
-        Test().run()
+    Test().run()

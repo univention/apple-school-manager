@@ -16,13 +16,12 @@ import zipfile
 from operator import itemgetter
 
 import univention.testing.strings as uts
-import univention.testing.ucr as ucr_test
 from ldap.filter import filter_format
 from ucsschool.lib.models.group import SchoolClass
 from ucsschool.lib.models.school import School
+from univention.asm.config import RoleSettings, SchoolSettings, Settings, StudentSettings
 from univention.asm.csv.zip_file import AsmZipFile
-from univention.asm.utils import get_default_password_policy, get_person_id
-from univention.config_registry import handler_unset
+from univention.asm.utils import get_person_id
 from univention.testing import utils
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
@@ -50,6 +49,12 @@ class Test(ImportTestbase):  # type: ignore[misc]
         school3 = self.ou_C.name
 
         schools = [school1, school2]
+        settings = Settings(
+            student=StudentSettings(anonymize=False),
+            staff=RoleSettings(anonymize=False),
+            schools={school: SchoolSettings() for school in schools},
+            other_schools=None,
+        )
         school_class1 = f"{school1}-{uts.random_username()}"
         school_class2 = f"{school2}-{uts.random_username()}"
         school_class3 = f"{school3}-{uts.random_username()}"
@@ -127,31 +132,31 @@ class Test(ImportTestbase):  # type: ignore[misc]
         student7_name, student7_dn = self.schoolenv.create_student(school2, classes=school_class2)
         student8_name, _student8_dn = self.schoolenv.create_student(school3, classes=school_class3)
 
-        t1_id_attr, t1_lo = get_person_id(teacher1_dn, "staff", [])
+        t1_id_attr, t1_lo = get_person_id(teacher1_dn, "entryUUID", [])
         t1_name = t1_lo[t1_id_attr][0]
-        t2_id_attr, t2_lo = get_person_id(teacher2_dn, "staff", [])
+        t2_id_attr, t2_lo = get_person_id(teacher2_dn, "entryUUID", [])
         t2_name = t2_lo[t2_id_attr][0]
-        t3_id_attr, t3_lo = get_person_id(teacher3_dn, "staff", [])
+        t3_id_attr, t3_lo = get_person_id(teacher3_dn, "entryUUID", [])
         t3_name = t3_lo[t3_id_attr][0]
-        t4_id_attr, t4_lo = get_person_id(teacher4_dn, "staff", [])
+        t4_id_attr, t4_lo = get_person_id(teacher4_dn, "entryUUID", [])
         t4_name = t4_lo[t4_id_attr][0]
-        t5_id_attr, t5_lo = get_person_id(teacher5_dn, "staff", [])
+        t5_id_attr, t5_lo = get_person_id(teacher5_dn, "entryUUID", [])
         t5_name = t5_lo[t5_id_attr][0]
-        t6_id_attr, t6_lo = get_person_id(teacher6_dn, "staff", [])
+        t6_id_attr, t6_lo = get_person_id(teacher6_dn, "entryUUID", [])
         t6_name = t6_lo[t6_id_attr][0]
-        s1_id_attr, s1_lo = get_person_id(student1_dn, "student", [])
+        s1_id_attr, s1_lo = get_person_id(student1_dn, "entryUUID", [])
         s1_name = s1_lo[s1_id_attr][0]
-        s2_id_attr, s2_lo = get_person_id(student2_dn, "student", [])
+        s2_id_attr, s2_lo = get_person_id(student2_dn, "entryUUID", [])
         s2_name = s2_lo[s2_id_attr][0]
-        s3_id_attr, s3_lo = get_person_id(student3_dn, "student", [])
+        s3_id_attr, s3_lo = get_person_id(student3_dn, "entryUUID", [])
         s3_name = s3_lo[s3_id_attr][0]
-        s4_id_attr, s4_lo = get_person_id(student4_dn, "student", [])
+        s4_id_attr, s4_lo = get_person_id(student4_dn, "entryUUID", [])
         s4_name = s4_lo[s4_id_attr][0]
-        s5_id_attr, s5_lo = get_person_id(student5_dn, "student", [])
+        s5_id_attr, s5_lo = get_person_id(student5_dn, "entryUUID", [])
         s5_name = s5_lo[s5_id_attr][0]
-        s6_id_attr, s6_lo = get_person_id(student6_dn, "student", [])
+        s6_id_attr, s6_lo = get_person_id(student6_dn, "entryUUID", [])
         s6_name = s6_lo[s6_id_attr][0]
-        s7_id_attr, s7_lo = get_person_id(student7_dn, "student", [])
+        s7_id_attr, s7_lo = get_person_id(student7_dn, "entryUUID", [])
         s7_name = s7_lo[s7_id_attr][0]
 
         self.log.info("Created a staff in each OU.")
@@ -615,8 +620,8 @@ class Test(ImportTestbase):  # type: ignore[misc]
                     )
 
         def check_student(student_csv_file_name: str) -> None:
-            assert get_default_password_policy() == "4", (
-                f"Unset asm/attributes/student/password_policy is {get_default_password_policy()!r}, expected '4'."
+            assert settings.student.password_policy == 4, (
+                f"Default password_policy is {settings.student.password_policy!r}, expected 4."
             )
 
             with open(student_csv_file_name) as student_csv_file:  # open csv-file in text mode
@@ -691,7 +696,7 @@ class Test(ImportTestbase):  # type: ignore[misc]
                     )
 
         with tempfile.NamedTemporaryFile() as zip_result_file:
-            zip_path = AsmZipFile(zip_result_file.name, schools).write_zip()
+            zip_path = AsmZipFile(zip_result_file.name, settings).write_zip()
             assert zip_path == zip_result_file.name
             tmp_dir = tempfile.mkdtemp()
             zf = zipfile.ZipFile(zip_path)
@@ -716,14 +721,4 @@ class Test(ImportTestbase):  # type: ignore[misc]
 
 
 if __name__ == "__main__":
-    with ucr_test.UCSTestConfigRegistry():
-        handler_unset(
-            [
-                "asm/attributes/user/email/prepend_domain",
-                "asm/attributes/classes/class_number_empty",
-                "asm/attributes/staff/anonymize",
-                "asm/attributes/student/anonymize",
-                "asm/attributes/student/password_policy",
-            ],
-        )
-        Test().run()
+    Test().run()

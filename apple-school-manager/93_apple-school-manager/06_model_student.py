@@ -10,11 +10,10 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 import univention.testing.strings as uts
-import univention.testing.ucr as ucr_test
 from ucsschool.lib.models.user import Student
+from univention.asm.config import DEFAULT_ANONYMIZE_VALUES, Settings, StudentSettings
 from univention.asm.models.student import AsmStudent
-from univention.asm.utils import get_default_password_policy, get_person_id, update_ucr
-from univention.config_registry import handler_set, handler_unset
+from univention.asm.utils import get_person_id
 from univention.testing import utils
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
@@ -24,19 +23,10 @@ class Test(ImportTestbase):  # type: ignore[misc]
 
     def test(self) -> None:
         subdomain = uts.random_name()
-        handler_set(
-            [
-                f"asm/attributes/user/email/prepend_domain={subdomain}",
-            ],
-        )
-        handler_unset(
-            [
-                "asm/attributes/student/grade_level",
-            ],
-        )
+        settings = Settings(email_prepend_domain=subdomain, student=StudentSettings(anonymize=False))
 
-        assert get_default_password_policy() == "4", (
-            f"Unset asm/attributes/student/password_policy is {get_default_password_policy()!r}, expected '4'."
+        assert StudentSettings().password_policy == 4, (
+            f"Default password_policy is {StudentSettings().password_policy!r}, expected 4."
         )
 
         school1 = self.ou_A.name
@@ -73,12 +63,12 @@ class Test(ImportTestbase):  # type: ignore[misc]
 
         student2 = Student.from_dn(student2_dn, None, self.lo)
 
-        s1_id_attr, s1_lo = get_person_id(student1_dn, "student", [])
+        s1_id_attr, s1_lo = get_person_id(student1_dn, "entryUUID", [])
         s1_name = s1_lo[s1_id_attr][0]
-        s2_id_attr, s2_lo = get_person_id(student2_dn, "student", [])
+        s2_id_attr, s2_lo = get_person_id(student2_dn, "entryUUID", [])
         s2_name = s2_lo[s2_id_attr][0]
 
-        or_student1 = AsmStudent.from_dn(student1_dn)
+        or_student1 = AsmStudent.from_dn(student1_dn, settings)
         got_student1 = or_student1.as_csv_line()
         expected_student1 = [
             s1_name,
@@ -99,13 +89,11 @@ class Test(ImportTestbase):  # type: ignore[misc]
                 f"CSV line for student1,\nexp: {expected_student1!r}\ngot: {got_student1!r}.",
             )
 
-        handler_set(
-            [
-                "asm/attributes/student/grade_level=sn",
-            ],
+        settings = Settings(
+            email_prepend_domain=subdomain,
+            student=StudentSettings(anonymize=False, grade_level_attribute="sn"),
         )
-        update_ucr()
-        or_student1 = AsmStudent.from_dn(student1_dn)
+        or_student1 = AsmStudent.from_dn(student1_dn, settings)
         got_student1 = or_student1.as_csv_line()
         expected_student1 = [
             s1_name,
@@ -126,9 +114,11 @@ class Test(ImportTestbase):  # type: ignore[misc]
                 f"CSV line for student1,\nexp: {expected_student1!r}\ngot: {got_student1!r}.",
             )
 
-        handler_set(["asm/attributes/student/password_policy=-"])
-        update_ucr()
-        or_student2 = AsmStudent.from_dn(student2_dn)
+        settings = Settings(
+            email_prepend_domain=subdomain,
+            student=StudentSettings(anonymize=False, grade_level_attribute="sn", password_policy=None),
+        )
+        or_student2 = AsmStudent.from_dn(student2_dn, settings)
         got_student2 = or_student2.as_csv_line()
         expected_student2 = [
             s2_name,
@@ -150,18 +140,18 @@ class Test(ImportTestbase):  # type: ignore[misc]
                 f"CSV line for student2,\nexp: {expected_student2!r}\ngot: {got_student2!r}.",
             )
 
-        handler_set(
-            ["asm/attributes/student/anonymize=true", "asm/attributes/student/password_policy=6"],
+        settings = Settings(
+            email_prepend_domain=subdomain,
+            student=StudentSettings(anonymize=True, grade_level_attribute="sn", password_policy=6),
         )
-        update_ucr()
-        or_student1 = AsmStudent.from_dn(student1_dn)
+        or_student1 = AsmStudent.from_dn(student1_dn, settings)
         got_student1 = or_student1.as_csv_line()
         expected_student1 = [
             s1_name,
             s1_name,
             student1.name,
             "",
-            "No Name",
+            "-",
             student1.lastname,  # grade level
             "",
             student1.name,
@@ -176,14 +166,16 @@ class Test(ImportTestbase):  # type: ignore[misc]
             )
 
         last_name_anon = uts.random_name()
-        handler_set(
-            [
-                f"asm/attributes/student/anonymize/last_name={last_name_anon}",
-                "asm/attributes/student/password_policy=8",
-            ],
+        settings = Settings(
+            email_prepend_domain=subdomain,
+            student=StudentSettings(
+                anonymize=True,
+                anonymize_values={**DEFAULT_ANONYMIZE_VALUES, "last_name": last_name_anon},
+                grade_level_attribute="sn",
+                password_policy=8,
+            ),
         )
-        update_ucr()
-        or_student1 = AsmStudent.from_dn(student1_dn)
+        or_student1 = AsmStudent.from_dn(student1_dn, settings)
         got_student1 = or_student1.as_csv_line()
         expected_student1 = [
             s1_name,
@@ -206,24 +198,4 @@ class Test(ImportTestbase):  # type: ignore[misc]
 
 
 if __name__ == "__main__":
-    with ucr_test.UCSTestConfigRegistry():
-        handler_unset(
-            [
-                "asm/attributes/user/email/prepend_domain",
-                "asm/attributes/classes/class_number_empty",
-                "asm/attributes/staff/anonymize",
-                "asm/attributes/student/password_policy",
-            ]
-            + [
-                f"asm/attributes/student/anonymize{value}"
-                for value in (
-                    "",
-                    "/email_address",
-                    "/first_name",
-                    "/last_name",
-                    "/middle_name",
-                    "/sis_username",
-                )
-            ],
-        )
-        Test().run()
+    Test().run()

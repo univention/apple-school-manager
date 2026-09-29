@@ -10,12 +10,10 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 import univention.testing.strings as uts
-import univention.testing.ucr as ucr_test
 from ldap.filter import filter_format
 from ucsschool.lib.models.group import SchoolClass
+from univention.asm.config import SchoolSettings, Settings
 from univention.asm.models.course import AsmCourse
-from univention.asm.utils import update_ucr
-from univention.config_registry import handler_set, handler_unset
 from univention.testing import utils
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
@@ -102,10 +100,12 @@ class Test(ImportTestbase):  # type: ignore[misc]
 
         for course_pattern in ["{name}", "{ou}-{name}", "{name}-{random}-{ou}"]:
             course_pattern = course_pattern.replace("{random}", uts.random_string())
-            handler_set([f"asm/attributes/course-name-pattern={course_pattern}"])
-            update_ucr()
+            settings = Settings(
+                schools={self.ou_A.name: SchoolSettings(course_name_pattern=course_pattern)},
+                other_schools=None,
+            )
 
-            course1 = AsmCourse.from_dn(school_class1_dn)
+            course1 = AsmCourse.from_dn(school_class1_dn, settings)
             got_course1 = course1.as_csv_line()
             school, school_class1_name = school_class1.split("-", 1)
             course_name = get_course_name(course_pattern, school, school_class1_name)
@@ -116,7 +116,7 @@ class Test(ImportTestbase):  # type: ignore[misc]
             else:
                 self.fail(f"Expected CSV line for course1: {expected_course1!r}, got: {got_course1!r}.")
 
-            course2 = AsmCourse.from_dn(school_class2_dn)
+            course2 = AsmCourse.from_dn(school_class2_dn, settings)
             got_course2 = course2.as_csv_line()
             school, school_class2_name = school_class2.split("-", 1)
             course_name = get_course_name(course_pattern, school, school_class2_name)
@@ -126,7 +126,7 @@ class Test(ImportTestbase):  # type: ignore[misc]
             else:
                 self.fail(f"Expected CSV line for course2: {expected_course2!r}, got: {got_course2!r}.")
 
-            workgroup1 = AsmCourse.from_dn(work_group1_dn)
+            workgroup1 = AsmCourse.from_dn(work_group1_dn, settings)
             got_workgroup1 = workgroup1.as_csv_line()
             _work_group1_name = work_group1_name.split("-", 1)[1]
             course_name = get_course_name(course_pattern, self.ou_A.name, _work_group1_name)
@@ -140,13 +140,4 @@ class Test(ImportTestbase):  # type: ignore[misc]
 
 
 if __name__ == "__main__":
-    with ucr_test.UCSTestConfigRegistry():
-        handler_unset(
-            [
-                "asm/attributes/user/email/prepend_domain",
-                "asm/attributes/classes/class_number_empty",
-                "asm/attributes/staff/anonymize",
-                "asm/attributes/student/anonymize",
-            ],
-        )
-        Test().run()
+    Test().run()

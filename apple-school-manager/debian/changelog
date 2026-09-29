@@ -1,7 +1,9 @@
 univention-apple-school-manager-connector (5.2.0) unstable; urgency=medium
 
-  * Bug #56486: Synchronize to several Apple School Manager accounts,
-    configured in /etc/asm-connections.json; migrate the app settings
+  * Bug #56486: Synchronize to several Apple School Manager accounts;
+    move the account app settings and all UCR variables to
+    /etc/asm-connections.json with user settings per account and class
+    settings per school
     Issue univention/dev/education/apple-school-manager#8
 
  -- Jürn Brodersen <brodersen@univention.de>  Wed, 23 Sep 2026 12:00:00 +0200

@@ -12,12 +12,12 @@ See https://support.apple.com/en-us/HT207029
 import logging
 import os
 import shutil
-import sys
 import tempfile
 import zipfile
 from collections.abc import Iterable
 
 from univention.admin import uexceptions
+from univention.asm.config import Settings
 
 from .csv_file import create_csv_files
 
@@ -25,14 +25,14 @@ from .csv_file import create_csv_files
 class AsmZipFile:
     """Class to create a ZIP file with ASM CSV files."""
 
-    def __init__(self, file_path: str, ou_whitelist: Iterable[str] | None = None) -> None:
+    def __init__(self, file_path: str, settings: Settings | None = None) -> None:
         """
         :param str file_path: file path to write ZIP to
-        :param ou_whitelist: list of schools/OUs that should be considered when looking for LDAP objects. No limit if empty or None.
-        :type ou_whitelist: list(str) or None
+        :param settings: settings of the Apple School Manager account, only schools that the
+            account receives are considered. All schools with the default settings if None.
         """
         self.file_path: str = file_path
-        self.ou_whitelist = ou_whitelist
+        self.settings = settings
         self.csv_files: Iterable[str] = []
         self.logger = logging.getLogger(__name__)
 
@@ -46,7 +46,7 @@ class AsmZipFile:
         :rtype: list(str)
         """
         self.logger.debug("Creating CSV files in %s...", tmp_dir)
-        self.csv_files = create_csv_files(tmp_dir, self.ou_whitelist)
+        self.csv_files = create_csv_files(tmp_dir, self.settings)
         if not self.csv_files:
             msg = "No CSV files were created."
             raise FileNotFoundError(msg)
@@ -64,6 +64,7 @@ class AsmZipFile:
         :param bool delete_csv_files: whether the CSV files should be removed afterwards
         :return: path to the created ZIP file
         :rtype: str
+        :raises univention.admin.uexceptions.valueInvalidSyntax: if an LDAP filter is invalid
         """
         file_path = file_path or self.file_path
         tmp_dir = tempfile.mkdtemp()
@@ -78,8 +79,7 @@ class AsmZipFile:
                 self.csv_files = self.create_csv_files(tmp_dir)
             except uexceptions.valueInvalidSyntax:
                 shutil.rmtree(tmp_dir, ignore_errors=True)
-                self.logger.exception("Error during creation of csv files. Abort asm-upload.")
-                sys.exit(1)
+                raise
         self.logger.debug("Writing ZIP file to %s...", file_path)
         with open(file_path, "wb") as fp, zipfile.ZipFile(fp, "w", zipfile.ZIP_DEFLATED) as zf:
             os.fchmod(fp.fileno(), 0o600)

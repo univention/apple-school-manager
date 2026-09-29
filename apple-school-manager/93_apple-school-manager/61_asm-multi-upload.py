@@ -1,5 +1,5 @@
 #!/usr/share/ucs-test/runner python3
-## desc: test asm-upload with multiple Apple School Manager accounts
+## desc: test asm-upload with multiple Apple School Manager accounts and their settings
 ## tags: [apptest]  # noqa: ERA001
 ## exposure: dangerous  # noqa: ERA001
 ## packages:
@@ -20,6 +20,7 @@ import subprocess
 import tempfile
 import zipfile
 from types import TracebackType
+from typing import Any
 
 import univention.testing.strings as uts
 import univention.testing.ucr as ucr_test
@@ -36,7 +37,7 @@ REMOTE_PATH = "/archive.zip"
 
 
 class LocalHostAsASM:
-    def __init__(self, connections: list[dict[str, str]], config_dir: str) -> None:
+    def __init__(self, connections: list[dict[str, Any]], config_dir: str) -> None:
         self.connections = connections
         self.config_dir = config_dir
 
@@ -47,18 +48,20 @@ class LocalHostAsASM:
         ]
         ucr_values.extend(f"auth/sshd/user/{c['username']}=yes" for c in self.connections)
         handler_set(ucr_values)
-        config = []
+        config: dict[str, Any] = {"accounts": {}, "schools": {}}
         for connection in self.connections:
             password_file = os.path.join(self.config_dir, f"{connection['username']}.secret")
             with open(password_file, "w") as fp:
                 fp.write(PASSWORD)
-            config.append(
-                {
-                    "username": connection["username"],
-                    "password_file": password_file,
-                    "school_whitelist": [connection["school"]],
-                },
-            )
+            config["accounts"][connection["username"]] = {
+                "username": connection["username"],
+                "password_file": password_file,
+                **connection["account_settings"],
+            }
+            config["schools"][connection["school"]] = {
+                "account": connection["username"],
+                **connection["school_settings"],
+            }
         if os.path.exists(CONFIG_FILE_PATH):
             os.rename(CONFIG_FILE_PATH, f"{CONFIG_FILE_PATH}.backup_61test")
         with open(CONFIG_FILE_PATH, "w") as fp:
@@ -114,24 +117,44 @@ class TempWorldWritableFile:
             os.unlink(self.path)
 
 
-def location_ids(zip_path: str) -> set[str]:
+def read_csv(zip_path: str, name: str) -> list[dict[str, str]]:
     with zipfile.ZipFile(zip_path) as zf:
-        content = zf.read("locations.csv").decode("utf-8")
-    return {row["location_id"] for row in csv.DictReader(io.StringIO(content))}
+        content = zf.read(name).decode("utf-8")
+    return list(csv.DictReader(io.StringIO(content)))
 
 
 class Test(ImportTestbase):  # type: ignore[misc]
     ou_C = None
 
-    def create_sftp_user(self, school: str) -> dict[str, str]:
+    def create_sftp_user(
+        self,
+        school: str,
+        account_settings: dict[str, Any],
+        school_settings: dict[str, Any],
+    ) -> dict[str, Any]:
         school_class = f"{school}-{uts.random_username()}"
         username, dn = self.schoolenv.create_student(school, classes=school_class, password=PASSWORD)
         lo, _po = getMachineConnection()
-        home_dir = lo.get(dn, attr=["homeDirectory"])["homeDirectory"][0].decode()
-        return {"username": username, "home_dir": home_dir, "school": school}
+        attrs = lo.get(dn, attr=["homeDirectory", "givenName"])
+        return {
+            "username": username,
+            "home_dir": attrs["homeDirectory"][0].decode(),
+            "first_name": attrs["givenName"][0].decode(),
+            "school": school,
+            "school_class": school_class,
+            "account_settings": account_settings,
+            "school_settings": school_settings,
+        }
 
     def test(self) -> None:
-        connections = [self.create_sftp_user(self.ou_A.name), self.create_sftp_user(self.ou_B.name)]
+        connections = [
+            self.create_sftp_user(self.ou_A.name, {"student": {"anonymize": False}}, {}),
+            self.create_sftp_user(
+                self.ou_B.name,
+                {"student": {"anonymize": True}},
+                {"course_name_pattern": "{name}"},
+            ),
+        ]
         with (
             tempfile.TemporaryDirectory() as config_dir,
             ucr_test.UCSTestConfigRegistry(),
@@ -151,15 +174,39 @@ class Test(ImportTestbase):  # type: ignore[misc]
             if len(zip_paths) != len(connections):
                 utils.fail(f"Expected {len(connections)} uploads, found {len(zip_paths)}.")
             for connection, zip_path in zip(connections, zip_paths, strict=True):
-                found = location_ids(zip_path)
-                print(f"{connection['username']}: zip_path={zip_path!r} locations={found!r}")
-                if found != {connection["school"]}:
-                    utils.fail(
-                        f"Archive for {connection['username']} contains {found!r}, "
-                        f"expected only {connection['school']!r}.",
-                    )
+                self.check_archive(connection, zip_path)
             if not filecmp.cmp(zip_paths[-1], REMOTE_PATH, shallow=False):
                 utils.fail("Last ZIP file was not correctly uploaded.")
+
+    def check_archive(self, connection: dict[str, Any], zip_path: str) -> None:
+        username = connection["username"]
+        locations = {row["location_id"] for row in read_csv(zip_path, "locations.csv")}
+        print(f"{username}: zip_path={zip_path!r} locations={locations!r}")
+        if locations != {connection["school"]}:
+            utils.fail(
+                f"Archive for {username} contains {locations!r}, expected {connection['school']!r}."
+            )
+
+        students = {row["sis_username"]: row for row in read_csv(zip_path, "students.csv")}
+        anonymize = connection["account_settings"]["student"]["anonymize"]
+        expected_first_name = username if anonymize else connection["first_name"]
+        if students[username]["first_name"] != expected_first_name:
+            utils.fail(
+                f"Archive for {username}: first_name is {students[username]['first_name']!r}, "
+                f"expected {expected_first_name!r} (anonymize={anonymize}).",
+            )
+
+        courses = {row["course_id"]: row for row in read_csv(zip_path, "courses.csv")}
+        school_class = connection["school_class"]
+        pattern = connection["school_settings"].get("course_name_pattern", "{ou}-{name}")
+        expected_course_name = pattern.format(
+            ou=connection["school"], name=school_class.split("-", 1)[1]
+        )
+        if courses[school_class]["course_name"] != expected_course_name:
+            utils.fail(
+                f"Archive for {username}: course_name is {courses[school_class]['course_name']!r}, "
+                f"expected {expected_course_name!r}.",
+            )
 
 
 if __name__ == "__main__":

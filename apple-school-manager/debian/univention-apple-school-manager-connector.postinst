@@ -32,17 +32,6 @@
 
 #DEBHELPER#
 
-ucr set "asm/attributes/staff/anonymize?yes" \
-	"asm/attributes/staff/anonymize/first_name?%uid" \
-	"asm/attributes/staff/anonymize/last_name?-" \
-	"asm/attributes/staff/anonymize/sis_username?%uid" \
-	"asm/attributes/student/anonymize?yes" \
-	"asm/attributes/student/anonymize/first_name?%uid" \
-	"asm/attributes/student/anonymize/last_name?-" \
-	"asm/attributes/student/anonymize/sis_username?%uid"
-
-if [ "$1" = "configure" ] && [ -n "$2" ] && dpkg --compare-versions "$2" lt 5.2.0; then
-	python3 -c 'from univention.asm.config import migrate_app_settings; migrate_app_settings()'
-fi
+python3 -c 'from univention.asm.config import write_initial_config; write_initial_config()'
 
 exit 0

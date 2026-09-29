@@ -10,18 +10,17 @@ See https://support.apple.com/en-us/HT207029
 """
 
 import logging
-from collections.abc import Collection, Iterable
+from collections.abc import Collection
 from typing import Any, Self
 
 from ucsschool.lib.models.user import Student
 
 import univention.asm.api_constraints as asm_api_constraints
+from univention.asm.config import Settings, StudentSettings
 from univention.asm.utils import (
     check_domain,
-    get_default_password_policy,
     get_ldap_connection,
     get_person_id,
-    get_ucr,
     prepend_to_mail_domain,
 )
 
@@ -43,7 +42,6 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
         "password_policy",
         "location_id",
     ]
-    ucr_anonymize_key_base = "asm/attributes/student/anonymize"
 
     def __init__(
         self,
@@ -84,9 +82,8 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
                 a password policy for each specific student. This value overrides
                 the location password policy and any password policy previously set
                 for that student. The `password_policy` field must have the number
-                4, 6, 8, or be an emtpy string (`''`). If None, the value of the
-                UCR variable asm/attributes/student/password_policy is used
-                (optional).
+                4, 6, 8, or be an emtpy string (`''`). If None, the default of
+                the setting ``password_policy`` is used (optional).
         :param additional_location_ids: list of additional (max 14) locations
                 (optional).
         :type location_ids: list(str)
@@ -117,7 +114,7 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
         self.email_address = email_address
         self.sis_username = sis_username
         self.password_policy = (
-            get_default_password_policy() if password_policy is None else password_policy
+            password_policy_value(StudentSettings()) if password_policy is None else password_policy
         )
         self.additional_location_ids = additional_location_ids
         if additional_location_ids:
@@ -133,57 +130,59 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
             ]
 
     @classmethod
-    def from_dn(
-        cls, dn: str, ou_whitelist: Iterable[str] | None = None, *args: Any, **kwargs: Any
-    ) -> Self:
+    def from_dn(cls, dn: str, settings: Settings | None = None, *args: Any, **kwargs: Any) -> Self:
         """
         Get AsmStudent object created from data in LDAP object.
 
         :param str dn: DN to the Student object to represent
-        :param ou_whitelist: list of schools/OUs that should be considered when
-                looking at ou-overlapping users. No limit if empty or None.
-        :type ou_whitelist: list(str) or None
+        :param settings: settings of the Apple School Manager account, only
+                schools that the account receives are exported. All schools with
+                the default settings if None.
         :return: AsmStudent instance
         :rtype: AsmStudent
         :raises WrongModel: when `dn` does not belong to a student
-        :raises ValueError: when non of the users `schools` is in the whitelist
+        :raises ValueError: when non of the users `schools` is synchronized to the account
         """
+        settings = settings or Settings()
         lo, _po = get_ldap_connection()
         student = Student.from_dn(dn, None, lo)
         if student.email and not check_domain(student.email):
             logger = logging.getLogger(__name__)
             logger.warning("Invalid email domain in %r for DN %r.", student.email, dn)
-        email = prepend_to_mail_domain(student.email) if student.email else None
+        email = (
+            prepend_to_mail_domain(student.email, settings.email_prepend_domain)
+            if student.email
+            else None
+        )
         location_ids = sorted(s for s in student.schools if s != student.school)
         if student.school:
             location_ids = [student.school, *location_ids]
-        if ou_whitelist:
-            location_ids = [loc for loc in location_ids if loc in ou_whitelist]
-            if not location_ids:
-                msg = f"Non of the users schools is in the whitelist: {student} (schools: {student.schools!r})."
-                raise ValueError(
-                    msg,
-                )
+        location_ids = [loc for loc in location_ids if settings.includes(loc)]
+        if not location_ids:
+            msg = f"Non of the users schools is synchronized to the account: {student} (schools: {student.schools!r})."
+            raise ValueError(msg)
         additional_attrs = ["middleName", "initials", "oxMiddleName"]
-        ucr = get_ucr()
-        grade_level_attribute = ucr.get("asm/attributes/student/grade_level")
+        grade_level_attribute = settings.student.grade_level_attribute
         if grade_level_attribute:
             additional_attrs.append(grade_level_attribute)
-        additional_attrs.extend(
-            {v[1:].strip() for v in cls.anonymize_mapping().values() if v and v.startswith("%")},
+        additional_attrs.extend(cls.anonymize_ldap_attributes(settings.student))
+        person_id_attr, student_lo = get_person_id(
+            student.dn,
+            settings.student.person_id_attribute,
+            additional_attrs,
         )
-        person_id_attr, student_lo = get_person_id(student.dn, "student", additional_attrs)
         person_id = student_lo[person_id_attr][0]
         middle_name = (
             student_lo.get("middleName", [""])[0]
             or student_lo.get("initials", [""])[0]
             or student_lo.get("oxMiddleName", [""])[0]
         )
-        grade_level = student_lo.get(grade_level_attribute, [None])[0]
+        grade_level = student_lo.get(grade_level_attribute, [None])[0] if grade_level_attribute else None
         return cls(
             **cls.anonymize(
                 student,
                 student_lo,
+                settings.student,
                 person_id=person_id,
                 first_name=student.firstname,
                 last_name=student.lastname,
@@ -193,7 +192,12 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
                 grade_level=grade_level,
                 email_address=email,
                 sis_username=student.name,
-                password_policy=None,  # UCS password policy doesn't fit and nothing else is ...
-                additional_location_ids=location_ids[1:],  # ... stored in LDAP regarding password length
+                password_policy=password_policy_value(settings.student),
+                additional_location_ids=location_ids[1:],
             ),
         )
+
+
+def password_policy_value(settings: StudentSettings) -> str:
+    """Return the ``password_policy`` column for the setting ``password_policy``."""
+    return "" if settings.password_policy is None else str(settings.password_policy)

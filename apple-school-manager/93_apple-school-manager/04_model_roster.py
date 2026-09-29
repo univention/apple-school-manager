@@ -10,11 +10,9 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 import univention.testing.strings as uts
-import univention.testing.ucr as ucr_test
 from ldap.filter import filter_format
 from univention.asm.models.roster import AsmRoster
 from univention.asm.utils import get_person_id
-from univention.config_registry import handler_unset
 from univention.testing import utils
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
@@ -34,9 +32,9 @@ class Test(ImportTestbase):  # type: ignore[misc]
         student1_name, student1_dn = self.schoolenv.create_student(school1, classes=school_class1)
         student2_name, student2_dn = self.schoolenv.create_student(school1, classes=school_class1)
         # "users" are created in the reverse order!?!?!?!
-        s1_id_attr, s1_lo = get_person_id(student1_dn, "student", [])
+        s1_id_attr, s1_lo = get_person_id(student1_dn, "entryUUID", [])
         s1_name = s1_lo[s1_id_attr][0]
-        s2_id_attr, s2_lo = get_person_id(student2_dn, "student", [])
+        s2_id_attr, s2_lo = get_person_id(student2_dn, "entryUUID", [])
         s2_name = s2_lo[s2_id_attr][0]
         work_group1_description = uts.random_name()
         work_group1_name, work_group1_dn = self.schoolenv.create_workgroup(
@@ -100,13 +98,4 @@ class Test(ImportTestbase):  # type: ignore[misc]
 
 
 if __name__ == "__main__":
-    with ucr_test.UCSTestConfigRegistry():
-        handler_unset(
-            [
-                "asm/attributes/user/email/prepend_domain",
-                "asm/attributes/classes/class_number_empty",
-                "asm/attributes/staff/anonymize",
-                "asm/attributes/student/anonymize",
-            ],
-        )
-        Test().run()
+    Test().run()

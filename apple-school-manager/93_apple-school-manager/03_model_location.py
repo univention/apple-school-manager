@@ -10,11 +10,9 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 import univention.testing.strings as uts
-import univention.testing.ucr as ucr_test
 from ldap.filter import filter_format
 from ucsschool.lib.models.school import School
 from univention.asm.models.location import AsmLocation
-from univention.config_registry import handler_unset
 from univention.testing import utils
 from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
 
@@ -68,13 +66,4 @@ class Test(ImportTestbase):  # type: ignore[misc]
 
 
 if __name__ == "__main__":
-    with ucr_test.UCSTestConfigRegistry():
-        handler_unset(
-            [
-                "asm/attributes/user/email/prepend_domain",
-                "asm/attributes/classes/class_number_empty",
-                "asm/attributes/staff/anonymize",
-                "asm/attributes/student/anonymize",
-            ],
-        )
-        Test().run()
+    Test().run()

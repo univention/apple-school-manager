@@ -1,0 +1,13 @@
+[asm/sync_daily]
+Description[de]=Ist diese Variable aktiviert, wird die Apple School Manager Synchronisation täglich automatisch ausgeführt. Standard: false.
+Description[en]=If activated, the Apple School Manager synchronization runs automatically once a day. Default: false.
+Type=bool
+Categories=service-administration
+
+[asm/sync_daily/hour]
+Description[de]=Stunde, zu der die tägliche Apple School Manager Synchronisation ausgeführt wird. Erlaubte Werte sind 0 bis 23.
+Description[en]=Hour at which the daily Apple School Manager synchronization runs. Allowed values are 0 to 23.
+Type=int
+Min=0
+Max=23
+Categories=service-administration

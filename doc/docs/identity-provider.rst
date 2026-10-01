@@ -111,7 +111,10 @@ Keycloak is unavailable for a short time while that happens.
 Turn the realm into an SSF transmitter
 --------------------------------------
 
-#. Open the Keycloak admin console and select your realm.
+#. Open the Keycloak admin console at
+   ``https://ucs-sso-ng.DOMAIN/admin/``
+   and select the realm ``ucs``.
+   Replace ``DOMAIN`` with the domain name of your UCS domain.
 
 #. On the :guilabel:`Realm settings` page,
    set :guilabel:`SSF Transmitter` to :guilabel:`On`.
@@ -120,11 +123,15 @@ The realm now offers an SSF configuration metadata endpoint next to the OpenID
 endpoint configuration.
 You need the URLs of both endpoints in :ref:`identity-provider-asm-idp`:
 
-* :samp:`https://{keycloak.example.com}/realms/{realm}/.well-known/openid-configuration`
-* :samp:`https://{keycloak.example.com}/realms/{realm}/.well-known/ssf-configuration`
+* ``https://ucs-sso-ng.DOMAIN/realms/ucs/.well-known/openid-configuration``
+* ``https://ucs-sso-ng.DOMAIN/realms/ucs/.well-known/ssf-configuration``
 
-On UCS, the Keycloak app runs at :samp:`auth.{domain}` by default,
-and the users of the domain are in the realm ``ucs``.
+The URLs use the defaults of the Keycloak app:
+the host ``ucs-sso-ng.DOMAIN``
+and the realm ``ucs``, which holds the users of the domain.
+If you changed
+:external+uv-keycloak-app:envvar:`keycloak/server/sso/fqdn`
+or use another realm, adjust the URLs accordingly.
 
 .. _identity-provider-keycloak-scopes:
 
@@ -304,10 +311,10 @@ Connect the identity provider
         - The client secret from the :guilabel:`Credentials` tab of the client
 
       * - :guilabel:`SSF URL`
-        - :samp:`https://{keycloak.example.com}/realms/{realm}/.well-known/ssf-configuration`
+        - ``https://ucs-sso-ng.DOMAIN/realms/ucs/.well-known/ssf-configuration``
 
       * - :guilabel:`OIDC URL`
-        - :samp:`https://{keycloak.example.com}/realms/{realm}/.well-known/openid-configuration`
+        - ``https://ucs-sso-ng.DOMAIN/realms/ucs/.well-known/openid-configuration``
 
 #. Click :guilabel:`Continue`.
 

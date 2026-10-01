@@ -206,27 +206,27 @@ A value without a leading ``%`` is exported literally.
      - Default
      - Required
 
-   * - :samp:`asm/attributes/{role}/anonymize/first_name`
+   * - ``asm/attributes/ROLE/anonymize/first_name``
      - ``%uid``
      - Yes
 
-   * - :samp:`asm/attributes/{role}/anonymize/middle_name`
+   * - ``asm/attributes/ROLE/anonymize/middle_name``
      - Empty
      - No
 
-   * - :samp:`asm/attributes/{role}/anonymize/last_name`
+   * - ``asm/attributes/ROLE/anonymize/last_name``
      - ``No Name``
      - Yes
 
-   * - :samp:`asm/attributes/{role}/anonymize/email_address`
+   * - ``asm/attributes/ROLE/anonymize/email_address``
      - Empty
      - No
 
-   * - :samp:`asm/attributes/{role}/anonymize/sis_username`
+   * - ``asm/attributes/ROLE/anonymize/sis_username``
      - ``%uid``
      - No
 
-Replace :samp:`{role}` with ``staff`` or ``student``.
+Replace ``ROLE`` with ``staff`` or ``student``.
 
 .. _configuration-person-id:
 
@@ -339,7 +339,8 @@ The connector applies the filter in addition to the school list.
 
 A filter for an individual school overrides the global filter.
 Append the school abbreviation to the variable name for that,
-as in :samp:`asm/ldap_filter/students/{gym123}`.
+as in ``asm/ldap_filter/students/SCHOOL``.
+Replace ``SCHOOL`` with the school abbreviation, for example ``gym123``.
 
 .. code-block:: console
    :caption: Synchronize only the students of ``gym123`` with a primary email address

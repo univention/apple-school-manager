@@ -58,8 +58,11 @@ What happens during a run
    :ref:`synchronization-csv-files` to a temporary directory.
 
 #. The connector packs the CSV files into
-   :file:`/var/lib/asm/asm_{timestamp}.zip`
+   :file:`/var/lib/asm/asm_TIMESTAMP.zip`
    and removes the temporary directory.
+   ``TIMESTAMP`` is the time the connector created the archive,
+   in ISO 8601 format,
+   for example ``2026-10-01T03:00:12.345678``.
 
 #. The connector opens an SFTP connection to
    ``upload.appleschoolcontent.com``

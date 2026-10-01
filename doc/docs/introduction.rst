@@ -88,6 +88,10 @@ entity.
    * - Membership of a student in a school class or work group
      - Roster entry
 
+Apple School Manager requires every class to belong to a course,
+so each school class and work group becomes both.
+See :ref:`synchronization-courses`.
+
 Staff members without a teacher role aren't synchronized.
 Exam users aren't synchronized either.
 

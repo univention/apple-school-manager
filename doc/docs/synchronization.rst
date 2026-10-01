@@ -150,6 +150,14 @@ Locations
 Courses
 -------
 
+Apple School Manager requires every class to belong to a course.
+UCS\@school only has the school class or work group,
+so the connector exports each of them twice:
+once as a course in :file:`courses.csv`
+and once as a class of that course in :file:`classes.csv`.
+Both rows use the name of the group as their ID,
+so each course has exactly one class.
+
 .. list-table:: Columns of :file:`courses.csv`
    :header-rows: 1
    :widths: 30 70

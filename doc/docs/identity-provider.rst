@@ -46,7 +46,7 @@ What you need
 
 * A UCS\@school domain
   with the Apple School Manager Connector
-  and the Keycloak app in version ``26.7.0-nubus1`` or later.
+  and the Keycloak app in version ``26.7.2-nubus1`` or later.
 
 * A domain that you verified in Apple School Manager.
   See :cite:t:`apple-verify-domain`.

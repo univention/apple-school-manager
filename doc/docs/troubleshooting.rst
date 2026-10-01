@@ -19,7 +19,7 @@ Log file
 The connector writes to :file:`/var/log/univention/asm.log`.
 The file holds the debug-level log of every run,
 including the email domains that don't resolve
-and the teachers that an LDAP filter excluded from a class.
+and the teachers whom an LDAP filter excluded from a class.
 The app settings show the time of the last upload in ``asm/last_upload``.
 
 The log rotation follows the ``logrotate/*`` UCR variables of the system.
@@ -79,7 +79,7 @@ Check the following, in this order:
    See :ref:`configuration-school-list`.
 
 #. **An LDAP filter excludes the user.**
-   The log file doesn't name users that a filter excluded.
+   The log file doesn't name users whom a filter excluded.
    Run the filter with :command:`univention-ldapsearch`
    to check which users it selects.
    See :ref:`configuration-ldap-filter`.
@@ -151,7 +151,7 @@ This is a limitation of Apple School Manager,
 not of the connector.
 
 An LDAP filter for teachers can also reduce the number.
-The log file records every teacher that a filter excluded from a class.
+The log file records every teacher whom a filter excluded from a class.
 
 .. _troubleshooting-support:
 

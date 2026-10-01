@@ -354,7 +354,7 @@ combine it with the role of the users and run it with
 :command:`univention-ldapsearch`:
 
 .. code-block:: console
-   :caption: List the students of ``gym123`` that the filter selects
+   :caption: List the students of ``gym123`` who match the filter
 
    $ univention-ldapsearch -LLL \
      '(&(ucsschoolRole=student:school:gym123)(mailPrimaryAddress=*))' uid

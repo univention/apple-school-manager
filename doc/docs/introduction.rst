@@ -49,9 +49,9 @@ Before you start, make sure that you have the following:
 * The SFTP credentials for the Apple School Manager account.
   :ref:`installation-credentials` describes where to find them.
 
-* A mail domain for your users.
-  The connector only synchronizes users that have a primary email address,
-  because Apple School Manager uses the email address as the Apple Account.
+* A primary email address for each user.
+  Apple School Manager uses the email address as the Apple Account
+  and can't create an account for a user without one.
 
 .. _introduction-scope:
 
@@ -76,8 +76,8 @@ entity.
    * - School
      - Location
 
-   * - School class and work group
-     - Course and class
+   * - School class or work group
+     - One course and one class of that course
 
    * - Student
      - Student

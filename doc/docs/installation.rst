@@ -72,7 +72,7 @@ To find them, do the following:
 
 #. Sign in to `Apple School Manager <https://school.apple.com/>`_.
 
-#. Click your name in the lower left corner
+#. Click your name in the lower-left corner
    and select :guilabel:`Preferences`.
 
 #. Select :guilabel:`Managed Apple Accounts`.
@@ -101,5 +101,5 @@ Enter the credentials
 The connector stores the password in :file:`/etc/asm.secret`
 with read permission for the ``root`` user only.
 
-After you saved the settings,
+After you've saved the settings,
 continue with :ref:`configuration`.

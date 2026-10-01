@@ -35,7 +35,7 @@ Three things start a synchronization run:
    $ /usr/sbin/asm-upload
 
 The command writes progress messages to the terminal
-and a more detailed protocol to :file:`/var/log/univention/asm.log`.
+and a more detailed log to :file:`/var/log/univention/asm.log`.
 It exits with a non-zero status
 if the credentials are missing
 or if the upload fails.
@@ -81,9 +81,9 @@ How Apple School Manager applies the data
 Apple School Manager compares the uploaded data with the accounts that it
 holds:
 
-* A user that appears for the first time gets a new account.
+* A user who appears for the first time gets a new account.
 
-* A user that is no longer in the upload is deactivated immediately
+* A user who is no longer in the upload is deactivated immediately
   and deleted after 30 days.
 
 * A user whose attributes changed keeps the account,

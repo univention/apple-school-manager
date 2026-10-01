@@ -139,9 +139,9 @@ Email addresses
 ---------------
 
 Apple School Manager uses the email address of a user as the Apple Account.
-The connector therefore only exports users
-that have a primary email address in UCS\@school.
-Users without one don't appear in Apple School Manager.
+The connector exports the primary email address of each user in UCS\@school.
+Users without one are exported without an email address,
+and Apple School Manager can't create an Apple Account for them.
 
 The connector checks whether the second-level domain of the email address
 resolves in the :term:`DNS`.
@@ -150,11 +150,12 @@ and exports the address unchanged.
 
 .. envvar:: asm/attributes/user/email/prepend_domain
 
+   :Default: Unset
+
    Inserts the value as a subdomain in front of the domain of every email
    address.
    With the value ``apple``, the connector exports the address
    ``jane@example.com`` as ``jane@apple.example.com``.
-   Default: unset.
 
 .. _configuration-anonymization:
 
@@ -174,20 +175,21 @@ with values that you configure.
    Without an email address,
    Apple School Manager can't create an Apple Account for the user.
 
-   Anonymization and the :ref:`identity-provider` setup therefore exclude each
-   other.
+   Anonymization and the :ref:`identity-provider` setup exclude each other.
    If you use Keycloak as an identity provider for Apple School Manager,
    turn anonymization off.
 
 .. envvar:: asm/attributes/staff/anonymize
 
+   :Default: ``false``
+
    Enables anonymization for teachers.
-   Default: ``false``.
 
 .. envvar:: asm/attributes/student/anonymize
 
+   :Default: ``false``
+
    Enables anonymization for students.
-   Default: ``false``.
 
 For each anonymized attribute,
 a separate variable holds the replacement value.
@@ -237,13 +239,15 @@ that doesn't change when you rename the user.
 
 .. envvar:: asm/attributes/staff/person_id/mapping
 
+   :Default: ``%entryUUID``
+
    LDAP attribute that identifies a teacher.
-   Default: ``%entryUUID``.
 
 .. envvar:: asm/attributes/student/person_id/mapping
 
+   :Default: ``%entryUUID``
+
    LDAP attribute that identifies a student.
-   Default: ``%entryUUID``.
 
 .. caution::
 
@@ -262,10 +266,11 @@ The password policy determines how long that password is.
 
 .. envvar:: asm/attributes/student/password_policy
 
+   :Default: ``4``
+
    Length of the password that Apple creates for a new student.
    Valid values are ``4``, ``6``, ``8``, and the dash (``-``).
    The dash means that Apple School Manager uses the default of the school.
-   Default: ``4``.
 
 Apple School Manager doesn't support a password policy for teachers.
 A value other than the ones listed makes the synchronization stop with an
@@ -278,9 +283,11 @@ Grade level of students
 
 .. envvar:: asm/attributes/student/grade_level
 
+   :Default: Unset
+
    LDAP attribute that holds the grade level of a student.
    The connector exports its value in the ``grade_level`` column.
-   Default: unset, which leaves the column empty.
+   If unset, the column stays empty.
 
 .. _configuration-course-names:
 
@@ -293,18 +300,20 @@ The connector derives the course name from that name.
 
 .. envvar:: asm/attributes/course-name-pattern
 
+   :Default: ``{ou}-{name}``
+
    Pattern for the course name.
    The connector replaces ``{ou}`` with the school abbreviation
    and ``{name}`` with the class name without the school prefix.
-   Default: ``{ou}-{name}``.
 
 .. envvar:: asm/attributes/classes/class_number_empty
+
+   :Default: ``true``
 
    Leaves the ``class_number`` column empty.
    Apple School Manager builds the name of a class from the course name and the
    class number,
    so an identical class number only repeats the course name.
-   Default: ``true``.
 
 .. _configuration-ldap-filter:
 
@@ -318,9 +327,13 @@ The connector applies the filter in addition to the school list.
 
 .. envvar:: asm/ldap_filter/students
 
+   :Default: Unset
+
    LDAP filter for the students of every school.
 
 .. envvar:: asm/ldap_filter/staff
+
+   :Default: Unset
 
    LDAP filter for the teachers of every school.
 
@@ -329,9 +342,22 @@ Append the school abbreviation to the variable name for that,
 as in :samp:`asm/ldap_filter/students/{gym123}`.
 
 .. code-block:: console
-   :caption: Synchronize only the students of one class
+   :caption: Synchronize only the students of ``gym123`` with a primary email address
 
-   $ ucr set asm/ldap_filter/students/gym123='(ucsschoolRole=student:school:gym123)'
+   $ ucr set asm/ldap_filter/students/gym123='(mailPrimaryAddress=*)'
+
+The connector combines the filter with its own selection of the students or
+teachers of the school,
+so the filter only needs to describe the attributes of the users you want.
+To check which users a filter selects before you set it,
+combine it with the role of the users and run it with
+:command:`univention-ldapsearch`:
+
+.. code-block:: console
+   :caption: List the students of ``gym123`` that the filter selects
+
+   $ univention-ldapsearch -LLL \
+     '(&(ucsschoolRole=student:school:gym123)(mailPrimaryAddress=*))' uid
 
 .. caution::
 

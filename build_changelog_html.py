@@ -30,6 +30,7 @@ CONF_PY = """\
 project = "Apple School Manager Connector"
 extensions = []
 html_theme = "basic"
+html_permalinks = False
 exclude_patterns = ["_build"]
 """
 
@@ -54,7 +55,7 @@ def _build_sphinx(srcdir: Path, outdir: Path) -> None:
 
 def _extract(page: Path, xpath: str) -> str:
     """
-    Return the HTML of the element that ``xpath`` matches in a built page.
+    Return the HTML of the elements that ``xpath`` matches in a built page.
 
     Raise if docutils rendered an error node. An unknown role or malformed
     markup surfaces as a ``system-message`` or ``problematic`` node, so this
@@ -71,8 +72,7 @@ def _extract(page: Path, xpath: str) -> str:
     if not matches:
         msg = f"no element matched {xpath!r} in {page.name}"
         raise ValueError(msg)
-    fragment: str = html.tostring(matches[0], encoding="unicode", pretty_print=True)
-    return fragment
+    return "".join(html.tostring(match, encoding="unicode", pretty_print=True) for match in matches)
 
 
 def main() -> None:
@@ -81,7 +81,7 @@ def main() -> None:
         outdir = Path(tmp) / "out"
         srcdir.mkdir()
         _build_sphinx(srcdir, outdir)
-        changelog = _extract(outdir / "changelog.html", "//*[@id='changelog']")
+        changelog = _extract(outdir / "changelog.html", "//*[@id='changelog']/section")
     CHANGELOG_HTML.write_text(f"<div>\n{changelog}\n</div>")
 
 

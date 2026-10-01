@@ -17,8 +17,9 @@ Log file
 ========
 
 The connector writes to :file:`/var/log/univention/asm.log`.
-The file holds the debug level protocol of every run,
-including the LDAP objects that the connector skipped and why.
+The file holds the debug-level log of every run,
+including the email domains that don't resolve
+and the teachers that an LDAP filter excluded from a class.
 The app settings show the time of the last upload in ``asm/last_upload``.
 
 The log rotation follows the ``logrotate/*`` UCR variables of the system.
@@ -51,8 +52,8 @@ Users don't appear in Apple School Manager
 Check the following, in this order:
 
 #. **The user has no primary email address.**
-   Apple School Manager uses the email address as the Apple Account,
-   so the connector skips users without one.
+   The connector exports the user without an email address,
+   and Apple School Manager can't create an Apple Account for the user.
 
 #. **The domain of the email address doesn't resolve.**
    The connector checks the second-level domain of every address in the
@@ -78,8 +79,10 @@ Check the following, in this order:
    See :ref:`configuration-school-list`.
 
 #. **An LDAP filter excludes the user.**
+   The log file doesn't name users that a filter excluded.
+   Run the filter with :command:`univention-ldapsearch`
+   to check which users it selects.
    See :ref:`configuration-ldap-filter`.
-   The log file names every user that a filter excluded.
 
 .. _troubleshooting-credentials:
 
@@ -114,7 +117,9 @@ or with an SSH exception.
 
 Reinstall the package to restore the file.
 If Apple changed the host key,
-report it so that a new version of the app can ship the new key.
+report it to Univention,
+see :ref:`troubleshooting-support`,
+so that a new version of the app can ship the new key.
 
 .. _troubleshooting-ldap-filter:
 

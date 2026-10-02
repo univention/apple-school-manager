@@ -22,5 +22,5 @@ msgstr ""
 
 #: ../../bibliography.rst:9
 msgid "Bibliography"
-msgstr ""
+msgstr "Literaturverzeichnis"
 

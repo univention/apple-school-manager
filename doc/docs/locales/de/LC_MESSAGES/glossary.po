@@ -22,110 +22,110 @@ msgstr ""
 
 #: ../../glossary.rst:9
 msgid "Glossary"
-msgstr ""
+msgstr "Glossar"
 
 #: ../../glossary.rst:18
 msgid "App Center"
-msgstr ""
+msgstr "App Center"
 
 #: ../../glossary.rst:20
 msgid ""
 "The Univention App Center, the component of :term:`UCS` with which you "
 "install and configure apps."
-msgstr ""
+msgstr "Das Univention App Center, die Komponente von :term:`UCS`, mit der Sie Apps installieren und konfigurieren."
 
 #: ../../glossary.rst:13
 msgid "Apple School Manager"
-msgstr ""
+msgstr "Apple School Manager"
 
 #: ../../glossary.rst:15
 msgid ""
 "The web service with which educational institutions manage their Managed "
 "Apple Accounts, devices, and content. Abbreviated as ASM."
-msgstr ""
+msgstr "Der Webdienst, mit dem Bildungseinrichtungen ihre verwalteten Apple Accounts, Geräte und Inhalte verwalten. Abgekürzt als ASM."
 
 #: ../../glossary.rst:22
 msgid "DNS"
-msgstr ""
+msgstr "DNS"
 
 #: ../../glossary.rst:24
 msgid "Domain Name System, the service that resolves host names to IP addresses."
-msgstr ""
+msgstr "Domain Name System, der Dienst, der Rechnernamen in IP-Adressen auflöst."
 
 #: ../../glossary.rst:26
 msgid "Keycloak"
-msgstr ""
+msgstr "Keycloak"
 
 #: ../../glossary.rst:28
 msgid ""
 "The identity and access management software that UCS ships as an app. It "
 "provides the single sign-on of the domain."
-msgstr ""
+msgstr "Die Software für Identitäts- und Zugriffsverwaltung, die UCS als App bereitstellt. Sie liefert das Single Sign-On der Domäne."
 
 #: ../../glossary.rst:30
 msgid "OIDC"
-msgstr ""
+msgstr "OIDC"
 
 #: ../../glossary.rst:32
 msgid "OpenID Connect, the identity layer on top of OAuth 2.0."
-msgstr ""
+msgstr "OpenID Connect, die Identitätsschicht auf Basis von OAuth 2.0."
 
 #: ../../glossary.rst:34
 msgid "PKCE"
-msgstr ""
+msgstr "PKCE"
 
 #: ../../glossary.rst:36
 msgid ""
 "Proof Key for Code Exchange, an extension of the OAuth 2.0 authorization "
 "code flow."
-msgstr ""
+msgstr "Proof Key for Code Exchange, eine Erweiterung des Authorization Code Flow von OAuth 2.0."
 
 #: ../../glossary.rst:38
 msgid "SSF"
-msgstr ""
+msgstr "SSF"
 
 #: ../../glossary.rst:40
 msgid ""
 "Shared Signals Framework, the standard of the OpenID Foundation for "
 "sharing security events between an identity provider and the applications"
 " that rely on it."
-msgstr ""
+msgstr "Shared Signals Framework, der Standard der OpenID Foundation für den Austausch von Sicherheitsereignissen zwischen einem Identity Provider und den Anwendungen, die sich auf ihn stützen."
 
 #: ../../glossary.rst:43
 msgid "UCR"
-msgstr ""
+msgstr "UCR"
 
 #: ../../glossary.rst:45
 msgid ""
 "Univention Configuration Registry, the central configuration database of "
 ":term:`UCS`."
-msgstr ""
+msgstr "Univention Configuration Registry, die zentrale Konfigurationsdatenbank von :term:`UCS`."
 
 #: ../../glossary.rst:47
 msgid "UCS"
-msgstr ""
+msgstr "UCS"
 
 #: ../../glossary.rst:49
 msgid ""
 "Univention Corporate Server, the server operating system with integrated "
 "identity management."
-msgstr ""
+msgstr "Univention Corporate Server, das Server-Betriebssystem mit integriertem Identity Management."
 
 #: ../../glossary.rst:51
 msgid "UCS@school"
-msgstr ""
+msgstr "UCS@school"
 
 #: ../../glossary.rst:53
 msgid "The extension of :term:`UCS` for schools and school authorities."
-msgstr ""
+msgstr "Die Erweiterung von :term:`UCS` für Schulen und Schulträger."
 
 #: ../../glossary.rst:54
 msgid "UMC"
-msgstr ""
+msgstr "UMC"
 
 #: ../../glossary.rst:56
 msgid ""
 "Univention Management Console, the web interface for the administration "
 "of :term:`UCS`."
-msgstr ""
+msgstr "Univention Management Console, die Weboberfläche für die Administration von :term:`UCS`."
 

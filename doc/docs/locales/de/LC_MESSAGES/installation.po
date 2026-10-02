@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Apple School Manager Connector 5.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-11 10:35+0000\n"
+"POT-Creation-Date: 2026-10-02 12:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: ../../installation.rst:9
 msgid "Installation"
-msgstr ""
+msgstr "Installation"
 
 #: ../../installation.rst:11
 msgid ""
@@ -31,30 +31,35 @@ msgid ""
 " it, how to install it, and how to obtain the credentials that the "
 "connector needs."
 msgstr ""
+"Sie installieren den *Apple School Manager Connector* wie jede andere App "
+"aus dem :term:`App Center`. Dieses Kapitel beschreibt, wo Sie ihn "
+"installieren können, wie Sie ihn installieren und wie Sie die Zugangsdaten "
+"erhalten, die der Connector benötigt."
 
 #: ../../installation.rst:20
 msgid "Supported system roles"
-msgstr ""
+msgstr "Unterstützte Systemrollen"
 
 #: ../../installation.rst:22
 msgid "You can install the connector on the following system roles:"
 msgstr ""
+"Sie können den Connector auf den folgenden Systemrollen installieren:"
 
 #: ../../installation.rst:24
 msgid "Primary Directory Node"
-msgstr ""
+msgstr "Primary Directory Node"
 
 #: ../../installation.rst:25
 msgid "Backup Directory Node"
-msgstr ""
+msgstr "Backup Directory Node"
 
 #: ../../installation.rst:26
 msgid "Replica Directory Node"
-msgstr ""
+msgstr "Replica Directory Node"
 
 #: ../../installation.rst:30
 msgid "Install the connector on exactly one system in the domain."
-msgstr ""
+msgstr "Installieren Sie den Connector auf genau einem System in der Domäne."
 
 #: ../../installation.rst:32
 msgid ""
@@ -64,6 +69,11 @@ msgid ""
 "the existing installation as described in :ref:`configuration-school-"
 "list`."
 msgstr ""
+"Jede Installation lädt einen vollständigen Datensatz hoch und überschreibt, "
+"was der vorherige Upload übertragen hat. Zwei Installationen überschreiben "
+"daher gegenseitig ihre Daten. Wenn Sie weitere Schulen synchronisieren "
+"möchten, fügen Sie diese der bestehenden Installation hinzu, wie in "
+":ref:`configuration-school-list` beschrieben."
 
 #: ../../installation.rst:39
 msgid ""
@@ -71,102 +81,132 @@ msgid ""
 " that node. On a central Replica Directory Node, a Primary Directory "
 "Node, or a Backup Directory Node, it sees every school in the domain."
 msgstr ""
+"Auf dem Replica Directory Node einer Schule sieht der Connector nur die "
+"Schule dieses Nodes. Auf einem zentralen Replica Directory Node, einem "
+"Primary Directory Node oder einem Backup Directory Node sieht er alle "
+"Schulen der Domäne."
 
 #: ../../installation.rst:48
 msgid "Install the app"
-msgstr ""
+msgstr "App installieren"
 
 #: ../../installation.rst:50
 msgid "Open the App Center in :term:`UMC`."
-msgstr ""
+msgstr "Öffnen Sie das App Center in :term:`UMC`."
 
 #: ../../installation.rst:52
 msgid "Select :guilabel:`Apple School Manager Connector`."
-msgstr ""
+msgstr "Wählen Sie :guilabel:`Apple School Manager Connector`."
 
 #: ../../installation.rst:54
 msgid "Click :guilabel:`Install`."
-msgstr ""
+msgstr "Klicken Sie auf :guilabel:`Installieren`."
 
 #: ../../installation.rst:56
 msgid ""
 "The App Center installs the app and then opens the app settings, where "
 "you enter the credentials from the next section."
 msgstr ""
+"Das App Center installiert die App und öffnet anschließend die "
+"App-Einstellungen, in denen Sie die Zugangsdaten aus dem nächsten Abschnitt "
+"eingeben."
 
 #: ../../installation.rst:62
 msgid ""
 "The connector requires UCS\\@school in version ``5.2v5`` or later. The "
 "app refuses to update on a system with an older version."
 msgstr ""
+"Der Connector erfordert UCS\\@school in Version ``5.2v5`` oder höher. Auf "
+"einem System mit einer älteren Version verweigert die App das Update."
 
 #: ../../installation.rst:68
 msgid "Obtain the SFTP credentials"
-msgstr ""
+msgstr "SFTP-Zugangsdaten ermitteln"
 
 #: ../../installation.rst:70
 msgid ""
 "Apple School Manager generates the SFTP user name and password for you. "
 "To find them, do the following:"
 msgstr ""
+"Apple School Manager erzeugt den SFTP-Benutzernamen und das Passwort für "
+"Sie. Um diese zu finden, gehen Sie wie folgt vor:"
 
 #: ../../installation.rst:73
 msgid "Sign in to `Apple School Manager <https://school.apple.com/>`_."
 msgstr ""
+"Melden Sie sich bei `Apple School Manager <https://school.apple.com/>`_ an."
 
 #: ../../installation.rst:75
 msgid ""
-"Click your name in the lower left corner and select "
+"Click your name in the lower-left corner and select "
 ":guilabel:`Preferences`."
 msgstr ""
+"Klicken Sie unten links auf Ihren Namen und wählen Sie "
+":guilabel:`Preferences`."
 
 #: ../../installation.rst:78
 msgid "Select :guilabel:`Managed Apple Accounts`."
-msgstr ""
+msgstr "Wählen Sie :guilabel:`Managed Apple Accounts`."
 
 #: ../../installation.rst:80
 msgid "Open the menu for :guilabel:`Apple formatted CSV`."
-msgstr ""
+msgstr "Öffnen Sie das Menü für :guilabel:`Apple formatted CSV`."
 
 #: ../../installation.rst:82
 msgid "Click :guilabel:`Upload CSV`."
-msgstr ""
+msgstr "Klicken Sie auf :guilabel:`Upload CSV`."
 
 #: ../../installation.rst:84
 msgid ""
 "A new frame opens and shows the SFTP account data. For background "
 "information, see :cite:t:`apple-sftp-upload`."
 msgstr ""
+"Ein neuer Bereich öffnet sich und zeigt die Daten des SFTP-Kontos. "
+"Hintergrundinformationen finden Sie in :cite:t:`apple-sftp-upload`."
 
 #: ../../installation.rst:90
 msgid "Enter the credentials"
-msgstr ""
+msgstr "Zugangsdaten eingeben"
 
 #: ../../installation.rst:92
 msgid "Open the App Center in UMC and select the app."
-msgstr ""
+msgstr "Öffnen Sie das App Center in UMC und wählen Sie die App aus."
 
 #: ../../installation.rst:94
 msgid "Click :guilabel:`App settings`."
-msgstr ""
+msgstr "Klicken Sie auf :guilabel:`App-Einstellungen`."
 
 #: ../../installation.rst:96
 msgid ""
 "Enter the user name in the :guilabel:`asm/username` field and the "
 "password in the :guilabel:`asm/password` field."
 msgstr ""
+"Geben Sie den Benutzernamen in das Feld :guilabel:`asm/username` und das "
+"Passwort in das Feld :guilabel:`asm/password` ein."
 
 #: ../../installation.rst:99
 msgid "Click :guilabel:`Apply changes`."
-msgstr ""
+msgstr "Klicken Sie auf :guilabel:`Änderungen anwenden`."
 
 #: ../../installation.rst:101
 msgid ""
 "The connector stores the password in :file:`/etc/asm.secret` with read "
 "permission for the ``root`` user only."
 msgstr ""
+"Der Connector speichert das Passwort in :file:`/etc/asm.secret`, mit "
+"Leserechten nur für den Benutzer ``root``."
 
 #: ../../installation.rst:104
-msgid "After you saved the settings, continue with :ref:`configuration`."
+msgid "After you've saved the settings, continue with :ref:`configuration`."
 msgstr ""
+"Nachdem Sie die Einstellungen gespeichert haben, fahren Sie mit "
+":ref:`configuration` fort."
+
+#~ msgid ""
+#~ "Click your name in the lower left"
+#~ " corner and select :guilabel:`Preferences`."
+#~ msgstr ""
+
+#~ msgid "After you saved the settings, continue with :ref:`configuration`."
+#~ msgstr ""
 

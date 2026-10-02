@@ -77,7 +77,7 @@ entity.
      - Location
 
    * - School class or work group
-     - One course and one class of that course
+     - Course and class
 
    * - Student
      - Student
@@ -89,7 +89,8 @@ entity.
      - Roster entry
 
 Apple School Manager requires every class to belong to a course,
-so each school class and work group becomes both.
+so the connector turns each school class and work group into a course
+with exactly one class in it.
 See :ref:`synchronization-courses`.
 
 Staff members without a teacher role aren't synchronized.

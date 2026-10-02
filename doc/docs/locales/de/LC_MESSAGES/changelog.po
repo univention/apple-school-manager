@@ -31,15 +31,16 @@ msgstr ""
 "der App auf."
 
 #: ../../changelog.rst:16
-#, fuzzy
 msgid "v5.2.0"
-msgstr "v5.1.0"
+msgstr "v5.2.0"
 
 #: ../../changelog.rst:18
 msgid ""
 "The connector synchronizes to several Apple School Manager accounts. Each"
 " account receives only the schools that you assign to it."
 msgstr ""
+"Der Connector synchronisiert in mehrere Konten in Apple School Manager. "
+"Jedes Konto erhält nur die Schulen, die Sie ihm zuordnen."
 
 #: ../../changelog.rst:21
 msgid ""
@@ -50,10 +51,17 @@ msgid ""
 "the LDAP filters per school. The update moves the former values to the "
 "new file."
 msgstr ""
+"Die Einstellungsdatei :file:`/etc/asm-connections.json` ersetzt die "
+"App-Einstellungen ``asm/username``, ``asm/password`` und "
+"``asm/school_whitelist`` sowie alle UCR-Variablen ``asm/attributes/*`` und "
+"``asm/ldap_filter/*``. Die Einstellungen für Benutzer gelten pro Konto, die "
+"Einstellungen für Klassen und die LDAP-Filter pro Schule. Das Update "
+"überträgt die bisherigen Werte in die neue Datei."
 
 #: ../../changelog.rst:28
 msgid "An invalid LDAP filter only stops the upload to the affected account."
 msgstr ""
+"Ein ungültiger LDAP-Filter bricht nur den Upload in das betroffene Konto ab."
 
 #: ../../changelog.rst:33
 msgid "v5.1.1"

@@ -62,7 +62,6 @@ msgid "Install the connector on exactly one system in the domain."
 msgstr "Installieren Sie den Connector auf genau einem System in der Domäne."
 
 #: ../../installation.rst:32
-#, fuzzy
 msgid ""
 "Every installation uploads a complete data set and overwrites what the "
 "previous upload transferred. Two installations therefore overwrite each "
@@ -71,11 +70,13 @@ msgid ""
 "list`, or add another Apple School Manager account as described in :ref"
 ":`configuration-accounts`."
 msgstr ""
-"Jede Installation lädt einen vollständigen Datensatz hoch und "
-"überschreibt, was der vorherige Upload übertragen hat. Zwei "
-"Installationen überschreiben daher gegenseitig ihre Daten. Wenn Sie "
-"weitere Schulen synchronisieren möchten, fügen Sie diese der bestehenden "
-"Installation hinzu, wie in :ref:`configuration-school-list` beschrieben."
+"Jede Installation lädt einen vollständigen Datensatz hoch und überschreibt, "
+"was der vorherige Upload übertragen hat. Zwei Installationen überschreiben "
+"daher gegenseitig ihre Daten. Wenn Sie weitere Schulen synchronisieren "
+"möchten, fügen Sie diese der bestehenden Installation hinzu, wie in "
+":ref:`configuration-school-list` beschrieben, oder fügen Sie ein weiteres "
+"Konto in Apple School Manager hinzu, wie in :ref:`configuration-accounts` "
+"beschrieben."
 
 #: ../../installation.rst:41
 msgid ""
@@ -110,6 +111,9 @@ msgid ""
 "section and enter them as described in :ref:`installation-configure-"
 "credentials`."
 msgstr ""
+"Beschaffen Sie nach der Installation die Zugangsdaten, wie im nächsten "
+"Abschnitt beschrieben, und tragen Sie sie ein, wie in "
+":ref:`installation-configure-credentials` beschrieben."
 
 #: ../../installation.rst:64
 msgid ""
@@ -169,17 +173,16 @@ msgid "Enter the credentials"
 msgstr "Zugangsdaten eingeben"
 
 #: ../../installation.rst:94
-#, fuzzy
 msgid ""
 "Store the password in :file:`/etc/asm.secret` with read permission for "
 "the ``root`` user only."
 msgstr ""
-"Der Connector speichert das Passwort in :file:`/etc/asm.secret`, mit "
-"Leserechten nur für den Benutzer ``root``."
+"Speichern Sie das Passwort in :file:`/etc/asm.secret`, mit Leserechten nur "
+"für den Benutzer ``root``."
 
 #: ../../installation.rst:97
 msgid "Store the password"
-msgstr ""
+msgstr "Passwort speichern"
 
 #: ../../installation.rst:103
 msgid ""
@@ -187,14 +190,18 @@ msgid ""
 "settings file :file:`/etc/asm-connections.json`, which the installation "
 "creates without an account."
 msgstr ""
+"Tragen Sie den Benutzernamen, den Pfad der Passwortdatei und die Schulen in "
+"die Einstellungsdatei :file:`/etc/asm-connections.json` ein, die die "
+"Installation ohne Konto anlegt."
 
 #: ../../installation.rst:107
 msgid "One Apple School Manager account in :file:`/etc/asm-connections.json`"
-msgstr ""
+msgstr "Ein Konto in Apple School Manager in :file:`/etc/asm-connections.json`"
 
 #: ../../installation.rst:122
 msgid "The entry ``*`` in ``schools`` synchronizes every school to the account."
 msgstr ""
+"Der Eintrag ``*`` in ``schools`` synchronisiert jede Schule in das Konto."
 
 #: ../../installation.rst:124
 msgid ""
@@ -203,6 +210,10 @@ msgid ""
 " every setting for users and classes. Then continue with "
 ":ref:`configuration`."
 msgstr ""
+":ref:`configuration-file` beschreibt die Datei im Detail, einschließlich der "
+"Beschränkung des Kontos auf einzelne Schulen, weiterer Konten und aller "
+"Einstellungen für Benutzer und Klassen. Fahren Sie danach mit "
+":ref:`configuration` fort."
 
 #~ msgid ""
 #~ "Click your name in the lower left"

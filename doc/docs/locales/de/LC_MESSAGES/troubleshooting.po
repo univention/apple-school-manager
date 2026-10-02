@@ -121,7 +121,6 @@ msgstr ""
 " Logdatei nach ``Invalid email domain``."
 
 #: ../../troubleshooting.rst:63
-#, fuzzy
 msgid ""
 "**Anonymization removed the email address.** Anonymization is enabled by "
 "default. With ``student.anonymize`` or ``staff.anonymize`` enabled for "
@@ -129,15 +128,15 @@ msgid ""
 "address, which is empty by default. See :ref:`configuration-"
 "anonymization`."
 msgstr ""
-"**Die Anonymisierung hat die E-Mail-Adresse entfernt.** Ist "
-"``asm/attributes/student/anonymize`` oder "
-"``asm/attributes/staff/anonymize`` aktiviert, exportiert der Connector "
-"statt der Adresse den Ersatzwert, der standardmäßig leer ist. Siehe :ref"
-":`configuration-anonymization`."
+"**Die Anonymisierung hat die E-Mail-Adresse entfernt.** Die Anonymisierung "
+"ist standardmäßig aktiviert. Ist ``student.anonymize`` oder "
+"``staff.anonymize`` für das Konto aktiviert, exportiert der Connector statt "
+"der Adresse den Ersatzwert, der standardmäßig leer ist. Siehe "
+":ref:`configuration-anonymization`."
 
 #: ../../troubleshooting.rst:70
 msgid "Turn anonymization off in :file:`/etc/asm-connections.json`"
-msgstr ""
+msgstr "Anonymisierung in :file:`/etc/asm-connections.json` ausschalten"
 
 #: ../../troubleshooting.rst:78
 msgid ""
@@ -145,6 +144,10 @@ msgid ""
 " the ``schools`` section of the settings file lists, and only to the "
 "account that the school refers to. See :ref:`configuration-school-list`."
 msgstr ""
+"**Die Schule steht nicht auf der Liste.** Der Connector exportiert nur "
+"Schulen, die der Abschnitt ``schools`` der Einstellungsdatei aufführt, und "
+"nur in das Konto, auf das die Schule verweist. Siehe "
+":ref:`configuration-school-list`."
 
 #: ../../troubleshooting.rst:84
 msgid ""
@@ -168,22 +171,25 @@ msgid ""
 "connections.json` is missing or invalid, or if a password file is missing"
 " or empty. The message in the log file names the file and the entry."
 msgstr ""
+"Der Connector bricht ab, bevor er Daten sammelt, wenn "
+":file:`/etc/asm-connections.json` fehlt oder ungültig ist oder wenn eine "
+"Passwortdatei fehlt oder leer ist. Die Meldung in der Logdatei nennt die "
+"Datei und den Eintrag."
 
 #: ../../troubleshooting.rst:100 ../../troubleshooting.rst:138
 msgid "Message in the log file"
 msgstr "Meldung in der Logdatei"
 
 #: ../../troubleshooting.rst:105
-#, fuzzy
 msgid ""
 "Configure the accounts, as described in :ref:`configuration-accounts`. If"
 " the credentials are set but Apple rejects them, generate new ones in "
 "Apple School Manager and enter those."
 msgstr ""
-"Geben Sie die Zugangsdaten in den App-Einstellungen ein, wie in :ref"
-":`installation-configure-credentials` beschrieben. Wenn die Zugangsdaten "
-"gesetzt sind, Apple sie aber ablehnt, erzeugen Sie in Apple School "
-"Manager neue Zugangsdaten und geben Sie diese ein."
+"Konfigurieren Sie die Konten, wie in :ref:`configuration-accounts` "
+"beschrieben. Wenn die Zugangsdaten gesetzt sind, Apple sie aber ablehnt, "
+"erzeugen Sie in Apple School Manager neue Zugangsdaten und tragen Sie diese "
+"ein."
 
 #: ../../troubleshooting.rst:114
 msgid "The upload stops with a missing host key"

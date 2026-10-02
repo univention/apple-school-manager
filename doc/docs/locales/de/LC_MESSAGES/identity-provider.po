@@ -133,7 +133,7 @@ msgstr ""
 
 #: ../../identity-provider.rst:68
 msgid "Turn anonymization off in :file:`/etc/asm-connections.json`"
-msgstr ""
+msgstr "Anonymisierung in :file:`/etc/asm-connections.json` ausschalten"
 
 #: ../../identity-provider.rst:76
 msgid "See :ref:`configuration-anonymization`."

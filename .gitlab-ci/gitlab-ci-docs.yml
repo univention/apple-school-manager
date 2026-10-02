@@ -9,25 +9,27 @@
 # tag, so there is no 'univention/dev/docs/sphinx-docker' include here.
 #
 # 'DOC_NAME' has to stay in step with 'doc_basename' in 'doc/docs/conf.py':
-# the PDF that 'docs:pdf' copies is named after it, and the theme builds the
+# the PDF that the pdf jobs copy is named after it, and the theme builds the
 # download link from the value in 'conf.py'.
 #
 # The manual is published in English under 'DOC_NAME/en' and in German under
 # 'DOC_NAME/de', the same '<language>' suffix that 'conf.py' gives the base URL.
-# The component builds the English one; the 'docs-de:*' jobs below build the
-# German one from the same sources and the PO files in 'doc/docs/locales/de'.
+# The component is included once per language, with the language as the suffix
+# of the job prefix. Both build from the same sources; the German one adds the
+# PO files in 'doc/docs/locales/de'.
 
 include:
   - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/sphinx-docs@2
     inputs:
+      job_prefix: "docs-en"
       docs_dir: "doc/docs"
       doc_target_name: "$DOC_NAME"
       doc_target_path: "$DOC_NAME/en"
-      job_rules:
+      job_rules: &docs_job_rules
         - changes: &docs_changes
             - "doc/docs/**/*"
             - "apple-school-manager/debian/changelog"
-      merge_rules:
+      merge_rules: &docs_merge_rules
         - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
           changes: *docs_changes
         - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
@@ -38,48 +40,52 @@ include:
           changes: *docs_changes
         - if: $CI_COMMIT_TAG
           changes: *docs_changes
+  # No link check, the translation keeps every link of the English source. No
+  # production merge request either, 'docs-en:merge' carries both languages.
+  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/sphinx-docs@2
+    inputs:
+      job_prefix: "docs-de"
+      docs_dir: "doc/docs"
+      doc_target_name: "$DOC_NAME"
+      doc_target_path: "$DOC_NAME/de"
+      job_rules: *docs_job_rules
+      merge_rules: *docs_merge_rules
+      linkcheck: false
+      production_merge_request: false
 
-# The German build reuses the component's variables and rules and overrides the
-# language and the target path. There is no German link check: the translation
-# keeps every link of the English source.
-.docs-de:
-  extends:
-    - ".docs:build-env"
-    - ".docs:build:true"
-  stage: build
+".docs-en:vars":
+  variables:
+    language: "en"
+
+".docs-de:vars":
   variables:
     language: "de"
-    DOC_TARGET_PATH: "$DOC_NAME/de"
 
-docs-de:html:
-  extends:
-    - ".sphinx-html-template"
-    - ".docs-de"
+# Both review jobs record an environment, and the template names it after the
+# branch alone, so each language gets its own name and its own link in the merge
+# request.
+docs-en:review:
+  environment:
+    name: review/docs-en/$CI_COMMIT_REF_NAME
 
-docs-de:pdf:
-  extends:
-    - ".sphinx-pdf-template"
-    - ".docs-de"
+docs-de:review:
+  environment:
+    name: review/docs-de/$CI_COMMIT_REF_NAME
 
-docs-de:spelling:
-  extends:
-    - ".sphinx-spelling-template"
-    - ".docs-de"
-
-# One merge artifact for both languages, because docs.univention.de takes the
-# whole 'out' directory of one artifact per merge request and force-pushes it to
-# a branch named after this project. A second production merge request for the
+# One artifact for both languages, because docs.univention.de takes the whole
+# 'out' directory of one artifact per merge request and force-pushes it to a
+# branch named after this project. A second production merge request for the
 # German manual would overwrite the English one. 'needs' replaces the list of
 # the component instead of extending it, so the English jobs are listed again.
-docs:merge:
+docs-en:merge:
   needs:
-    - job: "docs:html"
+    - job: "docs-en:html"
       artifacts: true
-    - job: "docs:pdf"
+    - job: "docs-en:pdf"
       artifacts: true
-    - job: "docs:linkcheck"
+    - job: "docs-en:linkcheck"
       artifacts: false
-    - job: "docs:spelling"
+    - job: "docs-en:spelling"
       artifacts: false
     - job: "docs-de:html"
       artifacts: true
@@ -94,7 +100,7 @@ docs:merge:
 # Publishing the HTML alone would leave out the PDF that every page links to.
 # The site root redirects to the English manual.
 #
-# This is independent of 'docs:production-merge-request', which publishes to
+# This is independent of 'docs-en:production-merge-request', which publishes to
 # docs.software-univention.de.
 #
 # The 'pages' keyword is what makes this a Pages job, so the job name is free
@@ -105,9 +111,9 @@ docs-pages:
   pages:
     publish: public
   needs:
-    - job: "docs:html"
+    - job: "docs-en:html"
       artifacts: true
-    - job: "docs:pdf"
+    - job: "docs-en:pdf"
       artifacts: true
     - job: "docs-de:html"
       artifacts: true

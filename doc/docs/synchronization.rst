@@ -299,7 +299,7 @@ Students
 
    * - ``grade_level``
      - The attribute from ``student.grade_level_attribute``.
-       Empty if the variable is unset.
+       Empty if the key is unset.
 
    * - ``email_address``
      - Primary email address,

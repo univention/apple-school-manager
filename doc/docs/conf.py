@@ -8,6 +8,9 @@ import re
 import sys
 from pathlib import Path
 
+from sphinx.application import Sphinx
+from sphinx.config import Config
+
 
 def _app_version() -> str:
     """Read the app version from the topmost Debian changelog entry."""
@@ -143,11 +146,36 @@ linkcheck_allowed_redirects = {
 }
 
 # Sitemap, see https://github.com/jdillard/sphinx-sitemap
-html_baseurl = f"https://docs.software-univention.de/{doc_basename}/"
-sitemap_url_scheme = "{link}"
+univention_use_doc_base = True
+univention_project_basename = doc_basename
+univention_release_language_scheme = "{language}"
 
 # See Univention Sphinx Extension for its options.
 # https://git.knut.univention.de/univention/documentation/univention_sphinx_extension
 univention_feedback = True
 univention_pdf_show_source_license = True
 univention_doc_basename = doc_basename
+
+
+def adapt_settings_to_translation(_app: Sphinx, config: Config) -> None:
+    """Adapt the document title and the spell check to the German build."""
+    if config.language == "de":
+        config.spelling_word_list_filename = [
+            *config.spelling_word_list_filename,
+            "spelling_wordlist_de",
+        ]
+        config.spelling_exclude_patterns = [*config.spelling_exclude_patterns, "bibliography.rst"]
+        config.latex_documents = [
+            (
+                root_doc,
+                f"{doc_basename}.tex",
+                "Apple School Manager Connector Dokumentation",
+                "Univention GmbH",
+                "manual",
+                False,
+            ),
+        ]
+
+
+def setup(app: Sphinx) -> None:
+    app.connect("config-inited", adapt_settings_to_translation)

@@ -29,6 +29,7 @@ path = [
     "doc/docs/_static/.gitkeep",
     "doc/docs/bibliography.bib",
     "doc/docs/spelling_wordlist",
+    "doc/docs/spelling_wordlist_de",
     "doc/docs/locales/**",
 ]
 SPDX-FileCopyrightText = "2026 Univention GmbH"

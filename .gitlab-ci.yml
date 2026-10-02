@@ -17,7 +17,7 @@ include:
       mail_sender: "ucsschool-team@univention.de"
       author_alias: "UCS@school Team"
       mail_subject: "Apple School Manager Connector update"
-      changelog_link: "https://docs.software-univention.de/apple-school-manager-connector/changelog.html"
+      changelog_link: "https://docs.software-univention.de/apple-school-manager-connector/en/changelog.html"
       mail_recipient: "app-announcement@univention.de"
       chat_destination: "#ucsschool"
       ucs_base_version: "5.2"

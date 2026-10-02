@@ -541,11 +541,11 @@ msgstr "``grade_level``"
 
 #: ../../synchronization.rst:301
 msgid ""
-"The attribute from ``student.grade_level_attribute``. Empty if the "
-"variable is unset."
+"The attribute from ``student.grade_level_attribute``. Empty if the key "
+"is unset."
 msgstr ""
-"Das Attribut aus ``student.grade_level_attribute``. Leer, wenn die Variable "
-"nicht gesetzt ist."
+"Das Attribut aus ``student.grade_level_attribute``. Leer, wenn der "
+"Schlüssel nicht gesetzt ist."
 
 #: ../../synchronization.rst:309
 msgid "User name of the student."

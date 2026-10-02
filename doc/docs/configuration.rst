@@ -150,12 +150,13 @@ and exports the address unchanged.
 
 .. envvar:: asm/attributes/user/email/prepend_domain
 
-   :Default: Unset
-
    Inserts the value as a subdomain in front of the domain of every email
    address.
    With the value ``apple``, the connector exports the address
    ``jane@example.com`` as ``jane@apple.example.com``.
+
+   :Default value: Unset
+   :Type: string
 
 .. _configuration-anonymization:
 
@@ -181,15 +182,17 @@ with values that you configure.
 
 .. envvar:: asm/attributes/staff/anonymize
 
-   :Default: ``false``
-
    Enables anonymization for teachers.
+
+   :Default value: ``false``
+   :Type: boolean
 
 .. envvar:: asm/attributes/student/anonymize
 
-   :Default: ``false``
-
    Enables anonymization for students.
+
+   :Default value: ``false``
+   :Type: boolean
 
 For each anonymized attribute,
 a separate variable holds the replacement value.
@@ -239,15 +242,17 @@ that doesn't change when you rename the user.
 
 .. envvar:: asm/attributes/staff/person_id/mapping
 
-   :Default: ``%entryUUID``
-
    LDAP attribute that identifies a teacher.
+
+   :Default value: ``%entryUUID``
+   :Type: string
 
 .. envvar:: asm/attributes/student/person_id/mapping
 
-   :Default: ``%entryUUID``
-
    LDAP attribute that identifies a student.
+
+   :Default value: ``%entryUUID``
+   :Type: string
 
 .. caution::
 
@@ -266,11 +271,13 @@ The password policy determines how long that password is.
 
 .. envvar:: asm/attributes/student/password_policy
 
-   :Default: ``4``
-
    Length of the password that Apple creates for a new student.
-   Valid values are ``4``, ``6``, ``8``, and the dash (``-``).
-   The dash means that Apple School Manager uses the default of the school.
+   The value ``-`` means that Apple School Manager uses the default of the
+   school.
+
+   :Default value: ``4``
+   :Possible values: ``4``, ``6``, ``8``, ``-``
+   :Type: string
 
 Apple School Manager doesn't support a password policy for teachers.
 A value other than the ones listed makes the synchronization stop with an
@@ -283,11 +290,12 @@ Grade level of students
 
 .. envvar:: asm/attributes/student/grade_level
 
-   :Default: Unset
-
    LDAP attribute that holds the grade level of a student.
    The connector exports its value in the ``grade_level`` column.
    If unset, the column stays empty.
+
+   :Default value: Unset
+   :Type: string
 
 .. _configuration-course-names:
 
@@ -300,20 +308,22 @@ The connector derives the course name from that name.
 
 .. envvar:: asm/attributes/course-name-pattern
 
-   :Default: ``{ou}-{name}``
-
    Pattern for the course name.
    The connector replaces ``{ou}`` with the school abbreviation
    and ``{name}`` with the class name without the school prefix.
 
-.. envvar:: asm/attributes/classes/class_number_empty
+   :Default value: ``{ou}-{name}``
+   :Type: string
 
-   :Default: ``true``
+.. envvar:: asm/attributes/classes/class_number_empty
 
    Leaves the ``class_number`` column empty.
    Apple School Manager builds the name of a class from the course name and the
    class number,
    so an identical class number only repeats the course name.
+
+   :Default value: ``true``
+   :Type: boolean
 
 .. _configuration-ldap-filter:
 
@@ -327,15 +337,17 @@ The connector applies the filter in addition to the school list.
 
 .. envvar:: asm/ldap_filter/students
 
-   :Default: Unset
-
    LDAP filter for the students of every school.
+
+   :Default value: Unset
+   :Type: string
 
 .. envvar:: asm/ldap_filter/staff
 
-   :Default: Unset
-
    LDAP filter for the teachers of every school.
+
+   :Default value: Unset
+   :Type: string
 
 A filter for an individual school overrides the global filter.
 Append the school abbreviation to the variable name for that,

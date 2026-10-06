@@ -46,3 +46,15 @@ def test_misspelled_school_is_rejected(password_file: str) -> None:
     )
     with pytest.raises(config.ASMConfigError, match="gym1234"):
         config.check_schools(connections, ["gym123", "gs456"])
+
+
+@pytest.mark.parametrize("name", ["north", "school-1", "a_b.c"])
+def test_valid_account_name(password_file: str, name: str) -> None:
+    [connection] = config.parse_config(settings_file(password_file, [name], {"*": name}))
+    assert connection.name == name
+
+
+@pytest.mark.parametrize("name", ["north/south", "north south", "north=south", "Nord-Süd"])
+def test_invalid_account_name(password_file: str, name: str) -> None:
+    with pytest.raises(config.ASMConfigError, match="account name"):
+        config.parse_config(settings_file(password_file, [name], {"*": name}))

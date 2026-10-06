@@ -21,6 +21,7 @@ The file holds the debug-level log of every run,
 including the email domains that don't resolve
 and the teachers whom an LDAP filter excluded from a class.
 The app settings show the time of the last upload in ``asm/last_upload``.
+``asm/last_upload/ACCOUNT`` holds the time of the last upload to each account.
 
 The log rotation follows the ``logrotate/*`` UCR variables of the system.
 The connector writes its own configuration to :file:`/etc/logrotate.d/asm`.

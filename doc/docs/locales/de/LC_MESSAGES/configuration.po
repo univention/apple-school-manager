@@ -169,14 +169,15 @@ msgstr "Konten in Apple School Manager"
 
 #: ../../configuration.rst:104
 msgid ""
-"The ``accounts`` section maps a name of your choice to each account. "
-"Usually there is a single account. If the schools on your UCS\\@school "
-"system belong to different institutions, each with its own Apple School "
-"Manager account, add one entry per account. The connector then uploads a "
-"separate archive to every account, each restricted to the schools that "
-"refer to that account."
+"The ``accounts`` section maps a name of your choice to each account. The "
+"name may only contain letters, digits, ``.``, ``_``, and ``-``. Usually "
+"there is a single account. If the schools on your UCS\\@school system belong "
+"to different institutions, each with its own Apple School Manager account, "
+"add one entry per account. The connector then uploads a separate archive to "
+"every account, each restricted to the schools that refer to that account."
 msgstr ""
 "Der Abschnitt ``accounts`` ordnet jedem Konto einen Namen Ihrer Wahl zu. "
+"Der Name darf nur Buchstaben, Ziffern, ``.``, ``_`` und ``-`` enthalten. "
 "Meist gibt es ein einziges Konto. Wenn die Schulen auf Ihrem "
 "UCS\\@school-System zu verschiedenen Einrichtungen mit jeweils eigenem Konto "
 "in Apple School Manager gehören, legen Sie einen Eintrag pro Konto an. Der "
@@ -715,11 +716,25 @@ msgstr ""
 msgid "``asm/last_upload``"
 msgstr "``asm/last_upload``"
 
-#: ../../configuration.rst:375
-msgid "Read-only status field. Shows when the connector last uploaded an archive."
+#: ../../configuration.rst:389
+msgid ""
+"Read-only status field. Shows when the connector last uploaded an archive "
+"to any account."
 msgstr ""
 "Schreibgeschütztes Statusfeld. Zeigt an, wann der Connector zuletzt ein "
-"Archiv hochgeladen hat."
+"Archiv in eines der Konten hochgeladen hat."
+
+#: ../../configuration.rst:392
+msgid "``asm/last_upload/ACCOUNT``"
+msgstr "``asm/last_upload/ACCOUNT``"
+
+#: ../../configuration.rst:394
+msgid ""
+"Shows when the connector last uploaded an archive to the account "
+"``ACCOUNT``. Not part of the app settings."
+msgstr ""
+"Zeigt an, wann der Connector zuletzt ein Archiv in das Konto ``ACCOUNT`` "
+"hochgeladen hat. Nicht Teil der App-Einstellungen."
 
 #: ../../configuration.rst:381
 msgid "Schedule the synchronization"

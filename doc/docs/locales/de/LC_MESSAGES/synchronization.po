@@ -132,13 +132,15 @@ msgstr ""
 ":file:`archive.zip` hoch. Den Host-Schlüssel prüft er gegen "
 ":file:`/etc/asm_public_key`."
 
-#: ../../synchronization.rst:72
+#: ../../synchronization.rst:73
 msgid ""
-"The connector sets ``asm/last_upload`` to the current time and deletes "
-"the archive, unless you enabled ``asm/store_zip``."
+"The connector sets ``asm/last_upload`` and ``asm/last_upload/ACCOUNT`` to "
+"the current time and deletes the archive, unless you enabled "
+"``asm/store_zip``."
 msgstr ""
-"Der Connector setzt ``asm/last_upload`` auf die aktuelle Uhrzeit und löscht "
-"das Archiv, sofern Sie ``asm/store_zip`` nicht aktiviert haben."
+"Der Connector setzt ``asm/last_upload`` und ``asm/last_upload/ACCOUNT`` auf "
+"die aktuelle Uhrzeit und löscht das Archiv, sofern Sie ``asm/store_zip`` "
+"nicht aktiviert haben."
 
 #: ../../synchronization.rst:76
 msgid ""

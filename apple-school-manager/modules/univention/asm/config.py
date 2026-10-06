@@ -11,6 +11,7 @@ per account and the settings of the classes per school.
 import json
 import logging
 import os
+import re
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
 from types import MappingProxyType
@@ -22,6 +23,7 @@ CONFIG_FILE_PATH = "/etc/asm-connections.json"
 LEGACY_PASSWORD_FILE_PATH = "/etc/asm.secret"  # noqa: S105
 MIGRATED_ACCOUNT_NAME = "default"
 OTHER_SCHOOLS = "*"
+ACCOUNT_NAME_PATTERN = re.compile(r"[A-Za-z0-9._-]+")
 PASSWORD_POLICIES = (4, 6, 8)
 ANONYMIZE_ATTRIBUTES = ("first_name", "middle_name", "last_name", "email_address", "sis_username")
 REQUIRED_ANONYMIZE_ATTRIBUTES = ("first_name", "last_name")
@@ -173,6 +175,10 @@ def parse_config(data: Any, source: str = "configuration") -> list[Connection]: 
     if not accounts:
         msg = f"No Apple School Manager account configured in {source}."
         raise ASMConfigError(msg)
+    for name in accounts:
+        if not ACCOUNT_NAME_PATTERN.fullmatch(name):
+            msg = f"{source}: account name {name!r} may only contain letters, digits, '.', '_' and '-'."
+            raise ASMConfigError(msg)
     if not schools:
         msg = f"No school assigned to an Apple School Manager account in {source}."
         raise ASMConfigError(msg)

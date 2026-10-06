@@ -70,7 +70,8 @@ What happens during a run
    and uploads the archive as :file:`archive.zip`.
    It verifies the host key against :file:`/etc/asm_public_key`.
 
-#. The connector sets ``asm/last_upload`` to the current time
+#. The connector sets ``asm/last_upload``
+   and ``asm/last_upload/ACCOUNT`` to the current time
    and deletes the archive,
    unless you enabled ``asm/store_zip``.
 

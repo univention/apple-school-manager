@@ -29,6 +29,8 @@ v5.2.0
   for example an invalid LDAP filter,
   only stops the upload to that account.
 
+* ``asm/last_upload/ACCOUNT`` holds the time of the last upload to each account.
+
 .. _changelog-v5.1.1:
 
 v5.1.1

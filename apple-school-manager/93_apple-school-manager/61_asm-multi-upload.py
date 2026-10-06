@@ -29,7 +29,7 @@ from paramiko.client import AutoAddPolicy, SSHClient
 from ucsschool.lib.models.utils import exec_cmd
 from univention.admin.uldap import getMachineConnection
 from univention.asm.config import CONFIG_FILE_PATH
-from univention.config_registry import handler_set
+from univention.config_registry import ConfigRegistry, handler_set
 from univention.testing.ucsschool.ucs_test_school import UCSTestSchool
 
 PASSWORD = "univention"  # noqa: S105
@@ -207,3 +207,8 @@ def test_asm_upload_to_multiple_accounts(
         assert filecmp.cmp(zip_paths[-1], REMOTE_PATH, shallow=False), (
             "Last ZIP file was not correctly uploaded."
         )
+        ucr = ConfigRegistry()
+        ucr.load()
+        for connection in connections:
+            key = f"asm/last_upload/{connection['username']}"
+            assert ucr.get(key), f"{key} is not set after the upload."

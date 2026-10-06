@@ -66,6 +66,14 @@ msgstr ""
 "Ein Fehler beim Upload in ein Konto, zum Beispiel ein ungültiger "
 "LDAP-Filter, bricht nur den Upload in dieses Konto ab."
 
+#: ../../changelog.rst:32
+msgid ""
+"``asm/last_upload/ACCOUNT`` holds the time of the last upload to each "
+"account."
+msgstr ""
+"``asm/last_upload/ACCOUNT`` enthält den Zeitpunkt des letzten Uploads in "
+"jedes Konto."
+
 #: ../../changelog.rst:33
 msgid "v5.1.1"
 msgstr "v5.1.1"

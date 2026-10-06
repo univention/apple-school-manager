@@ -338,6 +338,14 @@ The update drops an LDAP filter for a school
 that wasn't on the former school list,
 because the connector didn't synchronize that school.
 
+Without ``asm/username``,
+the update has no account to assign schools to.
+It keeps ``asm/school_whitelist``
+and the ``asm/ldap_filter/students/SCHOOL`` and ``asm/ldap_filter/staff/SCHOOL`` UCR variables
+and prints a note for each of them.
+Move their values to the settings file
+when you add the account.
+
 If :file:`/etc/asm-connections.json` already exists,
 the update leaves it and the UCR variables unchanged.
 

@@ -132,3 +132,19 @@ def test_existing_file_is_not_overwritten(
 
 def test_fresh_installation_migrates_nothing() -> None:
     assert config.config_from_ucr({}) == ({"accounts": {}, "defaults": {}, "schools": {}}, set())
+
+
+def test_without_username_keeps_school_settings() -> None:
+    ucr = {
+        "asm/school_whitelist": "gym123",
+        "asm/ldap_filter/students": "(objectClass=*)",
+        "asm/ldap_filter/students/gym123": "(uid=a*)",
+        "asm/ldap_filter/staff/rs789": "(uid=b*)",
+    }
+    data, migrated_keys = config.config_from_ucr(ucr)
+    assert data == {
+        "accounts": {},
+        "defaults": {"student": {"ldap_filter": "(objectClass=*)"}},
+        "schools": {},
+    }
+    assert migrated_keys == {"asm/ldap_filter/students"}

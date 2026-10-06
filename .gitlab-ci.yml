@@ -78,7 +78,7 @@ integration_tests:
       when: manual
       allow_failure: False
   variables:
-    TARGET_VERSION: "5.2-4"
+    TARGET_VERSION: "5.2-7"
     OPENSTACK_CFG_FILE: ".gitlab-ci/ucsschool-singleserver.cfg"
   script:
     - mkdir results

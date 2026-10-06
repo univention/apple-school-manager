@@ -1,4 +1,4 @@
-#!/usr/share/ucs-test/runner python3
+#!/usr/share/ucs-test/runner pytest-3 -s -l -v
 ## desc: test asm-upload
 ## tags: [apptest]  # noqa: ERA001
 ## exposure: dangerous  # noqa: ERA001
@@ -15,6 +15,7 @@ import json
 import os
 import shutil
 import subprocess
+from collections.abc import Callable
 from types import TracebackType
 
 import univention.testing.strings as uts
@@ -24,8 +25,7 @@ from ucsschool.lib.models.utils import exec_cmd
 from univention.admin.uldap import getMachineConnection
 from univention.asm.config import CONFIG_FILE_PATH
 from univention.config_registry import handler_set
-from univention.testing import utils
-from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
+from univention.testing.ucsschool.ucs_test_school import UCSTestSchool
 
 
 class LocalHostAsASM:
@@ -107,51 +107,46 @@ class TempUserWritableFileAnywhere:
             os.unlink(self.path)
 
 
-class Test(ImportTestbase):  # type: ignore[misc]
-    ou_B = None
-    ou_C = None
-
-    def test(self) -> None:
-        school_class = f"{self.ou_A.name}-{uts.random_username()}"
-        student1_name, student1_dn = self.schoolenv.create_student(
-            self.ou_A.name,
-            classes=school_class,
-            password="univention",
-        )
-        lo, _po = getMachineConnection()
-        user_attrs = lo.get(student1_dn, attr=["homeDirectory", "uidNumber", "gidNumber"])
-        home_dir = user_attrs["homeDirectory"][0].decode()
-        uid = int(user_attrs["uidNumber"][0])
-        gid = int(user_attrs["gidNumber"][0])
-        remote_path = "/archive.zip"
-        with (
-            ucr_test.UCSTestConfigRegistry(),
-            LocalHostAsASM(
-                student1_name,
-                "univention",
-                home_dir,
-                self.ou_A.name,
-            ),
-            TempUserWritableFileAnywhere(remote_path, uid, gid),
-        ):
-            cmd = ["/usr/sbin/asm-upload"]
-            print(f"Executing {cmd!r}...")
-            returncode, stdout, stderr = exec_cmd(cmd)
-            print(f"-> returncode={returncode}")
-            print(f"-> stdout={stdout}")
-            print(f"-> stderr={stderr}")
-            if returncode:
-                utils.fail(f"{cmd!r} returned {returncode}.)")
-            for line in stderr.split("\n"):
-                if line.startswith("The uploaded zip is stored in: "):
-                    zip_path = line.split()[-1]
-                    print(f"Comparing zip_path={zip_path!r} and remote_path={remote_path!r}...")
-                    if not filecmp.cmp(zip_path, remote_path, shallow=False):
-                        utils.fail("ZIP file was not correctly uploaded")
-                    return
-            utils.fail("Something with the upload seems to be broken.")
-
-
-if __name__ == "__main__":
-    test = Test()
-    test.run()
+def test_asm_upload(
+    schoolenv: UCSTestSchool,
+    create_ous: Callable[..., list[tuple[str, str]]],
+) -> None:
+    [(school, _)] = create_ous(1)
+    school_class = f"{school}-{uts.random_username()}"
+    student1_name, student1_dn = schoolenv.create_student(
+        school,
+        classes=school_class,
+        password="univention",
+    )
+    lo, _po = getMachineConnection()
+    user_attrs = lo.get(student1_dn, attr=["homeDirectory", "uidNumber", "gidNumber"])
+    home_dir = user_attrs["homeDirectory"][0].decode()
+    uid = int(user_attrs["uidNumber"][0])
+    gid = int(user_attrs["gidNumber"][0])
+    remote_path = "/archive.zip"
+    with (
+        ucr_test.UCSTestConfigRegistry(),
+        LocalHostAsASM(
+            student1_name,
+            "univention",
+            home_dir,
+            school,
+        ),
+        TempUserWritableFileAnywhere(remote_path, uid, gid),
+    ):
+        cmd = ["/usr/sbin/asm-upload"]
+        print(f"Executing {cmd!r}...")
+        returncode, stdout, stderr = exec_cmd(cmd)
+        print(f"-> returncode={returncode}")
+        print(f"-> stdout={stdout}")
+        print(f"-> stderr={stderr}")
+        assert not returncode, f"{cmd!r} returned {returncode}.)"
+        zip_paths = [
+            line.split()[-1]
+            for line in stderr.split("\n")
+            if line.startswith("The uploaded zip is stored in: ")
+        ]
+        assert zip_paths, "Something with the upload seems to be broken."
+        zip_path = zip_paths[0]
+        print(f"Comparing zip_path={zip_path!r} and remote_path={remote_path!r}...")
+        assert filecmp.cmp(zip_path, remote_path, shallow=False), "ZIP file was not correctly uploaded"

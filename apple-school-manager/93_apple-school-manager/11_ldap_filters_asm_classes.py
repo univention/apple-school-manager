@@ -1,4 +1,4 @@
-#!/usr/share/ucs-test/runner python3
+#!/usr/share/ucs-test/runner pytest-3 -s -l -v
 ## desc: test ldap filter staff inside school classes
 ## tags: [apptest]  # noqa: ERA001
 ## exposure: dangerous  # noqa: ERA001
@@ -12,16 +12,29 @@
 
 import logging
 import tempfile
-from typing import Any
+from collections.abc import Callable, Iterator
+from typing import Any, NamedTuple
 
+import pytest
 import univention.testing.strings as uts
 from ldap.filter import filter_format
 from univention.admin import uexceptions
+from univention.admin.uldap import access
 from univention.asm.config import Settings, parse_config
 from univention.asm.models.classes import AsmClass
 from univention.asm.models.staff import get_filtered_staff
 from univention.asm.utils import get_person_id
-from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
+from univention.testing.ucsschool.ucs_test_school import UCSTestSchool
+
+log = logging.getLogger(__name__)
+
+
+class SchoolClassWithStaff(NamedTuple):
+    school: str
+    dn: str
+    teacher1_name: str
+    teacher1_id: str
+    teacher2_id: str
 
 
 def build_settings(
@@ -42,118 +55,93 @@ def build_settings(
 
 def get_person_id_by_dn(dn: str) -> str:
     id_attr, t1_lo = get_person_id(dn, "entryUUID", [])
-    return t1_lo[id_attr][0]
+    person_id: str = t1_lo[id_attr][0]
+    return person_id
 
 
-class Test(ImportTestbase):  # type: ignore[misc]
-    def test(self) -> None:
-        school1 = self.ou_A.name
-        school_class1 = f"{school1}-{uts.random_username()}"
-        filter_type = "staff"
-        teacher1_name, teacher1_dn = self.schoolenv.create_teacher(
-            school1,
-            classes=school_class1,
-        )
-        _teacher2_name, teacher2_dn = self.schoolenv.create_teacher_and_staff(
-            school1,
-            classes=school_class1,
-        )
-        teacher1_id = get_person_id_by_dn(teacher1_dn)
-        teacher2_id = get_person_id_by_dn(teacher2_dn)
-
-        school_class = self.lo.search(
-            filter_format("(&(objectClass=univentionGroup)(cn=%s))", (school_class1,)),
-            attr=["memberUid"],
-        )
-        school_class_dn = school_class[0][0]
-        self.log.info(
-            "*** school_class1=%r",
-            school_class,
-        )
-        # users to be ignored by filters:
-        self.schoolenv.create_teacher(school1)
-        self.schoolenv.create_teacher_and_staff(school1)
-        self.schoolenv.create_student(school1)
-
-        asm_logger = logging.getLogger("univention.asm")
-        asm_logger.setLevel(logging.DEBUG)
-        for handler in self.log.handlers:
-            asm_logger.addHandler(handler)
-
-        get_filtered_staff.cache_clear()
-        self.log.info("Test if global filter works for AsmClass")
-        ldap_filter = "NONSENSE"
-        settings = build_settings(school1, {"staff": {"ldap_filter": ldap_filter}})
-        try:
-            _ = AsmClass.from_dn(school_class_dn, settings)
-            self.fail(
-                "We expect an valueInvalidSyntax exception with an invalid filter for filter "
-                "type 'staff'",
-            )
-        except uexceptions.valueInvalidSyntax:
-            self.log.info("*** OK: expected exception was raised (AsmClass).")
-
-        get_filtered_staff.cache_clear()
-        ldap_filter = f"uid={teacher1_name}"
-        settings = build_settings(school1, {"staff": {"ldap_filter": ldap_filter}})
-        asm_class = AsmClass.from_dn(school_class_dn, settings)
-        assert asm_class.instructor_id == teacher1_id
-        assert not (asm_class.instructor_id_2 or asm_class.instructor_id_3), (
-            f"Not exactly 1 staff object found: {asm_class}"
-        )
-        self.log.info(
-            "*** OK: found expected user %r for filter_type=%r with global filter.",
-            teacher1_name,
-            filter_type,
-        )
-
-        get_filtered_staff.cache_clear()
-        ldap_filter = f"(!(uid={teacher1_name}))"
-        settings = build_settings(school1, {"staff": {"ldap_filter": ldap_filter}})
-        asm_class = AsmClass.from_dn(school_class_dn, settings)
-        assert asm_class.instructor_id != teacher1_id
-        assert asm_class.instructor_id == teacher2_id
-        self.log.info(
-            "*** OK: did not find user %r for filter_type=%r with global filter.",
-            teacher1_name,
-            filter_type,
-        )
-
-        get_filtered_staff.cache_clear()
-        self.log.info("Test if overriding with school specific filter works")
-        ldap_filter = f"uid={teacher1_name}"
-        settings = build_settings(
-            school1,
-            {"staff": {"ldap_filter": f"(!(uid={teacher1_name}))"}},
-            {"staff": {"ldap_filter": ldap_filter}},
-        )
-        asm_class = AsmClass.from_dn(school_class_dn, settings)
-        assert asm_class.instructor_id == teacher1_id
-        assert not (asm_class.instructor_id_2 or asm_class.instructor_id_3), (
-            f"Not exactly 1 staff object found: {asm_class}"
-        )
-        self.log.info(
-            "*** OK: found expected user %r for filter_type=%r with school specific filter.",
-            teacher1_name,
-            filter_type,
-        )
-
-        get_filtered_staff.cache_clear()
-        ldap_filter = f"(!(uid={teacher1_name}))"
-        settings = build_settings(
-            school1,
-            {"staff": {"ldap_filter": f"(!(uid={teacher1_name}))"}},
-            {"staff": {"ldap_filter": ldap_filter}},
-        )
-        asm_class = AsmClass.from_dn(school_class_dn, settings)
-        assert asm_class.instructor_id != teacher1_id
-        assert asm_class.instructor_id == teacher2_id
-        self.log.info(
-            "*** OK: did not find user %r for filter_type=%r with school specific filter.",
-            teacher1_name,
-            filter_type,
-        )
+@pytest.fixture(autouse=True)
+def _clear_staff_cache(caplog: pytest.LogCaptureFixture) -> Iterator[None]:
+    caplog.set_level(logging.DEBUG, logger="univention.asm")
+    get_filtered_staff.cache_clear()
+    yield
+    get_filtered_staff.cache_clear()
 
 
-if __name__ == "__main__":
-    Test().run()
+@pytest.fixture
+def school_class(
+    schoolenv: UCSTestSchool, lo: access, create_ous: Callable[..., list[tuple[str, str]]]
+) -> SchoolClassWithStaff:
+    [(school1, _dn)] = create_ous(1)
+    school_class1 = f"{school1}-{uts.random_username()}"
+    teacher1_name, teacher1_dn = schoolenv.create_teacher(school1, classes=school_class1)
+    _teacher2_name, teacher2_dn = schoolenv.create_teacher_and_staff(school1, classes=school_class1)
+    found = lo.search(
+        filter_format("(&(objectClass=univentionGroup)(cn=%s))", (school_class1,)),
+        attr=["memberUid"],
+    )
+    log.info("*** school_class1=%r", found)
+    # users to be ignored by filters:
+    schoolenv.create_teacher(school1)
+    schoolenv.create_teacher_and_staff(school1)
+    schoolenv.create_student(school1)
+    return SchoolClassWithStaff(
+        school=school1,
+        dn=found[0][0],
+        teacher1_name=teacher1_name,
+        teacher1_id=get_person_id_by_dn(teacher1_dn),
+        teacher2_id=get_person_id_by_dn(teacher2_dn),
+    )
+
+
+def class_settings(
+    school_class: SchoolClassWithStaff, default_filter: str, school_filter: str | None
+) -> Settings:
+    return build_settings(
+        school_class.school,
+        {"staff": {"ldap_filter": default_filter.format(teacher1=school_class.teacher1_name)}},
+        {"staff": {"ldap_filter": school_filter.format(teacher1=school_class.teacher1_name)}}
+        if school_filter
+        else None,
+    )
+
+
+def test_invalid_filter_raises(school_class: SchoolClassWithStaff) -> None:
+    settings = build_settings(school_class.school, {"staff": {"ldap_filter": "NONSENSE"}})
+    with pytest.raises(uexceptions.valueInvalidSyntax):
+        AsmClass.from_dn(school_class.dn, settings)
+
+
+@pytest.mark.parametrize(
+    ("default_filter", "school_filter"),
+    [
+        ("uid={teacher1}", None),
+        ("(!(uid={teacher1}))", "uid={teacher1}"),
+    ],
+    ids=["global", "school_specific"],
+)
+def test_filter_includes_teacher(
+    school_class: SchoolClassWithStaff, default_filter: str, school_filter: str | None
+) -> None:
+    settings = class_settings(school_class, default_filter, school_filter)
+    asm_class = AsmClass.from_dn(school_class.dn, settings)
+    assert asm_class.instructor_id == school_class.teacher1_id
+    assert not (asm_class.instructor_id_2 or asm_class.instructor_id_3), (
+        f"Not exactly 1 staff object found: {asm_class}"
+    )
+
+
+@pytest.mark.parametrize(
+    ("default_filter", "school_filter"),
+    [
+        ("(!(uid={teacher1}))", None),
+        ("(!(uid={teacher1}))", "(!(uid={teacher1}))"),
+    ],
+    ids=["global", "school_specific"],
+)
+def test_filter_excludes_teacher(
+    school_class: SchoolClassWithStaff, default_filter: str, school_filter: str | None
+) -> None:
+    settings = class_settings(school_class, default_filter, school_filter)
+    asm_class = AsmClass.from_dn(school_class.dn, settings)
+    assert asm_class.instructor_id != school_class.teacher1_id
+    assert asm_class.instructor_id == school_class.teacher2_id

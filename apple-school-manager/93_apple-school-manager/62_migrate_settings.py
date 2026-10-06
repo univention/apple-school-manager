@@ -29,7 +29,11 @@ def legacy_ucr_values(username: str) -> dict[str, str]:
         "asm/attributes/student/anonymize": "yes",
         "asm/attributes/student/anonymize/first_name": "%uid",
         "asm/attributes/student/anonymize/last_name": "-",
+        "asm/attributes/student/anonymize/sis_username": "",
         "asm/attributes/staff/anonymize": "no",
+        "asm/attributes/staff/anonymize/first_name": "%givenName",
+        "asm/attributes/staff/anonymize/last_name": "%sn",
+        "asm/attributes/staff/anonymize/sis_username": "%uid",
         "asm/attributes/staff/person_id/mapping": "%entryUUID",
         "asm/attributes/student/password_policy": "-",
         "asm/attributes/classes/class_number_empty": "false",
@@ -49,11 +53,19 @@ def expected_settings(username: str) -> dict[str, Any]:
             "class_number_empty": False,
             "student": {
                 "anonymize": True,
-                "anonymize_values": {"first_name": "%uid", "last_name": "-"},
+                "anonymize_values": {"first_name": "%uid", "last_name": "-", "sis_username": None},
                 "password_policy": None,
                 "ldap_filter": "(objectClass=*)",
             },
-            "staff": {"anonymize": False, "person_id_attribute": "entryUUID"},
+            "staff": {
+                "anonymize": False,
+                "anonymize_values": {
+                    "first_name": "%givenName",
+                    "last_name": "%sn",
+                    "sis_username": "%uid",
+                },
+                "person_id_attribute": "entryUUID",
+            },
         },
         "schools": {
             "gym123": {"account": "default", "student": {"ldap_filter": "(uid=a*)"}},

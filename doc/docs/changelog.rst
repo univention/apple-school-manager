@@ -25,7 +25,9 @@ v5.2.0
   the settings for classes and the LDAP filters per school.
   The update moves the former values to the new file.
 
-* An invalid LDAP filter only stops the upload to the affected account.
+* An error during the upload to one account,
+  for example an invalid LDAP filter,
+  only stops the upload to that account.
 
 .. _changelog-v5.1.1:
 

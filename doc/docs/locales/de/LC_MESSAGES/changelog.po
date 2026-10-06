@@ -59,9 +59,12 @@ msgstr ""
 "überträgt die bisherigen Werte in die neue Datei."
 
 #: ../../changelog.rst:28
-msgid "An invalid LDAP filter only stops the upload to the affected account."
+msgid ""
+"An error during the upload to one account, for example an invalid LDAP "
+"filter, only stops the upload to that account."
 msgstr ""
-"Ein ungültiger LDAP-Filter bricht nur den Upload in das betroffene Konto ab."
+"Ein Fehler beim Upload in ein Konto, zum Beispiel ein ungültiger "
+"LDAP-Filter, bricht nur den Upload in dieses Konto ab."
 
 #: ../../changelog.rst:33
 msgid "v5.1.1"

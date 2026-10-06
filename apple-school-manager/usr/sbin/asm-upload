@@ -85,6 +85,10 @@ def main() -> None:
             logger.exception(f"Invalid LDAP filter, nothing uploaded to account {connection.name}.")
             failed.append(connection.name)
             continue
+        except Exception:
+            logger.exception(f"Upload to account {connection.name} failed.")
+            failed.append(connection.name)
+            continue
         if not delete_zip and zip_path is not None:
             logger.info(f"The uploaded zip is stored in: {zip_path}")
     if failed:

@@ -365,6 +365,17 @@ msgstr ""
 "aufführt. Bei einem einzigen Konto synchronisiert er alle Schulen in dieses "
 "Konto."
 
+#: ../../configuration.rst:192
+msgid ""
+"If the section lists a school that doesn't exist, the connector stops "
+"before it uploads anything. Otherwise a misspelled school would go to the "
+"account of the entry ``*`` instead of the account you meant."
+msgstr ""
+"Wenn der Abschnitt eine Schule aufführt, die es nicht gibt, bricht der "
+"Connector ab, bevor er etwas hochlädt. Andernfalls ginge eine falsch "
+"geschriebene Schule an das Konto des Eintrags ``*`` statt an das gemeinte "
+"Konto."
+
 #: ../../configuration.rst:191
 msgid "Every school to one account, one school with its own LDAP filter"
 msgstr "Jede Schule in ein Konto, eine Schule mit eigenem LDAP-Filter"

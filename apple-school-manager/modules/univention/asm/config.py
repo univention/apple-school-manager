@@ -11,7 +11,7 @@ per account and the settings of the classes per school.
 import json
 import logging
 import os
-from collections.abc import Mapping
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
 from types import MappingProxyType
 from typing import Any
@@ -204,6 +204,27 @@ def parse_config(data: Any, source: str = "configuration") -> list[Connection]: 
             ),
         )
     return connections
+
+
+def check_schools(connections: Iterable[Connection], existing_schools: Iterable[str]) -> None:
+    """
+    Make sure that every school that the connections name exists.
+
+    A misspelled school would otherwise go to the account of the entry ``*``
+    instead of the account it was meant for.
+
+    :param connections: the connections from :py:func:`get_connections`
+    :param existing_schools: the names of the schools in LDAP
+    :raises ASMConfigError: if a connection names a school that doesn't exist
+    """
+    named = {school for connection in connections for school in connection.settings.schools}
+    unknown = sorted(named - set(existing_schools))
+    if unknown:
+        msg = (
+            f"{CONFIG_FILE_PATH} lists the school(s) {', '.join(unknown)}, which don't exist. "
+            "Correct or remove them."
+        )
+        raise ASMConfigError(msg)
 
 
 def _build_settings(

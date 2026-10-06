@@ -32,11 +32,12 @@ import sys
 from logging import FileHandler
 
 from paramiko.ssh_exception import NoValidConnectionsError, SSHException
+from ucsschool.lib.models.school import School
 from univention.admin import uexceptions
 from univention.asm.asm_upload import ASMUpload
-from univention.asm.config import ASMConfigError, get_connections
+from univention.asm.config import ASMConfigError, check_schools, get_connections
 from univention.asm.network.sftp_upload import MissingPublicSshKeyError
-from univention.asm.utils import get_ucr
+from univention.asm.utils import get_ldap_connection, get_ucr
 
 LOGFILE_PATH = "/var/log/univention/asm.log"
 UCR_STORE_ZIP_KEY = "asm/store_zip"
@@ -62,6 +63,8 @@ def main() -> None:
     setup_logging()
     try:
         connections = get_connections()
+        lo, _po = get_ldap_connection()
+        check_schools(connections, [school.name for school in School.get_all(lo)])
     except ASMConfigError as exc:
         logger.exception(exc)
         sys.exit(1)

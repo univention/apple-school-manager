@@ -80,13 +80,14 @@ msgstr "Ablauf eines Synchronisationslaufs"
 
 #: ../../synchronization.rst:48
 msgid ""
-"The connector reads the settings file :file:`/etc/asm-connections.json`, "
-"as described in :ref:`configuration-file`. A missing or invalid entry "
-"stops the run."
+"The connector reads the settings file :file:`/etc/asm-connections.json`, as "
+"described in :ref:`configuration-file`. A missing or invalid entry stops "
+"the run, and so does a school that doesn't exist in the LDAP directory."
 msgstr ""
-"Der Connector liest die Einstellungsdatei :file:`/etc/asm-connections.json`, "
-"wie in :ref:`configuration-file` beschrieben. Ein fehlender oder ungültiger "
-"Eintrag bricht den Lauf ab."
+"Der Connector liest die Einstellungsdatei "
+":file:`/etc/asm-connections.json`, wie in :ref:`configuration-file` "
+"beschrieben. Ein fehlender oder ungültiger Eintrag bricht den Lauf ab, "
+"ebenso eine Schule, die es im LDAP-Verzeichnis nicht gibt."
 
 #: ../../synchronization.rst:52
 msgid ""

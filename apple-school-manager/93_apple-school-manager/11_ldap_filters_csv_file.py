@@ -1,4 +1,4 @@
-#!/usr/share/ucs-test/runner python3
+#!/usr/share/ucs-test/runner pytest-3 -s -l -v
 ## desc: test ldap filter for student and staff csv generation
 ## tags: [apptest]  # noqa: ERA001
 ## exposure: dangerous  # noqa: ERA001
@@ -11,15 +11,27 @@
 
 import logging
 import tempfile
-from typing import Any
+from collections.abc import Callable, Iterator
+from typing import Any, NamedTuple
 
+import pytest
 import univention.testing.strings as uts
 from ldap.filter import filter_format
 from univention.admin import uexceptions
+from univention.admin.uldap import access
 from univention.asm.config import Settings, parse_config
 from univention.asm.csv.csv_file import AsmRostersCsvFile, AsmStaffCsvFile, AsmStudentsCsvFile
 from univention.asm.models.staff import get_filtered_staff
-from univention.testing.ucsschool.importusers_cli_v2 import ImportTestbase
+from univention.testing.ucsschool.ucs_test_school import UCSTestSchool
+
+log = logging.getLogger(__name__)
+
+CSV_FILE_CLASSES = {"staff": AsmStaffCsvFile, "student": AsmStudentsCsvFile}
+
+
+class Users(NamedTuple):
+    school: str
+    by_role: dict[str, tuple[str, str]]
 
 
 def build_settings(
@@ -38,147 +50,76 @@ def build_settings(
         return parse_config(config)[0].settings
 
 
-class Test(ImportTestbase):  # type: ignore[misc]
-    def test(self) -> None:
-        school1 = self.ou_A.name
-        school_class1 = f"{school1}-{uts.random_username()}"
-        teacher1_name, _teacher1_dn = self.schoolenv.create_teacher(
-            school1,
-            classes=school_class1,
-        )
-        teacher2_name, _teacher2_dn = self.schoolenv.create_teacher_and_staff(
-            school1,
-            classes=school_class1,
-        )
-        student1_name, _student1_dn = self.schoolenv.create_student(
-            school1,
-            classes=school_class1,
-        )
-        student2_name, _student2_dn = self.schoolenv.create_student(
-            school1,
-            classes=school_class1,
-        )
-        self.log.info(
-            "*** school_class1=%r",
-            self.lo.search(
-                filter_format(
-                    "(&(objectClass=univentionGroup)(cn=%s))",
-                    (school_class1,),
-                ),
-                attr=["memberUid"],
-            ),
-        )
-        # users to be ignored by filters:
-        self.schoolenv.create_teacher(school1)
-        self.schoolenv.create_teacher_and_staff(school1)
-        self.schoolenv.create_student(school1)
-
-        # capture asm logging
-        asm_logger = logging.getLogger("univention.asm")
-        asm_logger.setLevel(logging.DEBUG)
-        for handler in self.log.handlers:
-            asm_logger.addHandler(handler)
-
-        #  For staff, students and roster
-        for klass, user1, user2, role in (
-            (AsmStaffCsvFile, teacher1_name, teacher2_name, "staff"),
-            (AsmStudentsCsvFile, student1_name, student2_name, "student"),
-        ):
-            get_filtered_staff.cache_clear()
-            self.log.info(
-                "===> klass=%r user1=%r user2=%r role=%r",
-                klass.__name__,
-                user1,
-                user2,
-                role,
-            )
-            ldap_filter = "NONSENSE"
-            settings = build_settings(school1, {role: {"ldap_filter": ldap_filter}})
-            #  invalid filter raised exception
-            # user:
-            try:
-                _ = list(klass("", settings).find_and_create_objects())
-                self.fail(
-                    "We expect an valueInvalidSyntax exception with an invalid filter for filter "
-                    f"type '{role}'",
-                )
-            except uexceptions.valueInvalidSyntax:
-                self.log.info(
-                    "*** OK: expected exception was raised (%s).",
-                    klass.__name__,
-                )
-            get_filtered_staff.cache_clear()
-            # roster:
-            if role == "student":
-                try:
-                    _ = list(AsmRostersCsvFile("", settings).find_and_create_objects())
-                    self.fail(
-                        "We expect an valueInvalidSyntax exception with an invalid filter for filter "
-                        f"type '{role}'",
-                    )
-                except uexceptions.valueInvalidSyntax:
-                    self.log.info(
-                        "*** OK: expected exception was raised (%s).",
-                        AsmRostersCsvFile.__name__,
-                    )
-
-            get_filtered_staff.cache_clear()
-            #  global filter works
-            # user:
-            ldap_filter = f"uid={user1}"
-            settings = build_settings(school1, {role: {"ldap_filter": ldap_filter}})
-            user_objs: list[Any] = list(klass("", settings).find_and_create_objects())
-            assert len(user_objs) == 1, f"Not exactly 1 user object found: {user_objs}"
-            assert user1 == user_objs[0].sis_username, (
-                f"The filter is: {ldap_filter}. '{user1}' was not found in {user_objs}"
-            )
-            self.log.info(
-                "*** OK: found expected user %r for role=%r with global filter.",
-                user1,
-                role,
-            )
-
-            # roster:
-            if role == "student":
-                get_filtered_staff.cache_clear()
-                roster_objs = list(AsmRostersCsvFile("", settings).find_and_create_objects())
-                assert len(roster_objs) == 1, f"Not exactly 1 roster object found: {roster_objs}"
-                assert roster_objs[0].student_id == user_objs[0].person_id
-                self.log.info(
-                    "*** OK: found expected user %r in roster for role=%r with global filter.",
-                    user1,
-                    role,
-                )
-
-            get_filtered_staff.cache_clear()
-            self.log.info("Test if overriding with school specific filter works")
-            # user:
-            ldap_filter = f"uid={user2}"
-            settings = build_settings(
-                school1,
-                {role: {"ldap_filter": f"uid={user1}"}},
-                {role: {"ldap_filter": ldap_filter}},
-            )
-            user_objs = list(klass("", settings).find_and_create_objects())
-            assert len(user_objs) == 1, f"Not exactly 1 user object found: {user_objs}"
-            assert user2 == user_objs[0].sis_username
-            self.log.info(
-                "*** OK: found expected user %r for role=%r with school specific filter.",
-                user2,
-                role,
-            )
-            # roster:
-            if role == "student":
-                get_filtered_staff.cache_clear()
-                roster_objs = list(AsmRostersCsvFile("", settings).find_and_create_objects())
-                assert len(roster_objs) == 1, f"Not exactly 1 roster object found: {roster_objs}"
-                assert roster_objs[0].student_id == user_objs[0].person_id
-                self.log.info(
-                    "*** OK: found expected user %r in roster for role=%r with global filter.",
-                    user2,
-                    role,
-                )
+@pytest.fixture(autouse=True)
+def _clear_staff_cache(caplog: pytest.LogCaptureFixture) -> Iterator[None]:
+    caplog.set_level(logging.DEBUG, logger="univention.asm")
+    get_filtered_staff.cache_clear()
+    yield
+    get_filtered_staff.cache_clear()
 
 
-if __name__ == "__main__":
-    Test().run()
+@pytest.fixture
+def school(create_ous: Callable[..., list[tuple[str, str]]]) -> str:
+    [(name, _dn)] = create_ous(1)
+    return name
+
+
+@pytest.fixture
+def users(schoolenv: UCSTestSchool, lo: access, school: str) -> Users:
+    school_class1 = f"{school}-{uts.random_username()}"
+    teacher1_name, _teacher1_dn = schoolenv.create_teacher(school, classes=school_class1)
+    teacher2_name, _teacher2_dn = schoolenv.create_teacher_and_staff(school, classes=school_class1)
+    student1_name, _student1_dn = schoolenv.create_student(school, classes=school_class1)
+    student2_name, _student2_dn = schoolenv.create_student(school, classes=school_class1)
+    log.info(
+        "*** school_class1=%r",
+        lo.search(
+            filter_format("(&(objectClass=univentionGroup)(cn=%s))", (school_class1,)),
+            attr=["memberUid"],
+        ),
+    )
+    # users to be ignored by filters:
+    schoolenv.create_teacher(school)
+    schoolenv.create_teacher_and_staff(school)
+    schoolenv.create_student(school)
+    return Users(
+        school=school,
+        by_role={
+            "staff": (teacher1_name, teacher2_name),
+            "student": (student1_name, student2_name),
+        },
+    )
+
+
+@pytest.mark.parametrize("role", ["staff", "student"])
+def test_invalid_filter_raises(school: str, role: str) -> None:
+    settings = build_settings(school, {role: {"ldap_filter": "NONSENSE"}})
+    with pytest.raises(uexceptions.valueInvalidSyntax):
+        list(CSV_FILE_CLASSES[role]("", settings).find_and_create_objects())
+    if role == "student":
+        get_filtered_staff.cache_clear()
+        with pytest.raises(uexceptions.valueInvalidSyntax):
+            list(AsmRostersCsvFile("", settings).find_and_create_objects())
+
+
+@pytest.mark.parametrize("role", ["staff", "student"])
+@pytest.mark.parametrize("school_specific", [False, True], ids=["global", "school_specific"])
+def test_filter_selects_user(users: Users, role: str, *, school_specific: bool) -> None:
+    user1, user2 = users.by_role[role]
+    expected_user = user2 if school_specific else user1
+    settings = build_settings(
+        users.school,
+        {role: {"ldap_filter": f"uid={user1}"}},
+        {role: {"ldap_filter": f"uid={user2}"}} if school_specific else None,
+    )
+    user_objs: list[Any] = list(CSV_FILE_CLASSES[role]("", settings).find_and_create_objects())
+    assert len(user_objs) == 1, f"Not exactly 1 user object found: {user_objs}"
+    assert expected_user == user_objs[0].sis_username, (
+        f"The filter selects '{expected_user}', which was not found in {user_objs}"
+    )
+
+    if role == "student":
+        get_filtered_staff.cache_clear()
+        roster_objs = list(AsmRostersCsvFile("", settings).find_and_create_objects())
+        assert len(roster_objs) == 1, f"Not exactly 1 roster object found: {roster_objs}"
+        assert roster_objs[0].student_id == user_objs[0].person_id

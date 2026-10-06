@@ -59,6 +59,8 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 # Sphinx loads conf.py by path, so it is not part of a package.
 "doc/**/conf.py" = ["INP001"]
+# pytest loads conftest.py by path, so it is not part of a package.
+"**/93_apple-school-manager/conftest.py" = ["INP001"]
 
 [tool.ruff.lint.flake8-annotations]
 allow-star-arg-any = true

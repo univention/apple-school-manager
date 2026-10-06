@@ -11,3 +11,9 @@ Type=int
 Min=0
 Max=23
 Categories=service-administration
+
+[asm/last_upload/.*]
+Description[de]=Zeitpunkt des letzten Uploads in das Apple School Manager Konto mit diesem Namen aus /etc/asm-connections.json. Der Connector setzt die Variable.
+Description[en]=Time of the last upload to the Apple School Manager account of this name in /etc/asm-connections.json. The connector sets the variable.
+Type=str
+Categories=service-administration

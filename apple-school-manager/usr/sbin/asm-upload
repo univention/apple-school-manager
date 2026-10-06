@@ -29,6 +29,7 @@
 
 import logging
 import sys
+from datetime import datetime
 from logging import FileHandler
 
 from paramiko.ssh_exception import NoValidConnectionsError, SSHException
@@ -38,6 +39,7 @@ from univention.asm.asm_upload import ASMUpload
 from univention.asm.config import ASMConfigError, check_schools, get_connections
 from univention.asm.network.sftp_upload import MissingPublicSshKeyError
 from univention.asm.utils import get_ldap_connection, get_ucr
+from univention.config_registry import handler_set
 
 LOGFILE_PATH = "/var/log/univention/asm.log"
 UCR_STORE_ZIP_KEY = "asm/store_zip"
@@ -92,6 +94,8 @@ def main() -> None:
             logger.exception(f"Upload to account {connection.name} failed.")
             failed.append(connection.name)
             continue
+        now = datetime.now().isoformat()
+        handler_set([f"asm/last_upload={now}", f"asm/last_upload/{connection.name}={now}"])
         if not delete_zip and zip_path is not None:
             logger.info(f"The uploaded zip is stored in: {zip_path}")
     if failed:

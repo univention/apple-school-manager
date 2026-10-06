@@ -109,6 +109,7 @@ Apple School Manager accounts
 -----------------------------
 
 The ``accounts`` section maps a name of your choice to each account.
+The name may only contain letters, digits, ``.``, ``_``, and ``-``.
 Usually there is a single account.
 If the schools on your UCS\@school system belong to different institutions,
 each with its own Apple School Manager account,
@@ -393,7 +394,12 @@ The app settings apply to every account alike.
    * - ``asm/last_upload``
      - Unset
      - Read-only status field.
-       Shows when the connector last uploaded an archive.
+       Shows when the connector last uploaded an archive to any account.
+
+   * - ``asm/last_upload/ACCOUNT``
+     - Unset
+     - Shows when the connector last uploaded an archive to the account ``ACCOUNT``.
+       Not part of the app settings.
 
 .. _configuration-schedule:
 

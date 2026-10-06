@@ -11,8 +11,6 @@ import logging
 import os
 from datetime import datetime
 
-from univention.config_registry import handler_set
-
 from .config import Settings
 from .csv.zip_file import AsmZipFile
 from .network.sftp_upload import SFTP, MissingPublicSshKeyError
@@ -51,7 +49,6 @@ class ASMUpload:
             self.logger.info("Finished uploading ZIP file.")
 
         self.logger.debug("Disconnected.")
-        handler_set([f"asm/last_upload={datetime.isoformat(datetime.now())}"])
         if self.delete_zip_file:
             os.remove(zip_path)
             self.logger.debug("Deleted ZIP file.")

@@ -181,25 +181,26 @@ msgstr "Konten in Apple School Manager"
 
 #: ../../configuration.rst:111
 msgid ""
-"The ``accounts`` section maps a name of your choice to each account. "
-"Usually there is a single account. If the schools on your UCS\\@school "
-"system belong to different institutions, each with its own Apple School "
-"Manager account, add one entry per account. The connector then uploads a "
-"separate archive to every account, each restricted to the schools that "
-"refer to that account."
+"The ``accounts`` section maps a name of your choice to each account. The "
+"name may only contain letters, digits, ``.``, ``_``, and ``-``. Usually "
+"there is a single account. If the schools on your UCS\\@school system belong "
+"to different institutions, each with its own Apple School Manager account, "
+"add one entry per account. The connector then uploads a separate archive to "
+"every account, each restricted to the schools that refer to that account."
 msgstr ""
 "Der Abschnitt ``accounts`` ordnet jedem Konto einen Namen Ihrer Wahl zu. "
+"Der Name darf nur Buchstaben, Ziffern, ``.``, ``_`` und ``-`` enthalten. "
 "Meist gibt es ein einziges Konto. Wenn die Schulen auf Ihrem "
 "UCS\\@school-System zu verschiedenen Einrichtungen mit jeweils eigenem Konto "
 "in Apple School Manager gehören, legen Sie einen Eintrag pro Konto an. Der "
 "Connector lädt dann in jedes Konto ein eigenes Archiv hoch, jeweils "
 "beschränkt auf die Schulen, die auf dieses Konto verweisen."
 
-#: ../../configuration.rst:119
+#: ../../configuration.rst:120
 msgid "To add an account:"
 msgstr "So fügen Sie ein Konto hinzu:"
 
-#: ../../configuration.rst:121
+#: ../../configuration.rst:122
 msgid ""
 "Store the SFTP password of the account in a file of its own that only "
 "``root`` can read. :ref:`installation-credentials` describes where to "
@@ -209,16 +210,16 @@ msgstr ""
 "``root`` lesen kann. :ref:`installation-credentials` beschreibt, wo Sie das "
 "Passwort finden."
 
-#: ../../configuration.rst:125
+#: ../../configuration.rst:126
 msgid "Store the password of an account"
 msgstr "Passwort eines Kontos speichern"
 
-#: ../../configuration.rst:131
+#: ../../configuration.rst:132
 msgid "Add the account to the ``accounts`` section of the settings file."
 msgstr ""
 "Fügen Sie das Konto dem Abschnitt ``accounts`` der Einstellungsdatei hinzu."
 
-#: ../../configuration.rst:133
+#: ../../configuration.rst:134
 msgid ""
 "Assign at least one school to the account, as described in :ref"
 ":`configuration-school-list`."
@@ -226,7 +227,7 @@ msgstr ""
 "Ordnen Sie dem Konto mindestens eine Schule zu, wie in "
 ":ref:`configuration-school-list` beschrieben."
 
-#: ../../configuration.rst:136
+#: ../../configuration.rst:137
 msgid ""
 "An account entry takes the following keys. All keys except ``username`` "
 "and ``password_file`` are optional and can also go to ``defaults``."
@@ -235,120 +236,120 @@ msgstr ""
 "``username`` und ``password_file`` sind optional und können auch in "
 "``defaults`` stehen."
 
-#: ../../configuration.rst:140
+#: ../../configuration.rst:141
 msgid "Keys of an account entry"
 msgstr "Schlüssel eines Kontoeintrags"
 
-#: ../../configuration.rst:144 ../../configuration.rst:227
+#: ../../configuration.rst:145 ../../configuration.rst:228
 msgid "Key"
 msgstr "Schlüssel"
 
-#: ../../configuration.rst:145 ../../configuration.rst:228
-#: ../../configuration.rst:371 ../../configuration.rst:499
+#: ../../configuration.rst:146 ../../configuration.rst:229
+#: ../../configuration.rst:372 ../../configuration.rst:505
 msgid "Default"
 msgstr "Voreinstellung"
 
-#: ../../configuration.rst:146 ../../configuration.rst:229
-#: ../../configuration.rst:372
+#: ../../configuration.rst:147 ../../configuration.rst:230
+#: ../../configuration.rst:373
 msgid "Description"
 msgstr "Beschreibung"
 
-#: ../../configuration.rst:148
+#: ../../configuration.rst:149
 msgid "``username``"
 msgstr "``username``"
 
-#: ../../configuration.rst:149 ../../configuration.rst:153
-#: ../../configuration.rst:232 ../../configuration.rst:500
+#: ../../configuration.rst:150 ../../configuration.rst:154
+#: ../../configuration.rst:233 ../../configuration.rst:506
 msgid "Required"
 msgstr "Erforderlich"
 
-#: ../../configuration.rst:150
+#: ../../configuration.rst:151
 msgid "The SFTP user name of the account."
 msgstr "Der SFTP-Benutzername des Kontos."
 
-#: ../../configuration.rst:152
+#: ../../configuration.rst:153
 msgid "``password_file``"
 msgstr "``password_file``"
 
-#: ../../configuration.rst:154
+#: ../../configuration.rst:155
 msgid "Path to the file that holds the SFTP password of the account."
 msgstr "Pfad zur Datei mit dem SFTP-Passwort des Kontos."
 
-#: ../../configuration.rst:156 ../../configuration.rst:449
+#: ../../configuration.rst:157 ../../configuration.rst:455
 msgid "``email_prepend_domain``"
 msgstr "``email_prepend_domain``"
 
-#: ../../configuration.rst:157 ../../configuration.rst:245
+#: ../../configuration.rst:158 ../../configuration.rst:246
 msgid "Empty"
 msgstr "Leer"
 
-#: ../../configuration.rst:158
+#: ../../configuration.rst:159
 msgid "See :ref:`configuration-email`."
 msgstr "Siehe :ref:`configuration-email`."
 
-#: ../../configuration.rst:160 ../../configuration.rst:479
+#: ../../configuration.rst:161 ../../configuration.rst:485
 msgid "``student.anonymize``, ``staff.anonymize``"
 msgstr "``student.anonymize``, ``staff.anonymize``"
 
-#: ../../configuration.rst:161 ../../configuration.rst:241
+#: ../../configuration.rst:162 ../../configuration.rst:242
 msgid "``true``"
 msgstr "``true``"
 
-#: ../../configuration.rst:162 ../../configuration.rst:166
+#: ../../configuration.rst:163 ../../configuration.rst:167
 msgid "See :ref:`configuration-anonymization`."
 msgstr "Siehe :ref:`configuration-anonymization`."
 
-#: ../../configuration.rst:164 ../../configuration.rst:484
+#: ../../configuration.rst:165 ../../configuration.rst:490
 msgid "``student.anonymize_values``, ``staff.anonymize_values``"
 msgstr "``student.anonymize_values``, ``staff.anonymize_values``"
 
-#: ../../configuration.rst:165
+#: ../../configuration.rst:166
 msgid "See :ref:`configuration-anonymization`"
 msgstr "Siehe :ref:`configuration-anonymization`"
 
-#: ../../configuration.rst:168 ../../configuration.rst:539
+#: ../../configuration.rst:169 ../../configuration.rst:545
 msgid "``student.person_id_attribute``, ``staff.person_id_attribute``"
 msgstr "``student.person_id_attribute``, ``staff.person_id_attribute``"
 
-#: ../../configuration.rst:169
+#: ../../configuration.rst:170
 #, python-format
 msgid "``entryUUID``"
 msgstr "``entryUUID``"
 
-#: ../../configuration.rst:170
+#: ../../configuration.rst:171
 msgid "See :ref:`configuration-person-id`."
 msgstr "Siehe :ref:`configuration-person-id`."
 
-#: ../../configuration.rst:172 ../../configuration.rst:559
+#: ../../configuration.rst:173 ../../configuration.rst:565
 msgid "``student.password_policy``"
 msgstr "``student.password_policy``"
 
-#: ../../configuration.rst:173
+#: ../../configuration.rst:174
 msgid "``4``"
 msgstr "``4``"
 
-#: ../../configuration.rst:174
+#: ../../configuration.rst:175
 msgid "See :ref:`configuration-password-policy`."
 msgstr "Siehe :ref:`configuration-password-policy`."
 
-#: ../../configuration.rst:176 ../../configuration.rst:573
+#: ../../configuration.rst:177 ../../configuration.rst:579
 msgid "``student.grade_level_attribute``"
 msgstr "``student.grade_level_attribute``"
 
-#: ../../configuration.rst:177 ../../configuration.rst:507
-#: ../../configuration.rst:515
+#: ../../configuration.rst:178 ../../configuration.rst:513
+#: ../../configuration.rst:521
 msgid "``null``"
 msgstr "``null``"
 
-#: ../../configuration.rst:178
+#: ../../configuration.rst:179
 msgid "See :ref:`configuration-grade-level`."
 msgstr "Siehe :ref:`configuration-grade-level`."
 
-#: ../../configuration.rst:183
+#: ../../configuration.rst:184
 msgid "Schools"
 msgstr "Schulen"
 
-#: ../../configuration.rst:185
+#: ../../configuration.rst:186
 msgid ""
 "The ``schools`` section lists the schools to synchronize by their "
 "abbreviation and assigns each of them to an account. The connector only "
@@ -358,7 +359,7 @@ msgstr ""
 "Kürzel auf und ordnet jede von ihnen einem Konto zu. Der Connector "
 "synchronisiert nur Schulen, die der Abschnitt aufführt."
 
-#: ../../configuration.rst:190
+#: ../../configuration.rst:191
 msgid ""
 "To look up the abbreviations, open :menuselection:`School administration "
 "--> Schools` in :term:`UMC`. The abbreviation is the name of the school "
@@ -368,7 +369,7 @@ msgstr ""
 ":menuselection:`Schul-Administration --> Schulen` in der :term:`UMC`. Das "
 "Kürzel ist der Name des Schulobjekts, zum Beispiel ``gym123``."
 
-#: ../../configuration.rst:194
+#: ../../configuration.rst:195
 msgid ""
 "The entry ``*`` stands for every school that the section doesn't list by "
 "name. With a single account, it synchronizes all schools to that account."
@@ -377,7 +378,7 @@ msgstr ""
 "aufführt. Bei einem einzigen Konto synchronisiert er alle Schulen in dieses "
 "Konto."
 
-#: ../../configuration.rst:198
+#: ../../configuration.rst:199
 msgid ""
 "If the section lists a school that doesn't exist, the connector stops "
 "before it uploads anything. Otherwise a misspelled school would go to the "
@@ -388,11 +389,11 @@ msgstr ""
 "geschriebene Schule an das Konto des Eintrags ``*`` statt an das gemeinte "
 "Konto."
 
-#: ../../configuration.rst:203
+#: ../../configuration.rst:204
 msgid "Every school to one account, one school with its own LDAP filter"
 msgstr "Jede Schule in ein Konto, eine Schule mit eigenem LDAP-Filter"
 
-#: ../../configuration.rst:214
+#: ../../configuration.rst:215
 msgid ""
 "A user who belongs to several schools appears in the upload to an account"
 " only with the schools that belong to that account. If none of the user's"
@@ -404,7 +405,7 @@ msgstr ""
 "Schulen des Benutzers zu dem Konto, überspringt der Connector den Benutzer "
 "für dieses Konto."
 
-#: ../../configuration.rst:219
+#: ../../configuration.rst:220
 msgid ""
 "A school entry takes the following keys. All keys except ``account`` are "
 "optional and can also go to ``defaults``."
@@ -412,48 +413,48 @@ msgstr ""
 "Ein Schuleintrag nimmt die folgenden Schlüssel auf. Alle Schlüssel außer "
 "``account`` sind optional und können auch in ``defaults`` stehen."
 
-#: ../../configuration.rst:223
+#: ../../configuration.rst:224
 msgid "Keys of a school entry"
 msgstr "Schlüssel eines Schuleintrags"
 
-#: ../../configuration.rst:231
+#: ../../configuration.rst:232
 msgid "``account``"
 msgstr "``account``"
 
-#: ../../configuration.rst:233
+#: ../../configuration.rst:234
 msgid "Name of the account in the ``accounts`` section that receives the school."
 msgstr "Name des Kontos im Abschnitt ``accounts``, das die Schule erhält."
 
-#: ../../configuration.rst:236 ../../configuration.rst:588
+#: ../../configuration.rst:237 ../../configuration.rst:594
 msgid "``course_name_pattern``"
 msgstr "``course_name_pattern``"
 
-#: ../../configuration.rst:237
+#: ../../configuration.rst:238
 #, python-brace-format
 msgid "``{ou}-{name}``"
 msgstr "``{ou}-{name}``"
 
-#: ../../configuration.rst:238 ../../configuration.rst:242
+#: ../../configuration.rst:239 ../../configuration.rst:243
 msgid "See :ref:`configuration-course-names`."
 msgstr "Siehe :ref:`configuration-course-names`."
 
-#: ../../configuration.rst:240 ../../configuration.rst:595
+#: ../../configuration.rst:241 ../../configuration.rst:601
 msgid "``class_number_empty``"
 msgstr "``class_number_empty``"
 
-#: ../../configuration.rst:244 ../../configuration.rst:613
+#: ../../configuration.rst:245 ../../configuration.rst:619
 msgid "``student.ldap_filter``, ``staff.ldap_filter``"
 msgstr "``student.ldap_filter``, ``staff.ldap_filter``"
 
-#: ../../configuration.rst:246
+#: ../../configuration.rst:247
 msgid "See :ref:`configuration-ldap-filter`."
 msgstr "Siehe :ref:`configuration-ldap-filter`."
 
-#: ../../configuration.rst:251
+#: ../../configuration.rst:252
 msgid "Defaults"
 msgstr "Voreinstellungen"
 
-#: ../../configuration.rst:253
+#: ../../configuration.rst:254
 msgid ""
 "The ``defaults`` section takes every optional key of an account entry and"
 " of a school entry. A value in ``defaults`` applies to every account or "
@@ -463,15 +464,15 @@ msgstr ""
 "eines Schuleintrags auf. Ein Wert in ``defaults`` gilt für jedes Konto und "
 "jede Schule, die den Schlüssel nicht selbst setzen."
 
-#: ../../configuration.rst:258
+#: ../../configuration.rst:259
 msgid "Anonymize nobody, except the students of the account ``north``"
 msgstr "Niemanden anonymisieren, außer den Schülern des Kontos ``north``"
 
-#: ../../configuration.rst:276
+#: ../../configuration.rst:277
 msgid "Update from an earlier version"
 msgstr "Update von einer früheren Version"
 
-#: ../../configuration.rst:278
+#: ../../configuration.rst:279
 msgid ""
 "Up to version 5.1.1, app settings and UCR variables held the "
 "configuration. The update to version 5.2.0 moves their values to the "
@@ -485,39 +486,39 @@ msgstr ""
 "Passwort bleibt in :file:`/etc/asm.secret`, und die Einstellungsdatei "
 "verweist darauf. Das Konto erhält den Namen ``default``."
 
-#: ../../configuration.rst:287
+#: ../../configuration.rst:288
 msgid "Former app settings and UCR variables"
 msgstr "Bisherige App-Einstellungen und UCR-Variablen"
 
-#: ../../configuration.rst:291
+#: ../../configuration.rst:292
 msgid "Former setting"
 msgstr "Bisherige Einstellung"
 
-#: ../../configuration.rst:292
+#: ../../configuration.rst:293
 msgid "Key in the settings file"
 msgstr "Schlüssel in der Einstellungsdatei"
 
-#: ../../configuration.rst:294
+#: ../../configuration.rst:295
 msgid "``asm/username``"
 msgstr "``asm/username``"
 
-#: ../../configuration.rst:295
+#: ../../configuration.rst:296
 msgid "``accounts.default.username``"
 msgstr "``accounts.default.username``"
 
-#: ../../configuration.rst:297
+#: ../../configuration.rst:298
 msgid "``asm/password``"
 msgstr "``asm/password``"
 
-#: ../../configuration.rst:298
+#: ../../configuration.rst:299
 msgid "``accounts.default.password_file``"
 msgstr "``accounts.default.password_file``"
 
-#: ../../configuration.rst:300
+#: ../../configuration.rst:301
 msgid "``asm/school_whitelist``"
 msgstr "``asm/school_whitelist``"
 
-#: ../../configuration.rst:301
+#: ../../configuration.rst:302
 msgid ""
 "One entry per school in ``schools``, or the entry ``*`` if the list was "
 "empty"
@@ -525,90 +526,90 @@ msgstr ""
 "Ein Eintrag pro Schule in ``schools`` oder der Eintrag ``*``, wenn die Liste "
 "leer war"
 
-#: ../../configuration.rst:304
+#: ../../configuration.rst:305
 msgid "``asm/attributes/user/email/prepend_domain``"
 msgstr "``asm/attributes/user/email/prepend_domain``"
 
-#: ../../configuration.rst:305
+#: ../../configuration.rst:306
 msgid "``defaults.email_prepend_domain``"
 msgstr "``defaults.email_prepend_domain``"
 
-#: ../../configuration.rst:307
+#: ../../configuration.rst:308
 msgid "``asm/attributes/ROLE/anonymize``"
 msgstr "``asm/attributes/ROLE/anonymize``"
 
-#: ../../configuration.rst:308
+#: ../../configuration.rst:309
 msgid "``defaults.ROLE.anonymize``"
 msgstr "``defaults.ROLE.anonymize``"
 
-#: ../../configuration.rst:310
+#: ../../configuration.rst:311
 msgid "``asm/attributes/ROLE/anonymize/ATTRIBUTE``"
 msgstr "``asm/attributes/ROLE/anonymize/ATTRIBUTE``"
 
-#: ../../configuration.rst:311
+#: ../../configuration.rst:312
 msgid "``defaults.ROLE.anonymize_values.ATTRIBUTE``"
 msgstr "``defaults.ROLE.anonymize_values.ATTRIBUTE``"
 
-#: ../../configuration.rst:313
+#: ../../configuration.rst:314
 msgid "``asm/attributes/ROLE/person_id/mapping``"
 msgstr "``asm/attributes/ROLE/person_id/mapping``"
 
-#: ../../configuration.rst:314
+#: ../../configuration.rst:315
 msgid "``defaults.ROLE.person_id_attribute``, without the leading ``%``"
 msgstr "``defaults.ROLE.person_id_attribute``, ohne das führende ``%``"
 
-#: ../../configuration.rst:317
+#: ../../configuration.rst:318
 msgid "``asm/attributes/student/password_policy``"
 msgstr "``asm/attributes/student/password_policy``"
 
-#: ../../configuration.rst:318
+#: ../../configuration.rst:319
 msgid "``defaults.student.password_policy``, ``null`` for the former ``-``"
 msgstr "``defaults.student.password_policy``, ``null`` für das bisherige ``-``"
 
-#: ../../configuration.rst:321
+#: ../../configuration.rst:322
 msgid "``asm/attributes/student/grade_level``"
 msgstr "``asm/attributes/student/grade_level``"
 
-#: ../../configuration.rst:322
+#: ../../configuration.rst:323
 msgid "``defaults.student.grade_level_attribute``"
 msgstr "``defaults.student.grade_level_attribute``"
 
-#: ../../configuration.rst:324
+#: ../../configuration.rst:325
 msgid "``asm/attributes/course-name-pattern``"
 msgstr "``asm/attributes/course-name-pattern``"
 
-#: ../../configuration.rst:325
+#: ../../configuration.rst:326
 msgid "``defaults.course_name_pattern``"
 msgstr "``defaults.course_name_pattern``"
 
-#: ../../configuration.rst:327
+#: ../../configuration.rst:328
 msgid "``asm/attributes/classes/class_number_empty``"
 msgstr "``asm/attributes/classes/class_number_empty``"
 
-#: ../../configuration.rst:328
+#: ../../configuration.rst:329
 msgid "``defaults.class_number_empty``"
 msgstr "``defaults.class_number_empty``"
 
-#: ../../configuration.rst:330
+#: ../../configuration.rst:331
 msgid "``asm/ldap_filter/students``, ``asm/ldap_filter/staff``"
 msgstr "``asm/ldap_filter/students``, ``asm/ldap_filter/staff``"
 
-#: ../../configuration.rst:331
+#: ../../configuration.rst:332
 msgid "``defaults.student.ldap_filter``, ``defaults.staff.ldap_filter``"
 msgstr "``defaults.student.ldap_filter``, ``defaults.staff.ldap_filter``"
 
-#: ../../configuration.rst:333
+#: ../../configuration.rst:334
 msgid "``asm/ldap_filter/students/SCHOOL``, ``asm/ldap_filter/staff/SCHOOL``"
 msgstr "``asm/ldap_filter/students/SCHOOL``, ``asm/ldap_filter/staff/SCHOOL``"
 
-#: ../../configuration.rst:335
+#: ../../configuration.rst:336
 msgid ""
 "``schools.SCHOOL.student.ldap_filter``, "
 "``schools.SCHOOL.staff.ldap_filter``"
 msgstr ""
 "``schools.SCHOOL.student.ldap_filter``, ``schools.SCHOOL.staff.ldap_filter``"
 
-#: ../../configuration.rst:338
+#: ../../configuration.rst:339
 msgid ""
 "Replace ``ROLE`` with ``staff`` or ``student``, ``ATTRIBUTE`` with an "
 "attribute from :ref:`configuration-anonymization`, and ``SCHOOL`` with "
@@ -618,7 +619,7 @@ msgstr ""
 "ein Attribut aus :ref:`configuration-anonymization` und ``SCHOOL`` durch das "
 "Schulkürzel."
 
-#: ../../configuration.rst:342
+#: ../../configuration.rst:343
 msgid ""
 "The update drops an LDAP filter for a school that wasn't on the former "
 "school list, because the connector didn't synchronize that school."
@@ -627,7 +628,7 @@ msgstr ""
 "bisherigen Schulliste stand, weil der Connector diese Schule nicht "
 "synchronisiert hat."
 
-#: ../../configuration.rst:346
+#: ../../configuration.rst:347
 msgid ""
 "Without ``asm/username``, the update has no account to assign schools to. "
 "It keeps ``asm/school_whitelist`` and the "
@@ -641,7 +642,7 @@ msgstr ""
 "und gibt für jede einen Hinweis aus. Übertragen Sie ihre Werte in die "
 "Einstellungsdatei, wenn Sie das Konto anlegen."
 
-#: ../../configuration.rst:354
+#: ../../configuration.rst:355
 msgid ""
 "If :file:`/etc/asm-connections.json` already exists, the update leaves it"
 " and the UCR variables unchanged."
@@ -649,11 +650,11 @@ msgstr ""
 "Wenn :file:`/etc/asm-connections.json` bereits existiert, lässt das Update "
 "die Datei und die UCR-Variablen unverändert."
 
-#: ../../configuration.rst:360
+#: ../../configuration.rst:361
 msgid "App settings"
 msgstr "App-Einstellungen"
 
-#: ../../configuration.rst:362
+#: ../../configuration.rst:363
 msgid ""
 "To open the app settings, select the app in the App Center and click "
 ":guilabel:`App settings`. The app settings apply to every account alike."
@@ -662,38 +663,39 @@ msgstr ""
 "klicken Sie auf :guilabel:`App-Einstellungen`. Die App-Einstellungen gelten "
 "für alle Konten gleichermaßen."
 
-#: ../../configuration.rst:366
+#: ../../configuration.rst:367
 msgid "App settings of the Apple School Manager Connector"
 msgstr "App-Einstellungen des Apple School Manager Connector"
 
-#: ../../configuration.rst:370
+#: ../../configuration.rst:371
 msgid "Setting"
 msgstr "Einstellung"
 
-#: ../../configuration.rst:374
+#: ../../configuration.rst:375
 msgid "``asm/sync_daily``"
 msgstr "``asm/sync_daily``"
 
-#: ../../configuration.rst:375 ../../configuration.rst:385
-#: ../../configuration.rst:389
+#: ../../configuration.rst:376 ../../configuration.rst:386
+#: ../../configuration.rst:390
 msgid "``False``"
 msgstr "``False``"
 
-#: ../../configuration.rst:376
+#: ../../configuration.rst:377
 msgid "Run the synchronization once a day. See :ref:`configuration-schedule`."
 msgstr ""
 "Führt die Synchronisation einmal am Tag aus. Siehe "
 ":ref:`configuration-schedule`."
 
-#: ../../configuration.rst:379
+#: ../../configuration.rst:380
 msgid "``asm/sync_daily/hour``"
 msgstr "``asm/sync_daily/hour``"
 
-#: ../../configuration.rst:380 ../../configuration.rst:394
+#: ../../configuration.rst:381 ../../configuration.rst:395
+#: ../../configuration.rst:400
 msgid "Unset"
 msgstr "Nicht gesetzt"
 
-#: ../../configuration.rst:381
+#: ../../configuration.rst:382
 msgid ""
 "The hour of the day at which the daily synchronization runs. Valid values"
 " are ``0`` to ``23``."
@@ -701,21 +703,21 @@ msgstr ""
 "Die Stunde des Tages, zu der die tägliche Synchronisation läuft. Gültige "
 "Werte sind ``0`` bis ``23``."
 
-#: ../../configuration.rst:384
+#: ../../configuration.rst:385
 msgid "``asm/run_on_appsetting_save``"
 msgstr "``asm/run_on_appsetting_save``"
 
-#: ../../configuration.rst:386
+#: ../../configuration.rst:387
 msgid "Run the synchronization immediately after you save the app settings."
 msgstr ""
 "Führt die Synchronisation sofort aus, nachdem Sie die App-Einstellungen "
 "gespeichert haben."
 
-#: ../../configuration.rst:388
+#: ../../configuration.rst:389
 msgid "``asm/store_zip``"
 msgstr "``asm/store_zip``"
 
-#: ../../configuration.rst:390
+#: ../../configuration.rst:391
 msgid ""
 "Keep the uploaded ZIP archive in :file:`/var/lib/asm/` instead of "
 "deleting it after the upload."
@@ -723,21 +725,35 @@ msgstr ""
 "Behält das hochgeladene ZIP-Archiv in :file:`/var/lib/asm/`, statt es "
 "nach dem Upload zu löschen."
 
-#: ../../configuration.rst:393
+#: ../../configuration.rst:394
 msgid "``asm/last_upload``"
 msgstr "``asm/last_upload``"
 
-#: ../../configuration.rst:395
-msgid "Read-only status field. Shows when the connector last uploaded an archive."
+#: ../../configuration.rst:396
+msgid ""
+"Read-only status field. Shows when the connector last uploaded an archive "
+"to any account."
 msgstr ""
 "Schreibgeschütztes Statusfeld. Zeigt an, wann der Connector zuletzt ein "
-"Archiv hochgeladen hat."
+"Archiv in eines der Konten hochgeladen hat."
+
+#: ../../configuration.rst:399
+msgid "``asm/last_upload/ACCOUNT``"
+msgstr "``asm/last_upload/ACCOUNT``"
 
 #: ../../configuration.rst:401
+msgid ""
+"Shows when the connector last uploaded an archive to the account "
+"``ACCOUNT``. Not part of the app settings."
+msgstr ""
+"Zeigt an, wann der Connector zuletzt ein Archiv in das Konto ``ACCOUNT`` "
+"hochgeladen hat. Nicht Teil der App-Einstellungen."
+
+#: ../../configuration.rst:407
 msgid "Schedule the synchronization"
 msgstr "Synchronisation zeitlich planen"
 
-#: ../../configuration.rst:403
+#: ../../configuration.rst:409
 msgid ""
 "The connector doesn't run on its own. Either you run it manually, as "
 "described in :ref:`synchronization-run`, or you let a cron job run it "
@@ -747,27 +763,27 @@ msgstr ""
 "wie in :ref:`synchronization-run` beschrieben, oder Sie lassen ihn von "
 "einem Cron-Job einmal am Tag ausführen."
 
-#: ../../configuration.rst:408
+#: ../../configuration.rst:414
 msgid "To enable the daily run:"
 msgstr "Um die tägliche Ausführung zu aktivieren:"
 
-#: ../../configuration.rst:410
+#: ../../configuration.rst:416
 msgid "Open the app settings."
 msgstr "Öffnen Sie die App-Einstellungen."
 
-#: ../../configuration.rst:412
+#: ../../configuration.rst:418
 msgid "Select :guilabel:`asm/sync_daily`."
 msgstr "Wählen Sie :guilabel:`asm/sync_daily` aus."
 
-#: ../../configuration.rst:414
+#: ../../configuration.rst:420
 msgid "Select the hour in :guilabel:`asm/sync_daily/hour`."
 msgstr "Wählen Sie die Stunde in :guilabel:`asm/sync_daily/hour` aus."
 
-#: ../../configuration.rst:416
+#: ../../configuration.rst:422
 msgid "Click :guilabel:`Apply changes`."
 msgstr "Klicken Sie auf :guilabel:`Änderungen anwenden`."
 
-#: ../../configuration.rst:418
+#: ../../configuration.rst:424
 msgid ""
 "The connector writes the cron job to :file:`/etc/cron.d/asm-upload`. The "
 "job runs at minute 0 of the selected hour. If you enable the daily run "
@@ -780,11 +796,11 @@ msgstr ""
 "eines Jobs einen Kommentar in die Cron-Datei, und es findet keine "
 "Synchronisation statt."
 
-#: ../../configuration.rst:427
+#: ../../configuration.rst:433
 msgid "Settings in detail"
 msgstr "Einstellungen im Detail"
 
-#: ../../configuration.rst:429
+#: ../../configuration.rst:435
 #, python-brace-format
 msgid ""
 "The following sections describe the optional keys of the settings file. "
@@ -796,11 +812,11 @@ msgstr ""
 "gehören in ein Objekt dieses Namens, wie in ``\"student\": {\"anonymize\": "
 "false}``."
 
-#: ../../configuration.rst:437
+#: ../../configuration.rst:443
 msgid "Email addresses"
 msgstr "E-Mail-Adressen"
 
-#: ../../configuration.rst:439
+#: ../../configuration.rst:445
 msgid ""
 "Apple School Manager uses the email address of a user as the Apple "
 "Account. The connector exports the primary email address of each user in "
@@ -813,7 +829,7 @@ msgstr ""
 "ohne E-Mail-Adresse exportiert, und Apple School Manager kann für sie "
 "keinen Apple Account anlegen."
 
-#: ../../configuration.rst:444
+#: ../../configuration.rst:450
 msgid ""
 "The connector checks whether the second-level domain of the email address"
 " resolves in the :term:`DNS`. If it doesn't, the connector writes a "
@@ -823,7 +839,7 @@ msgstr ""
 ":term:`DNS` auflösbar ist. Ist sie es nicht, schreibt der Connector eine "
 "Warnung in die Logdatei und exportiert die Adresse unverändert."
 
-#: ../../configuration.rst:450
+#: ../../configuration.rst:456
 msgid ""
 "Per account. Inserts the value as a subdomain in front of the domain of "
 "every email address. With the value ``apple``, the connector exports the "
@@ -834,11 +850,11 @@ msgstr ""
 "ein. Mit dem Wert ``apple`` exportiert der Connector die Adresse "
 "``jane@example.com`` als ``jane@apple.example.com``. Voreinstellung: leer."
 
-#: ../../configuration.rst:460
+#: ../../configuration.rst:466
 msgid "Anonymization"
 msgstr "Anonymisierung"
 
-#: ../../configuration.rst:462
+#: ../../configuration.rst:468
 msgid ""
 "If you don't want to transfer the names and email addresses of your "
 "users, you can anonymize them. Anonymization replaces the values of the "
@@ -850,7 +866,7 @@ msgstr ""
 "Werte der Attribute ``first_name``, ``middle_name``, ``last_name``, "
 "``email_address`` und ``sis_username`` durch Werte, die Sie konfigurieren."
 
-#: ../../configuration.rst:470
+#: ../../configuration.rst:476
 msgid ""
 "An anonymized user has no email address, unless you configure a "
 "replacement value for it. Without an email address, Apple School Manager "
@@ -860,7 +876,7 @@ msgstr ""
 "konfigurieren dafür einen Ersatzwert. Ohne E-Mail-Adresse kann Apple "
 "School Manager für den Benutzer keinen Apple Account anlegen."
 
-#: ../../configuration.rst:475
+#: ../../configuration.rst:481
 msgid ""
 "Anonymization and the :ref:`identity-provider` setup exclude each other. "
 "If you use Keycloak as an identity provider for Apple School Manager, "
@@ -870,7 +886,7 @@ msgstr ""
 "schließen sich gegenseitig aus. Wenn Sie Keycloak als Identity Provider "
 "für Apple School Manager verwenden, deaktivieren Sie die Anonymisierung."
 
-#: ../../configuration.rst:480
+#: ../../configuration.rst:486
 msgid ""
 "Per account. Enables anonymization for students and teachers. Default: "
 "``true``."
@@ -878,7 +894,7 @@ msgstr ""
 "Pro Konto. Aktiviert die Anonymisierung für Schüler und Lehrer. "
 "Voreinstellung: ``true``."
 
-#: ../../configuration.rst:485
+#: ../../configuration.rst:491
 msgid ""
 "Per account. Replacement values for the anonymized attributes. A value "
 "that starts with ``%`` names an LDAP attribute, and the connector exports"
@@ -893,61 +909,61 @@ msgstr ""
 "Sie müssen nur die Attribute aufführen, deren Voreinstellung Sie ändern "
 "möchten."
 
-#: ../../configuration.rst:494
+#: ../../configuration.rst:500
 msgid "Replacement values for anonymized attributes"
 msgstr "Ersatzwerte für anonymisierte Attribute"
 
-#: ../../configuration.rst:498
+#: ../../configuration.rst:504
 msgid "Key in ``anonymize_values``"
 msgstr "Schlüssel in ``anonymize_values``"
 
-#: ../../configuration.rst:502
+#: ../../configuration.rst:508
 msgid "``first_name``"
 msgstr "``first_name``"
 
-#: ../../configuration.rst:503 ../../configuration.rst:519
+#: ../../configuration.rst:509 ../../configuration.rst:525
 #, python-format
 msgid "``%uid``"
 msgstr "``%uid``"
 
-#: ../../configuration.rst:504 ../../configuration.rst:512
+#: ../../configuration.rst:510 ../../configuration.rst:518
 msgid "Yes"
 msgstr "Ja"
 
-#: ../../configuration.rst:506
+#: ../../configuration.rst:512
 msgid "``middle_name``"
 msgstr "``middle_name``"
 
-#: ../../configuration.rst:508 ../../configuration.rst:516
-#: ../../configuration.rst:520
+#: ../../configuration.rst:514 ../../configuration.rst:522
+#: ../../configuration.rst:526
 msgid "No"
 msgstr "Nein"
 
-#: ../../configuration.rst:510
+#: ../../configuration.rst:516
 msgid "``last_name``"
 msgstr "``last_name``"
 
-#: ../../configuration.rst:511
+#: ../../configuration.rst:517
 msgid "``-``"
 msgstr "``-``"
 
-#: ../../configuration.rst:514
+#: ../../configuration.rst:520
 msgid "``email_address``"
 msgstr "``email_address``"
 
-#: ../../configuration.rst:518
+#: ../../configuration.rst:524
 msgid "``sis_username``"
 msgstr "``sis_username``"
 
-#: ../../configuration.rst:522
+#: ../../configuration.rst:528
 msgid "Anonymize students with a fixed last name"
 msgstr "Schüler mit einem festen Nachnamen anonymisieren"
 
-#: ../../configuration.rst:533
+#: ../../configuration.rst:539
 msgid "Identification of users"
 msgstr "Identifikation von Benutzern"
 
-#: ../../configuration.rst:535
+#: ../../configuration.rst:541
 msgid ""
 "Apple School Manager identifies a user by the ``person_id`` column. The "
 "connector fills it with an LDAP attribute of the user that doesn't change"
@@ -957,7 +973,7 @@ msgstr ""
 "``person_id``. Der Connector füllt sie mit einem LDAP-Attribut des "
 "Benutzers, das sich nicht ändert, wenn Sie den Benutzer umbenennen."
 
-#: ../../configuration.rst:540
+#: ../../configuration.rst:546
 msgid ""
 "Per account. LDAP attribute that identifies a student or a teacher. "
 "Default: ``entryUUID``."
@@ -965,7 +981,7 @@ msgstr ""
 "Pro Konto. LDAP-Attribut, das einen Schüler oder einen Lehrer identifiziert. "
 "Voreinstellung: ``entryUUID``."
 
-#: ../../configuration.rst:546
+#: ../../configuration.rst:552
 msgid ""
 "Don't change these keys on a running installation. Apple School Manager "
 "treats a user with a new ``person_id`` as a different user and loses the "
@@ -975,11 +991,11 @@ msgstr ""
 "School Manager behandelt einen Benutzer mit einer neuen ``person_id`` als "
 "anderen Benutzer und verliert die Zuordnung zum bestehenden Konto."
 
-#: ../../configuration.rst:554
+#: ../../configuration.rst:560
 msgid "Password policy for students"
 msgstr "Passwortrichtlinie für Schüler"
 
-#: ../../configuration.rst:556
+#: ../../configuration.rst:562
 msgid ""
 "Apple School Manager creates the password for a new student itself. The "
 "password policy determines how long that password is."
@@ -987,7 +1003,7 @@ msgstr ""
 "Apple School Manager erstellt das Passwort für einen neuen Schüler "
 "selbst. Die Passwortrichtlinie legt fest, wie lang dieses Passwort ist."
 
-#: ../../configuration.rst:560
+#: ../../configuration.rst:566
 msgid ""
 "Per account. Length of the password that Apple creates for a new student."
 " Valid values are ``4``, ``6``, ``8``, and ``null``. ``null`` means that "
@@ -998,15 +1014,15 @@ msgstr ""
 "Apple School Manager die Voreinstellung der Schule verwendet. "
 "Voreinstellung: ``4``."
 
-#: ../../configuration.rst:566
+#: ../../configuration.rst:572
 msgid "Apple School Manager doesn't support a password policy for teachers."
 msgstr "Apple School Manager unterstützt keine Passwortrichtlinie für Lehrer."
 
-#: ../../configuration.rst:571
+#: ../../configuration.rst:577
 msgid "Grade level of students"
 msgstr "Jahrgangsstufe von Schülern"
 
-#: ../../configuration.rst:574
+#: ../../configuration.rst:580
 msgid ""
 "Per account. LDAP attribute that holds the grade level of a student. The "
 "connector exports its value in the ``grade_level`` column. Default: "
@@ -1016,11 +1032,11 @@ msgstr ""
 "Connector exportiert seinen Wert in der Spalte ``grade_level``. "
 "Voreinstellung: ``null``, wodurch die Spalte leer bleibt."
 
-#: ../../configuration.rst:582
+#: ../../configuration.rst:588
 msgid "Names of courses and classes"
 msgstr "Namen von Kursen und Klassen"
 
-#: ../../configuration.rst:584
+#: ../../configuration.rst:590
 msgid ""
 "UCS\\@school prefixes the name of a school class with the school "
 "abbreviation, for example ``gym123-1a``. The connector derives the course"
@@ -1030,7 +1046,7 @@ msgstr ""
 "zum Beispiel ``gym123-1a``. Der Connector leitet den Kursnamen aus diesem "
 "Namen ab."
 
-#: ../../configuration.rst:589
+#: ../../configuration.rst:595
 #, python-brace-format
 msgid ""
 "Per school. Pattern for the course name. The connector replaces ``{ou}`` "
@@ -1041,7 +1057,7 @@ msgstr ""
 "das Schulkürzel und ``{name}`` durch den Klassennamen ohne Schulpräfix. "
 "Voreinstellung: ``{ou}-{name}``."
 
-#: ../../configuration.rst:596
+#: ../../configuration.rst:602
 msgid ""
 "Per school. Leaves the ``class_number`` column empty. Apple School "
 "Manager builds the name of a class from the course name and the class "
@@ -1053,11 +1069,11 @@ msgstr ""
 "würde eine gleichlautende Klassennummer den Kursnamen nur wiederholen. "
 "Voreinstellung: ``true``."
 
-#: ../../configuration.rst:606
+#: ../../configuration.rst:612
 msgid "Select users with an LDAP filter"
 msgstr "Benutzer mit einem LDAP-Filter auswählen"
 
-#: ../../configuration.rst:608
+#: ../../configuration.rst:614
 msgid ""
 "If the school list from :ref:`configuration-school-list` isn't fine-"
 "grained enough, you can select the users with an LDAP filter. The "
@@ -1067,7 +1083,7 @@ msgstr ""
 "ist, können Sie die Benutzer mit einem LDAP-Filter auswählen. Der "
 "Connector wendet den Filter zusätzlich zur Schulliste an."
 
-#: ../../configuration.rst:614
+#: ../../configuration.rst:620
 msgid ""
 "Per school. LDAP filter for the students or the teachers of the school. A"
 " filter in ``defaults`` applies to every school that doesn't set its own."
@@ -1077,12 +1093,12 @@ msgstr ""
 "Filter in ``defaults`` gilt für jede Schule, die keinen eigenen setzt. "
 "Voreinstellung: leer, wodurch jeder Benutzer ausgewählt wird."
 
-#: ../../configuration.rst:620
+#: ../../configuration.rst:626
 msgid "Synchronize only the students of ``gym123`` with a primary email address"
 msgstr ""
 "Nur die Schüler von ``gym123`` mit primärer E-Mail-Adresse synchronisieren"
 
-#: ../../configuration.rst:628
+#: ../../configuration.rst:634
 msgid ""
 "The connector combines the filter with its own selection of the students "
 "or teachers of the school, so the filter only needs to describe the "
@@ -1096,11 +1112,11 @@ msgstr ""
 "Filter auswählt, bevor Sie ihn setzen, kombinieren Sie ihn mit der Rolle "
 "der Benutzer und führen Sie ihn mit :command:`univention-ldapsearch` aus:"
 
-#: ../../configuration.rst:635
+#: ../../configuration.rst:641
 msgid "List the students of ``gym123`` who match the filter"
 msgstr "Die Schüler von ``gym123`` auflisten, auf die der Filter zutrifft"
 
-#: ../../configuration.rst:643
+#: ../../configuration.rst:649
 msgid ""
 "An invalid LDAP filter stops the upload to the account of that school. "
 "The connector uploads nothing to that account in that case, so its data "

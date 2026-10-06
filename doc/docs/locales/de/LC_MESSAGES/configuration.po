@@ -604,6 +604,20 @@ msgstr ""
 "bisherigen Schulliste stand, weil der Connector diese Schule nicht "
 "synchronisiert hat."
 
+#: ../../configuration.rst:340
+msgid ""
+"Without ``asm/username``, the update has no account to assign schools to. "
+"It keeps ``asm/school_whitelist`` and the "
+"``asm/ldap_filter/students/SCHOOL`` and ``asm/ldap_filter/staff/SCHOOL`` "
+"UCR variables and prints a note for each of them. Move their values to the "
+"settings file when you add the account."
+msgstr ""
+"Ohne ``asm/username`` hat das Update kein Konto, dem es Schulen zuordnen "
+"kann. Es behält ``asm/school_whitelist`` und die UCR-Variablen "
+"``asm/ldap_filter/students/SCHOOL`` und ``asm/ldap_filter/staff/SCHOOL`` "
+"und gibt für jede einen Hinweis aus. Übertragen Sie ihre Werte in die "
+"Einstellungsdatei, wenn Sie das Konto anlegen."
+
 #: ../../configuration.rst:334
 msgid ""
 "If :file:`/etc/asm-connections.json` already exists, the update leaves it"

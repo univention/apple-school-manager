@@ -440,14 +440,18 @@ def config_from_ucr(ucr: Mapping[str, str]) -> tuple[dict[str, Any], set[str]]:
     accounts: dict[str, Any] = {}
     schools: dict[str, Any] = {}
     username = take("asm/username")
-    whitelist = [school.strip() for school in (take("asm/school_whitelist") or "").split(",")]
     if username:
         accounts[MIGRATED_ACCOUNT_NAME] = {
             "username": username,
             "password_file": LEGACY_PASSWORD_FILE_PATH,
         }
+        whitelist = [school.strip() for school in (take("asm/school_whitelist") or "").split(",")]
         for school in [school for school in whitelist if school] or [OTHER_SCHOOLS]:
             schools[school] = {"account": MIGRATED_ACCOUNT_NAME}
+    elif ucr.get("asm/school_whitelist"):
+        print("Keeping asm/school_whitelist: asm/username is not set, so there is no account for it.")
+    else:
+        take("asm/school_whitelist")
 
     for key in sorted(ucr.keys()):
         for role, prefix in (
@@ -457,6 +461,9 @@ def config_from_ucr(ucr: Mapping[str, str]) -> tuple[dict[str, Any], set[str]]:
             if not key.startswith(prefix):
                 continue
             school = key.removeprefix(prefix)
+            if not username:
+                print(f"Keeping {key}: asm/username is not set, so there is no account for it.")
+                continue
             if school not in schools and OTHER_SCHOOLS not in schools:
                 print(f"Dropping {key}: school {school!r} is not synchronized.")
                 migrated.add(key)

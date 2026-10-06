@@ -1,4 +1,4 @@
-#!/usr/share/ucs-test/runner python3
+#!/usr/share/ucs-test/runner pytest-3 -s -l -v
 ## desc: test migrating the former app settings and UCR variables to the settings file
 ## tags: [apptest]  # noqa: ERA001
 ## exposure: dangerous  # noqa: ERA001
@@ -10,21 +10,19 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 
 import json
-import os
 import stat
-import tempfile
 from pathlib import Path
+from typing import Any
 
+import pytest
 import univention.testing.strings as uts
-import univention.testing.ucr as ucr_test
 from univention.asm import config
-from univention.config_registry import ConfigRegistry, handler_set
-from univention.testing import utils
+from univention.config_registry import ConfigRegistry
+from univention.testing.ucr import UCSTestConfigRegistry
 
 
-def main() -> None:
-    username = uts.random_username()
-    ucr_values = {
+def legacy_ucr_values(username: str) -> dict[str, str]:
+    return {
         "asm/username": username,
         "asm/school_whitelist": "gym123, ,gs456",
         "asm/attributes/user/email/prepend_domain": "apple",
@@ -39,7 +37,10 @@ def main() -> None:
         "asm/ldap_filter/students/gym123": "(uid=a*)",
         "asm/ldap_filter/staff/rs789": "(uid=b*)",
     }
-    expected = {
+
+
+def expected_settings(username: str) -> dict[str, Any]:
+    return {
         "accounts": {
             "default": {"username": username, "password_file": "/etc/asm.secret"},
         },
@@ -59,53 +60,63 @@ def main() -> None:
             "gs456": {"account": "default"},
         },
     }
-    with ucr_test.UCSTestConfigRegistry(), tempfile.TemporaryDirectory() as tmp_dir:
-        config.CONFIG_FILE_PATH = os.path.join(tmp_dir, "asm-connections.json")
-        handler_set([f"{key}={value}" for key, value in ucr_values.items()] + ["asm/store_zip=yes"])
-
-        if not config.write_initial_config():
-            utils.fail("write_initial_config() did not create the file.")
-        with open(config.CONFIG_FILE_PATH) as fp:
-            migrated = json.load(fp)
-        if migrated != expected:
-            utils.fail(f"Migrated\n{migrated!r}\nexpected\n{expected!r}.")
-        mode = stat.S_IMODE(Path(config.CONFIG_FILE_PATH).stat().st_mode)
-        if mode != 0o600:
-            utils.fail(f"{config.CONFIG_FILE_PATH} has mode {mode:o}, expected 600.")
-
-        ucr = ConfigRegistry()
-        ucr.load()
-        for key in ucr_values:
-            if ucr.get(key) is not None:
-                utils.fail(f"{key} is still set to {ucr.get(key)!r}.")
-        if not ucr.is_true("asm/store_zip"):
-            utils.fail("asm/store_zip is an app setting and must not be migrated.")
-
-        password_file = os.path.join(tmp_dir, "asm.secret")
-        with open(password_file, "w") as fp:
-            fp.write("secret")
-        migrated["accounts"]["default"]["password_file"] = password_file
-        [connection] = config.parse_config(migrated)
-        if connection.settings.school("gym123").student_ldap_filter != "(uid=a*)":
-            utils.fail(f"Wrong settings for gym123: {connection.settings.school('gym123')!r}.")
-        if connection.settings.school("gs456").student_ldap_filter != "(objectClass=*)":
-            utils.fail(f"Wrong settings for gs456: {connection.settings.school('gs456')!r}.")
-        if connection.settings.includes("rs789"):
-            utils.fail("rs789 was not on the school list and must not be synchronized.")
-
-        handler_set([f"asm/username={uts.random_username()}"])
-        if config.write_initial_config():
-            utils.fail("write_initial_config() overwrote an existing file.")
-        with open(config.CONFIG_FILE_PATH) as fp:
-            if json.load(fp) != expected:
-                utils.fail("An existing file was modified.")
-
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        config.CONFIG_FILE_PATH = os.path.join(tmp_dir, "asm-connections.json")
-        data, migrated_keys = config.config_from_ucr({})
-        if data != {"accounts": {}, "defaults": {}, "schools": {}} or migrated_keys:
-            utils.fail(f"Fresh installation got {data!r}, {migrated_keys!r}.")
 
 
-if __name__ == "__main__":
-    main()
+@pytest.fixture
+def config_file(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    path = tmp_path / "asm-connections.json"
+    monkeypatch.setattr(config, "CONFIG_FILE_PATH", str(path))
+    return path
+
+
+@pytest.fixture
+def username(ucr: UCSTestConfigRegistry) -> str:
+    username: str = uts.random_username()
+    ucr.handler_set(
+        [f"{key}={value}" for key, value in legacy_ucr_values(username).items()] + ["asm/store_zip=yes"]
+    )
+    return username
+
+
+@pytest.fixture
+def migrated(config_file: Path, username: str) -> dict[str, Any]:  # noqa: ARG001
+    assert config.write_initial_config()
+    data: dict[str, Any] = json.loads(config_file.read_text())
+    return data
+
+
+def test_migration_writes_settings_file(migrated: dict[str, Any], username: str) -> None:
+    assert migrated == expected_settings(username)
+
+
+def test_settings_file_is_only_readable_by_root(migrated: dict[str, Any], config_file: Path) -> None:  # noqa: ARG001
+    assert stat.S_IMODE(config_file.stat().st_mode) == 0o600
+
+
+def test_migration_unsets_ucr_variables(migrated: dict[str, Any], username: str) -> None:  # noqa: ARG001
+    ucr = ConfigRegistry()
+    ucr.load()
+    assert {key: ucr[key] for key in legacy_ucr_values(username) if ucr.get(key) is not None} == {}
+    assert ucr.is_true("asm/store_zip"), "asm/store_zip is an app setting and must not be migrated."
+
+
+def test_migrated_settings_apply_per_school(migrated: dict[str, Any], tmp_path: Path) -> None:
+    password_file = tmp_path / "asm.secret"
+    password_file.write_text("secret")
+    migrated["accounts"]["default"]["password_file"] = str(password_file)
+    [connection] = config.parse_config(migrated)
+    assert connection.settings.school("gym123").student_ldap_filter == "(uid=a*)"
+    assert connection.settings.school("gs456").student_ldap_filter == "(objectClass=*)"
+    assert not connection.settings.includes("rs789")
+
+
+def test_existing_file_is_not_overwritten(
+    migrated: dict[str, Any], config_file: Path, username: str, ucr: UCSTestConfigRegistry
+) -> None:
+    ucr.handler_set([f"asm/username={uts.random_username()}"])
+    assert not config.write_initial_config()
+    assert json.loads(config_file.read_text()) == migrated == expected_settings(username)
+
+
+def test_fresh_installation_migrates_nothing() -> None:
+    assert config.config_from_ucr({}) == ({"accounts": {}, "defaults": {}, "schools": {}}, set())

@@ -47,7 +47,8 @@ What happens during a run
 
 #. The connector reads the settings file :file:`/etc/asm-connections.json`,
    as described in :ref:`configuration-file`.
-   A missing or invalid entry stops the run.
+   A missing or invalid entry stops the run,
+   and so does a school that doesn't exist in the LDAP directory.
 
 #. The connector collects the schools, classes, work groups, teachers, and
    students from the LDAP directory,

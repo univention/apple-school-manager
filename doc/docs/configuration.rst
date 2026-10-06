@@ -195,6 +195,11 @@ The entry ``*`` stands for every school that the section doesn't list by name.
 With a single account,
 it synchronizes all schools to that account.
 
+If the section lists a school that doesn't exist,
+the connector stops before it uploads anything.
+Otherwise a misspelled school would go to the account of the entry ``*``
+instead of the account you meant.
+
 .. code-block:: json
    :caption: Every school to one account, one school with its own LDAP filter
 

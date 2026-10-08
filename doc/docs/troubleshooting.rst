@@ -36,13 +36,18 @@ Get better error messages from Apple School Manager
 ===================================================
 
 Apple School Manager reports errors in the uploaded data sparsely.
-The wizard that imports a CSV file interactively is more explicit about what it
-rejects.
+The page that shows the SFTP credentials gives more details
+about the data that Apple School Manager rejects.
+You can keep the SFTP upload connected.
 
-To use it, disconnect the SFTP upload in Apple School Manager
-and run through the :guilabel:`Apple formatted CSV` wizard again
-with the archive from :ref:`synchronization-inspect`.
-The wizard names the file, the row, and the column that it objects to.
+#. Open the page with the SFTP credentials,
+   as described in :ref:`installation-credentials`.
+
+#. Keep the page open
+   and start a synchronization run,
+   as described in :ref:`synchronization-run`.
+
+The page shows the errors of each upload while the upload runs.
 
 .. _troubleshooting-users-missing:
 

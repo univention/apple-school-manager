@@ -20,10 +20,6 @@ Glossary
       The Univention App Center,
       the component of :term:`UCS` with which you install and configure apps.
 
-   DNS
-      Domain Name System,
-      the service that resolves host names to IP addresses.
-
    Keycloak
       The identity and access management software that UCS ships as an app.
       It provides the single sign-on of the domain.

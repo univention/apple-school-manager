@@ -9,7 +9,6 @@ Class to represent an ASM student.
 See https://support.apple.com/en-us/HT207029
 """
 
-import logging
 from collections.abc import Collection
 from typing import Any, Self
 
@@ -18,7 +17,6 @@ from ucsschool.lib.models.user import Student
 import univention.asm.api_constraints as asm_api_constraints
 from univention.asm.config import Settings, StudentSettings
 from univention.asm.utils import (
-    check_domain,
     get_ldap_connection,
     get_person_id,
     prepend_to_mail_domain,
@@ -146,9 +144,6 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
         settings = settings or Settings()
         lo, _po = get_ldap_connection()
         student = Student.from_dn(dn, None, lo)
-        if student.email and not check_domain(student.email):
-            logger = logging.getLogger(__name__)
-            logger.warning("Invalid email domain in %r for DN %r.", student.email, dn)
         email = (
             prepend_to_mail_domain(student.email, settings.email_prepend_domain)
             if student.email

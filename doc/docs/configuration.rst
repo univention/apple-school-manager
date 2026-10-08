@@ -453,11 +453,6 @@ The connector exports the primary email address of each user in UCS\@school.
 Users without one are exported without an email address,
 and Apple School Manager can't create an Apple Account for them.
 
-The connector checks whether the second-level domain of the email address
-resolves in the :term:`DNS`.
-If it doesn't, the connector writes a warning to the log file
-and exports the address unchanged.
-
 ``email_prepend_domain``
    Per account.
    Inserts the value as a subdomain in front of the domain of every email

@@ -7,11 +7,8 @@ Univention Apple School Manager Connector.
 Utility functions.
 """
 
-# don't import __future__.unicode_literals here, DNS lib cannot handle it!
-
 from functools import cache
 
-import DNS
 from ucsschool.importer.utils.ldap_connection import get_machine_connection, get_readonly_connection
 from ucsschool.lib.roles import context_type_school, create_ucsschool_role_string, role_dc_slave
 
@@ -19,8 +16,6 @@ from univention.admin.uldap import access as LoType  # noqa: N812
 from univention.admin.uldap import position as PoType  # noqa: N812
 from univention.config_registry import ConfigRegistry
 
-_external_dns_resolvers: list[str] = []
-_known_domains: dict[str, bool] = {}
 _ucr: ConfigRegistry = None
 
 
@@ -33,48 +28,6 @@ def get_ldap_connection() -> tuple[LoType, PoType]:
     else:
         lo, po = get_machine_connection()
     return lo, po
-
-
-def check_domain(email: str) -> bool:
-    """
-    Verify that the second level domain in ``email`` exists.
-
-    :param str email: an email address
-    :return: whether the second level domain in the email addresses domain exists
-    :rtype: bool
-    :raises ValueError: if the email address has an invalid format
-    """
-    _local_part, domain = split_email(email)
-    domain_to_check = ".".join(domain.split(".")[-2:])
-    if domain_to_check not in _known_domains:
-        dns_servers = get_static_dns_resolvers()
-        requester = DNS.DnsRequest(server=dns_servers, timeout=5)
-        dns_result: DNS.Lib.DnsResult = requester.req(name=str(domain_to_check), qtype="A")
-        _known_domains[domain_to_check] = bool(dns_result.answers)
-    return _known_domains[domain_to_check]
-
-
-def get_static_dns_resolvers() -> list[str]:
-    """
-    Get external DNS resolvers from UCR.
-
-    :return: list of IP addresses
-    :rtype: list(str)
-    """
-    if not _external_dns_resolvers:
-        ucr = get_ucr()
-        _external_dns_resolvers.extend(
-            [
-                ns
-                for ns in (
-                    ucr.get("dns/forwarder1", ""),
-                    ucr.get("dns/forwarder2", ""),
-                    ucr.get("dns/forwarder3", ""),
-                )
-                if ns.strip()
-            ],
-        )
-    return _external_dns_resolvers
 
 
 def get_ucr() -> ConfigRegistry:

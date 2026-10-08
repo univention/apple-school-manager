@@ -18,8 +18,7 @@ Log file
 
 The connector writes to :file:`/var/log/univention/asm.log`.
 The file holds the debug-level log of every run,
-including the email domains that don't resolve
-and the teachers whom an LDAP filter excluded from a class.
+including the teachers whom an LDAP filter excluded from a class.
 The app settings show the time of the last upload in ``asm/last_upload``.
 ``asm/last_upload/ACCOUNT`` holds the time of the last upload to each account.
 
@@ -60,11 +59,6 @@ Check the following, in this order:
 #. **The user has no primary email address.**
    The connector exports the user without an email address,
    and Apple School Manager can't create an Apple Account for the user.
-
-#. **The domain of the email address doesn't resolve.**
-   The connector checks the second-level domain of every address in the
-   :term:`DNS` and writes a warning to the log file if it can't resolve it.
-   Search the log file for ``Invalid email domain``.
 
 #. **Anonymization removed the email address.**
    Anonymization is enabled by default.

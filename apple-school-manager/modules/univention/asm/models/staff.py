@@ -22,7 +22,6 @@ from univention.admin import uexceptions
 from univention.admin.uldap import access as LoType  # noqa: N812
 from univention.asm.config import Settings
 from univention.asm.utils import (
-    check_domain,
     get_ldap_connection,
     get_person_id,
     prepend_to_mail_domain,
@@ -137,9 +136,6 @@ class AsmStaff(AsmModel, AnonymizeMixIn):
             teacher = Teacher.from_dn(dn, None, lo)
         except WrongModel:
             teacher = TeachersAndStaff.from_dn(dn, None, lo)
-        if teacher.email and not check_domain(teacher.email):
-            logger = logging.getLogger(__name__)
-            logger.warning("Invalid email domain in %r for DN %r.", teacher.email, dn)
         email = (
             prepend_to_mail_domain(teacher.email, settings.email_prepend_domain)
             if teacher.email

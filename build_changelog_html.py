@@ -22,16 +22,45 @@ REPO_ROOT = Path(__file__).resolve().parent
 CHANGELOG_RST = REPO_ROOT / "doc" / "docs" / "changelog.rst"
 CHANGELOG_HTML = REPO_ROOT / "changelog.html"
 
+MANUAL_URL = "https://docs.software-univention.de/apple-school-manager-connector/en/"
+
 # A throwaway Sphinx project with none of the manual's theme, intersphinx or
 # bibtex configuration. It is fast, needs no network, and therefore runs
-# unchanged in CI. The changelog carries no cross-reference into the rest of
-# the manual, so it builds on its own.
-CONF_PY = """\
+# unchanged in CI. A :ref: with an explicit title into the rest of the manual
+# resolves to the published page, so the App Center text keeps the link.
+CONF_PY = f"""\
+from pathlib import Path
+
+from docutils import nodes
+
 project = "Apple School Manager Connector"
 extensions = []
 html_theme = "basic"
 html_permalinks = False
 exclude_patterns = ["_build"]
+
+
+def _page_of(label):
+    for rst in Path({str(CHANGELOG_RST.parent)!r}).glob("*.rst"):
+        if f".. _{{label}}:" in rst.read_text().splitlines():
+            return rst.stem
+    return None
+
+
+def _resolve_in_manual(app, env, node, contnode):
+    if node.get("refdomain") != "std" or node.get("reftype") != "ref" or not node.get("refexplicit"):
+        return None
+    label = node["reftarget"]
+    page = _page_of(label)
+    if page is None:
+        return None
+    reference = nodes.reference("", "", internal=False, refuri=f"{MANUAL_URL}{{page}}.html#{{label}}")
+    reference += contnode
+    return reference
+
+
+def setup(app):
+    app.connect("missing-reference", _resolve_in_manual)
 """
 
 INDEX_RST = """\

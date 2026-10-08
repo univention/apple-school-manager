@@ -21,9 +21,11 @@ v5.2.0
 * The settings file :file:`/etc/asm-connections.json` replaces the app
   settings ``asm/username``, ``asm/password``, and ``asm/school_whitelist``
   and all ``asm/attributes/*`` and ``asm/ldap_filter/*`` UCR variables.
-  The settings for users apply per account,
+  The settings for students and teachers apply per account,
   the settings for classes and the LDAP filters per school.
-  The update moves the former values to the new file.
+  The update moves the former values to the new file,
+  as described in
+  :ref:`Update from an earlier version <configuration-accounts-migration>`.
 
 * An error during the upload to one account,
   for example an invalid LDAP filter,

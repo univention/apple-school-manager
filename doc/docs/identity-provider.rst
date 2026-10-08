@@ -299,7 +299,7 @@ so that user must exist before you connect the two systems.
    set a strong password.
    Two-factor authentication is optional but recommended.
 
-#. Assign the client role ``apple-asm`` / ``ssf-admin``.
+#. Assign the client role ``ssf-admin`` of the client ``apple-asm``.
 
 .. _identity-provider-asm:
 

@@ -564,8 +564,9 @@ msgstr ""
 "Zwei-Faktor-Authentifizierung ist optional, aber empfohlen."
 
 #: ../../identity-provider.rst:302
-msgid "Assign the client role ``apple-asm`` / ``ssf-admin``."
-msgstr "Weisen Sie die Client-Rolle ``apple-asm`` / ``ssf-admin`` zu."
+msgid "Assign the client role ``ssf-admin`` of the client ``apple-asm``."
+msgstr ""
+"Weisen Sie die Client-Rolle ``ssf-admin`` des Clients ``apple-asm`` zu."
 
 #: ../../identity-provider.rst:307
 msgid "Configure Apple School Manager"

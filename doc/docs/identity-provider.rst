@@ -131,7 +131,8 @@ Turn the realm into an SSF transmitter
 #. On the :guilabel:`Realm settings` page,
    set :guilabel:`SSF Transmitter` to :guilabel:`On`.
 
-The realm now offers an SSF configuration metadata endpoint next to the OpenID
+With the transmitter on,
+the realm offers an SSF configuration metadata endpoint next to the OpenID
 endpoint configuration.
 You need the URLs of both endpoints in :ref:`identity-provider-asm-idp`:
 
@@ -365,7 +366,7 @@ Connect the identity provider
 
 Apple School Manager shows :guilabel:`Authorizing Account`
 and then confirms the connection.
-Apple has now created an SSF stream for the client,
+During the connection, Apple creates an SSF stream for the client,
 which you can see on the client's :guilabel:`SSF Streams` tab in Keycloak.
 
 .. _identity-provider-asm-domain:
@@ -404,8 +405,8 @@ regardless of the domain that you chose for the SFTP upload.
 Sign in on a device
 ===================
 
-Your users can now sign in to an Apple device with their UCS\@school
-credentials.
+After you enable federation for the domain,
+your users sign in to an Apple device with their UCS\@school credentials.
 The following steps describe an unpaired device.
 See :cite:t:`apple-sign-in` for the general procedure.
 
@@ -424,5 +425,6 @@ See :cite:t:`apple-sign-in` for the general procedure.
 
 #. Enter the device PIN when the device asks for it.
 
-:menuselection:`Settings --> Apple Account` now shows the user with the email
+After the sign-in,
+:menuselection:`Settings --> Apple Account` shows the user with the email
 address from UCS\@school.

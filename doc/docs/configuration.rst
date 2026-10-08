@@ -122,6 +122,12 @@ To add an account:
 #. Store the SFTP password of the account in a file of its own
    that only ``root`` can read.
    :ref:`installation-credentials` describes where to find the password.
+   Every account has its own SFTP credentials,
+   so every account needs its own password file.
+   The examples name the file after the account,
+   such as :file:`/etc/asm-north.secret`.
+   The account from :ref:`installation-configure-credentials`
+   can keep :file:`/etc/asm.secret`.
 
    .. code-block:: console
       :caption: Store the password of an account

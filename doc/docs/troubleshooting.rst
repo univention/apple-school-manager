@@ -87,6 +87,25 @@ Check the following, in this order:
    to check which users it selects.
    See :ref:`configuration-ldap-filter`.
 
+.. _troubleshooting-no-students:
+
+Apple School Manager rejects an upload without students
+=======================================================
+
+Apple School Manager rejects an upload that contains no student
+and shows an error.
+Every account needs at least one student in its upload.
+
+An upload contains no students in the following cases:
+
+* None of the schools that the account receives has a student.
+
+* The LDAP filter for students excludes every student of those schools.
+  See :ref:`configuration-ldap-filter`.
+
+To see the error,
+follow :ref:`troubleshooting-apple-messages`.
+
 .. _troubleshooting-credentials:
 
 The run stops with a credential error

@@ -103,6 +103,15 @@ The App Center then recreates the Keycloak container,
 which starts Keycloak with the SSF feature.
 Keycloak is unavailable for a short time while that happens.
 
+.. note::
+
+   If you set the variable with :command:`ucr set` instead,
+   apply it with :command:`univention-app configure keycloak`.
+   Restarting the app with :command:`univention-app restart keycloak`
+   isn't enough,
+   and the :guilabel:`Realm settings` page doesn't offer
+   :guilabel:`SSF Transmitter`.
+
 .. _identity-provider-keycloak-realm:
 
 Turn the realm into an SSF transmitter
@@ -144,35 +153,57 @@ each with :guilabel:`Include in token scope` enabled.
 Create the OIDC client
 ----------------------
 
-Create a client with the following settings.
+#. On the realm's :guilabel:`Clients` page,
+   click :guilabel:`Create client`.
 
-.. list-table:: Settings of the OIDC client for Apple School Manager
-   :header-rows: 1
-   :widths: 40 60
+#. On the :guilabel:`General settings` page,
+   enter ``apple-asm`` as :guilabel:`Client ID`.
 
-   * - Setting
-     - Value
+#. On the :guilabel:`Capability config` page,
+   enter the settings from the following table.
 
-   * - :guilabel:`Client ID`
-     - ``apple-asm``
+   .. list-table:: Capabilities of the OIDC client for Apple School Manager
+      :header-rows: 1
+      :widths: 40 60
 
-   * - :guilabel:`Client authentication`
-     - :guilabel:`On`
+      * - Setting
+        - Value
 
-   * - :guilabel:`Authentication flow`
-     - :guilabel:`Standard flow`
+      * - :guilabel:`Client authentication`
+        - :guilabel:`On`
 
-   * - :guilabel:`Valid redirect URIs`
-     - ``https://gsa-ws.apple.com/grandslam/GsService2/acs``
+      * - :guilabel:`Authentication flow`
+        - :guilabel:`Standard flow`
 
-   * - :guilabel:`Valid post logout redirect URIs`
-     - ``+``
+      * - :guilabel:`Require PKCE`
+        - :guilabel:`Off`
 
-   * - :guilabel:`PKCE`
-     - :guilabel:`Off`
+      * - :guilabel:`SSF Receiver`
+        - :guilabel:`On`
 
-Apple doesn't appear to support :term:`PKCE` for OIDC federations,
-which is why the client turns it off.
+   Apple doesn't appear to support :term:`PKCE` for OIDC federations,
+   which is why the client turns it off.
+   The page doesn't offer :guilabel:`SSF Receiver`
+   until :guilabel:`Client authentication` is on
+   and you completed :ref:`identity-provider-keycloak-feature`
+   and :ref:`identity-provider-keycloak-realm`.
+
+#. On the :guilabel:`Login settings` page,
+   enter the settings from the following table
+   and click :guilabel:`Save`.
+
+   .. list-table:: Login settings of the OIDC client for Apple School Manager
+      :header-rows: 1
+      :widths: 40 60
+
+      * - Setting
+        - Value
+
+      * - :guilabel:`Valid redirect URIs`
+        - ``https://gsa-ws.apple.com/grandslam/GsService2/acs``
+
+      * - :guilabel:`Valid post logout redirect URIs`
+        - ``+``
 
 Copy the client secret from the :guilabel:`Credentials` tab.
 You need it in :ref:`identity-provider-asm-idp`.
@@ -182,10 +213,7 @@ You need it in :ref:`identity-provider-asm-idp`.
 Configure the client as an SSF receiver
 ---------------------------------------
 
-#. On the client's :guilabel:`Settings` tab,
-   set :guilabel:`SSF Receiver` to :guilabel:`On`.
-
-#. On the :guilabel:`Client scopes` tab,
+#. On the client's :guilabel:`Client scopes` tab,
    add ``ssf.manage``, ``ssf.read``, and ``offline_access``
    as :guilabel:`Default`.
 
@@ -220,8 +248,10 @@ Configure the client as an SSF receiver
    * - :guilabel:`Verification delay`
      - ``1500``
 
-   * - :guilabel:`Required Client Role`
-     - ``apple-asm`` / ``ssf-admin``
+   * - :guilabel:`Required role`
+     - Click :guilabel:`Select role`,
+       select :guilabel:`Client roles`,
+       and select ``ssf-admin``.
 
    * - :guilabel:`Allowed delivery methods`
      - :guilabel:`Push Delivery` only

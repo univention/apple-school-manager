@@ -75,6 +75,12 @@ What you need
 Configure Keycloak
 ==================
 
+Make every setting in the Keycloak admin console in the realm ``ucs``,
+which holds the users of your domain.
+The admin console opens in the realm ``master``.
+Select ``ucs`` in the realm selector before you change anything,
+and check the selected realm whenever you return to the admin console.
+
 .. _identity-provider-keycloak-feature:
 
 Enable the SSF feature
@@ -284,7 +290,8 @@ The resulting access token and refresh token belong to an offline session of
 one user,
 so that user must exist before you connect the two systems.
 
-#. Create a user, for example ``asm``.
+#. In the realm ``ucs``,
+   create a user, for example ``asm``.
 
 #. Set the first name, the last name, and the email address.
 

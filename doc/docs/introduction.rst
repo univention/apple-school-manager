@@ -31,9 +31,20 @@ who run a UCS\@school domain
 and who want to provision its users to Apple School Manager.
 It assumes that you're familiar with the administration of
 :term:`UCS` and UCS\@school,
-in particular with the :term:`App Center`,
-the :term:`UCR`,
-and the school objects that UCS\@school manages.
+in particular with the following topics:
+
+* The :term:`App Center`,
+  see :ref:`uv-manual:software-appcenter`
+  in the UCS manual :cite:p:`ucs-manual`.
+
+* The :term:`UCR`,
+  see :ref:`uv-manual:computers-administration-of-local-system-configuration-with-univention-configuration-registry`
+  in the UCS manual :cite:p:`ucs-manual`.
+
+* The school objects that UCS\@school manages,
+  see :ref:`uv-ucsschool-manual:structure-ldap`
+  in the UCS\@school manual :cite:p:`ucsschool-manual`,
+  which is available only in German.
 
 .. _introduction-prerequisites:
 

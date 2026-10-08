@@ -137,6 +137,7 @@ if "spelling" in sys.argv:
     spelling_lang = "en_US"
     spelling_show_suggestions = True
     spelling_word_list_filename = ["spelling_wordlist"]
+    spelling_exclude_patterns = ["bibliography.rst"]
 
 # -- Options for the link checker --------------------------------------------
 
@@ -164,7 +165,6 @@ def adapt_settings_to_translation(_app: Sphinx, config: Config) -> None:
             *config.spelling_word_list_filename,
             "spelling_wordlist_de",
         ]
-        config.spelling_exclude_patterns = [*config.spelling_exclude_patterns, "bibliography.rst"]
         config.latex_documents = [
             (
                 root_doc,

@@ -58,36 +58,62 @@ msgstr "Zielgruppe dieser Dokumentation"
 
 #: ../../introduction.rst:29
 msgid ""
-"This documentation addresses administrators who run a UCS\\@school domain"
-" and who want to provision its users to Apple School Manager. It assumes "
-"that you're familiar with the administration of :term:`UCS` and "
-"UCS\\@school, in particular with the :term:`App Center`, the :term:`UCR`,"
-" and the school objects that UCS\\@school manages."
+"This documentation addresses administrators who run a UCS\\@school domain "
+"and who want to provision its users to Apple School Manager. It assumes that"
+" you're familiar with the administration of :term:`UCS` and UCS\\@school, in"
+" particular with the following topics:"
 msgstr ""
 "Diese Dokumentation richtet sich an Administratoren, die eine "
 "UCS\\@school-Domäne betreiben und deren Benutzer in Apple School Manager "
 "provisionieren möchten. Sie setzt voraus, dass Sie mit der Administration "
-"von :term:`UCS` und UCS\\@school vertraut sind, insbesondere mit dem "
-":term:`App Center`, der :term:`UCR` und den Schulobjekten, die UCS\\@school "
-"verwaltet."
+"von :term:`UCS` und UCS\\@school vertraut sind, insbesondere mit den "
+"folgenden Themen:"
 
-#: ../../introduction.rst:41
+#: ../../introduction.rst:36
+msgid ""
+"The :term:`App Center`, see :ref:`uv-manual:software-appcenter` in the UCS "
+"manual :cite:p:`ucs-manual`."
+msgstr ""
+"Dem :term:`App Center`, siehe :ref:`uv-manual:software-appcenter` im "
+"UCS-Handbuch :cite:p:`ucs-manual`."
+
+#: ../../introduction.rst:40
+msgid ""
+"The :term:`UCR`, see "
+":ref:`uv-manual:computers-administration-of-local-system-configuration-with-univention-configuration-registry`"
+" in the UCS manual :cite:p:`ucs-manual`."
+msgstr ""
+"Der :term:`UCR`, siehe "
+":ref:`uv-manual:computers-administration-of-local-system-configuration-with-univention-configuration-registry`"
+" im UCS-Handbuch :cite:p:`ucs-manual`."
+
+#: ../../introduction.rst:44
+msgid ""
+"The school objects that UCS\\@school manages, see "
+":ref:`uv-ucsschool-manual:structure-ldap` in the UCS\\@school manual "
+":cite:p:`ucsschool-manual`, which is available only in German."
+msgstr ""
+"Den Schulobjekten, die UCS\\@school verwaltet, siehe "
+":ref:`uv-ucsschool-manual:structure-ldap` im UCS\\@school-Handbuch "
+":cite:p:`ucsschool-manual`."
+
+#: ../../introduction.rst:52
 msgid "What you need"
 msgstr "Voraussetzungen"
 
-#: ../../introduction.rst:43
+#: ../../introduction.rst:54
 msgid "Before you start, make sure that you have the following:"
 msgstr "Stellen Sie vor Beginn sicher, dass Folgendes vorhanden ist:"
 
-#: ../../introduction.rst:45
+#: ../../introduction.rst:56
 msgid "A UCS\\@school domain with at least one school."
 msgstr "Eine UCS\\@school-Domäne mit mindestens einer Schule."
 
-#: ../../introduction.rst:47
+#: ../../introduction.rst:58
 msgid "An Apple School Manager account for an educational institution."
 msgstr "Ein Konto bei Apple School Manager für eine Bildungseinrichtung."
 
-#: ../../introduction.rst:49
+#: ../../introduction.rst:60
 msgid ""
 "The SFTP credentials for the Apple School Manager account. :ref"
 ":`installation-credentials` describes where to find them."
@@ -95,7 +121,7 @@ msgstr ""
 "Die SFTP-Zugangsdaten für das Konto bei Apple School Manager. "
 ":ref:`installation-credentials` beschreibt, wo Sie diese finden."
 
-#: ../../introduction.rst:52
+#: ../../introduction.rst:63
 msgid ""
 "A primary email address for each user. Apple School Manager uses the "
 "email address as the Apple Account and can't create an account for a user"
@@ -105,11 +131,11 @@ msgstr ""
 "verwendet die E-Mail-Adresse als Apple Account und kann für Benutzer ohne "
 "E-Mail-Adresse kein Konto anlegen."
 
-#: ../../introduction.rst:59
+#: ../../introduction.rst:70
 msgid "What the connector synchronizes"
 msgstr "Was der Connector synchronisiert"
 
-#: ../../introduction.rst:61
+#: ../../introduction.rst:72
 msgid ""
 "The connector transfers data in one direction only, from UCS\\@school to "
 "Apple School Manager. It never reads data back, and it never changes "
@@ -119,7 +145,7 @@ msgstr ""
 "Apple School Manager. Er liest niemals Daten zurück und ändert niemals "
 "Objekte in Ihrer UCS\\@school-Domäne."
 
-#: ../../introduction.rst:66
+#: ../../introduction.rst:77
 msgid ""
 "The following table lists what the connector maps to which Apple School "
 "Manager entity."
@@ -127,56 +153,56 @@ msgstr ""
 "Die folgende Tabelle zeigt, welche Objekte der Connector auf welche Entität "
 "in Apple School Manager abbildet."
 
-#: ../../introduction.rst:69
+#: ../../introduction.rst:80
 msgid "Objects that the connector synchronizes"
 msgstr "Objekte, die der Connector synchronisiert"
 
-#: ../../introduction.rst:73
+#: ../../introduction.rst:84
 msgid "UCS\\@school object"
 msgstr "UCS\\@school-Objekt"
 
-#: ../../introduction.rst:74
+#: ../../introduction.rst:85
 msgid "Apple School Manager entity"
 msgstr "Entität in Apple School Manager"
 
-#: ../../introduction.rst:76
+#: ../../introduction.rst:87
 msgid "School"
 msgstr "Schule"
 
-#: ../../introduction.rst:77
+#: ../../introduction.rst:88
 msgid "Location"
 msgstr "Standort"
 
-#: ../../introduction.rst:79
+#: ../../introduction.rst:90
 msgid "School class or work group"
 msgstr "Schulklasse oder Arbeitsgruppe"
 
-#: ../../introduction.rst:80
+#: ../../introduction.rst:91
 msgid "Course and class"
 msgstr "Kurs und Klasse"
 
-#: ../../introduction.rst:82 ../../introduction.rst:83
+#: ../../introduction.rst:93 ../../introduction.rst:94
 msgid "Student"
 msgstr "Schüler"
 
-#: ../../introduction.rst:85
+#: ../../introduction.rst:96
 msgid "Teacher and teacher with staff role"
 msgstr "Lehrer und Lehrer mit Mitarbeiterrolle"
 
-#: ../../introduction.rst:86
+#: ../../introduction.rst:97
 msgid "Staff member"
 msgstr "Mitarbeiter"
 
-#: ../../introduction.rst:88
+#: ../../introduction.rst:99
 msgid "Membership of a student in a school class or work group"
 msgstr ""
 "Mitgliedschaft eines Schülers in einer Schulklasse oder Arbeitsgruppe"
 
-#: ../../introduction.rst:89
+#: ../../introduction.rst:100
 msgid "Roster entry"
 msgstr "Roster-Eintrag"
 
-#: ../../introduction.rst:91
+#: ../../introduction.rst:102
 msgid ""
 "Apple School Manager requires every class to belong to a course, so the "
 "connector turns each school class and work group into a course with "
@@ -186,7 +212,7 @@ msgstr ""
 "macht der Connector aus jeder Schulklasse und jeder Arbeitsgruppe einen Kurs"
 " mit genau einer Klasse darin. Siehe :ref:`synchronization-courses`."
 
-#: ../../introduction.rst:96
+#: ../../introduction.rst:107
 msgid ""
 "Staff members without a teacher role aren't synchronized. Exam users "
 "aren't synchronized either."
@@ -194,7 +220,7 @@ msgstr ""
 "Mitarbeiter ohne Lehrerrolle werden nicht synchronisiert. Prüfungsbenutzer "
 "werden ebenfalls nicht synchronisiert."
 
-#: ../../introduction.rst:99
+#: ../../introduction.rst:110
 msgid ""
 ":ref:`synchronization` describes the mapping in detail, including the "
 "individual CSV columns."
@@ -202,11 +228,11 @@ msgstr ""
 ":ref:`synchronization` beschreibt die Abbildung im Detail, einschließlich "
 "der einzelnen CSV-Spalten."
 
-#: ../../introduction.rst:105
+#: ../../introduction.rst:116
 msgid "Passwords and devices"
 msgstr "Passwörter und Geräte"
 
-#: ../../introduction.rst:107
+#: ../../introduction.rst:118
 msgid ""
 "The connector never transfers passwords. Apple School Manager creates the"
 " passwords for new accounts itself, and you distribute them from there. "
@@ -218,7 +244,7 @@ msgstr ""
 ":ref:`configuration-password-policy` beschreibt, wie Sie die Länge dieser "
 "Passwörter beeinflussen."
 
-#: ../../introduction.rst:113
+#: ../../introduction.rst:124
 msgid ""
 "For device management, Univention recommends a mobile device management "
 "solution that offers an interface to Apple School Manager. The "

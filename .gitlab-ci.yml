@@ -9,7 +9,7 @@ workflow:
 include:
   - project: univention/dev/tooling/ci-components
     file:
-      - fragments/openstack.yaml
+      - fragments/proxmox.yaml
   - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/pre-commit@2
   - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/app-release@2
     inputs:
@@ -68,7 +68,7 @@ build_changelog_html:
       - changelog.html
 
 integration_tests:
-  extends: .run_openstack_cfg
+  extends: .run_proxmox_cfg
   stage: test
   needs:
     - create_app_version
@@ -79,10 +79,10 @@ integration_tests:
       allow_failure: False
   variables:
     TARGET_VERSION: "5.2-7"
-    OPENSTACK_CFG_FILE: ".gitlab-ci/ucsschool-singleserver.cfg"
+    PROXMOX_CFG_FILE: ".gitlab-ci/ucsschool-singleserver.cfg"
   script:
     - mkdir results
-    - !reference [.run_openstack_cfg, script]
+    - !reference [.run_proxmox_cfg, script]
     - .gitlab-ci/parse_junit.py
   artifacts:
     reports:

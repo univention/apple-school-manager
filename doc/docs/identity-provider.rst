@@ -52,13 +52,10 @@ What you need
   See :cite:t:`apple-verify-domain`.
   Your users need a primary email address in that domain to sign in.
 
-* An account in Apple School Manager with the privilege to manage federated
-  authentication,
-  such as an account with the *Administrator* role.
+* An account in Apple School Manager with the *Administrator* role
+  to connect the identity provider.
   See :cite:t:`apple-roles`.
-  Accounts with the *Administrator*, *Site Manager*, or *People Manager* role
-  can manage the federation,
-  but can't sign in with it themselves.
+  This account can't sign in through the federation itself.
 
 * An Apple device for the first sign-in.
 

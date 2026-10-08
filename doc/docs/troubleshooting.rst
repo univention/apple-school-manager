@@ -153,6 +153,33 @@ not of the connector.
 An LDAP filter for teachers can also reduce the number.
 The log file records every teacher whom a filter excluded from a class.
 
+.. _troubleshooting-federation-again:
+
+Federation for a domain fails the second time
+=============================================
+
+If you disable federation for a domain
+and then enable it again,
+Apple School Manager shows an error.
+
+While federation is on,
+Apple School Manager offers to disconnect the domain
+instead of removing it.
+Disconnecting removes the domain only from the federation.
+The domain itself stays in Apple School Manager.
+
+To enable federation for the domain again,
+do the following:
+
+#. In Apple School Manager,
+   disconnect the identity provider.
+
+#. Connect it again,
+   as described in :ref:`identity-provider-asm-idp`.
+
+#. Enable federation for the domain,
+   as described in :ref:`identity-provider-asm-domain`.
+
 .. _troubleshooting-support:
 
 Where to get help

@@ -579,11 +579,11 @@ msgstr "Stellen Sie sicher, dass Ihre Domain verifiziert ist."
 #: ../../identity-provider.rst:313
 msgid ""
 "Under :guilabel:`User sign-in and directory sync`, click "
-":guilabel:`Connect`. If another identity provider is connected, "
-"disconnect it first."
+":guilabel:`Configure`. If another identity provider is connected, disconnect"
+" it first."
 msgstr ""
 "Klicken Sie unter :guilabel:`User sign-in and directory sync` auf "
-":guilabel:`Connect`. Wenn bereits ein anderer Identity Provider verbunden "
+":guilabel:`Configure`. Wenn bereits ein anderer Identity Provider verbunden "
 "ist, trennen Sie diesen zuerst."
 
 #: ../../identity-provider.rst:317
@@ -699,17 +699,50 @@ msgstr "Stellen Sie den erscheinenden Schalter auf :guilabel:`On`."
 
 #: ../../identity-provider.rst:374
 msgid ""
-"Federation is now active for the domain, and Apple School Manager sends a"
-" confirmation email."
+"If the SFTP upload uses the domain, Apple School Manager asks you to choose "
+"another domain for the upload. Choose any other domain."
 msgstr ""
-"Die Föderation ist nun für die Domain aktiv, und Apple School Manager "
-"sendet eine Bestätigungs-E-Mail."
+"Wenn der SFTP-Upload die Domain verwendet, fordert Apple School Manager Sie "
+"auf, eine andere Domain für den Upload zu wählen. Wählen Sie eine beliebige "
+"andere Domain."
 
-#: ../../identity-provider.rst:380
+#: ../../identity-provider.rst:378
+msgid ""
+"Apple School Manager enables federation for the domain and sends a "
+"confirmation email."
+msgstr ""
+"Apple School Manager aktiviert die Föderation für die Domain und sendet eine"
+" Bestätigungs-E-Mail."
+
+#: ../../identity-provider.rst:381
+msgid ""
+"After that, every Managed Apple Account with an email address in the domain "
+"signs in through Keycloak. This includes accounts that existed before you "
+"enabled federation and accounts that you created manually in Apple School "
+"Manager."
+msgstr ""
+"Danach meldet sich jeder Managed Apple Account mit einer E-Mail-Adresse in "
+"der Domain über Keycloak an. Das gilt auch für Konten, die es bereits vor "
+"der Aktivierung der Föderation gab, und für Konten, die Sie in Apple School "
+"Manager manuell angelegt haben."
+
+#: ../../identity-provider.rst:386
+msgid ""
+"The upload from the connector continues to work. Apple School Manager "
+"assigns the accounts by the domain of their email address, so the accounts "
+"from the upload belong to the federated domain, regardless of the domain "
+"that you chose for the SFTP upload."
+msgstr ""
+"Der Upload des Connectors funktioniert weiterhin. Apple School Manager "
+"ordnet die Konten anhand der Domain ihrer E-Mail-Adresse zu, sodass die "
+"Konten aus dem Upload zur föderierten Domain gehören, unabhängig von der "
+"Domain, die Sie für den SFTP-Upload gewählt haben."
+
+#: ../../identity-provider.rst:394
 msgid "Sign in on a device"
 msgstr "Auf einem Gerät anmelden"
 
-#: ../../identity-provider.rst:382
+#: ../../identity-provider.rst:396
 msgid ""
 "Your users can now sign in to an Apple device with their UCS\\@school "
 "credentials. The following steps describe an unpaired device. See :cite:t"
@@ -720,15 +753,15 @@ msgstr ""
 "gekoppeltes Gerät. Das allgemeine Vorgehen beschreibt "
 ":cite:t:`apple-sign-in`."
 
-#: ../../identity-provider.rst:387
+#: ../../identity-provider.rst:401
 msgid "Open :menuselection:`Settings --> Apple Account`."
 msgstr "Öffnen Sie :menuselection:`Settings --> Apple Account`."
 
-#: ../../identity-provider.rst:389
+#: ../../identity-provider.rst:403
 msgid "Tap :guilabel:`Sign In Manually`."
 msgstr "Tippen Sie auf :guilabel:`Sign In Manually`."
 
-#: ../../identity-provider.rst:391
+#: ../../identity-provider.rst:405
 msgid ""
 "Enter the email address of the user in the federated domain and tap "
 ":guilabel:`Proceed`."
@@ -736,7 +769,7 @@ msgstr ""
 "Geben Sie die E-Mail-Adresse des Benutzers in der föderierten Domain ein "
 "und tippen Sie auf :guilabel:`Proceed`."
 
-#: ../../identity-provider.rst:394
+#: ../../identity-provider.rst:408
 msgid ""
 "The device shows a hint that names your organization. Tap "
 ":guilabel:`Proceed`."
@@ -744,7 +777,7 @@ msgstr ""
 "Das Gerät zeigt einen Hinweis an, der Ihre Organisation nennt. Tippen Sie "
 "auf :guilabel:`Proceed`."
 
-#: ../../identity-provider.rst:397
+#: ../../identity-provider.rst:411
 msgid ""
 "The Keycloak sign-in page opens with the user name already filled in. "
 "Enter the password."
@@ -752,11 +785,11 @@ msgstr ""
 "Die Keycloak-Anmeldeseite öffnet sich mit bereits ausgefülltem "
 "Benutzernamen. Geben Sie das Passwort ein."
 
-#: ../../identity-provider.rst:400
+#: ../../identity-provider.rst:414
 msgid "Enter the device PIN when the device asks for it."
 msgstr "Geben Sie den Geräte-PIN ein, wenn das Gerät danach fragt."
 
-#: ../../identity-provider.rst:402
+#: ../../identity-provider.rst:416
 msgid ""
 ":menuselection:`Settings --> Apple Account` now shows the user with the "
 "email address from UCS\\@school."

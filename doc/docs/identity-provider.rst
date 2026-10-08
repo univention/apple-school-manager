@@ -311,7 +311,7 @@ Connect the identity provider
 #. Make sure that your domain is verified.
 
 #. Under :guilabel:`User sign-in and directory sync`,
-   click :guilabel:`Connect`.
+   click :guilabel:`Configure`.
    If another identity provider is connected, disconnect it first.
 
 #. Select :guilabel:`Custom Identity Provider`
@@ -371,8 +371,22 @@ Enable federation for the domain
 
 #. Switch the toggle that appears to :guilabel:`On`.
 
-Federation is now active for the domain,
-and Apple School Manager sends a confirmation email.
+#. If the SFTP upload uses the domain,
+   Apple School Manager asks you to choose another domain for the upload.
+   Choose any other domain.
+
+Apple School Manager enables federation for the domain
+and sends a confirmation email.
+
+After that, every Managed Apple Account with an email address in the domain
+signs in through Keycloak.
+This includes accounts that existed before you enabled federation
+and accounts that you created manually in Apple School Manager.
+
+The upload from the connector continues to work.
+Apple School Manager assigns the accounts by the domain of their email address,
+so the accounts from the upload belong to the federated domain,
+regardless of the domain that you chose for the SFTP upload.
 
 .. _identity-provider-onboarding:
 

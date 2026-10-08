@@ -33,7 +33,7 @@ The settings file :file:`/etc/asm-connections.json` has three sections:
 
 ``accounts``
    The Apple School Manager accounts, each with its credentials and the
-   settings for the users that the account receives.
+   settings for the students and teachers that the account receives.
    See :ref:`configuration-accounts`.
 
 ``schools``
@@ -74,9 +74,9 @@ The settings file :file:`/etc/asm-connections.json` has three sections:
        }
    }
 
-A user who belongs to several schools of the same account
+A student or teacher who belongs to several schools of the same account
 appears only once in the upload to that account.
-The settings for users therefore apply per account,
+The settings for students and teachers therefore apply per account,
 and the settings for classes and the LDAP filters apply per school.
 
 For every setting,
@@ -218,10 +218,11 @@ instead of the account you meant.
        }
    }
 
-A user who belongs to several schools appears in the upload to an account
+A student or teacher who belongs to several schools
+appears in the upload to an account
 only with the schools that belong to that account.
-If none of the user's schools belongs to the account,
-the connector skips the user for that account.
+If none of their schools belongs to the account,
+the connector skips them for that account.
 
 A school entry takes the following keys.
 All keys except ``account`` are optional

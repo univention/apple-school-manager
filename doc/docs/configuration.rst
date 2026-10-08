@@ -15,6 +15,13 @@ such as the credentials and the synchronization schedule.
 The :term:`UCR` holds the settings that control which users the connector
 exports and how it maps their attributes.
 
+.. caution::
+
+   Apple School Manager uses the email address of a user as the Apple Account.
+   Make sure that every synchronized user has a primary email address.
+   Apple School Manager can't create an account for a user without one.
+   See :ref:`configuration-email`.
+
 .. _configuration-app-settings:
 
 App settings

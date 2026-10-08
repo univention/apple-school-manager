@@ -246,12 +246,12 @@ msgstr ""
 " für die SSF-Konfigurationsmetadaten an. Die URLs beider Endpunkte "
 "benötigen Sie in :ref:`identity-provider-asm-idp`:"
 
-#: ../../identity-provider.rst:138 ../../identity-provider.rst:351
+#: ../../identity-provider.rst:138 ../../identity-provider.rst:355
 msgid "``https://ucs-sso-ng.DOMAIN/realms/ucs/.well-known/openid-configuration``"
 msgstr ""
 "``https://ucs-sso-ng.DOMAIN/realms/ucs/.well-known/openid-configuration``"
 
-#: ../../identity-provider.rst:139 ../../identity-provider.rst:348
+#: ../../identity-provider.rst:139 ../../identity-provider.rst:352
 msgid "``https://ucs-sso-ng.DOMAIN/realms/ucs/.well-known/ssf-configuration``"
 msgstr ""
 "``https://ucs-sso-ng.DOMAIN/realms/ucs/.well-known/ssf-configuration``"
@@ -321,7 +321,7 @@ msgid "Setting"
 msgstr "Einstellung"
 
 #: ../../identity-provider.rst:176 ../../identity-provider.rst:206
-#: ../../identity-provider.rst:237 ../../identity-provider.rst:339
+#: ../../identity-provider.rst:237 ../../identity-provider.rst:343
 msgid "Value"
 msgstr "Wert"
 
@@ -548,14 +548,23 @@ msgstr ""
 "existieren, bevor Sie die beiden Systeme verbinden."
 
 #: ../../identity-provider.rst:293
+msgid ""
+"Create the user in Keycloak, not in UCS. Keycloak has only read access to "
+"the UCS users, so it can't assign client roles to them."
+msgstr ""
+"Legen Sie den Benutzer in Keycloak an, nicht in UCS. Keycloak hat nur "
+"Lesezugriff auf die Benutzer aus UCS und kann ihnen deshalb keine "
+"Client-Rollen zuweisen."
+
+#: ../../identity-provider.rst:297
 msgid "In the realm ``ucs``, create a user, for example ``asm``."
 msgstr "Legen Sie im Realm ``ucs`` einen Benutzer an, zum Beispiel ``asm``."
 
-#: ../../identity-provider.rst:296
+#: ../../identity-provider.rst:300
 msgid "Set the first name, the last name, and the email address."
 msgstr "Setzen Sie Vorname, Nachname und E-Mail-Adresse."
 
-#: ../../identity-provider.rst:298
+#: ../../identity-provider.rst:302
 msgid ""
 "On the :guilabel:`Credentials` tab, set a strong password. Two-factor "
 "authentication is optional but recommended."
@@ -563,34 +572,34 @@ msgstr ""
 "Setzen Sie im Reiter :guilabel:`Credentials` ein starkes Passwort. "
 "Zwei-Faktor-Authentifizierung ist optional, aber empfohlen."
 
-#: ../../identity-provider.rst:302
+#: ../../identity-provider.rst:306
 msgid "Assign the client role ``ssf-admin`` of the client ``apple-asm``."
 msgstr ""
 "Weisen Sie die Client-Rolle ``ssf-admin`` des Clients ``apple-asm`` zu."
 
-#: ../../identity-provider.rst:307
+#: ../../identity-provider.rst:311
 msgid "Configure Apple School Manager"
 msgstr "Apple School Manager konfigurieren"
 
-#: ../../identity-provider.rst:312
+#: ../../identity-provider.rst:316
 msgid "Connect the identity provider"
 msgstr "Identity Provider verbinden"
 
-#: ../../identity-provider.rst:314
+#: ../../identity-provider.rst:318
 msgid "Sign in to `Apple School Manager <https://school.apple.com/>`_."
 msgstr ""
 "Melden Sie sich bei `Apple School Manager <https://school.apple.com/>`_ "
 "an."
 
-#: ../../identity-provider.rst:316 ../../identity-provider.rst:372
+#: ../../identity-provider.rst:320 ../../identity-provider.rst:376
 msgid "Open :menuselection:`Preferences --> Managed Apple Accounts`."
 msgstr "Öffnen Sie :menuselection:`Preferences --> Managed Apple Accounts`."
 
-#: ../../identity-provider.rst:318
+#: ../../identity-provider.rst:322
 msgid "Make sure that your domain is verified."
 msgstr "Stellen Sie sicher, dass Ihre Domain verifiziert ist."
 
-#: ../../identity-provider.rst:320
+#: ../../identity-provider.rst:324
 msgid ""
 "Under :guilabel:`User sign-in and directory sync`, click "
 ":guilabel:`Configure`. If another identity provider is connected, disconnect"
@@ -600,7 +609,7 @@ msgstr ""
 ":guilabel:`Configure`. Wenn bereits ein anderer Identity Provider verbunden "
 "ist, trennen Sie diesen zuerst."
 
-#: ../../identity-provider.rst:324
+#: ../../identity-provider.rst:328
 msgid ""
 "Select :guilabel:`Custom Identity Provider` and click "
 ":guilabel:`Continue`."
@@ -608,13 +617,13 @@ msgstr ""
 "Wählen Sie :guilabel:`Custom Identity Provider` aus und klicken Sie auf "
 ":guilabel:`Continue`."
 
-#: ../../identity-provider.rst:327
+#: ../../identity-provider.rst:331
 msgid "Enter a name for the identity provider, for example ``asmkc``."
 msgstr ""
 "Geben Sie einen Namen für den Identity Provider ein, zum Beispiel "
 "``asmkc``."
 
-#: ../../identity-provider.rst:329
+#: ../../identity-provider.rst:333
 msgid ""
 "Enter the client ID and the client secret from :ref:`identity-provider-"
 "keycloak-client`, and the two URLs from :ref:`identity-provider-keycloak-"
@@ -625,45 +634,45 @@ msgstr ""
 ":ref:`identity-provider-keycloak-realm` ein, wie in der folgenden Tabelle "
 "aufgeführt."
 
-#: ../../identity-provider.rst:334
+#: ../../identity-provider.rst:338
 msgid "Settings of the custom identity provider in Apple School Manager"
 msgstr ""
 "Einstellungen des benutzerdefinierten Identity Providers in Apple School "
 "Manager"
 
-#: ../../identity-provider.rst:338
+#: ../../identity-provider.rst:342
 msgid "Field"
 msgstr "Feld"
 
-#: ../../identity-provider.rst:341
+#: ../../identity-provider.rst:345
 msgid ":guilabel:`Client ID`"
 msgstr ":guilabel:`Client ID`"
 
-#: ../../identity-provider.rst:342
+#: ../../identity-provider.rst:346
 msgid "``apple-asm``"
 msgstr "``apple-asm``"
 
-#: ../../identity-provider.rst:344
+#: ../../identity-provider.rst:348
 msgid ":guilabel:`Client Secret`"
 msgstr ":guilabel:`Client Secret`"
 
-#: ../../identity-provider.rst:345
+#: ../../identity-provider.rst:349
 msgid "The client secret from the :guilabel:`Credentials` tab of the client"
 msgstr "Das Client Secret aus dem Reiter :guilabel:`Credentials` des Clients"
 
-#: ../../identity-provider.rst:347
+#: ../../identity-provider.rst:351
 msgid ":guilabel:`SSF URL`"
 msgstr ":guilabel:`SSF URL`"
 
-#: ../../identity-provider.rst:350
+#: ../../identity-provider.rst:354
 msgid ":guilabel:`OIDC URL`"
 msgstr ":guilabel:`OIDC URL`"
 
-#: ../../identity-provider.rst:353
+#: ../../identity-provider.rst:357
 msgid "Click :guilabel:`Continue`."
 msgstr "Klicken Sie auf :guilabel:`Continue`."
 
-#: ../../identity-provider.rst:355
+#: ../../identity-provider.rst:359
 msgid ""
 "In the window that opens, click the sign-in button for your identity "
 "provider, for example :guilabel:`Sign in with asmkc`."
@@ -671,7 +680,7 @@ msgstr ""
 "Klicken Sie im sich öffnenden Fenster auf die Anmeldeschaltfläche Ihres "
 "Identity Providers, zum Beispiel :guilabel:`Sign in with asmkc`."
 
-#: ../../identity-provider.rst:359
+#: ../../identity-provider.rst:363
 msgid ""
 "Sign in with the administrative user from :ref:`identity-provider-"
 "keycloak-admin-user`."
@@ -679,7 +688,7 @@ msgstr ""
 "Melden Sie sich mit dem administrativen Benutzer aus "
 ":ref:`identity-provider-keycloak-admin-user` an."
 
-#: ../../identity-provider.rst:362
+#: ../../identity-provider.rst:366
 msgid ""
 "Apple School Manager shows :guilabel:`Authorizing Account` and then "
 "confirms the connection. Apple has now created an SSF stream for the "
@@ -691,15 +700,15 @@ msgstr ""
 "Client angelegt, den Sie in Keycloak im Reiter :guilabel:`SSF Streams` des"
 " Clients sehen."
 
-#: ../../identity-provider.rst:370
+#: ../../identity-provider.rst:374
 msgid "Enable federation for the domain"
 msgstr "Föderation für die Domain aktivieren"
 
-#: ../../identity-provider.rst:374
+#: ../../identity-provider.rst:378
 msgid "Select your domain and click :guilabel:`Manage`."
 msgstr "Wählen Sie Ihre Domain aus und klicken Sie auf :guilabel:`Manage`."
 
-#: ../../identity-provider.rst:376
+#: ../../identity-provider.rst:380
 msgid ""
 "At the bottom of the page, find the section for your identity provider "
 "and click :guilabel:`Set up`."
@@ -707,11 +716,11 @@ msgstr ""
 "Suchen Sie unten auf der Seite den Abschnitt für Ihren Identity Provider "
 "und klicken Sie auf :guilabel:`Set up`."
 
-#: ../../identity-provider.rst:379
+#: ../../identity-provider.rst:383
 msgid "Switch the toggle that appears to :guilabel:`On`."
 msgstr "Stellen Sie den erscheinenden Schalter auf :guilabel:`On`."
 
-#: ../../identity-provider.rst:381
+#: ../../identity-provider.rst:385
 msgid ""
 "If the SFTP upload uses the domain, Apple School Manager asks you to choose "
 "another domain for the upload. Choose any other domain."
@@ -720,7 +729,7 @@ msgstr ""
 "auf, eine andere Domain für den Upload zu wählen. Wählen Sie eine beliebige "
 "andere Domain."
 
-#: ../../identity-provider.rst:385
+#: ../../identity-provider.rst:389
 msgid ""
 "Apple School Manager enables federation for the domain and sends a "
 "confirmation email."
@@ -728,7 +737,7 @@ msgstr ""
 "Apple School Manager aktiviert die Föderation für die Domain und sendet eine"
 " Bestätigungs-E-Mail."
 
-#: ../../identity-provider.rst:388
+#: ../../identity-provider.rst:392
 msgid ""
 "After that, every Managed Apple Account with an email address in the domain "
 "signs in through Keycloak. This includes accounts that existed before you "
@@ -740,7 +749,7 @@ msgstr ""
 "der Aktivierung der Föderation gab, und für Konten, die Sie in Apple School "
 "Manager manuell angelegt haben."
 
-#: ../../identity-provider.rst:393
+#: ../../identity-provider.rst:397
 msgid ""
 "The upload from the connector continues to work. Apple School Manager "
 "assigns the accounts by the domain of their email address, so the accounts "
@@ -752,11 +761,11 @@ msgstr ""
 "Konten aus dem Upload zur föderierten Domain gehören, unabhängig von der "
 "Domain, die Sie für den SFTP-Upload gewählt haben."
 
-#: ../../identity-provider.rst:401
+#: ../../identity-provider.rst:405
 msgid "Sign in on a device"
 msgstr "Auf einem Gerät anmelden"
 
-#: ../../identity-provider.rst:403
+#: ../../identity-provider.rst:407
 msgid ""
 "Your users can now sign in to an Apple device with their UCS\\@school "
 "credentials. The following steps describe an unpaired device. See :cite:t"
@@ -767,15 +776,15 @@ msgstr ""
 "gekoppeltes Gerät. Das allgemeine Vorgehen beschreibt "
 ":cite:t:`apple-sign-in`."
 
-#: ../../identity-provider.rst:408
+#: ../../identity-provider.rst:412
 msgid "Open :menuselection:`Settings --> Apple Account`."
 msgstr "Öffnen Sie :menuselection:`Settings --> Apple Account`."
 
-#: ../../identity-provider.rst:410
+#: ../../identity-provider.rst:414
 msgid "Tap :guilabel:`Sign In Manually`."
 msgstr "Tippen Sie auf :guilabel:`Sign In Manually`."
 
-#: ../../identity-provider.rst:412
+#: ../../identity-provider.rst:416
 msgid ""
 "Enter the email address of the user in the federated domain and tap "
 ":guilabel:`Proceed`."
@@ -783,7 +792,7 @@ msgstr ""
 "Geben Sie die E-Mail-Adresse des Benutzers in der föderierten Domain ein "
 "und tippen Sie auf :guilabel:`Proceed`."
 
-#: ../../identity-provider.rst:415
+#: ../../identity-provider.rst:419
 msgid ""
 "The device shows a hint that names your organization. Tap "
 ":guilabel:`Proceed`."
@@ -791,7 +800,7 @@ msgstr ""
 "Das Gerät zeigt einen Hinweis an, der Ihre Organisation nennt. Tippen Sie "
 "auf :guilabel:`Proceed`."
 
-#: ../../identity-provider.rst:418
+#: ../../identity-provider.rst:422
 msgid ""
 "The Keycloak sign-in page opens with the user name already filled in. "
 "Enter the password."
@@ -799,11 +808,11 @@ msgstr ""
 "Die Keycloak-Anmeldeseite öffnet sich mit bereits ausgefülltem "
 "Benutzernamen. Geben Sie das Passwort ein."
 
-#: ../../identity-provider.rst:421
+#: ../../identity-provider.rst:425
 msgid "Enter the device PIN when the device asks for it."
 msgstr "Geben Sie den Geräte-PIN ein, wenn das Gerät danach fragt."
 
-#: ../../identity-provider.rst:423
+#: ../../identity-provider.rst:427
 msgid ""
 ":menuselection:`Settings --> Apple Account` now shows the user with the "
 "email address from UCS\\@school."

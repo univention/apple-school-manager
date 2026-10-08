@@ -290,6 +290,10 @@ The resulting access token and refresh token belong to an offline session of
 one user,
 so that user must exist before you connect the two systems.
 
+Create the user in Keycloak, not in UCS.
+Keycloak has only read access to the UCS users,
+so it can't assign client roles to them.
+
 #. In the realm ``ucs``,
    create a user, for example ``asm``.
 

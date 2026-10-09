@@ -76,7 +76,7 @@ class FakeKeycloakAdmin:
     def create_client(self, payload: dict[str, Any], skip_exists: bool = False) -> str:  # noqa: ARG002, FBT001
         self.writes += 1
         client_uuid = str(uuid.uuid4())
-        self.clients[client_uuid] = {**copy.deepcopy(payload), "id": client_uuid, "secret": "s3cr3t"}
+        self.clients[client_uuid] = {**self.stored(payload), "id": client_uuid, "secret": "s3cr3t"}
         self.default_scopes[client_uuid] = []
         offline_access = self.get_client_scope_by_name("offline_access")
         assert offline_access is not None
@@ -86,7 +86,16 @@ class FakeKeycloakAdmin:
 
     def update_client(self, client_id: str, payload: dict[str, Any]) -> None:
         self.writes += 1
-        self.clients[client_id] = copy.deepcopy(payload)
+        self.clients[client_id] = self.stored(payload)
+
+    @staticmethod
+    def stored(payload: dict[str, Any]) -> dict[str, Any]:
+        """Like Keycloak, drop client attributes with an empty value."""
+        client = copy.deepcopy(payload)
+        client["attributes"] = {
+            key: value for key, value in client.get("attributes", {}).items() if value
+        }
+        return client
 
     def get_client_default_client_scopes(self, client_id: str) -> list[dict[str, Any]]:
         return [

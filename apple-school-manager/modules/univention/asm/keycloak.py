@@ -107,28 +107,45 @@ def client_attributes(client_id: str) -> dict[str, str]:
     }
 
 
+def client_settings(client_id: str) -> dict[str, Any]:
+    """Return the top-level client settings that the setup manages."""
+    return {
+        "clientId": client_id,
+        "protocol": "openid-connect",
+        "publicClient": False,
+        "standardFlowEnabled": True,
+        "implicitFlowEnabled": False,
+        "directAccessGrantsEnabled": False,
+        "serviceAccountsEnabled": False,
+        "redirectUris": [APPLE_REDIRECT_URI],
+    }
+
+
 def client_representation(client_id: str, current: dict[str, Any] | None = None) -> dict[str, Any]:
     """
     Return the client as Apple School Manager needs it.
 
     Settings of `current` that the setup doesn't manage stay as they are.
     """
-    representation = dict(current or {})
-    representation.update(
-        clientId=client_id,
-        protocol="openid-connect",
-        publicClient=False,
-        standardFlowEnabled=True,
-        implicitFlowEnabled=False,
-        directAccessGrantsEnabled=False,
-        serviceAccountsEnabled=False,
-        redirectUris=[APPLE_REDIRECT_URI],
-    )
+    representation = {**(current or {}), **client_settings(client_id)}
     representation["attributes"] = {
         **(representation.get("attributes") or {}),
         **client_attributes(client_id),
     }
     return representation
+
+
+def client_matches(current: dict[str, Any], client_id: str) -> bool:
+    """
+    Whether `current` already has every setting that the setup manages.
+
+    Keycloak drops attributes with an empty value, so a missing attribute
+    counts as empty.
+    """
+    if any(current.get(key) != value for key, value in client_settings(client_id).items()):
+        return False
+    attributes = current.get("attributes") or {}
+    return all(attributes.get(key, "") == value for key, value in client_attributes(client_id).items())
 
 
 class KeycloakSetup:
@@ -206,9 +223,8 @@ class KeycloakSetup:
             self.report(f"Created the client {client_id!r}.")
             return client_uuid
         current = self.admin.get_client(client_uuid)
-        wanted = client_representation(client_id, current)
-        if wanted != current:
-            self.admin.update_client(client_uuid, wanted)
+        if not client_matches(current, client_id):
+            self.admin.update_client(client_uuid, client_representation(client_id, current))
             self.report(f"Updated the client {client_id!r}.")
         return client_uuid
 

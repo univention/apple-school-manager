@@ -54,7 +54,7 @@ def names(admin: KeycloakAdmin) -> Iterator[tuple[str, str]]:
         admin.delete_client(client_uuid)
 
 
-def run_setup(client_id: str, username: str, password_file: Path) -> dict[str, str]:
+def run_setup(client_id: str, username: str, password_file: Path) -> tuple[dict[str, str], list[str]]:
     cmd = [
         "/usr/sbin/asm-setup-keycloak",
         "--client-id",
@@ -68,11 +68,16 @@ def run_setup(client_id: str, username: str, password_file: Path) -> dict[str, s
     print(result.stdout, result.stderr)
     assert result.returncode == 0, result.stderr
     values = {}
+    changes = []
     for line in result.stdout.splitlines():
         key, sep, value = line.partition(":")
         if sep and key in {"Client ID", "Client Secret", "SSF URL", "OIDC URL"}:
             values[key] = value.strip()
-    return values
+        elif line.startswith(
+            ("Enabling", "Turned", "Created", "Included", "Updated", "Added", "Assigned")
+        ):
+            changes.append(line)
+    return values, changes
 
 
 def test_asm_setup_keycloak(
@@ -82,7 +87,8 @@ def test_asm_setup_keycloak(
     password_file = tmp_path / "password"
     password_file.write_text(uts.random_string(20))
 
-    values = run_setup(client_id, username, password_file)
+    values, changes = run_setup(client_id, username, password_file)
+    assert changes
 
     assert values["Client ID"] == client_id
     assert values["SSF URL"] == f"{sso_base_url}/realms/{REALM}/.well-known/ssf-configuration"
@@ -103,4 +109,4 @@ def test_asm_setup_keycloak(
         role["name"] for role in admin.get_client_roles_of_user(user_id, client_uuid)
     }
 
-    assert run_setup(client_id, username, password_file) == values
+    assert run_setup(client_id, username, password_file) == (values, [])

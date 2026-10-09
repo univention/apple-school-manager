@@ -147,20 +147,24 @@ so that a new version of the app can ship the new key.
 
 .. _troubleshooting-ldap-filter:
 
-The run stops with an invalid LDAP filter
-=========================================
+The upload to an account stops with an invalid LDAP filter
+==========================================================
 
-An LDAP filter with a syntax error stops the synchronization
-before the connector uploads anything.
-The log file names the variable and the filter.
+An LDAP filter with a syntax error stops the upload
+to the account of that school.
+The connector still uploads to the remaining accounts
+and exits with a non-zero status at the end.
+The log file names the filter and the account.
 
 .. code-block:: text
-   :caption: Message in the log file
+   :caption: Messages in the log file
 
    Invalid LDAP-filter for students: '(ucsschoolRole=student'
+   Invalid LDAP filter, nothing uploaded to account north.
 
-Correct the filter,
-or unset the variable to fall back to the global filter.
+Correct the filter in the settings file,
+or remove the ``ldap_filter`` key of the school
+to fall back to the filter in ``defaults``.
 See :ref:`configuration-ldap-filter`.
 
 .. _troubleshooting-no-csv:

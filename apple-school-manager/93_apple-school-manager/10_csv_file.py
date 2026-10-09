@@ -417,7 +417,7 @@ def test_csv_files(
                         t5_name,
                         t6_name,
                     ],
-                    # school3 is not in the whitelist, so school_class3 must not be returned
+                    # school3 isn't assigned to the account, so school_class3 must not be returned
                     [
                         school_class4,
                         "",
@@ -454,7 +454,7 @@ def test_csv_files(
                 [
                     [school_class1, school_class1, school_class1, school1],
                     [school_class2, school_class2, school_class2, school2],
-                    # school3 is not in the whitelist, so school_class3 must not be returned
+                    # school3 isn't assigned to the account, so school_class3 must not be returned
                     [school_class4, school_class4, school_class4, school1],
                 ],
                 key=itemgetter(0),
@@ -480,7 +480,7 @@ def test_csv_files(
                 [
                     [school1, school1],
                     [school2, school2_display_name],
-                    # school3 is not in the whitelist, so school3 must not be returned
+                    # school3 isn't assigned to the account, so school3 must not be returned
                 ],
                 key=itemgetter(0),
             )  # sort by school name
@@ -535,7 +535,7 @@ def test_csv_files(
                         [f"{school_class2}-{student_name[1]}", school_class2, student_name[1]],
                     ),
                 )
-            # school3 is not in the whitelist, so school3 must not be returned
+            # school3 isn't assigned to the account, so school3 must not be returned
             roster.append(
                 (
                     (school_class4, student3_name),  # sort key
@@ -596,7 +596,7 @@ def test_csv_files(
                     key=itemgetter(0),
                 ),
             )  # sorted by 1. school, 2. username
-            # school3 is not in the whitelist, so school3 must not be returned
+            # school3 isn't assigned to the account, so school3 must not be returned
             for s1, t_name, t_id, t_dn, s2 in teachers:
                 atts = {
                     k: (str(v, "utf-8") if isinstance(v, (bytes)) else v)
@@ -673,7 +673,7 @@ def test_csv_files(
                     key=itemgetter(0),
                 ),
             )  # sorted by 1. school, 2. username
-            # school3 is not in the whitelist, so school3 must not be returned
+            # school3 isn't assigned to the account, so school3 must not be returned
             for s1, t_name, t_id, t_dn, s2 in teachers:
                 atts = {
                     k: (str(v, "utf-8") if isinstance(v, (bytes)) else v)

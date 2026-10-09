@@ -5,7 +5,7 @@
 .. _index:
 
 ##############################################
-Apple School Manager Connector for UCS\@school
+Apple School Manager Connector for |UAS|
 ##############################################
 
 .. toctree::

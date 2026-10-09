@@ -117,11 +117,11 @@ msgstr ""
 
 #: ../../installation.rst:64
 msgid ""
-"The connector requires UCS\\@school in version ``5.2v5`` or later. The "
-"app refuses to update on a system with an older version."
+"The connector requires |UAS| in version ``5.2v5`` or later. The app refuses "
+"to update on a system with an older version."
 msgstr ""
-"Der Connector erfordert UCS\\@school in Version ``5.2v5`` oder höher. Auf "
-"einem System mit einer älteren Version verweigert die App das Update."
+"Der Connector erfordert |UAS| in Version ``5.2v5`` oder höher. Auf einem "
+"System mit einer älteren Version verweigert die App das Update."
 
 #: ../../installation.rst:70
 msgid "Obtain the SFTP credentials"

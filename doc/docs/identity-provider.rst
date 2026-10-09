@@ -11,7 +11,7 @@ Keycloak as identity provider for ASM
 Apple School Manager can federate the sign-in of its Managed Apple Accounts to
 an external identity provider.
 Your users then sign in to their Apple devices with the password from your
-UCS\@school domain
+|UAS| domain
 instead of a password that Apple School Manager manages.
 
 This chapter describes how to set up the :term:`Keycloak` app of :term:`UCS`
@@ -44,7 +44,7 @@ A plain :term:`OIDC` client isn't enough.
 What you need
 =============
 
-* A UCS\@school domain
+* A |UAS| domain
   with the Apple School Manager Connector
   and the Keycloak app in version ``26.7.2-nubus1`` or later.
 
@@ -408,7 +408,7 @@ Sign in on a device
 ===================
 
 After you enable federation for the domain,
-your users sign in to an Apple device with their UCS\@school credentials.
+your users sign in to an Apple device with their |UAS| credentials.
 The following steps describe an unpaired device.
 See :cite:t:`apple-sign-in` for the general procedure.
 
@@ -429,4 +429,4 @@ See :cite:t:`apple-sign-in` for the general procedure.
 
 After the sign-in,
 :menuselection:`Settings --> Apple Account` shows the user with the email
-address from UCS\@school.
+address from |UAS|.

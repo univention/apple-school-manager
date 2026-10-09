@@ -24,11 +24,11 @@ msgstr ""
 msgid "Contents"
 msgstr "Inhalt"
 
-#: ../../index.rst:24
+#: ../../index.rst:32
 msgid "Appendix"
 msgstr "Anhang"
 
 #: ../../index.rst:9
-msgid "Apple School Manager Connector for UCS\\@school"
-msgstr "Apple School Manager Connector für UCS\\@school"
+msgid "Apple School Manager Connector for |UAS|"
+msgstr "Apple School Manager Connector für |UAS|"
 

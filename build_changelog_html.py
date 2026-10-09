@@ -21,6 +21,7 @@ from lxml import html
 REPO_ROOT = Path(__file__).resolve().parent
 CHANGELOG_RST = REPO_ROOT / "doc" / "docs" / "changelog.rst"
 CHANGELOG_HTML = REPO_ROOT / "changelog.html"
+SUBSTITUTIONS = CHANGELOG_RST.parent / "substitutions.txt"
 
 MANUAL_URL = "https://docs.software-univention.de/apple-school-manager-connector/en/"
 
@@ -38,6 +39,7 @@ extensions = []
 html_theme = "basic"
 html_permalinks = False
 exclude_patterns = ["_build"]
+rst_epilog = ".. include:: /substitutions.txt"
 
 
 def _page_of(label):
@@ -76,6 +78,7 @@ def _build_sphinx(srcdir: Path, outdir: Path) -> None:
     (srcdir / "conf.py").write_text(CONF_PY)
     (srcdir / "index.rst").write_text(INDEX_RST)
     (srcdir / "changelog.rst").write_text(CHANGELOG_RST.read_text())
+    (srcdir / "substitutions.txt").write_text(SUBSTITUTIONS.read_text())
     subprocess.run(
         ["sphinx-build", "--builder", "html", str(srcdir), str(outdir)],
         check=True,

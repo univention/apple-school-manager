@@ -133,24 +133,16 @@ msgid "v5.0.1"
 msgstr "v5.0.1"
 
 #: ../../changelog.rst:76
-msgid ""
-"First release for UCS\\@school 5.2. Functionally identical to version "
-"3.0.3."
-msgstr ""
-"Erstes Release für UCS\\@school 5.2. Funktional identisch mit Version "
-"3.0.3."
+msgid "First release for |UAS| 5.2. Functionally identical to version 3.0.3."
+msgstr "Erstes Release für |UAS| 5.2. Funktional identisch mit Version 3.0.3."
 
 #: ../../changelog.rst:82
 msgid "v4.0.0"
 msgstr "v4.0.0"
 
 #: ../../changelog.rst:84
-msgid ""
-"First release for UCS\\@school 5.1. Functionally identical to version "
-"3.0.3."
-msgstr ""
-"Erstes Release für UCS\\@school 5.1. Funktional identisch mit Version "
-"3.0.3."
+msgid "First release for |UAS| 5.1. Functionally identical to version 3.0.3."
+msgstr "Erstes Release für |UAS| 5.1. Funktional identisch mit Version 3.0.3."
 
 #: ../../changelog.rst:90
 msgid "v3.0.3"

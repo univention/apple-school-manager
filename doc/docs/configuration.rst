@@ -111,7 +111,7 @@ Apple School Manager accounts
 The ``accounts`` section maps a name of your choice to each account.
 The name may only contain letters, digits, ``.``, ``_``, and ``-``.
 Usually there is a single account.
-If the schools on your UCS\@school system belong to different institutions,
+If the schools on your |UAS| system belong to different institutions,
 each with its own Apple School Manager account,
 add one entry per account.
 The connector then uploads a separate archive to every account,
@@ -450,7 +450,7 @@ Email addresses
 ---------------
 
 Apple School Manager uses the email address of a user as the Apple Account.
-The connector exports the primary email address of each user in UCS\@school.
+The connector exports the primary email address of each user in |UAS|.
 Users without one are exported without an email address,
 and Apple School Manager can't create an Apple Account for them.
 
@@ -589,7 +589,7 @@ Grade level of students
 Names of courses and classes
 ----------------------------
 
-UCS\@school prefixes the name of a school class with the school abbreviation,
+|UAS| prefixes the name of a school class with the school abbreviation,
 for example ``gym123-1a``.
 The connector derives the course name from that name.
 

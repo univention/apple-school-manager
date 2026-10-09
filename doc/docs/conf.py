@@ -66,6 +66,9 @@ bibtex_reference_style = "label"
 
 templates_path = ["_templates"]
 source_suffix = ".rst"
+rst_epilog = """
+.. include:: /substitutions.txt
+"""
 root_doc = "index"
 language = "en"
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]

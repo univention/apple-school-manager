@@ -10,10 +10,10 @@ Introduction
 
 The *Apple School Manager Connector* is an app for :term:`UCS@school`.
 It provisions the schools, classes, work groups, teachers, and students of your
-UCS\@school domain to :term:`Apple School Manager`,
+|UAS| domain to :term:`Apple School Manager`,
 so that you don't have to maintain the same accounts twice.
 
-In this setup, UCS\@school takes the role of the student information system
+In this setup, |UAS| takes the role of the student information system
 that Apple School Manager expects,
 and the connector uses the SFTP interface that Apple provides for such systems.
 The connector collects the data from the LDAP directory,
@@ -27,10 +27,10 @@ Who this documentation is for
 =============================
 
 This documentation addresses administrators
-who run a UCS\@school domain
+who run a |UAS| domain
 and who want to provision its users to Apple School Manager.
 It assumes that you're familiar with the administration of
-:term:`UCS` and UCS\@school,
+:term:`UCS` and |UAS|,
 in particular with the following topics:
 
 * The :term:`App Center`,
@@ -41,9 +41,9 @@ in particular with the following topics:
   see :ref:`uv-manual:computers-administration-of-local-system-configuration-with-univention-configuration-registry`
   in the UCS manual :cite:p:`ucs-manual`.
 
-* The school objects that UCS\@school manages,
+* The school objects that |UAS| manages,
   see :ref:`uv-ucsschool-manual:structure-ldap`
-  in the UCS\@school manual :cite:p:`ucsschool-manual`,
+  in the |UAS| manual :cite:p:`ucsschool-manual`,
   which is available only in German.
 
 .. _introduction-prerequisites:
@@ -53,7 +53,7 @@ What you need
 
 Before you start, make sure that you have the following:
 
-* A UCS\@school domain with at least one school.
+* A |UAS| domain with at least one school.
 
 * An Apple School Manager account for an educational institution.
 
@@ -69,10 +69,10 @@ Before you start, make sure that you have the following:
 What the connector synchronizes
 ===============================
 
-The connector transfers data in one direction only, from UCS\@school to Apple
+The connector transfers data in one direction only, from |UAS| to Apple
 School Manager.
 It never reads data back,
-and it never changes objects in your UCS\@school domain.
+and it never changes objects in your |UAS| domain.
 
 The following table lists what the connector maps to which Apple School Manager
 entity.
@@ -81,7 +81,7 @@ entity.
    :header-rows: 1
    :widths: 40 60
 
-   * - UCS\@school object
+   * - |UAS| object
      - Apple School Manager entity
 
    * - School
@@ -125,4 +125,4 @@ For device management, Univention recommends a mobile device management
 solution that offers an interface to Apple School Manager.
 The `Univention integration catalog
 <https://www.univention.com/products/integration-catalog/>`_
-lists the solutions that integrate with UCS\@school.
+lists the solutions that integrate with |UAS|.

@@ -26,15 +26,15 @@ msgstr "Keycloak als Identity Provider für ASM"
 
 #: ../../identity-provider.rst:11
 msgid ""
-"Apple School Manager can federate the sign-in of its Managed Apple "
-"Accounts to an external identity provider. Your users then sign in to "
-"their Apple devices with the password from your UCS\\@school domain "
-"instead of a password that Apple School Manager manages."
+"Apple School Manager can federate the sign-in of its Managed Apple Accounts "
+"to an external identity provider. Your users then sign in to their Apple "
+"devices with the password from your |UAS| domain instead of a password that "
+"Apple School Manager manages."
 msgstr ""
-"Apple School Manager kann die Anmeldung seiner verwalteten Apple Accounts "
-"an einen externen Identity Provider föderieren. Ihre Benutzer melden sich "
-"dann an ihren Apple-Geräten mit dem Passwort aus Ihrer UCS\\@school-Domäne"
-" an statt mit einem Passwort, das Apple School Manager verwaltet."
+"Apple School Manager kann die Anmeldung seiner verwalteten Apple Accounts an"
+" einen externen Identity Provider föderieren. Ihre Benutzer melden sich dann"
+" an ihren Apple-Geräten mit dem Passwort aus Ihrer |UAS|-Domäne an statt mit"
+" einem Passwort, das Apple School Manager verwaltet."
 
 #: ../../identity-provider.rst:17
 msgid ""
@@ -89,10 +89,10 @@ msgstr "Voraussetzungen"
 
 #: ../../identity-provider.rst:47
 msgid ""
-"A UCS\\@school domain with the Apple School Manager Connector and the "
-"Keycloak app in version ``26.7.2-nubus1`` or later."
+"A |UAS| domain with the Apple School Manager Connector and the Keycloak app "
+"in version ``26.7.2-nubus1`` or later."
 msgstr ""
-"Eine UCS\\@school-Domäne mit dem Apple School Manager Connector und der "
+"Eine |UAS|-Domäne mit dem Apple School Manager Connector und der "
 "Keycloak-App in Version ``26.7.2-nubus1`` oder neuer."
 
 #: ../../identity-provider.rst:51
@@ -769,13 +769,13 @@ msgstr "Auf einem Gerät anmelden"
 #: ../../identity-provider.rst:410
 msgid ""
 "After you enable federation for the domain, your users sign in to an Apple "
-"device with their UCS\\@school credentials. The following steps describe an "
+"device with their |UAS| credentials. The following steps describe an "
 "unpaired device. See :cite:t:`apple-sign-in` for the general procedure."
 msgstr ""
 "Nachdem Sie die Föderation für die Domain aktiviert haben, melden sich Ihre "
-"Benutzer mit ihren UCS\\@school-Anmeldedaten an einem Apple-Gerät an. Die "
-"folgenden Schritte beschreiben ein nicht gekoppeltes Gerät. Das allgemeine "
-"Vorgehen beschreibt :cite:t:`apple-sign-in`."
+"Benutzer mit ihren |UAS|-Anmeldedaten an einem Apple-Gerät an. Die folgenden"
+" Schritte beschreiben ein nicht gekoppeltes Gerät. Das allgemeine Vorgehen "
+"beschreibt :cite:t:`apple-sign-in`."
 
 #: ../../identity-provider.rst:415
 msgid "Open :menuselection:`Settings --> Apple Account`."
@@ -816,10 +816,10 @@ msgstr "Geben Sie den Geräte-PIN ein, wenn das Gerät danach fragt."
 #: ../../identity-provider.rst:430
 msgid ""
 "After the sign-in, :menuselection:`Settings --> Apple Account` shows the "
-"user with the email address from UCS\\@school."
+"user with the email address from |UAS|."
 msgstr ""
 "Nach der Anmeldung zeigt :menuselection:`Settings --> Apple Account` den "
-"Benutzer mit der E-Mail-Adresse aus UCS\\@school an."
+"Benutzer mit der E-Mail-Adresse aus |UAS| an."
 
 #~ msgid ""
 #~ "A UCS\\@school domain with the Apple "

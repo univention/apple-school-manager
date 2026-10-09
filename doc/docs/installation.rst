@@ -61,7 +61,7 @@ and enter them as described in :ref:`installation-configure-credentials`.
 
 .. note::
 
-   The connector requires UCS\@school in version ``5.2v5`` or later.
+   The connector requires |UAS| in version ``5.2v5`` or later.
    The app refuses to update on a system with an older version.
 
 .. _installation-credentials:

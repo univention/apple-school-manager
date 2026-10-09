@@ -73,7 +73,7 @@ v5.0.2
 v5.0.1
 ======
 
-* First release for UCS\@school 5.2.
+* First release for |UAS| 5.2.
   Functionally identical to version 3.0.3.
 
 .. _changelog-v4.0.0:
@@ -81,7 +81,7 @@ v5.0.1
 v4.0.0
 ======
 
-* First release for UCS\@school 5.1.
+* First release for |UAS| 5.1.
   Functionally identical to version 3.0.3.
 
 .. _changelog-v3.0.3:

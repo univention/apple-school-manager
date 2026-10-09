@@ -144,7 +144,7 @@ Locations
    :widths: 30 70
 
    * - Column
-     - Source in UCS\@school
+     - Source in |UAS|
 
    * - ``location_id``
      - Name of the school, for example ``gym123``.
@@ -159,7 +159,7 @@ Courses
 -------
 
 Apple School Manager requires every class to belong to a course.
-UCS\@school only has the school class or work group,
+|UAS| only has the school class or work group,
 so the connector exports each of them twice:
 once as a course in :file:`courses.csv`
 and once as a class of that course in :file:`classes.csv`.
@@ -171,7 +171,7 @@ so each course has exactly one class.
    :widths: 30 70
 
    * - Column
-     - Source in UCS\@school
+     - Source in |UAS|
 
    * - ``course_id``
      - Name of the school class or work group,
@@ -197,7 +197,7 @@ Classes
    :widths: 30 70
 
    * - Column
-     - Source in UCS\@school
+     - Source in |UAS|
 
    * - ``class_id``
      - Name of the school class or work group.
@@ -237,7 +237,7 @@ Staff
    :widths: 30 70
 
    * - Column
-     - Source in UCS\@school
+     - Source in |UAS|
 
    * - ``person_id``
      - The attribute from ``staff.person_id_attribute``,
@@ -281,7 +281,7 @@ Students
    :widths: 30 70
 
    * - Column
-     - Source in UCS\@school
+     - Source in |UAS|
 
    * - ``person_id``
      - The attribute from ``student.person_id_attribute``,
@@ -332,7 +332,7 @@ Rosters
    :widths: 30 70
 
    * - Column
-     - Source in UCS\@school
+     - Source in |UAS|
 
    * - ``roster_id``
      - The class name and the ``person_id`` of the student,

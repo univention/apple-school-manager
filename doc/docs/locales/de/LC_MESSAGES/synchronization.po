@@ -286,8 +286,8 @@ msgstr "Spalte"
 #: ../../synchronization.rst:147 ../../synchronization.rst:174
 #: ../../synchronization.rst:200 ../../synchronization.rst:240
 #: ../../synchronization.rst:284 ../../synchronization.rst:335
-msgid "Source in UCS\\@school"
-msgstr "Quelle in UCS\\@school"
+msgid "Source in |UAS|"
+msgstr "Quelle in |UAS|"
 
 #: ../../synchronization.rst:149 ../../synchronization.rst:187
 #: ../../synchronization.rst:220 ../../synchronization.rst:265
@@ -317,18 +317,17 @@ msgstr "Kurse"
 
 #: ../../synchronization.rst:161
 msgid ""
-"Apple School Manager requires every class to belong to a course. "
-"UCS\\@school only has the school class or work group, so the connector "
-"exports each of them twice: once as a course in :file:`courses.csv` and "
-"once as a class of that course in :file:`classes.csv`. Both rows use the "
-"name of the group as their ID, so each course has exactly one class."
+"Apple School Manager requires every class to belong to a course. |UAS| only "
+"has the school class or work group, so the connector exports each of them "
+"twice: once as a course in :file:`courses.csv` and once as a class of that "
+"course in :file:`classes.csv`. Both rows use the name of the group as their "
+"ID, so each course has exactly one class."
 msgstr ""
-"Apple School Manager verlangt, dass jede Klasse zu einem Kurs gehört. "
-"UCS\\@school kennt nur die Schulklasse oder Arbeitsgruppe, daher exportiert "
-"der Connector jede davon zweimal: einmal als Kurs in :file:`courses.csv` "
-"und einmal als Klasse dieses Kurses in :file:`classes.csv`. Beide Zeilen "
-"verwenden den Namen der Gruppe als ID, sodass jeder Kurs genau eine Klasse "
-"hat."
+"Apple School Manager verlangt, dass jede Klasse zu einem Kurs gehört. |UAS| "
+"kennt nur die Schulklasse oder Arbeitsgruppe, daher exportiert der Connector"
+" jede davon zweimal: einmal als Kurs in :file:`courses.csv` und einmal als "
+"Klasse dieses Kurses in :file:`classes.csv`. Beide Zeilen verwenden den "
+"Namen der Gruppe als ID, sodass jeder Kurs genau eine Klasse hat."
 
 #: ../../synchronization.rst:169
 msgid "Columns of :file:`courses.csv`"

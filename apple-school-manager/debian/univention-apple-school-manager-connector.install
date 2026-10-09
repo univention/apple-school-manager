@@ -1,2 +1,3 @@
 etc/asm_public_key etc/
+usr/sbin/asm-setup-keycloak usr/sbin
 usr/sbin/asm-upload usr/sbin

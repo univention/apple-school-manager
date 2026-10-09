@@ -22,6 +22,7 @@ Homepage: https://school.apple.com/
 Package: python3-univention-apple-school-manager-connector
 Architecture: all
 Depends:
+ python3-keycloak,
  python3-paramiko,
  python3-ucsschool,
  python3-univention,

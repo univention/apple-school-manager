@@ -1,0 +1,152 @@
+#!/usr/bin/python3
+# SPDX-FileCopyrightText: 2026 Univention GmbH
+# SPDX-License-Identifier: AGPL-3.0-only
+
+"""Set up Keycloak as the identity provider of Apple School Manager."""
+
+import argparse
+import getpass
+import subprocess
+import sys
+import time
+import urllib.error
+import urllib.request
+from pathlib import Path
+
+from keycloak import KeycloakAdmin
+from keycloak.exceptions import KeycloakError
+from univention.asm.keycloak import (
+    AdminUser,
+    KeycloakSetup,
+    KeycloakSetupError,
+    check_keycloak_app_version,
+)
+from univention.config_registry import ConfigRegistry
+
+KEYCLOAK_SECRET_FILE = Path("/etc/keycloak.secret")
+KEYCLOAK_ADMIN = "admin"
+SSF_FEATURE_KEY = "keycloak/server/feature/ssf"
+WAIT_SECONDS = 300
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--realm", default="ucs", help="Keycloak realm with the users (default: %(default)s)"
+    )
+    parser.add_argument(
+        "--client-id",
+        default="apple-asm",
+        help="client ID for Apple School Manager (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--user",
+        default="asm",
+        help="Keycloak user that Apple School Manager connects with, created if missing (default: %(default)s)",
+    )
+    parser.add_argument("--first-name", default="Apple School Manager", help="first name of a new user")
+    parser.add_argument("--last-name", default="Connector", help="last name of a new user")
+    parser.add_argument("--email", help="email address of a new user (default: USER@DOMAIN)")
+    parser.add_argument(
+        "--password-file",
+        type=Path,
+        help="file with the password of a new user, asked for interactively if omitted",
+    )
+    return parser.parse_args()
+
+
+def is_reachable(url: str) -> bool:
+    try:
+        with urllib.request.urlopen(url, timeout=10) as response:  # noqa: S310
+            return bool(response.status == 200)
+    except (urllib.error.URLError, TimeoutError):
+        return False
+
+
+def wait_until_reachable(url: str) -> None:
+    deadline = time.monotonic() + WAIT_SECONDS
+    while not is_reachable(url):
+        if time.monotonic() > deadline:
+            msg = f"Keycloak didn't answer at {url} within {WAIT_SECONDS} seconds."
+            raise KeycloakSetupError(msg)
+        time.sleep(5)
+
+
+def enable_ssf_feature(ucr: ConfigRegistry, probe_url: str) -> None:
+    if ucr.is_true(SSF_FEATURE_KEY):
+        return
+    print("Enabling the SSF feature of Keycloak. Keycloak restarts and is briefly unavailable.")
+    subprocess.run(
+        ["univention-app", "configure", "keycloak", "--set", f"{SSF_FEATURE_KEY}=true"], check=True
+    )
+    wait_until_reachable(probe_url)
+
+
+def read_password(password_file: Path | None, username: str) -> str:
+    if password_file is not None:
+        password = password_file.read_text().strip()
+        if not password:
+            msg = f"The password file {password_file} is empty."
+            raise KeycloakSetupError(msg)
+        return password
+    if not sys.stdin.isatty():
+        msg = f"Pass the password of the new user {username!r} with --password-file."
+        raise KeycloakSetupError(msg)
+    password = getpass.getpass(f"Password for the new Keycloak user {username!r}: ")
+    if not password or password != getpass.getpass("Repeat the password: "):
+        msg = "The passwords are empty or don't match."
+        raise KeycloakSetupError(msg)
+    return password
+
+
+def main() -> None:
+    args = parse_args()
+    ucr = ConfigRegistry()
+    ucr.load()
+    check_keycloak_app_version(ucr.get("appcenter/apps/keycloak/version"))
+    if not KEYCLOAK_SECRET_FILE.exists():
+        msg = (
+            f"{KEYCLOAK_SECRET_FILE} is missing. Run asm-setup-keycloak on the Primary Directory Node "
+            "or a Backup Directory Node with the Keycloak app."
+        )
+        raise KeycloakSetupError(msg)
+    base_url = ucr.get("ucs/server/sso/uri", f"https://ucs-sso-ng.{ucr['domainname']}/".lower()).rstrip(
+        "/"
+    )
+    enable_ssf_feature(ucr, f"{base_url}/realms/{args.realm}/.well-known/openid-configuration")
+
+    admin = KeycloakAdmin(
+        server_url=f"{base_url}/",
+        username=KEYCLOAK_ADMIN,
+        password=KEYCLOAK_SECRET_FILE.read_text().strip(),
+        realm_name=args.realm,
+        user_realm_name="master",
+        verify=True,
+    )
+    user = AdminUser(
+        username=args.user,
+        first_name=args.first_name,
+        last_name=args.last_name,
+        email=args.email or f"{args.user}@{ucr['domainname']}",
+    )
+    result = KeycloakSetup(admin, base_url, args.realm).run(
+        args.client_id, user, lambda: read_password(args.password_file, args.user)
+    )
+    if not is_reachable(result.ssf_url):
+        msg = f"Keycloak doesn't offer {result.ssf_url}. Check that the SSF feature is enabled."
+        raise KeycloakSetupError(msg)
+
+    print()
+    print("Enter these values for the custom identity provider in Apple School Manager:")
+    print(f"Client ID:     {result.client_id}")
+    print(f"Client Secret: {result.client_secret}")
+    print(f"SSF URL:       {result.ssf_url}")
+    print(f"OIDC URL:      {result.oidc_url}")
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except (KeycloakSetupError, KeycloakError, subprocess.CalledProcessError) as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        sys.exit(1)

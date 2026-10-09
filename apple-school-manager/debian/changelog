@@ -5,6 +5,9 @@ univention-apple-school-manager-connector (5.2.0) unstable; urgency=medium
     /etc/asm-connections.json with user settings per account and class
     settings per school
     Issue univention/dev/education/apple-school-manager#8
+  * Add asm-setup-keycloak, which sets up Keycloak as the identity
+    provider of Apple School Manager
+    Issue univention/dev/education/apple-school-manager#19
 
  -- Jürn Brodersen <brodersen@univention.de>  Wed, 23 Sep 2026 12:00:00 +0200
 

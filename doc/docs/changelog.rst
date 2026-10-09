@@ -33,6 +33,9 @@ v5.2.0
 
 * ``asm/last_upload/ACCOUNT`` holds the time of the last upload to each account.
 
+* The script :command:`asm-setup-keycloak` sets up Keycloak
+  as the identity provider of Apple School Manager.
+
 * The connector no longer checks whether the domain of an email address
   resolves.
   The check only wrote a warning,

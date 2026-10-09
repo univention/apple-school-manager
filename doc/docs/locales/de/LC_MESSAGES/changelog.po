@@ -78,6 +78,14 @@ msgstr ""
 
 #: ../../changelog.rst:36
 msgid ""
+"The script :command:`asm-setup-keycloak` sets up Keycloak as the identity "
+"provider of Apple School Manager."
+msgstr ""
+"Das Skript :command:`asm-setup-keycloak` richtet Keycloak als Identity "
+"Provider für Apple School Manager ein."
+
+#: ../../changelog.rst:39
+msgid ""
 "The connector no longer checks whether the domain of an email address "
 "resolves. The check only wrote a warning, and Apple School Manager accepts "
 "such addresses."
@@ -86,41 +94,41 @@ msgstr ""
 "auflösen lässt. Die Prüfung schrieb nur eine Warnung, und Apple School "
 "Manager akzeptiert solche Adressen."
 
-#: ../../changelog.rst:44
+#: ../../changelog.rst:47
 msgid "v5.1.1"
 msgstr "v5.1.1"
 
-#: ../../changelog.rst:46
+#: ../../changelog.rst:49
 msgid "The connector supports running on a central Replica Directory Node again."
 msgstr ""
 "Der Connector lässt sich wieder auf einem zentralen Replica Directory "
 "Node betreiben."
 
-#: ../../changelog.rst:51
+#: ../../changelog.rst:54
 msgid "v5.1.0"
 msgstr "v5.1.0"
 
-#: ../../changelog.rst:53
+#: ../../changelog.rst:56
 msgid "The connector exports more additional locations for students and teachers."
 msgstr ""
 "Der Connector exportiert weitere zusätzliche Standorte für Schüler und"
 " Lehrer."
 
-#: ../../changelog.rst:58
+#: ../../changelog.rst:61
 msgid "v5.0.3"
 msgstr "v5.0.3"
 
-#: ../../changelog.rst:60
+#: ../../changelog.rst:63
 msgid "The app refuses installation on a central Replica Directory Node."
 msgstr ""
 "Die App verweigert die Installation auf einem zentralen Replica "
 "Directory Node."
 
-#: ../../changelog.rst:65
+#: ../../changelog.rst:68
 msgid "v5.0.2"
 msgstr "v5.0.2"
 
-#: ../../changelog.rst:67
+#: ../../changelog.rst:70
 msgid ""
 "Follow-up release for version 5.0.1. A mismatched component ID in the App"
 " Center prevented the update from UCS 5.0."
@@ -128,35 +136,35 @@ msgstr ""
 "Folge-Release für Version 5.0.1. Eine nicht passende Komponenten-ID im"
 " App Center verhinderte das Update von UCS 5.0."
 
-#: ../../changelog.rst:74
+#: ../../changelog.rst:77
 msgid "v5.0.1"
 msgstr "v5.0.1"
 
-#: ../../changelog.rst:76
+#: ../../changelog.rst:79
 msgid "First release for |UAS| 5.2. Functionally identical to version 3.0.3."
 msgstr "Erstes Release für |UAS| 5.2. Funktional identisch mit Version 3.0.3."
 
-#: ../../changelog.rst:82
+#: ../../changelog.rst:85
 msgid "v4.0.0"
 msgstr "v4.0.0"
 
-#: ../../changelog.rst:84
+#: ../../changelog.rst:87
 msgid "First release for |UAS| 5.1. Functionally identical to version 3.0.3."
 msgstr "Erstes Release für |UAS| 5.1. Funktional identisch mit Version 3.0.3."
 
-#: ../../changelog.rst:90
+#: ../../changelog.rst:93
 msgid "v3.0.3"
 msgstr "v3.0.3"
 
-#: ../../changelog.rst:92
+#: ../../changelog.rst:95
 msgid "Fixed a Debian dependency."
 msgstr "Eine Debian-Abhängigkeit wurde korrigiert."
 
-#: ../../changelog.rst:97
+#: ../../changelog.rst:100
 msgid "v3.0.2"
 msgstr "v3.0.2"
 
-#: ../../changelog.rst:99
+#: ../../changelog.rst:102
 msgid ""
 "The connector exports the grade level, configured with "
 "``asm/attributes/student/grade_level``."
@@ -164,11 +172,11 @@ msgstr ""
 "Der Connector exportiert die Jahrgangsstufe, die mit "
 "``asm/attributes/student/grade_level`` konfiguriert wird."
 
-#: ../../changelog.rst:105
+#: ../../changelog.rst:108
 msgid "v3.0.1"
 msgstr "v3.0.1"
 
-#: ../../changelog.rst:107
+#: ../../changelog.rst:110
 msgid ""
 "The log rotation of the connector follows the ``logrotate/*`` UCR "
 "variables."
@@ -176,11 +184,11 @@ msgstr ""
 "Die Logrotation des Connectors folgt den UCR-Variablen "
 "``logrotate/*``."
 
-#: ../../changelog.rst:112
+#: ../../changelog.rst:115
 msgid "v2.2.4"
 msgstr "v2.2.4"
 
-#: ../../changelog.rst:114
+#: ../../changelog.rst:117
 msgid ""
 "The connector applies configured LDAP filters correctly when it loads "
 "classes."
@@ -188,19 +196,19 @@ msgstr ""
 "Der Connector wendet konfigurierte LDAP-Filter beim Laden von Klassen "
 "korrekt an."
 
-#: ../../changelog.rst:120
+#: ../../changelog.rst:123
 msgid "v2.2.3"
 msgstr "v2.2.3"
 
-#: ../../changelog.rst:122
+#: ../../changelog.rst:125
 msgid "Fixed the handling of unexpected errors."
 msgstr "Die Behandlung unerwarteter Fehler wurde korrigiert."
 
-#: ../../changelog.rst:127
+#: ../../changelog.rst:130
 msgid "v2.2.2"
 msgstr "v2.2.2"
 
-#: ../../changelog.rst:129
+#: ../../changelog.rst:132
 #, python-brace-format
 msgid ""
 "The name of a course, which the connector derives from the school class, "
@@ -211,21 +219,21 @@ msgstr ""
 " folgt dem Muster in ``asm/attributes/course-name-pattern``. Der "
 "Voreinstellung ist ``{ou}-{name}``."
 
-#: ../../changelog.rst:137
+#: ../../changelog.rst:140
 msgid "v2.2.1"
 msgstr "v2.2.1"
 
-#: ../../changelog.rst:139
+#: ../../changelog.rst:142
 msgid "The connector applies configured LDAP filters to :file:`rosters.csv`."
 msgstr ""
 "Der Connector wendet konfigurierte LDAP-Filter auf :file:`rosters.csv`"
 " an."
 
-#: ../../changelog.rst:144
+#: ../../changelog.rst:147
 msgid "v2.2.0"
 msgstr "v2.2.0"
 
-#: ../../changelog.rst:146
+#: ../../changelog.rst:149
 msgid ""
 "The connector uses the name of the school class as the course name. It "
 "used the description of the school class before."
@@ -233,7 +241,7 @@ msgstr ""
 "Der Connector verwendet den Namen der Schulklasse als Kursnamen. Zuvor"
 " verwendete er die Beschreibung der Schulklasse."
 
-#: ../../changelog.rst:149
+#: ../../changelog.rst:152
 msgid ""
 "LDAP filters give you finer control over the exported teachers and "
 "students. Set them globally or per school with "
@@ -245,11 +253,11 @@ msgstr ""
 "``asm/ldap_filter/students`` und ``asm/ldap_filter/staff`` setzen. Ein"
 " ungültiger Filter bricht die Synchronisation ohne Export ab."
 
-#: ../../changelog.rst:157
+#: ../../changelog.rst:160
 msgid "v2.1.0"
 msgstr "v2.1.0"
 
-#: ../../changelog.rst:159
+#: ../../changelog.rst:162
 msgid ""
 "The connector fills the ``password_policy`` column for new students from "
 "``asm/attributes/student/password_policy``."
@@ -257,19 +265,19 @@ msgstr ""
 "Der Connector füllt die Spalte ``password_policy`` für neue Schüler "
 "aus ``asm/attributes/student/password_policy``."
 
-#: ../../changelog.rst:165
+#: ../../changelog.rst:168
 msgid "v2.0.0"
 msgstr "v2.0.0"
 
-#: ../../changelog.rst:167
+#: ../../changelog.rst:170
 msgid "First release for UCS 4.4. Functionally identical to version 1.2."
 msgstr "Erstes Release für UCS 4.4. Funktional identisch mit Version 1.2."
 
-#: ../../changelog.rst:173
+#: ../../changelog.rst:176
 msgid "v1.2.0"
 msgstr "v1.2.0"
 
-#: ../../changelog.rst:175
+#: ../../changelog.rst:178
 msgid ""
 "The connector handles classes with more than 15 teachers correctly. It "
 "exports 15 of them, which is the limit of Apple School Manager."
@@ -278,19 +286,19 @@ msgstr ""
 "exportiert 15 davon, was dem Limit von Apple School Manager "
 "entspricht."
 
-#: ../../changelog.rst:182
+#: ../../changelog.rst:185
 msgid "v1.1.0"
 msgstr "v1.1.0"
 
-#: ../../changelog.rst:184
+#: ../../changelog.rst:187
 msgid "You can install the app on a Replica Directory Node."
 msgstr "Sie können die App auf einem Replica Directory Node installieren."
 
-#: ../../changelog.rst:189
+#: ../../changelog.rst:192
 msgid "v1.0.0"
 msgstr "v1.0.0"
 
-#: ../../changelog.rst:191
+#: ../../changelog.rst:194
 msgid "First release."
 msgstr "Erstes Release."
 

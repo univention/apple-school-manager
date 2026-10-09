@@ -77,11 +77,56 @@ What you need
 Configure Keycloak
 ==================
 
-Make every setting in the Keycloak admin console in the realm ``ucs``,
+You can make the Keycloak settings with a script,
+as described in :ref:`identity-provider-keycloak-script`,
+or manually, as described in the sections after it.
+
+For the manual setup,
+make every setting in the Keycloak admin console in the realm ``ucs``,
 which holds the users of your domain.
 The admin console opens in the realm ``master``.
 Select ``ucs`` in the realm selector before you change anything,
 and check the selected realm whenever you return to the admin console.
+
+.. _identity-provider-keycloak-script:
+
+Set up Keycloak with a script
+-----------------------------
+
+The app ships the script :command:`asm-setup-keycloak`,
+which makes the settings of the following sections for you.
+Run it on the Primary Directory Node
+or on a Backup Directory Node with the Keycloak app:
+
+.. code-block:: console
+   :caption: Set up Keycloak for Apple School Manager
+
+   $ asm-setup-keycloak
+
+The script does the following:
+
+#. It enables the SSF feature of Keycloak, if it isn't enabled yet.
+   Keycloak restarts and is unavailable for a short time.
+
+#. It turns the realm ``ucs`` into an SSF transmitter
+   and creates the client scopes, the client ``apple-asm``,
+   and the client role ``ssf-admin``.
+
+#. It creates the Keycloak user ``asm`` with the client role ``ssf-admin``
+   and asks for the password of the user.
+   To pass the password in a file instead,
+   use the option ``--password-file``.
+
+At the end,
+the script prints the client ID, the client secret, the SSF URL,
+and the OIDC URL.
+You need them in :ref:`identity-provider-asm-idp`.
+
+You can run the script again at any time.
+It only changes settings that differ from what Apple School Manager needs,
+and it keeps an existing user and its password.
+To use other names for the realm, the client, or the user,
+see :command:`asm-setup-keycloak --help`.
 
 .. _identity-provider-keycloak-feature:
 
@@ -333,8 +378,9 @@ Connect the identity provider
 
 #. Enter a name for the identity provider, for example ``asmkc``.
 
-#. Enter the client ID and the client secret from
-   :ref:`identity-provider-keycloak-client`,
+#. Enter the values that :command:`asm-setup-keycloak` printed,
+   or the client ID and the client secret from
+   :ref:`identity-provider-keycloak-client`
    and the two URLs from :ref:`identity-provider-keycloak-realm`,
    as listed in the following table.
 

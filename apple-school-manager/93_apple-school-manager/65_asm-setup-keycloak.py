@@ -23,7 +23,7 @@ REALM = "ucs"
 
 
 @pytest.fixture
-def base_url() -> str:
+def sso_base_url() -> str:
     ucr = ConfigRegistry()
     ucr.load()
     return str(ucr.get("ucs/server/sso/uri", f"https://ucs-sso-ng.{ucr['domainname']}/".lower())).rstrip(
@@ -32,9 +32,9 @@ def base_url() -> str:
 
 
 @pytest.fixture
-def admin(base_url: str) -> KeycloakAdmin:
+def admin(sso_base_url: str) -> KeycloakAdmin:
     return KeycloakAdmin(
-        server_url=f"{base_url}/",
+        server_url=f"{sso_base_url}/",
         username="admin",
         password=Path("/etc/keycloak.secret").read_text().strip(),
         realm_name=REALM,
@@ -76,7 +76,7 @@ def run_setup(client_id: str, username: str, password_file: Path) -> dict[str, s
 
 
 def test_asm_setup_keycloak(
-    admin: KeycloakAdmin, base_url: str, names: tuple[str, str], tmp_path: Path
+    admin: KeycloakAdmin, sso_base_url: str, names: tuple[str, str], tmp_path: Path
 ) -> None:
     client_id, username = names
     password_file = tmp_path / "password"
@@ -85,8 +85,8 @@ def test_asm_setup_keycloak(
     values = run_setup(client_id, username, password_file)
 
     assert values["Client ID"] == client_id
-    assert values["SSF URL"] == f"{base_url}/realms/{REALM}/.well-known/ssf-configuration"
-    assert values["OIDC URL"] == f"{base_url}/realms/{REALM}/.well-known/openid-configuration"
+    assert values["SSF URL"] == f"{sso_base_url}/realms/{REALM}/.well-known/ssf-configuration"
+    assert values["OIDC URL"] == f"{sso_base_url}/realms/{REALM}/.well-known/openid-configuration"
     with urllib.request.urlopen(values["SSF URL"], timeout=30) as response:  # noqa: S310
         assert response.status == 200
     assert admin.get_realm(REALM)["attributes"]["ssf.transmitterEnabled"] == "true"

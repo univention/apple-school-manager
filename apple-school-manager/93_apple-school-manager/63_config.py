@@ -40,11 +40,34 @@ def test_existing_schools_pass(password_file: str) -> None:
     config.check_schools(connections, ["gym123", "gs456"])
 
 
-def test_misspelled_school_is_rejected(password_file: str) -> None:
+def test_misspelled_school_is_rejected_with_catch_all(password_file: str) -> None:
     connections = config.parse_config(
         settings_file(password_file, ["north", "south"], {"gym1234": "north", "*": "south"}),
     )
     with pytest.raises(config.ASMConfigError, match="gym1234"):
+        config.check_schools(connections, ["gym123", "gs456"])
+
+
+def test_unknown_school_without_catch_all_is_skipped(
+    password_file: str, caplog: pytest.LogCaptureFixture
+) -> None:
+    connections = config.parse_config(
+        settings_file(
+            password_file,
+            ["north", "south"],
+            {"gym123": "north", "gone": "north", "gone2": "south"},
+        ),
+    )
+    receiving = config.check_schools(connections, ["gym123", "gs456"])
+    assert [connection.name for connection in receiving] == ["north"]
+    assert "'gone'" in caplog.text
+    assert "'gone2'" in caplog.text
+    assert "'south' has no existing school" in caplog.text
+
+
+def test_no_account_with_an_existing_school_is_rejected(password_file: str) -> None:
+    connections = config.parse_config(settings_file(password_file, ["north"], {"gone": "north"}))
+    with pytest.raises(config.ASMConfigError, match="receives an existing school"):
         config.check_schools(connections, ["gym123", "gs456"])
 
 

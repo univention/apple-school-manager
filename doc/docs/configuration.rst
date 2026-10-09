@@ -98,6 +98,18 @@ that names the file and the entry:
 * A school that refers to an account that the file doesn't define.
 * A missing or empty password file.
 * A user name that appears for more than one account.
+* A school that doesn't exist, if the file has the entry ``*``.
+  A misspelled school would otherwise send its users
+  to the account of that entry.
+* No account that receives an existing school.
+
+The following problems only write a warning to the log file.
+The connector uploads to the remaining accounts:
+
+* An account that no school refers to.
+  The account receives no upload.
+* A school that doesn't exist, if the file has no entry ``*``.
+  An account without any existing school receives no upload.
 
 If the upload to one account fails,
 the connector still uploads to the remaining accounts

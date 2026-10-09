@@ -212,25 +212,48 @@ def parse_config(data: Any, source: str = "configuration") -> list[Connection]: 
     return connections
 
 
-def check_schools(connections: Iterable[Connection], existing_schools: Iterable[str]) -> None:
+def check_schools(
+    connections: Iterable[Connection], existing_schools: Iterable[str]
+) -> list[Connection]:
     """
-    Make sure that every school that the connections name exists.
+    Check the schools that the connections name against the schools in LDAP.
 
-    A misspelled school would otherwise go to the account of the entry ``*``
-    instead of the account it was meant for.
+    With an entry ``*``, a misspelled school would send its users to the
+    account of that entry instead of the account it was meant for, so a school
+    that doesn't exist stops the run. Without that entry, such a school only
+    matches nothing: it is logged, and an account without any existing school
+    receives no upload.
 
     :param connections: the connections from :py:func:`get_connections`
     :param existing_schools: the names of the schools in LDAP
-    :raises ASMConfigError: if a connection names a school that doesn't exist
+    :return: the connections that receive at least one school
+    :raises ASMConfigError: if a school doesn't exist while an entry ``*`` exists,
+        or if no account receives a school
     """
+    connections = list(connections)
+    existing = set(existing_schools)
     named = {school for connection in connections for school in connection.settings.schools}
-    unknown = sorted(named - set(existing_schools))
-    if unknown:
+    unknown = sorted(named - existing)
+    if unknown and any(connection.settings.other_schools is not None for connection in connections):
         msg = (
             f"{CONFIG_FILE_PATH} lists the school(s) {', '.join(unknown)}, which don't exist. "
+            f"With the entry {OTHER_SCHOOLS!r}, a misspelled school would go to the wrong account. "
             "Correct or remove them."
         )
         raise ASMConfigError(msg)
+    logger = logging.getLogger(__name__)
+    for school in unknown:
+        logger.warning("%s lists the school %r, which doesn't exist.", CONFIG_FILE_PATH, school)
+    receiving = []
+    for connection in connections:
+        if connection.settings.other_schools is None and not existing & set(connection.settings.schools):
+            logger.warning("Account %r has no existing school and receives no upload.", connection.name)
+            continue
+        receiving.append(connection)
+    if not receiving:
+        msg = f"No Apple School Manager account in {CONFIG_FILE_PATH} receives an existing school."
+        raise ASMConfigError(msg)
+    return receiving
 
 
 def _build_settings(

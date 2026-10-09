@@ -66,7 +66,7 @@ def main() -> None:
     try:
         connections = get_connections()
         lo, _po = get_ldap_connection()
-        check_schools(connections, [school.name for school in School.get_all(lo)])
+        connections = check_schools(connections, [school.name for school in School.get_all(lo)])
     except ASMConfigError as exc:
         logger.error(exc)  # noqa: TRY400
         logger.debug("Traceback of the configuration error:", exc_info=True)

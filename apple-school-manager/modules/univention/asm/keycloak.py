@@ -213,7 +213,18 @@ class KeycloakSetup:
         return client_uuid
 
     def ensure_default_scopes(self, client_uuid: str) -> None:
+        """
+        Make the SSF scopes and ``offline_access`` default scopes of the client.
+
+        Keycloak attaches ``offline_access`` to a new client as an optional
+        scope, and an optional scope doesn't become a default one by adding it
+        again, so it is detached first.
+        """
         present = {scope["name"] for scope in self.admin.get_client_default_client_scopes(client_uuid)}
+        optional = {
+            scope["name"]: scope["id"]
+            for scope in self.admin.get_client_optional_client_scopes(client_uuid)
+        }
         for name in DEFAULT_CLIENT_SCOPES:
             if name in present:
                 continue
@@ -221,12 +232,19 @@ class KeycloakSetup:
             if scope is None:
                 msg = f"The realm {self.realm!r} has no client scope {name!r}."
                 raise KeycloakSetupError(msg)
+            if name in optional:
+                self.admin.delete_client_optional_client_scope(client_uuid, optional[name])
             self.admin.add_client_default_client_scope(
                 client_uuid,
                 scope["id"],
                 {"realm": self.realm, "client": client_uuid, "clientScopeId": scope["id"]},
             )
             self.report(f"Added {name!r} to the default client scopes.")
+        present = {scope["name"] for scope in self.admin.get_client_default_client_scopes(client_uuid)}
+        missing = [name for name in DEFAULT_CLIENT_SCOPES if name not in present]
+        if missing:
+            msg = f"Keycloak didn't add {', '.join(missing)} to the default client scopes."
+            raise KeycloakSetupError(msg)
 
     def ensure_role(self, client_uuid: str) -> dict[str, Any]:
         self.admin.create_client_role(client_uuid, {"name": SSF_ADMIN_ROLE}, skip_exists=True)

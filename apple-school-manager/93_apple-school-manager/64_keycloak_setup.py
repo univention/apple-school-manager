@@ -29,6 +29,7 @@ class FakeKeycloakAdmin:
         self.scopes: dict[str, dict[str, Any]] = {}
         self.clients: dict[str, dict[str, Any]] = {}
         self.default_scopes: dict[str, list[str]] = {}
+        self.optional_scopes: dict[str, list[str]] = {}
         self.roles: dict[str, dict[str, dict[str, Any]]] = {}
         self.users: dict[str, dict[str, Any]] = {}
         self.user_roles: dict[tuple[str, str], list[dict[str, Any]]] = {}
@@ -77,6 +78,9 @@ class FakeKeycloakAdmin:
         client_uuid = str(uuid.uuid4())
         self.clients[client_uuid] = {**copy.deepcopy(payload), "id": client_uuid, "secret": "s3cr3t"}
         self.default_scopes[client_uuid] = []
+        offline_access = self.get_client_scope_by_name("offline_access")
+        assert offline_access is not None
+        self.optional_scopes[client_uuid] = [offline_access["id"]]
         self.roles[client_uuid] = {}
         return client_uuid
 
@@ -96,8 +100,21 @@ class FakeKeycloakAdmin:
         client_scope_id: str,
         payload: dict[str, Any],  # noqa: ARG002
     ) -> None:
+        """Like Keycloak, ignore a scope that is already attached as optional."""
+        if client_scope_id in self.optional_scopes[client_id]:
+            return
         self.writes += 1
         self.default_scopes[client_id].append(client_scope_id)
+
+    def get_client_optional_client_scopes(self, client_id: str) -> list[dict[str, Any]]:
+        return [
+            {"id": scope_id, "name": self.scopes[scope_id]["name"]}
+            for scope_id in self.optional_scopes[client_id]
+        ]
+
+    def delete_client_optional_client_scope(self, client_id: str, client_scope_id: str) -> None:
+        self.writes += 1
+        self.optional_scopes[client_id].remove(client_scope_id)
 
     def create_client_role(
         self,

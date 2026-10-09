@@ -77,24 +77,8 @@ What you need
 Configure Keycloak
 ==================
 
-You can make the Keycloak settings with a script,
-as described in :ref:`identity-provider-keycloak-script`,
-or manually, as described in the sections after it.
-
-For the manual setup,
-make every setting in the Keycloak admin console in the realm ``ucs``,
-which holds the users of your domain.
-The admin console opens in the realm ``master``.
-Select ``ucs`` in the realm selector before you change anything,
-and check the selected realm whenever you return to the admin console.
-
-.. _identity-provider-keycloak-script:
-
-Set up Keycloak with a script
------------------------------
-
 The app ships the script :command:`asm-setup-keycloak`,
-which makes the settings of the following sections for you.
+which makes all settings in Keycloak that Apple School Manager needs.
 Run it on the Primary Directory Node
 or on a Backup Directory Node with the Keycloak app:
 
@@ -112,15 +96,26 @@ The script does the following:
    and creates the client scopes, the client ``apple-asm``,
    and the client role ``ssf-admin``.
 
-#. It creates the Keycloak user ``asm`` with the client role ``ssf-admin``
+#. It creates the user ``asm`` in Keycloak with the client role ``ssf-admin``
    and asks for the password of the user.
    To pass the password in a file instead,
    use the option ``--password-file``.
 
+Apple School Manager connects to Keycloak with this user.
+The script creates it in Keycloak and not in UCS,
+because Keycloak has only read access to the UCS users
+and can't assign client roles to them.
+
 At the end,
-the script prints the client ID, the client secret, the SSF URL,
-and the OIDC URL.
-You need them in :ref:`identity-provider-asm-idp`.
+the script prints the values that you need in :ref:`identity-provider-asm-idp`:
+
+.. code-block:: text
+   :caption: Output of :command:`asm-setup-keycloak`
+
+   Client ID:     apple-asm
+   Client Secret: CLIENT_SECRET
+   SSF URL:       https://ucs-sso-ng.DOMAIN/realms/ucs/.well-known/ssf-configuration
+   OIDC URL:      https://ucs-sso-ng.DOMAIN/realms/ucs/.well-known/openid-configuration
 
 You can run the script again at any time.
 It only changes settings that differ from what Apple School Manager needs,
@@ -128,230 +123,124 @@ and it keeps an existing user and its password.
 To use other names for the realm, the client, or the user,
 see :command:`asm-setup-keycloak --help`.
 
-.. _identity-provider-keycloak-feature:
+.. _identity-provider-keycloak-settings:
 
-Enable the SSF feature
-----------------------
+Settings that the script makes
+------------------------------
 
-Set the app setting
-:external+uv-keycloak-app:envvar:`keycloak/server/feature/ssf`
-of the Keycloak app to ``true``.
+The following tables list the settings that :command:`asm-setup-keycloak` makes,
+with the names that the Keycloak API uses.
+Use them to check the setup,
+for example in the Keycloak admin console.
+The admin console opens in the realm ``master``,
+so select the realm ``ucs`` first.
 
-#. Open the App Center in :term:`UMC` and select the Keycloak app.
+.. list-table:: Settings of the Keycloak app, the realm, and the client scopes
+   :header-rows: 1
+   :widths: 40 60
 
-#. Click :guilabel:`App settings`.
+   * - Object
+     - Setting
 
-#. Select :guilabel:`keycloak/server/feature/ssf`.
+   * - Keycloak app
+     - App setting ``keycloak/server/feature/ssf``: ``true``
 
-#. Click :guilabel:`Apply changes`.
+   * - Realm ``ucs``
+     - Attribute ``ssf.transmitterEnabled``: ``true``
 
-Alternatively, set it on the command line:
+   * - Client scopes ``ssf.manage`` and ``ssf.read``
+     - Attribute ``include.in.token.scope``: ``true``
 
-.. code-block:: console
-   :caption: Enable the SSF feature of Keycloak
+   * - User ``asm``
+     - Client role ``ssf-admin`` of the client ``apple-asm``
 
-   $ univention-app configure keycloak --set keycloak/server/feature/ssf=true
-
-The App Center then recreates the Keycloak container,
-which starts Keycloak with the SSF feature.
-Keycloak is unavailable for a short time while that happens.
-
-.. note::
-
-   If you set the variable with :command:`ucr set` instead,
-   apply it with :command:`univention-app configure keycloak`.
-   Restarting the app with :command:`univention-app restart keycloak`
-   isn't enough,
-   and the :guilabel:`Realm settings` page doesn't offer
-   :guilabel:`SSF Transmitter`.
-
-.. _identity-provider-keycloak-realm:
-
-Turn the realm into an SSF transmitter
---------------------------------------
-
-#. Open the Keycloak admin console at
-   ``https://ucs-sso-ng.DOMAIN/admin/``
-   and select the realm ``ucs``.
-   Replace ``DOMAIN`` with the domain name of your UCS domain.
-
-#. On the :guilabel:`Realm settings` page,
-   set :guilabel:`SSF Transmitter` to :guilabel:`On`.
-
-With the transmitter on,
-the realm offers an SSF configuration metadata endpoint next to the OpenID
-endpoint configuration.
-You need the URLs of both endpoints in :ref:`identity-provider-asm-idp`:
-
-* ``https://ucs-sso-ng.DOMAIN/realms/ucs/.well-known/openid-configuration``
-* ``https://ucs-sso-ng.DOMAIN/realms/ucs/.well-known/ssf-configuration``
-
-The URLs use the defaults of the Keycloak app:
-the host ``ucs-sso-ng.DOMAIN``
-and the realm ``ucs``, which holds the users of the domain.
-If you changed
-:external+uv-keycloak-app:envvar:`keycloak/server/sso/fqdn`
-or use another realm, adjust the URLs accordingly.
-
-.. _identity-provider-keycloak-scopes:
-
-Create the client scopes
-------------------------
-
-On the realm's :guilabel:`Client scopes` page,
-create the client scopes ``ssf.manage`` and ``ssf.read``,
-each with :guilabel:`Include in token scope` enabled.
-
-.. _identity-provider-keycloak-client:
-
-Create the OIDC client
-----------------------
-
-#. On the realm's :guilabel:`Clients` page,
-   click :guilabel:`Create client`.
-
-#. On the :guilabel:`General settings` page,
-   enter ``apple-asm`` as :guilabel:`Client ID`.
-
-#. On the :guilabel:`Capability config` page,
-   enter the settings from the following table.
-
-   .. list-table:: Capabilities of the OIDC client for Apple School Manager
-      :header-rows: 1
-      :widths: 40 60
-
-      * - Setting
-        - Value
-
-      * - :guilabel:`Client authentication`
-        - :guilabel:`On`
-
-      * - :guilabel:`Authentication flow`
-        - :guilabel:`Standard flow`
-
-      * - :guilabel:`Require PKCE`
-        - :guilabel:`Off`
-
-      * - :guilabel:`SSF Receiver`
-        - :guilabel:`On`
-
-   Apple doesn't appear to support :term:`PKCE` for OIDC federations,
-   which is why the client turns it off.
-   The page doesn't offer :guilabel:`SSF Receiver`
-   until :guilabel:`Client authentication` is on
-   and you completed :ref:`identity-provider-keycloak-feature`
-   and :ref:`identity-provider-keycloak-realm`.
-
-#. On the :guilabel:`Login settings` page,
-   enter the settings from the following table
-   and click :guilabel:`Save`.
-
-   .. list-table:: Login settings of the OIDC client for Apple School Manager
-      :header-rows: 1
-      :widths: 40 60
-
-      * - Setting
-        - Value
-
-      * - :guilabel:`Valid redirect URIs`
-        - ``https://gsa-ws.apple.com/grandslam/GsService2/acs``
-
-      * - :guilabel:`Valid post logout redirect URIs`
-        - ``+``
-
-Copy the client secret from the :guilabel:`Credentials` tab.
-You need it in :ref:`identity-provider-asm-idp`.
-
-.. _identity-provider-keycloak-receiver:
-
-Configure the client as an SSF receiver
----------------------------------------
-
-#. On the client's :guilabel:`Client scopes` tab,
-   add ``ssf.manage``, ``ssf.read``, and ``offline_access``
-   as :guilabel:`Default`.
-
-#. On the :guilabel:`Roles` tab,
-   add the client role ``ssf-admin``.
-
-#. On the :guilabel:`SSF` tab,
-   enter the settings from the following table.
-
-.. list-table:: SSF settings of the client
+.. list-table:: Settings of the client ``apple-asm``
    :header-rows: 1
    :widths: 40 60
 
    * - Setting
      - Value
 
-   * - :guilabel:`Profile`
-     - :guilabel:`SSE CAEP 1.0`
+   * - ``publicClient``
+     - ``false``
 
-   * - :guilabel:`Default Subjects`
+   * - ``standardFlowEnabled``
+     - ``true``
+
+   * - ``implicitFlowEnabled``, ``directAccessGrantsEnabled``,
+       ``serviceAccountsEnabled``
+     - ``false``
+
+   * - ``redirectUris``
+     - ``https://gsa-ws.apple.com/grandslam/GsService2/acs``
+
+   * - Default client scopes
+     - ``ssf.manage``, ``ssf.read``, ``offline_access``
+
+   * - Client role
+     - ``ssf-admin``
+
+   * - Attribute ``post.logout.redirect.uris``
+     - ``+``
+
+   * - Attribute ``pkce.code.challenge.method``
+     - Empty
+
+Apple doesn't appear to support :term:`PKCE` for OIDC federations,
+which is why the client turns it off.
+
+The client acts as SSF receiver through the attributes in the following table.
+
+.. list-table:: SSF attributes of the client ``apple-asm``
+   :header-rows: 1
+   :widths: 40 60
+
+   * - Attribute
+     - Value
+
+   * - ``ssf.enabled``
+     - ``true``
+
+   * - ``ssf.profile``
+     - ``SSE_CAEP``
+
+   * - ``ssf.defaultSubjects``
      - ``NONE``
 
-   * - :guilabel:`Subject format`
+   * - ``ssf.userSubjectFormat``
      - ``iss_sub``
 
-   * - :guilabel:`Add subject on login`
-     - :guilabel:`On`
+   * - ``ssf.autoNotifyOnLogin``
+     - ``true``
 
-   * - :guilabel:`Auto verify stream`
-     - :guilabel:`On`
+   * - ``ssf.autoVerifyStream``
+     - ``true``
 
-   * - :guilabel:`Verification delay`
+   * - ``ssf.verificationDelayMillis``
      - ``1500``
 
-   * - :guilabel:`Required role`
-     - Click :guilabel:`Select role`,
-       select :guilabel:`Client roles`,
-       and select ``ssf-admin``.
+   * - ``ssf.requiredRole``
+     - ``apple-asm.ssf-admin``
 
-   * - :guilabel:`Allowed delivery methods`
-     - :guilabel:`Push Delivery` only
+   * - ``ssf.allowedDeliveryMethods``
+     - ``push``
 
-   * - :guilabel:`Valid push URLs`
+   * - ``ssf.validPushUrls``
      - ``https://federation.apple.com/feeds/school/caep/*``
 
-   * - :guilabel:`Supported Events`
-     - ``CaepCredentialChange``, ``CaepSessionRevoked``
+   * - ``ssf.supportedEvents``
+     - ``CaepCredentialChange,CaepSessionRevoked``
 
-   * - :guilabel:`Emit events enabled`
-     - :guilabel:`On`
+   * - ``ssf.allowEmitEvents``
+     - ``true``
 
-   * - :guilabel:`Emit-only events`
+   * - ``ssf.emitOnlyEvents``
      - ``CaepSessionRevoked``
 
-:guilabel:`Auto verify stream` sends the verification event as soon as Apple
+``ssf.autoVerifyStream`` sends the verification event as soon as Apple
 creates the stream.
-:guilabel:`Emit-only events` lets you control through the Keycloak API when
+``ssf.emitOnlyEvents`` lets you control through the Keycloak API when
 Keycloak sends a sign-out to Apple.
-
-.. _identity-provider-keycloak-admin-user:
-
-Create the administrative user
-------------------------------
-
-Apple School Manager establishes the connection to Keycloak with the
-authorization code flow.
-The resulting access token and refresh token belong to an offline session of
-one user,
-so that user must exist before you connect the two systems.
-
-Create the user in Keycloak, not in UCS.
-Keycloak has only read access to the UCS users,
-so it can't assign client roles to them.
-
-#. In the realm ``ucs``,
-   create a user, for example ``asm``.
-
-#. Set the first name, the last name, and the email address.
-
-#. On the :guilabel:`Credentials` tab,
-   set a strong password.
-   Two-factor authentication is optional but recommended.
-
-#. Assign the client role ``ssf-admin`` of the client ``apple-asm``.
 
 .. _identity-provider-asm:
 
@@ -379,9 +268,6 @@ Connect the identity provider
 #. Enter a name for the identity provider, for example ``asmkc``.
 
 #. Enter the values that :command:`asm-setup-keycloak` printed,
-   or the client ID and the client secret from
-   :ref:`identity-provider-keycloak-client`
-   and the two URLs from :ref:`identity-provider-keycloak-realm`,
    as listed in the following table.
 
    .. list-table:: Settings of the custom identity provider in Apple School Manager
@@ -395,7 +281,7 @@ Connect the identity provider
         - ``apple-asm``
 
       * - :guilabel:`Client Secret`
-        - The client secret from the :guilabel:`Credentials` tab of the client
+        - The client secret that :command:`asm-setup-keycloak` printed
 
       * - :guilabel:`SSF URL`
         - ``https://ucs-sso-ng.DOMAIN/realms/ucs/.well-known/ssf-configuration``
@@ -409,8 +295,8 @@ Connect the identity provider
    click the sign-in button for your identity provider,
    for example :guilabel:`Sign in with asmkc`.
 
-#. Sign in with the administrative user from
-   :ref:`identity-provider-keycloak-admin-user`.
+#. Sign in with the user ``asm``
+   that :command:`asm-setup-keycloak` created.
 
 Apple School Manager shows :guilabel:`Authorizing Account`
 and then confirms the connection.

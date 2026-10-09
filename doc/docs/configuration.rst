@@ -362,6 +362,9 @@ and ``SCHOOL`` with the school abbreviation.
 The update drops an LDAP filter for a school
 that wasn't on the former school list,
 because the connector didn't synchronize that school.
+It also leaves out schools that don't exist any more,
+both from the former school list and from the LDAP filters,
+and prints a note for each of them.
 
 Without ``asm/username``,
 the update has no account to assign schools to.

@@ -12,11 +12,14 @@ import json
 import logging
 import os
 import re
-from collections.abc import Iterable, Mapping
+from collections.abc import Collection, Iterable, Mapping
 from dataclasses import dataclass, field
 from types import MappingProxyType
 from typing import Any
 
+from ucsschool.lib.models.school import School
+
+from univention.asm.utils import get_ldap_connection
 from univention.config_registry import ConfigRegistry, handler_unset
 
 CONFIG_FILE_PATH = "/etc/asm-connections.json"
@@ -427,7 +430,7 @@ def write_initial_config() -> bool:
         return False
     ucr = ConfigRegistry()
     ucr.load()
-    data, migrated_keys = config_from_ucr(ucr)
+    data, migrated_keys = config_from_ucr(ucr, _existing_schools())
     fd = os.open(CONFIG_FILE_PATH, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
     with os.fdopen(fd, "w") as config_file:
         json.dump(data, config_file, indent=4)
@@ -438,13 +441,38 @@ def write_initial_config() -> bool:
     return True
 
 
-def config_from_ucr(ucr: Mapping[str, str]) -> tuple[dict[str, Any], set[str]]:
+def _existing_schools() -> set[str] | None:
+    """
+    Read the names of the schools in LDAP.
+
+    :return: the school names, or None if LDAP can't be read
+    """
+    try:
+        lo, _po = get_ldap_connection()
+        return {school.name for school in School.get_all(lo)}
+    except Exception as exc:  # noqa: BLE001
+        print(f"Can't read the schools from LDAP, migrating every school as it is: {exc}")
+        return None
+
+
+def config_from_ucr(
+    ucr: Mapping[str, str],
+    existing_schools: Collection[str] | None = None,
+) -> tuple[dict[str, Any], set[str]]:
     """
     Translate the former app settings and UCR variables into the file format.
 
+    Schools that don't exist any more are left out, because the connector
+    refuses a settings file that names them.
+
     :param ucr: loaded UCR
+    :param existing_schools: the names of the schools in LDAP, None to keep every school
     :return: the file content and the UCR variables that it replaces
     """
+
+    def exists(school: str) -> bool:
+        return existing_schools is None or school in existing_schools
+
     migrated: set[str] = set()
 
     def take(key: str) -> str | None:
@@ -496,8 +524,19 @@ def config_from_ucr(ucr: Mapping[str, str]) -> tuple[dict[str, Any], set[str]]:
             "password_file": LEGACY_PASSWORD_FILE_PATH,
         }
         whitelist = [school.strip() for school in (take("asm/school_whitelist") or "").split(",")]
-        for school in [school for school in whitelist if school] or [OTHER_SCHOOLS]:
+        listed = [school for school in whitelist if school]
+        for school in listed:
+            if not exists(school):
+                print(f"Dropping {school!r} from asm/school_whitelist: the school doesn't exist.")
+                continue
             schools[school] = {"account": MIGRATED_ACCOUNT_NAME}
+        if not listed:
+            schools[OTHER_SCHOOLS] = {"account": MIGRATED_ACCOUNT_NAME}
+        elif not schools:
+            print(
+                f"None of the schools in asm/school_whitelist exist. Assign schools to the account "
+                f"{MIGRATED_ACCOUNT_NAME!r} in {CONFIG_FILE_PATH}.",
+            )
     elif ucr.get("asm/school_whitelist"):
         print("Keeping asm/school_whitelist: asm/username is not set, so there is no account for it.")
     else:
@@ -513,6 +552,10 @@ def config_from_ucr(ucr: Mapping[str, str]) -> tuple[dict[str, Any], set[str]]:
             school = key.removeprefix(prefix)
             if not username:
                 print(f"Keeping {key}: asm/username is not set, so there is no account for it.")
+                continue
+            if not exists(school):
+                print(f"Dropping {key}: school {school!r} doesn't exist.")
+                migrated.add(key)
                 continue
             if school not in schools and OTHER_SCHOOLS not in schools:
                 print(f"Dropping {key}: school {school!r} is not synchronized.")

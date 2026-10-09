@@ -91,7 +91,8 @@ def username(ucr: UCSTestConfigRegistry) -> str:
 
 
 @pytest.fixture
-def migrated(config_file: Path, username: str) -> dict[str, Any]:  # noqa: ARG001
+def migrated(config_file: Path, username: str, monkeypatch: pytest.MonkeyPatch) -> dict[str, Any]:  # noqa: ARG001
+    monkeypatch.setattr(config, "_existing_schools", lambda: {"gym123", "gs456", "rs789"})
     assert config.write_initial_config()
     data: dict[str, Any] = json.loads(config_file.read_text())
     return data
@@ -148,3 +149,27 @@ def test_without_username_keeps_school_settings() -> None:
         "schools": {},
     }
     assert migrated_keys == {"asm/ldap_filter/students"}
+
+
+def test_migration_drops_schools_that_dont_exist() -> None:
+    ucr = {
+        "asm/username": "sftp-user",
+        "asm/school_whitelist": "gym123,gone",
+        "asm/ldap_filter/students/gone": "(uid=a*)",
+    }
+    data, migrated_keys = config.config_from_ucr(ucr, existing_schools={"gym123"})
+    assert data["schools"] == {"gym123": {"account": "default"}}
+    assert migrated_keys == set(ucr)
+
+
+def test_migration_drops_filters_of_schools_that_dont_exist() -> None:
+    ucr = {"asm/username": "sftp-user", "asm/ldap_filter/staff/gone": "(uid=b*)"}
+    data, migrated_keys = config.config_from_ucr(ucr, existing_schools={"gym123"})
+    assert data["schools"] == {"*": {"account": "default"}}
+    assert migrated_keys == set(ucr)
+
+
+def test_migration_doesnt_widen_a_list_of_gone_schools_to_every_school() -> None:
+    ucr = {"asm/username": "sftp-user", "asm/school_whitelist": "gone"}
+    data, _migrated_keys = config.config_from_ucr(ucr, existing_schools={"gym123"})
+    assert data["schools"] == {}

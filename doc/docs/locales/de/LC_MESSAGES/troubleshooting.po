@@ -353,10 +353,279 @@ msgstr ""
 ":ref:`identity-provider-asm-domain` beschrieben."
 
 #: ../../troubleshooting.rst:214
+msgid "Apple School Manager can't connect to Keycloak"
+msgstr "Apple School Manager kann sich nicht mit Keycloak verbinden"
+
+#: ../../troubleshooting.rst:216
+msgid ""
+"If connecting Apple School Manager to Keycloak fails, or if Keycloak shows "
+"no SSF stream for the client afterwards, run :command:`asm-setup-keycloak` "
+"again, as described in :ref:`identity-provider-keycloak`. The script "
+"restores every setting that differs from what Apple School Manager needs."
+msgstr ""
+"Wenn das Verbinden von Apple School Manager mit Keycloak fehlschlägt oder "
+"Keycloak danach keinen SSF-Stream für den Client anzeigt, führen Sie "
+":command:`asm-setup-keycloak` erneut aus, wie in "
+":ref:`identity-provider-keycloak` beschrieben. Das Skript stellt jede "
+"Einstellung wieder her, die von dem abweicht, was Apple School Manager "
+"braucht."
+
+#: ../../troubleshooting.rst:223
+msgid ""
+"To check the settings yourself, compare them with the following tables. They"
+" use the names of the Keycloak API. In the Keycloak admin console, select "
+"the realm ``ucs`` first, because the console opens in the realm ``master``."
+msgstr ""
+"Um die Einstellungen selbst zu prüfen, vergleichen Sie sie mit den folgenden"
+" Tabellen. Sie verwenden die Namen der Keycloak-API. Wählen Sie in der "
+"Keycloak-Administrationskonsole zuerst den Realm ``ucs`` aus, weil sich die "
+"Konsole im Realm ``master`` öffnet."
+
+#: ../../troubleshooting.rst:230
+msgid "Settings of the Keycloak app, the realm, and the client scopes"
+msgstr "Einstellungen der Keycloak-App, des Realms und der Client Scopes"
+
+#: ../../troubleshooting.rst:234
+msgid "Object"
+msgstr "Objekt"
+
+#: ../../troubleshooting.rst:235 ../../troubleshooting.rst:253
+msgid "Setting"
+msgstr "Einstellung"
+
+#: ../../troubleshooting.rst:237
+msgid "Keycloak app"
+msgstr "Keycloak-App"
+
+#: ../../troubleshooting.rst:238
+msgid "App setting ``keycloak/server/feature/ssf``: ``true``"
+msgstr "App-Einstellung ``keycloak/server/feature/ssf``: ``true``"
+
+#: ../../troubleshooting.rst:240
+msgid "Realm ``ucs``"
+msgstr "Realm ``ucs``"
+
+#: ../../troubleshooting.rst:241
+msgid "Attribute ``ssf.transmitterEnabled``: ``true``"
+msgstr "Attribut ``ssf.transmitterEnabled``: ``true``"
+
+#: ../../troubleshooting.rst:243
+msgid "Client scopes ``ssf.manage`` and ``ssf.read``"
+msgstr "Client Scopes ``ssf.manage`` und ``ssf.read``"
+
+#: ../../troubleshooting.rst:244
+msgid "Attribute ``include.in.token.scope``: ``true``"
+msgstr "Attribut ``include.in.token.scope``: ``true``"
+
+#: ../../troubleshooting.rst:246
+msgid "User ``asm``"
+msgstr "Benutzer ``asm``"
+
+#: ../../troubleshooting.rst:247
+msgid "Client role ``ssf-admin`` of the client ``apple-asm``"
+msgstr "Client-Rolle ``ssf-admin`` des Clients ``apple-asm``"
+
+#: ../../troubleshooting.rst:249
+msgid "Settings of the client ``apple-asm``"
+msgstr "Einstellungen des Clients ``apple-asm``"
+
+#: ../../troubleshooting.rst:254 ../../troubleshooting.rst:291
+msgid "Value"
+msgstr "Wert"
+
+#: ../../troubleshooting.rst:256
+msgid "``publicClient``"
+msgstr "``publicClient``"
+
+#: ../../troubleshooting.rst:257 ../../troubleshooting.rst:264
+msgid "``false``"
+msgstr "``false``"
+
+#: ../../troubleshooting.rst:259
+msgid "``standardFlowEnabled``"
+msgstr "``standardFlowEnabled``"
+
+#: ../../troubleshooting.rst:260 ../../troubleshooting.rst:294
+#: ../../troubleshooting.rst:306 ../../troubleshooting.rst:309
+#: ../../troubleshooting.rst:327
+msgid "``true``"
+msgstr "``true``"
+
+#: ../../troubleshooting.rst:262
+msgid ""
+"``implicitFlowEnabled``, ``directAccessGrantsEnabled``, "
+"``serviceAccountsEnabled``"
+msgstr ""
+"``implicitFlowEnabled``, ``directAccessGrantsEnabled``, "
+"``serviceAccountsEnabled``"
+
+#: ../../troubleshooting.rst:266
+msgid "``redirectUris``"
+msgstr "``redirectUris``"
+
+#: ../../troubleshooting.rst:267
+msgid "``https://gsa-ws.apple.com/grandslam/GsService2/acs``"
+msgstr "``https://gsa-ws.apple.com/grandslam/GsService2/acs``"
+
+#: ../../troubleshooting.rst:269
+msgid "Default client scopes"
+msgstr "Default Client Scopes"
+
+#: ../../troubleshooting.rst:270
+msgid "``ssf.manage``, ``ssf.read``, ``offline_access``"
+msgstr "``ssf.manage``, ``ssf.read``, ``offline_access``"
+
+#: ../../troubleshooting.rst:272
+msgid "Client role"
+msgstr "Client-Rolle"
+
+#: ../../troubleshooting.rst:273
+msgid "``ssf-admin``"
+msgstr "``ssf-admin``"
+
+#: ../../troubleshooting.rst:275
+msgid "Attribute ``post.logout.redirect.uris``"
+msgstr "Attribut ``post.logout.redirect.uris``"
+
+#: ../../troubleshooting.rst:276
+msgid "``+``"
+msgstr "``+``"
+
+#: ../../troubleshooting.rst:278
+msgid "Attribute ``pkce.code.challenge.method``"
+msgstr "Attribut ``pkce.code.challenge.method``"
+
+#: ../../troubleshooting.rst:279
+msgid "Empty"
+msgstr "Leer"
+
+#: ../../troubleshooting.rst:281
+msgid ""
+"Apple doesn't appear to support :term:`PKCE` for OIDC federations, which is "
+"why the client turns it off."
+msgstr ""
+"Apple scheint :term:`PKCE` für OIDC-Föderationen nicht zu unterstützen, "
+"weshalb der Client es deaktiviert."
+
+#: ../../troubleshooting.rst:284
+msgid ""
+"The client acts as SSF receiver through the attributes in the following "
+"table."
+msgstr ""
+"Der Client arbeitet über die Attribute in der folgenden Tabelle als "
+"SSF-Receiver."
+
+#: ../../troubleshooting.rst:286
+msgid "SSF attributes of the client ``apple-asm``"
+msgstr "Attribute des Clients ``apple-asm`` für SSF"
+
+#: ../../troubleshooting.rst:290
+msgid "Attribute"
+msgstr "Attribut"
+
+#: ../../troubleshooting.rst:293
+msgid "``ssf.enabled``"
+msgstr "``ssf.enabled``"
+
+#: ../../troubleshooting.rst:296
+msgid "``ssf.profile``"
+msgstr "``ssf.profile``"
+
+#: ../../troubleshooting.rst:297
+msgid "``SSE_CAEP``"
+msgstr "``SSE_CAEP``"
+
+#: ../../troubleshooting.rst:299
+msgid "``ssf.defaultSubjects``"
+msgstr "``ssf.defaultSubjects``"
+
+#: ../../troubleshooting.rst:300
+msgid "``NONE``"
+msgstr "``NONE``"
+
+#: ../../troubleshooting.rst:302
+msgid "``ssf.userSubjectFormat``"
+msgstr "``ssf.userSubjectFormat``"
+
+#: ../../troubleshooting.rst:303
+msgid "``iss_sub``"
+msgstr "``iss_sub``"
+
+#: ../../troubleshooting.rst:305
+msgid "``ssf.autoNotifyOnLogin``"
+msgstr "``ssf.autoNotifyOnLogin``"
+
+#: ../../troubleshooting.rst:308
+msgid "``ssf.autoVerifyStream``"
+msgstr "``ssf.autoVerifyStream``"
+
+#: ../../troubleshooting.rst:311
+msgid "``ssf.verificationDelayMillis``"
+msgstr "``ssf.verificationDelayMillis``"
+
+#: ../../troubleshooting.rst:312
+msgid "``1500``"
+msgstr "``1500``"
+
+#: ../../troubleshooting.rst:314
+msgid "``ssf.requiredRole``"
+msgstr "``ssf.requiredRole``"
+
+#: ../../troubleshooting.rst:315
+msgid "``apple-asm.ssf-admin``"
+msgstr "``apple-asm.ssf-admin``"
+
+#: ../../troubleshooting.rst:317
+msgid "``ssf.allowedDeliveryMethods``"
+msgstr "``ssf.allowedDeliveryMethods``"
+
+#: ../../troubleshooting.rst:318
+msgid "``push``"
+msgstr "``push``"
+
+#: ../../troubleshooting.rst:320
+msgid "``ssf.validPushUrls``"
+msgstr "``ssf.validPushUrls``"
+
+#: ../../troubleshooting.rst:321
+msgid "``https://federation.apple.com/feeds/school/caep/*``"
+msgstr "``https://federation.apple.com/feeds/school/caep/*``"
+
+#: ../../troubleshooting.rst:323
+msgid "``ssf.supportedEvents``"
+msgstr "``ssf.supportedEvents``"
+
+#: ../../troubleshooting.rst:324
+msgid "``CaepCredentialChange,CaepSessionRevoked``"
+msgstr "``CaepCredentialChange,CaepSessionRevoked``"
+
+#: ../../troubleshooting.rst:326
+msgid "``ssf.allowEmitEvents``"
+msgstr "``ssf.allowEmitEvents``"
+
+#: ../../troubleshooting.rst:329
+msgid "``ssf.emitOnlyEvents``"
+msgstr "``ssf.emitOnlyEvents``"
+
+#: ../../troubleshooting.rst:330
+msgid "``CaepSessionRevoked``"
+msgstr "``CaepSessionRevoked``"
+
+#: ../../troubleshooting.rst:332
+msgid ""
+"``ssf.autoVerifyStream`` sends the verification event as soon as Apple "
+"creates the stream. ``ssf.emitOnlyEvents`` lets you control through the "
+"Keycloak API when Keycloak sends a sign-out to Apple."
+msgstr ""
+"``ssf.autoVerifyStream`` sendet das Verifizierungsereignis, sobald Apple den"
+" Stream anlegt. Mit ``ssf.emitOnlyEvents`` steuern Sie über die "
+"Keycloak-API, wann Keycloak eine Abmeldung an Apple sendet."
+
+#: ../../troubleshooting.rst:340
 msgid "Where to get help"
 msgstr "Hilfe erhalten"
 
-#: ../../troubleshooting.rst:216
+#: ../../troubleshooting.rst:342
 msgid ""
 "The `Univention Help <https://help.univention.com/>`_ forum for questions"
 " from the community."
@@ -364,11 +633,11 @@ msgstr ""
 "Das Forum `Univention Help <https://help.univention.com/>`_ für Fragen an "
 "die Community."
 
-#: ../../troubleshooting.rst:219
+#: ../../troubleshooting.rst:345
 msgid "Your Univention support contract for a supported environment."
 msgstr "Ihr Univention-Supportvertrag für eine unterstützte Umgebung."
 
-#: ../../troubleshooting.rst:221
+#: ../../troubleshooting.rst:347
 msgid ""
 "When you report a problem, attach the relevant part of "
 ":file:`/var/log/univention/asm.log`."

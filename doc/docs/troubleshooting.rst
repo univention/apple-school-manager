@@ -208,6 +208,132 @@ do the following:
 #. Enable federation for the domain,
    as described in :ref:`identity-provider-asm-domain`.
 
+.. _troubleshooting-keycloak-settings:
+
+Apple School Manager can't connect to Keycloak
+==============================================
+
+If connecting Apple School Manager to Keycloak fails,
+or if Keycloak shows no SSF stream for the client afterwards,
+run :command:`asm-setup-keycloak` again,
+as described in :ref:`identity-provider-keycloak`.
+The script restores every setting that differs
+from what Apple School Manager needs.
+
+To check the settings yourself,
+compare them with the following tables.
+They use the names of the Keycloak API.
+In the Keycloak admin console,
+select the realm ``ucs`` first,
+because the console opens in the realm ``master``.
+
+.. list-table:: Settings of the Keycloak app, the realm, and the client scopes
+   :header-rows: 1
+   :widths: 40 60
+
+   * - Object
+     - Setting
+
+   * - Keycloak app
+     - App setting ``keycloak/server/feature/ssf``: ``true``
+
+   * - Realm ``ucs``
+     - Attribute ``ssf.transmitterEnabled``: ``true``
+
+   * - Client scopes ``ssf.manage`` and ``ssf.read``
+     - Attribute ``include.in.token.scope``: ``true``
+
+   * - User ``asm``
+     - Client role ``ssf-admin`` of the client ``apple-asm``
+
+.. list-table:: Settings of the client ``apple-asm``
+   :header-rows: 1
+   :widths: 40 60
+
+   * - Setting
+     - Value
+
+   * - ``publicClient``
+     - ``false``
+
+   * - ``standardFlowEnabled``
+     - ``true``
+
+   * - ``implicitFlowEnabled``, ``directAccessGrantsEnabled``,
+       ``serviceAccountsEnabled``
+     - ``false``
+
+   * - ``redirectUris``
+     - ``https://gsa-ws.apple.com/grandslam/GsService2/acs``
+
+   * - Default client scopes
+     - ``ssf.manage``, ``ssf.read``, ``offline_access``
+
+   * - Client role
+     - ``ssf-admin``
+
+   * - Attribute ``post.logout.redirect.uris``
+     - ``+``
+
+   * - Attribute ``pkce.code.challenge.method``
+     - Empty
+
+Apple doesn't appear to support :term:`PKCE` for OIDC federations,
+which is why the client turns it off.
+
+The client acts as SSF receiver through the attributes in the following table.
+
+.. list-table:: SSF attributes of the client ``apple-asm``
+   :header-rows: 1
+   :widths: 40 60
+
+   * - Attribute
+     - Value
+
+   * - ``ssf.enabled``
+     - ``true``
+
+   * - ``ssf.profile``
+     - ``SSE_CAEP``
+
+   * - ``ssf.defaultSubjects``
+     - ``NONE``
+
+   * - ``ssf.userSubjectFormat``
+     - ``iss_sub``
+
+   * - ``ssf.autoNotifyOnLogin``
+     - ``true``
+
+   * - ``ssf.autoVerifyStream``
+     - ``true``
+
+   * - ``ssf.verificationDelayMillis``
+     - ``1500``
+
+   * - ``ssf.requiredRole``
+     - ``apple-asm.ssf-admin``
+
+   * - ``ssf.allowedDeliveryMethods``
+     - ``push``
+
+   * - ``ssf.validPushUrls``
+     - ``https://federation.apple.com/feeds/school/caep/*``
+
+   * - ``ssf.supportedEvents``
+     - ``CaepCredentialChange,CaepSessionRevoked``
+
+   * - ``ssf.allowEmitEvents``
+     - ``true``
+
+   * - ``ssf.emitOnlyEvents``
+     - ``CaepSessionRevoked``
+
+``ssf.autoVerifyStream`` sends the verification event as soon as Apple
+creates the stream.
+``ssf.emitOnlyEvents`` lets you control through the Keycloak API when
+Keycloak sends a sign-out to Apple.
+
 .. _troubleshooting-support:
 
 Where to get help

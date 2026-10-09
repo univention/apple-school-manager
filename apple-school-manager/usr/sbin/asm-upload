@@ -68,7 +68,8 @@ def main() -> None:
         lo, _po = get_ldap_connection()
         check_schools(connections, [school.name for school in School.get_all(lo)])
     except ASMConfigError as exc:
-        logger.exception(exc)
+        logger.error(exc)  # noqa: TRY400
+        logger.debug("Traceback of the configuration error:", exc_info=True)
         sys.exit(1)
     delete_zip = not get_ucr().is_true(UCR_STORE_ZIP_KEY)
     failed = []

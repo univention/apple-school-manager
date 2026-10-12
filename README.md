@@ -45,28 +45,3 @@ see `build_changelog_html.py`.
 ## Update etc/asm_public_key
 
 You can call generate_asm_host_key.py
-
-## Keycloak with SSF support before app version 26.7.1
-
-`doc/docs/identity-provider.rst` documents the supported setup,
-which needs the Keycloak app in version 26.7.1 or later.
-On an older Keycloak, build an image with the SSF feature yourself:
-
-* go to the keycloak-app repo
-* download the keycloak nightly build `keycloak-999.0.0-SNAPSHOT.tar.gz`
-* build the container locally:
-  `docker buildx build docker/keycloak --build-arg KEYCLOAK_VERSION=999.0.0-SNAPSHOT -t nightly-keycloak --no-cache`
-* export the image to an archive: `docker save -o night-image.tar nightly-keycloak:latest`
-* copy the archive to the UCS server,
-  or download it there:
-  `curl http://t04.service-univention.de/nightly-image.tar --output /var/tmp/nightly-image.tar`
-
-On the UCS server:
-
-* import the image: `docker load -i nightly-image.tar`
-* in `/var/cache/univention-appcenter/appcenter.software-univention.de/5.0/keycloak_20260226143602.compose`
-  (or whatever keycloak version is installed)
-  * replace `image*` with `image: "nightly-keycloak:latest"`
-  * append to the `command` to enable the SSF feature:
-    `--spi-datastore-legacy-allow-migrate-existing-database-to-snapshot=true --feature-ssf enabled --spi-events-listener-jboss-logging-success-level=info --spi-events-listener-jboss-logging-error-level=warn --log-level=info,org.keycloak.ssf:trace`
-* run `univention-app reinitialize keycloak`

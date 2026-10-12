@@ -47,13 +47,10 @@ msgstr ""
 #: ../../identity-provider.rst:22
 msgid ""
 "The :term:`SSF` support that Apple School Manager requires is an "
-"experimental feature of Keycloak. Univention doesn't support this setup "
-"in production yet. Try it in a test environment first."
+"experimental feature of Keycloak."
 msgstr ""
 "Die :term:`SSF`-Unterstützung, die Apple School Manager voraussetzt, ist "
-"ein experimentelles Feature von Keycloak. Univention unterstützt diese "
-"Einrichtung noch nicht im Produktivbetrieb. Probieren Sie sie zuerst in "
-"einer Testumgebung aus."
+"ein experimentelles Feature von Keycloak."
 
 #: ../../identity-provider.rst:30
 msgid "Why Apple School Manager needs SSF"

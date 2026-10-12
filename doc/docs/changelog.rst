@@ -10,9 +10,9 @@ Changelog
 
 This chapter lists the changes of every released version of the app.
 
-.. _changelog-v5.2.0:
+.. _changelog-v6.0.0:
 
-v5.2.0
+v6.0.0
 ======
 
 * The connector synchronizes to several Apple School Manager accounts.

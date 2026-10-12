@@ -31,8 +31,8 @@ msgstr ""
 "der App auf."
 
 #: ../../changelog.rst:16
-msgid "v5.2.0"
-msgstr "v5.2.0"
+msgid "v6.0.0"
+msgstr "v6.0.0"
 
 #: ../../changelog.rst:18
 msgid ""

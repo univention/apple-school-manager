@@ -1,4 +1,4 @@
-univention-apple-school-manager-connector (5.2.0) unstable; urgency=medium
+univention-apple-school-manager-connector (6.0.0) unstable; urgency=medium
 
   * Bug #56486: Synchronize to several Apple School Manager accounts;
     move the account app settings and all UCR variables to
@@ -6,7 +6,7 @@ univention-apple-school-manager-connector (5.2.0) unstable; urgency=medium
     settings per school
     Issue univention/dev/education/apple-school-manager#8
 
- -- Jürn Brodersen <brodersen@univention.de>  Wed, 23 Sep 2026 12:00:00 +0200
+ -- Jürn Brodersen <brodersen@univention.de>  Mon, 12 Oct 2026 12:00:00 +0200
 
 univention-apple-school-manager-connector (5.1.1) unstable; urgency=medium
 

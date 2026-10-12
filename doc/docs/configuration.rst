@@ -297,7 +297,7 @@ Update from an earlier version
 
 Up to version 5.1.1,
 app settings and UCR variables held the configuration.
-The update to version 5.2.0 moves their values to the settings file
+The update to version 6.0.0 moves their values to the settings file
 and removes the UCR variables.
 You don't need to do anything.
 The password stays in :file:`/etc/asm.secret`,

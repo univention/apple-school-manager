@@ -21,8 +21,6 @@ as that identity provider.
 
    The :term:`SSF` support that Apple School Manager requires is an
    experimental feature of Keycloak.
-   Univention doesn't support this setup in production yet.
-   Try it in a test environment first.
 
 .. _identity-provider-ssf:
 

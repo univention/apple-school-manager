@@ -105,7 +105,7 @@ docs-en:merge:
 # the build jobs produced. Each rsyncs into 'out/DOC_NAME/<language>', so their
 # artifacts land on top of each other and 'out/DOC_NAME' is the complete site.
 # Publishing the HTML alone would leave out the PDF that every page links to.
-# The site root redirects to the English manual.
+# The site root links to both languages.
 #
 # This is independent of 'docs-en:production-merge-request', which publishes to
 # docs.software-univention.de.
@@ -132,7 +132,18 @@ docs-pages:
   script:
     - rm -rf public
     - mv "out/$DOC_NAME" public
-    - printf '<!DOCTYPE html>\n<meta http-equiv="refresh" content="0; url=en/">\n' > public/index.html
+    - |
+      cat > public/index.html <<'EOF'
+      <!DOCTYPE html>
+      <html lang="en">
+      <meta charset="utf-8">
+      <title>Apple School Manager Connector</title>
+      <h1>Apple School Manager Connector</h1>
+      <ul>
+        <li><a href="en/">English</a></li>
+        <li><a href="de/" lang="de">Deutsch</a></li>
+      </ul>
+      EOF
   artifacts:
     paths:
       - public

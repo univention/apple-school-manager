@@ -53,6 +53,13 @@ include:
       linkcheck: false
       production_merge_request: false
 
+# 'sphinx-docker' declares 'language' with a description, so the Run pipeline
+# form prefills it with an empty value. That turns it into a pipeline variable,
+# which overrides the 'language' of every job below, and both builds come out in
+# English. A plain value is not offered in the form.
+variables:
+  language: ""
+
 ".docs-en:vars":
   variables:
     language: "en"

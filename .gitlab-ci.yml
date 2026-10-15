@@ -14,12 +14,12 @@ include:
   - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/app-release@2
     inputs:
       app_id: "apple-school-manager"
-      mail_sender: "ucsschool-team@univention.de"
-      author_alias: "UCS@school Team"
+      mail_sender: "ucsschool-maintainers@univention.de"
+      author_alias: "The ByteBenders"
       mail_subject: "Apple School Manager Connector update"
       changelog_link: "https://docs.software-univention.de/apple-school-manager-connector/en/changelog.html"
       mail_recipient: "app-announcement@univention.de"
-      chat_destination: "#ucsschool"
+      chat_destination: "#product-announcements"
       ucs_base_version: "5.2"
       app_staging_version: "999.0.0-staging"
       additional_update_appcenter_needs:

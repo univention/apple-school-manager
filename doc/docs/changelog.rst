@@ -38,6 +38,11 @@ v6.0.0 (2026-10-19)
   The check only wrote a warning,
   and Apple School Manager accepts such addresses.
 
+* The app supports Keycloak as identity provider for Apple School Manager.
+  Users sign in to their Managed Apple Accounts
+  with the password from the |UAS| domain.
+  See :ref:`identity-provider`.
+
 .. _changelog-v5.1.1:
 
 v5.1.1 (2026-03-05)

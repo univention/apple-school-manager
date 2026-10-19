@@ -12,8 +12,8 @@ This chapter lists the changes of every released version of the app.
 
 .. _changelog-v6.0.0:
 
-v6.0.0
-======
+v6.0.0 (2026-10-19)
+===================
 
 * The connector synchronizes to several Apple School Manager accounts.
   Each account receives only the schools that you assign to it.
@@ -40,8 +40,8 @@ v6.0.0
 
 .. _changelog-v5.1.1:
 
-v5.1.1
-======
+v5.1.1 (2026-03-05)
+===================
 
 * The connector supports running on a central Replica Directory Node again.
 

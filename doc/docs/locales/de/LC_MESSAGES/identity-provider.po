@@ -31,7 +31,7 @@ msgid ""
 "devices with the password from your |UAS| domain instead of a password that "
 "Apple School Manager manages."
 msgstr ""
-"Apple School Manager kann die Anmeldung seiner verwalteten Apple Accounts an"
+"Apple School Manager kann die Anmeldung seiner Managed Apple Accounts an"
 " einen externen Identity Provider föderieren. Ihre Benutzer melden sich dann"
 " an ihren Apple-Geräten mit dem Passwort aus Ihrer |UAS|-Domäne an statt mit"
 " einem Passwort, das Apple School Manager verwaltet."
@@ -808,7 +808,7 @@ msgstr ""
 
 #: ../../identity-provider.rst:428
 msgid "Enter the device PIN when the device asks for it."
-msgstr "Geben Sie den Geräte-PIN ein, wenn das Gerät danach fragt."
+msgstr "Geben Sie die Geräte-PIN ein, wenn das Gerät danach fragt."
 
 #: ../../identity-provider.rst:430
 msgid ""

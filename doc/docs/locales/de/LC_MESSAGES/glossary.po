@@ -42,7 +42,7 @@ msgstr "Apple School Manager"
 msgid ""
 "The web service with which educational institutions manage their Managed "
 "Apple Accounts, devices, and content. Abbreviated as ASM."
-msgstr "Der Webdienst, mit dem Bildungseinrichtungen ihre verwalteten Apple Accounts, Geräte und Inhalte verwalten. Abgekürzt als ASM."
+msgstr "Der Webdienst, mit dem Bildungseinrichtungen ihre Managed Apple Accounts, Geräte und Inhalte verwalten. Abgekürzt als ASM."
 
 #: ../../glossary.rst:22
 msgid "Keycloak"

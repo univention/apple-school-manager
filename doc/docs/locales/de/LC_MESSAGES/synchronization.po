@@ -167,13 +167,13 @@ msgid ""
 "Apple School Manager compares the uploaded data with the accounts that it"
 " holds:"
 msgstr ""
-"Apple School Manager vergleicht die hochgeladenen Daten mit den Accounts, "
+"Apple School Manager vergleicht die hochgeladenen Daten mit den Konten, "
 "die es verwaltet:"
 
 #: ../../synchronization.rst:92
 msgid "A user who appears for the first time gets a new account."
 msgstr ""
-"Ein Benutzer, der zum ersten Mal auftaucht, erhält einen neuen Account."
+"Ein Benutzer, der zum ersten Mal auftaucht, erhält ein neues Konto."
 
 #: ../../synchronization.rst:94
 msgid ""
@@ -188,7 +188,7 @@ msgid ""
 "A user whose attributes changed keeps the account, as long as the "
 "``person_id`` column is unchanged. See :ref:`configuration-person-id`."
 msgstr ""
-"Ein Benutzer, dessen Attribute sich geändert haben, behält seinen Account, "
+"Ein Benutzer, dessen Attribute sich geändert haben, behält sein Konto, "
 "solange die Spalte ``person_id`` unverändert bleibt. Siehe "
 ":ref:`configuration-person-id`."
 

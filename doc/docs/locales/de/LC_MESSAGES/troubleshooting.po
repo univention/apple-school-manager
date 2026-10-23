@@ -361,8 +361,8 @@ msgid ""
 "The `Univention Help <https://help.univention.com/>`_ forum for questions"
 " from the community."
 msgstr ""
-"Das Forum `Univention Help <https://help.univention.com/>`_ für Fragen an "
-"die Community."
+"Das Forum `Univention Help <https://help.univention.com/>`_ für Fragen aus "
+"der Community."
 
 #: ../../troubleshooting.rst:219
 msgid "Your Univention support contract for a supported environment."

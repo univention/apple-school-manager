@@ -218,7 +218,7 @@ msgid ""
 "default is ``{ou}-{name}``."
 msgstr ""
 "Der Name eines Kurses, den der Connector aus der Schulklasse ableitet,"
-" folgt dem Muster in ``asm/attributes/course-name-pattern``. Der "
+" folgt dem Muster in ``asm/attributes/course-name-pattern``. Die "
 "Voreinstellung ist ``{ou}-{name}``."
 
 #: ../../changelog.rst:142

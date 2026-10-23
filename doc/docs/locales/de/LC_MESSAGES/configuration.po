@@ -502,8 +502,8 @@ msgid ""
 "every school that doesn't set the key itself."
 msgstr ""
 "Der Abschnitt ``defaults`` nimmt jeden optionalen Schlüssel eines Konto- und "
-"eines Schuleintrags auf. Ein Wert in ``defaults`` gilt für jedes Konto und "
-"jede Schule, die den Schlüssel nicht selbst setzen."
+"eines Schuleintrags auf. Ein Wert in ``defaults`` gilt für alle Konten und "
+"Schulen, die den Schlüssel nicht selbst setzen."
 
 #: ../../configuration.rst:278
 msgid "Anonymize nobody, except the students of the account ``north``"

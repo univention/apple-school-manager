@@ -1,17 +1,13 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2026, Univention GmbH
-# This file is distributed under the same license as the Apple School
-# Manager Connector package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+# SPDX-FileCopyrightText: 2026 Univention GmbH
 #
-#, fuzzy
+# SPDX-License-Identifier: AGPL-3.0-only
 msgid ""
 msgstr ""
 "Project-Id-Version: Apple School Manager Connector 5.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-02 13:01+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2026-10-30 09:39+0000\n"
+"PO-Revision-Date: 2026-10-30 14:05+0100\n"
+"Last-Translator: Univention GmbH <packages@univention.de>\n"
 "Language: de\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -27,8 +23,8 @@ msgstr "Changelog"
 #: ../../changelog.rst:11
 msgid "This chapter lists the changes of every released version of the app."
 msgstr ""
-"Dieses Kapitel listet die Änderungen jeder veröffentlichten Version "
-"der App auf."
+"Dieses Kapitel listet die Änderungen jeder veröffentlichten Version der "
+"App auf."
 
 #: ../../changelog.rst:16
 msgid "v6.0.0 (2026-10-19)"
@@ -36,75 +32,79 @@ msgstr "v6.0.0 (2026-10-19)"
 
 #: ../../changelog.rst:18
 msgid ""
-"The connector synchronizes to several Apple School Manager accounts. Each"
-" account receives only the schools that you assign to it."
+"The connector synchronizes to several *Apple School Manager* accounts. "
+"Each account receives only the schools that you assign to it."
 msgstr ""
-"Der Connector synchronisiert in mehrere Konten in Apple School Manager. "
-"Jedes Konto erhält nur die Schulen, die Sie ihm zuordnen."
+"Der Connector synchronisiert in mehrere Konten in *Apple School Manager*."
+" Jedes Konto erhält nur die Schulen, die Sie ihm zuordnen."
 
 #: ../../changelog.rst:21
 msgid ""
 "The settings file :file:`/etc/asm-connections.json` replaces the app "
-"settings ``asm/username``, ``asm/password``, and ``asm/school_whitelist`` "
-"and all ``asm/attributes/*`` and ``asm/ldap_filter/*`` UCR variables. The "
-"settings for students and teachers apply per account, the settings for "
-"classes and the LDAP filters per school. The update moves the former values "
-"to the new file, as described in :ref:`Update from an earlier version "
-"<configuration-accounts-migration>`."
+"settings ``asm/username``, ``asm/password``, and ``asm/school_whitelist``"
+" and all ``asm/attributes/*`` and ``asm/ldap_filter/*`` UCR variables. "
+"The settings for students and teachers apply per account, the settings "
+"for classes and the LDAP filters per school. The update moves the former "
+"values to the new file, as described in :ref:`Update from an earlier "
+"version <configuration-accounts-migration>`."
 msgstr ""
-"Die Einstellungsdatei :file:`/etc/asm-connections.json` ersetzt die "
-"App-Einstellungen ``asm/username``, ``asm/password`` und "
-"``asm/school_whitelist`` sowie alle UCR-Variablen ``asm/attributes/*`` und "
-"``asm/ldap_filter/*``. Die Einstellungen für Schüler und Lehrer gelten pro "
-"Konto, die Einstellungen für Klassen und die LDAP-Filter pro Schule. Das "
-"Update überträgt die bisherigen Werte in die neue Datei, wie in :ref:`Update"
-" von einer früheren Version <configuration-accounts-migration>` beschrieben."
+"Die Einstellungsdatei :file:`/etc/asm-connections.json` ersetzt die App-"
+"Einstellungen ``asm/username``, ``asm/password`` und "
+"``asm/school_whitelist`` sowie alle UCR-Variablen ``asm/attributes/*`` "
+"und ``asm/ldap_filter/*``. Die Einstellungen für Schüler und Lehrer "
+"gelten pro Konto, die Einstellungen für Klassen und die LDAP-Filter pro "
+"Schule. Das Update überträgt die bisherigen Werte in die neue Datei, wie "
+"in :ref:`Update von einer früheren Version <configuration-accounts-"
+"migration>` beschrieben."
 
 #: ../../changelog.rst:30
 msgid ""
 "An error during the upload to one account, for example an invalid LDAP "
 "filter, only stops the upload to that account."
 msgstr ""
-"Ein Fehler beim Upload in ein Konto, zum Beispiel ein ungültiger "
-"LDAP-Filter, bricht nur den Upload in dieses Konto ab."
+"Ein Fehler beim Upload in ein Konto, zum Beispiel ein ungültiger LDAP-"
+"Filter, bricht nur den Upload in dieses Konto ab."
 
 #: ../../changelog.rst:34
+#, python-brace-format
 msgid ""
-"``asm/last_upload/ACCOUNT`` holds the time of the last upload to each "
-"account."
+":samp:`asm/last_upload/{ACCOUNT}` holds the time of the last upload to "
+"each account."
 msgstr ""
-"``asm/last_upload/ACCOUNT`` enthält den Zeitpunkt des letzten Uploads in "
+":samp:`asm/last_upload/{ACCOUNT}` enthält den Zeitpunkt des letzten Uploads in "
 "jedes Konto."
 
 #: ../../changelog.rst:36
 msgid ""
 "The connector no longer checks whether the domain of an email address "
-"resolves. The check only wrote a warning, and Apple School Manager accepts "
-"such addresses."
+"resolves. The check only wrote a warning, and *Apple School Manager* "
+"accepts such addresses."
 msgstr ""
-"Der Connector prüft nicht mehr, ob sich die Domain einer E-Mail-Adresse "
-"auflösen lässt. Die Prüfung schrieb nur eine Warnung, und Apple School "
-"Manager akzeptiert solche Adressen."
+"Der Connector prüft nicht mehr, ob sich die Domäne einer E-Mailadresse "
+"auflösen lässt. Die Prüfung schrieb nur eine Warnung, und *Apple School "
+"Manager* akzeptiert solche Adressen."
 
 #: ../../changelog.rst:41
 msgid ""
-"The app supports Keycloak as identity provider for Apple School Manager. "
-"Users sign in to their Managed Apple Accounts with the password from the "
-"|UAS| domain. See :ref:`identity-provider`."
+"The app supports Keycloak as identity provider for *Apple School "
+"Manager*. Users sign in to their *Managed Apple Accounts* with the "
+"password from the |UAS| domain. See :ref:`identity-provider`."
 msgstr ""
-"Die App unterstützt Keycloak als Identity Provider für Apple School "
-"Manager. Benutzer melden sich mit dem Passwort aus der |UAS|-Domäne an "
-"ihren Managed Apple Accounts an. Siehe :ref:`identity-provider`."
+"Die App unterstützt Keycloak als Identity Provider für *Apple School "
+"Manager*. Benutzer melden sich mit dem Passwort aus der |UAS|-Domäne an "
+"ihren *Managed Apple Accounts* an. Siehe :ref:`identity-provider`."
 
 #: ../../changelog.rst:49
 msgid "v5.1.1 (2026-03-05)"
 msgstr "v5.1.1 (2026-03-05)"
 
 #: ../../changelog.rst:51
-msgid "The connector supports running on a central Replica Directory Node again."
+msgid ""
+"The connector supports running on a central :external+uv-ucs-"
+"operation:term:`Replica Directory Node` again."
 msgstr ""
-"Der Connector lässt sich wieder auf einem zentralen Replica Directory "
-"Node betreiben."
+"Der Connector lässt sich wieder auf einem zentralen :external+uv-ucs-"
+"operation:term:`Replica Directory Node` betreiben."
 
 #: ../../changelog.rst:56
 msgid "v5.1.0"
@@ -113,18 +113,20 @@ msgstr "v5.1.0"
 #: ../../changelog.rst:58
 msgid "The connector exports more additional locations for students and teachers."
 msgstr ""
-"Der Connector exportiert weitere zusätzliche Standorte für Schüler und"
-" Lehrer."
+"Der Connector exportiert weitere zusätzliche Standorte für Schüler und "
+"Lehrer."
 
 #: ../../changelog.rst:63
 msgid "v5.0.3"
 msgstr "v5.0.3"
 
 #: ../../changelog.rst:65
-msgid "The app refuses installation on a central Replica Directory Node."
+msgid ""
+"The app refuses installation on a central :external+uv-ucs-"
+"operation:term:`Replica Directory Node`."
 msgstr ""
-"Die App verweigert die Installation auf einem zentralen Replica "
-"Directory Node."
+"Die App verweigert die Installation auf einem zentralen :external+uv-ucs-"
+"operation:term:`Replica Directory Node`."
 
 #: ../../changelog.rst:70
 msgid "v5.0.2"
@@ -135,8 +137,8 @@ msgid ""
 "Follow-up release for version 5.0.1. A mismatched component ID in the App"
 " Center prevented the update from UCS 5.0."
 msgstr ""
-"Folge-Release für Version 5.0.1. Eine nicht passende Komponenten-ID im"
-" App Center verhinderte das Update von UCS 5.0."
+"Nachfolgende Veröffentlichung für Version 5.0.1. Eine nicht passende Komponenten-ID im "
+"App Center verhinderte das Update von UCS 5.0."
 
 #: ../../changelog.rst:79
 msgid "v5.0.1"
@@ -182,9 +184,7 @@ msgstr "v3.0.1"
 msgid ""
 "The log rotation of the connector follows the ``logrotate/*`` UCR "
 "variables."
-msgstr ""
-"Die Logrotation des Connectors folgt den UCR-Variablen "
-"``logrotate/*``."
+msgstr "Die Logrotation des Connectors folgt den UCR-Variablen ``logrotate/*``."
 
 #: ../../changelog.rst:117
 msgid "v2.2.4"
@@ -217,8 +217,8 @@ msgid ""
 "follows the pattern in ``asm/attributes/course-name-pattern``. The "
 "default is ``{ou}-{name}``."
 msgstr ""
-"Der Name eines Kurses, den der Connector aus der Schulklasse ableitet,"
-" folgt dem Muster in ``asm/attributes/course-name-pattern``. Die "
+"Der Name eines Kurses, den der Connector aus der Schulklasse ableitet, "
+"folgt dem Muster in ``asm/attributes/course-name-pattern``. Die "
 "Voreinstellung ist ``{ou}-{name}``."
 
 #: ../../changelog.rst:142
@@ -227,9 +227,7 @@ msgstr "v2.2.1"
 
 #: ../../changelog.rst:144
 msgid "The connector applies configured LDAP filters to :file:`rosters.csv`."
-msgstr ""
-"Der Connector wendet konfigurierte LDAP-Filter auf :file:`rosters.csv`"
-" an."
+msgstr "Der Connector wendet konfigurierte LDAP-Filter auf :file:`rosters.csv` an."
 
 #: ../../changelog.rst:149
 msgid "v2.2.0"
@@ -240,8 +238,8 @@ msgid ""
 "The connector uses the name of the school class as the course name. It "
 "used the description of the school class before."
 msgstr ""
-"Der Connector verwendet den Namen der Schulklasse als Kursnamen. Zuvor"
-" verwendete er die Beschreibung der Schulklasse."
+"Der Connector verwendet den Namen der Schulklasse als Kursnamen. Zuvor "
+"verwendete er die Beschreibung der Schulklasse."
 
 #: ../../changelog.rst:154
 msgid ""
@@ -250,10 +248,10 @@ msgid ""
 "``asm/ldap_filter/students`` and ``asm/ldap_filter/staff``. An invalid "
 "filter stops the synchronization without an export."
 msgstr ""
-"LDAP-Filter ermöglichen eine feinere Steuerung der exportierten Lehrer"
-" und Schüler. Sie lassen sich global oder pro Schule mit "
-"``asm/ldap_filter/students`` und ``asm/ldap_filter/staff`` setzen. Ein"
-" ungültiger Filter bricht die Synchronisation ohne Export ab."
+"LDAP-Filter ermöglichen eine feinere Steuerung der exportierten Lehrer "
+"und Schüler. Sie lassen sich global oder pro Schule mit "
+"``asm/ldap_filter/students`` und ``asm/ldap_filter/staff`` setzen. Ein "
+"ungültiger Filter bricht die Synchronisation ohne Export ab."
 
 #: ../../changelog.rst:162
 msgid "v2.1.0"
@@ -264,8 +262,8 @@ msgid ""
 "The connector fills the ``password_policy`` column for new students from "
 "``asm/attributes/student/password_policy``."
 msgstr ""
-"Der Connector füllt die Spalte ``password_policy`` für neue Schüler "
-"aus ``asm/attributes/student/password_policy``."
+"Der Connector füllt die Spalte ``password_policy`` für neue Schüler aus "
+"``asm/attributes/student/password_policy``."
 
 #: ../../changelog.rst:170
 msgid "v2.0.0"
@@ -282,11 +280,10 @@ msgstr "v1.2.0"
 #: ../../changelog.rst:180
 msgid ""
 "The connector handles classes with more than 15 teachers correctly. It "
-"exports 15 of them, which is the limit of Apple School Manager."
+"exports 15 of them, which is the limit of *Apple School Manager*."
 msgstr ""
 "Der Connector verarbeitet Klassen mit mehr als 15 Lehrern korrekt. Er "
-"exportiert 15 davon, was dem Limit von Apple School Manager "
-"entspricht."
+"exportiert 15 davon, was dem Limit von *Apple School Manager* entspricht."
 
 #: ../../changelog.rst:187
 msgid "v1.1.0"
@@ -303,45 +300,3 @@ msgstr "v1.0.0"
 #: ../../changelog.rst:196
 msgid "First release."
 msgstr "Erstes Release."
-
-#~ msgid ""
-#~ "The connector exports the grade level,"
-#~ " configured with "
-#~ "``asm/attributes/student/grade_level``. See :ref"
-#~ ":`configuration-grade-level`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "The name of a course, which the"
-#~ " connector derives from the school "
-#~ "class, follows the pattern in "
-#~ "``asm/attributes/course-name-pattern``. The "
-#~ "default is ``{ou}-{name}``. See :ref"
-#~ ":`configuration-course-names`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "LDAP filters give you finer control "
-#~ "over the exported teachers and students."
-#~ " Set them globally or per school "
-#~ "with ``asm/ldap_filter/students`` and "
-#~ "``asm/ldap_filter/staff``. An invalid filter "
-#~ "stops the synchronization without an "
-#~ "export. See :ref:`configuration-ldap-filter`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "The connector fills the ``password_policy``"
-#~ " column for new students from "
-#~ "``asm/attributes/student/password_policy``. See :ref"
-#~ ":`configuration-password-policy`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "The accounts are configured in "
-#~ ":file:`/etc/asm-connections.json`. The app "
-#~ "settings ``asm/username``, ``asm/password``, and "
-#~ "``asm/school_whitelist`` are gone. The update"
-#~ " moves their values to the new "
-#~ "file."
-#~ msgstr ""

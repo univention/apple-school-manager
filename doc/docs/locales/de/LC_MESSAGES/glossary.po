@@ -1,20 +1,14 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2026, Univention GmbH
-# This file is distributed under the same license as the Apple School
-# Manager Connector package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+# SPDX-FileCopyrightText: 2026 Univention GmbH
 #
-#, fuzzy
+# SPDX-License-Identifier: AGPL-3.0-only
 msgid ""
 msgstr ""
-"Project-Id-Version: Apple School Manager Connector 5.1.1\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-11 10:35+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-10-30 09:39+0000\n"
+"PO-Revision-Date: 2026-10-30 14:07+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language: de\n"
-"Language-Team: de <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,9 +24,11 @@ msgstr "App Center"
 
 #: ../../glossary.rst:20
 msgid ""
-"The Univention App Center, the component of :term:`UCS` with which you "
-"install and configure apps."
-msgstr "Das Univention App Center, die Komponente von :term:`UCS`, mit der Sie Apps installieren und konfigurieren."
+"The Univention App Center, the component of :term:`Nubus for UCS` with "
+"which you install and configure apps."
+msgstr ""
+"Univention App Center ist die Komponente in :term:`Nubus für UCS`, mit "
+"der Sie Apps installieren und konfigurieren."
 
 #: ../../glossary.rst:13
 msgid "Apple School Manager"
@@ -42,7 +38,9 @@ msgstr "Apple School Manager"
 msgid ""
 "The web service with which educational institutions manage their Managed "
 "Apple Accounts, devices, and content. Abbreviated as ASM."
-msgstr "Der Webdienst, mit dem Bildungseinrichtungen ihre Managed Apple Accounts, Geräte und Inhalte verwalten. Abgekürzt als ASM."
+msgstr ""
+"Der Webdienst, mit dem Bildungseinrichtungen ihre Managed Apple Accounts,"
+" Geräte und Inhalte verwalten. Abgekürzt als ASM."
 
 #: ../../glossary.rst:22
 msgid "Keycloak"
@@ -50,73 +48,106 @@ msgstr "Keycloak"
 
 #: ../../glossary.rst:24
 msgid ""
-"The identity and access management software that UCS ships as an app. It "
-"provides the single sign-on of the domain."
-msgstr "Die Software für Identitäts- und Zugriffsverwaltung, die UCS als App bereitstellt. Sie liefert das Single Sign-On der Domäne."
+"The identity and access management software that Nubus for UCS ships as "
+"an app. It provides the single sign-on of the domain. For more "
+"information, see :cite:t:`uv-keycloak-app`."
+msgstr ""
+"Die Software für Identitäts- und Zugriffsverwaltung, die Nubus für UCS als "
+"App bereitstellt. Sie stellt das Single Sign-On der Domäne bereit. Weitere "
+"Informationen finden Sie in :cite:t:`uv-keycloak-app`."
 
-#: ../../glossary.rst:26
+#: ../../glossary.rst:27
+msgid "Management UI"
+msgstr "Management UI"
+
+#: ../../glossary.rst:29
+msgid ""
+"The *Management UI* is the administration web interface of :term:`Nubus "
+"for UCS`. For more information, see :external+uv-ucs-operation:ref"
+":`management-interface` in :cite:t:`uv-ucs-operation`."
+msgstr ""
+"Die *Management UI* ist die Weboberfläche zur Administration von "
+":term:`Nubus für UCS`. Weitere Informationen finden Sie unter :external"
+"+uv-ucs-operation:ref:`management-interface` in :cite:t:`uv-ucs-"
+"operation`."
+
+#: ../../glossary.rst:56
+msgid "Nubus for UCS"
+msgstr "Nubus für UCS"
+
+#: ../../glossary.rst:58
+msgid ""
+"Nubus for Univention Corporate Server, the server operating system with "
+"integrated identity management."
+msgstr ""
+"Nubus für Univention Corporate Server, das Server-Betriebssystem mit "
+"integriertem Identitätsmanagement."
+
+#: ../../glossary.rst:61
+msgid "For more information, see :cite:t:`uv-ucs-operation`."
+msgstr "Weitere Informationen finden Sie in :cite:t:`uv-ucs-operation`."
+
+#: ../../glossary.rst:33
 msgid "OIDC"
 msgstr "OIDC"
 
-#: ../../glossary.rst:28
+#: ../../glossary.rst:35
 msgid "OpenID Connect, the identity layer on top of OAuth 2.0."
 msgstr "OpenID Connect, die Identitätsschicht auf Basis von OAuth 2.0."
 
-#: ../../glossary.rst:30
+#: ../../glossary.rst:37
 msgid "PKCE"
 msgstr "PKCE"
 
-#: ../../glossary.rst:32
+#: ../../glossary.rst:39
 msgid ""
 "Proof Key for Code Exchange, an extension of the OAuth 2.0 authorization "
 "code flow."
-msgstr "Proof Key for Code Exchange, eine Erweiterung des Authorization Code Flow von OAuth 2.0."
+msgstr ""
+":spelling:word:`Proof Key for Code Exchange`, eine Erweiterung des :spelling:word:`Authorization Code Flow`"
+" von OAuth 2.0."
 
-#: ../../glossary.rst:34
+#: ../../glossary.rst:41
 msgid "SSF"
 msgstr "SSF"
 
-#: ../../glossary.rst:36
+#: ../../glossary.rst:43
 msgid ""
 "Shared Signals Framework, the standard of the OpenID Foundation for "
 "sharing security events between an identity provider and the applications"
 " that rely on it."
-msgstr "Shared Signals Framework, der Standard der OpenID Foundation für den Austausch von Sicherheitsereignissen zwischen einem Identity Provider und den Anwendungen, die sich auf ihn stützen."
+msgstr ""
+"Shared Signals Framework, der Standard der OpenID Foundation für den "
+"Austausch von Sicherheitsereignissen zwischen einem Identity Provider und"
+" den Anwendungen, die sich auf ihn stützen."
 
-#: ../../glossary.rst:39
+#: ../../glossary.rst:47
+msgid ""
+"For information about the relation to the *Apple School Manager "
+"Connector* app, see :ref:`identity-provider-ssf`."
+msgstr ""
+"Informationen zum Zusammenhang mit der App *Apple School Manager "
+"Connector* finden Sie unter :ref:`identity-provider-ssf`."
+
+#: ../../glossary.rst:49
 msgid "UCR"
 msgstr "UCR"
 
-#: ../../glossary.rst:41
+#: ../../glossary.rst:51
 msgid ""
 "Univention Configuration Registry, the central configuration database of "
-":term:`UCS`."
-msgstr "Univention Configuration Registry, die zentrale Konfigurationsdatenbank von :term:`UCS`."
+":term:`Nubus for UCS`. For more information, see :external+uv-ucs-"
+"operation:ref:`system-administration-ucr` in :cite:t:`uv-ucs-operation`."
+msgstr ""
+"Univention Configuration Registry, die zentrale Konfigurationsdatenbank "
+"von :term:`Nubus für UCS`. Weitere Informationen finden Sie unter "
+":external+uv-ucs-operation:ref:`system-administration-ucr` in :cite:t"
+":`uv-ucs-operation`."
 
-#: ../../glossary.rst:43
-msgid "UCS"
-msgstr "UCS"
+#: ../../glossary.rst:62
+msgid "UCS\\@school"
+msgstr "UCS\\@school"
 
-#: ../../glossary.rst:45
-msgid ""
-"Univention Corporate Server, the server operating system with integrated "
-"identity management."
-msgstr "Univention Corporate Server, das Server-Betriebssystem mit integriertem Identity Management."
-
-#: ../../glossary.rst:47
-msgid "UCS@school"
-msgstr "UCS@school"
-
-#: ../../glossary.rst:49
-msgid "The extension of :term:`UCS` for schools and school authorities."
-msgstr "Die Erweiterung von :term:`UCS` für Schulen und Schulträger."
-
-#: ../../glossary.rst:50
-msgid "UMC"
-msgstr "UMC"
-
-#: ../../glossary.rst:52
-msgid ""
-"Univention Management Console, the web interface for the administration "
-"of :term:`UCS`."
-msgstr "Univention Management Console, die Weboberfläche für die Administration von :term:`UCS`."
+#: ../../glossary.rst:64
+msgid "The extension of :term:`Nubus for UCS` for schools and school authorities."
+msgstr "Die Erweiterung von :term:`Nubus für UCS` für Schulen und Schulträger."

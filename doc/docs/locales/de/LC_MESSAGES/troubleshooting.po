@@ -1,17 +1,13 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2026, Univention GmbH
-# This file is distributed under the same license as the Apple School
-# Manager Connector package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+# SPDX-FileCopyrightText: 2026 Univention GmbH
 #
-#, fuzzy
+# SPDX-License-Identifier: AGPL-3.0-only
 msgid ""
 msgstr ""
 "Project-Id-Version: Apple School Manager Connector 5.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-02 13:01+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2026-10-29 15:38+0000\n"
+"PO-Revision-Date: 2026-10-30 13:56+0100\n"
+"Last-Translator: Univention GmbH <packages@univention.de>\n"
 "Language: de\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -26,11 +22,11 @@ msgstr "Fehlerbehebung"
 
 #: ../../troubleshooting.rst:11
 msgid ""
-"This chapter describes where the connector records what it does and what "
-"to do about the problems that occur most often."
+"This chapter describes where the connector logs its activity and what to "
+"do about the problems that occur most often."
 msgstr ""
-"Dieses Kapitel beschreibt, wo der Connector protokolliert, was er tut, und "
-"was Sie bei den häufigsten Problemen tun können."
+"Dieses Kapitel beschreibt, wo der Connector seine Aktivitäten "
+"protokolliert und was Sie bei den häufigsten Problemen tun können."
 
 #: ../../troubleshooting.rst:17
 msgid "Log file"
@@ -38,264 +34,358 @@ msgstr "Logdatei"
 
 #: ../../troubleshooting.rst:19
 msgid ""
-"The connector writes to :file:`/var/log/univention/asm.log`. The file holds "
-"the debug-level log of every run, including the teachers whom an LDAP filter"
-" excluded from a class. The app settings show the time of the last upload in"
-" ``asm/last_upload``. ``asm/last_upload/ACCOUNT`` holds the time of the last"
-" upload to each account."
+"The connector writes log information to the "
+":file:`/var/log/univention/asm.log` log file. The file holds the debug-"
+"level log of every run, including the teachers whom an LDAP filter "
+"excluded from a class."
 msgstr ""
-"Der Connector schreibt in :file:`/var/log/univention/asm.log`. Die Datei "
-"enthält das Log jedes Laufs auf Debug-Level, einschließlich der Lehrer, die "
-"ein LDAP-Filter aus einer Klasse ausgeschlossen hat. Die App-Einstellungen "
-"zeigen den Zeitpunkt des letzten Uploads in ``asm/last_upload``. "
-"``asm/last_upload/ACCOUNT`` enthält den Zeitpunkt des letzten Uploads in "
-"jedes Konto."
+"Der Connector schreibt Protokollinformationen in die Logdatei "
+":file:`/var/log/univention/asm.log`. Die Datei enthält das Protokoll "
+"jedes Laufs auf Debug-Level, einschließlich der Lehrer, die ein "
+"LDAP-Filter aus einer Klasse ausgeschlossen hat."
 
-#: ../../troubleshooting.rst:25
+#: ../../troubleshooting.rst:23
 msgid ""
-"The log rotation follows the ``logrotate/*`` UCR variables of the system."
-" The connector writes its own configuration to "
+"For the timestamp of the most recent upload to any account, check "
+":envvar:`asm/last_upload` in the app settings. For instructions, see :ref"
+":`configuration-app-settings`."
+msgstr ""
+"Den Zeitpunkt des letzten Uploads in ein beliebiges Konto finden Sie in "
+"den App-Einstellungen unter :envvar:`asm/last_upload`. Eine Anleitung "
+"finden Sie in :ref:`configuration-app-settings`."
+
+#: ../../troubleshooting.rst:27
+msgid ""
+"For the timestamp of the most recent upload to a specific account, check "
+":envvar:`asm/last_upload/ACCOUNT`. Replace ``ACCOUNT`` with the account "
+"name from the :envvar:`accounts` section of the settings file."
+msgstr ""
+"Den Zeitpunkt des letzten Uploads in ein bestimmtes Konto finden Sie unter "
+":envvar:`asm/last_upload/ACCOUNT`. Ersetzen Sie ``ACCOUNT`` durch den "
+"Kontonamen aus dem Abschnitt :envvar:`accounts` der Einstellungsdatei."
+
+#: ../../troubleshooting.rst:32
+msgid ""
+"The connector uses the system's ``logrotate/*`` UCR variables for log "
+"rotation. Its log rotation configuration is in "
 ":file:`/etc/logrotate.d/asm`."
 msgstr ""
 "Die Logrotation richtet sich nach den UCR-Variablen ``logrotate/*`` des "
-"Systems. Der Connector schreibt seine eigene Konfiguration nach "
+"Systems. Die Konfiguration für die Logrotation des Connectors befindet sich in "
 ":file:`/etc/logrotate.d/asm`."
 
-#: ../../troubleshooting.rst:28
+#: ../../troubleshooting.rst:35
+msgid ""
+"To follow a synchronization run in the log file, use the command in "
+":numref:`troubleshooting-log-listing`."
+msgstr ""
+"Um einen Synchronisationslauf in der Logdatei zu verfolgen, verwenden Sie "
+"den Befehl in :numref:`troubleshooting-log-listing`."
+
+#: ../../troubleshooting.rst:38
 msgid "Follow a synchronization run"
 msgstr "Synchronisationslauf verfolgen"
 
-#: ../../troubleshooting.rst:36
+#: ../../troubleshooting.rst:47
 msgid "Get better error messages from Apple School Manager"
 msgstr "Aussagekräftigere Fehlermeldungen von Apple School Manager erhalten"
 
-#: ../../troubleshooting.rst:38
+#: ../../troubleshooting.rst:49
 msgid ""
-"Apple School Manager reports errors in the uploaded data sparsely. The page "
-"that shows the SFTP credentials gives more details about the data that Apple"
-" School Manager rejects. You can keep the SFTP upload connected."
+"*Apple School Manager* provides limited information about errors in "
+"uploaded data. The page that shows the SFTP credentials gives more "
+"details about the data that *Apple School Manager* rejects. To view these"
+" details during an upload, follow these steps:"
 msgstr ""
-"Apple School Manager meldet Fehler in den hochgeladenen Daten nur spärlich. "
-"Die Seite, die die SFTP-Zugangsdaten anzeigt, gibt genauer an, welche Daten "
-"Apple School Manager ablehnt. Der SFTP-Upload kann dabei verbunden bleiben."
-
-#: ../../troubleshooting.rst:43
-msgid ""
-"Open the page with the SFTP credentials, as described in "
-":ref:`installation-credentials`."
-msgstr ""
-"Öffnen Sie die Seite mit den SFTP-Zugangsdaten, wie in "
-":ref:`installation-credentials` beschrieben."
-
-#: ../../troubleshooting.rst:46
-msgid ""
-"Keep the page open and start a synchronization run, as described in "
-":ref:`synchronization-run`."
-msgstr ""
-"Lassen Sie die Seite geöffnet und starten Sie einen Synchronisationslauf, "
-"wie in :ref:`synchronization-run` beschrieben."
-
-#: ../../troubleshooting.rst:50
-msgid "The page shows the errors of each upload while the upload runs."
-msgstr "Die Seite zeigt die Fehler jedes Uploads an, während der Upload läuft."
+"*Apple School Manager* meldet Fehler in den hochgeladenen Daten nur "
+"spärlich. Die Seite, die die SFTP-Zugangsdaten anzeigt, gibt genauer an, "
+"welche Daten *Apple School Manager* ablehnt. Um diese Details während "
+"eines Uploads anzuzeigen, gehen Sie wie folgt vor:"
 
 #: ../../troubleshooting.rst:55
+msgid ""
+"Open the page with the SFTP credentials in *Apple School Manager*, as "
+"described in :ref:`installation-credentials`."
+msgstr ""
+"Öffnen Sie die Seite mit den SFTP-Zugangsdaten in *Apple School Manager*, wie in :ref"
+":`installation-credentials` beschrieben."
+
+#: ../../troubleshooting.rst:58
+msgid ""
+"Keep the page open and start a synchronization run, as described in :ref"
+":`synchronization-run`."
+msgstr ""
+"Lassen Sie die Seite geöffnet und starten Sie einen Synchronisationslauf,"
+" wie in :ref:`synchronization-run` beschrieben."
+
+#: ../../troubleshooting.rst:62
+msgid "The page shows errors for each upload while it runs."
+msgstr "Die Seite zeigt die Fehler jedes Uploads an, während der Upload läuft."
+
+#: ../../troubleshooting.rst:67
 msgid "Users don't appear in Apple School Manager"
 msgstr "Benutzer erscheinen nicht in Apple School Manager"
 
-#: ../../troubleshooting.rst:57
-msgid "Check the following, in this order:"
-msgstr "Prüfen Sie Folgendes in dieser Reihenfolge:"
-
-#: ../../troubleshooting.rst:59
+#: ../../troubleshooting.rst:74
 msgid ""
-"**The user has no primary email address.** The connector exports the user"
-" without an email address, and Apple School Manager can't create an Apple"
-" Account for the user."
+"If user accounts don't appear in *Apple School Manager*, check the "
+"following possible causes in the listed order:"
 msgstr ""
-"**Der Benutzer hat keine primäre E-Mail-Adresse.** Der Connector exportiert "
-"den Benutzer ohne E-Mail-Adresse, und Apple School Manager kann für den "
-"Benutzer keinen Apple Account anlegen."
+"Wenn Benutzerkonten nicht in *Apple School Manager* erscheinen, prüfen "
+"Sie die folgenden möglichen Ursachen in der angegebenen Reihenfolge:"
 
-#: ../../troubleshooting.rst:63
+#: ../../troubleshooting.rst:77
+msgid "**The user has no primary email address.**"
+msgstr "**Der Benutzer hat keine primäre E-Mailadresse.**"
+
+#: ../../troubleshooting.rst:79
 msgid ""
-"**Anonymization removed the email address.** Anonymization is enabled by "
-"default. With ``student.anonymize`` or ``staff.anonymize`` enabled for "
-"the account, the connector exports the replacement value instead of the "
-"address, which is empty by default. See :ref:`configuration-"
-"anonymization`."
+"The connector exports the user without an email address, and *Apple "
+"School Manager* can't create an *Apple Account* for the user."
 msgstr ""
-"**Die Anonymisierung hat die E-Mail-Adresse entfernt.** Die Anonymisierung "
-"ist standardmäßig aktiviert. Ist ``student.anonymize`` oder "
-"``staff.anonymize`` für das Konto aktiviert, exportiert der Connector statt "
-"der Adresse den Ersatzwert, der standardmäßig leer ist. Siehe "
-":ref:`configuration-anonymization`."
+"Der Connector exportiert den Benutzer ohne E-Mailadresse, und *Apple School Manager* "
+"kann für den Benutzer keinen *Apple Account* anlegen."
 
-#: ../../troubleshooting.rst:70
-msgid "Turn anonymization off in :file:`/etc/asm-connections.json`"
-msgstr "Anonymisierung in :file:`/etc/asm-connections.json` ausschalten"
-
-#: ../../troubleshooting.rst:78
-msgid ""
-"**The school isn't on the list.** The connector only exports schools that"
-" the ``schools`` section of the settings file lists, and only to the "
-"account that the school refers to. See :ref:`configuration-school-list`."
-msgstr ""
-"**Die Schule steht nicht auf der Liste.** Der Connector exportiert nur "
-"Schulen, die der Abschnitt ``schools`` der Einstellungsdatei aufführt, und "
-"nur in das Konto, auf das die Schule verweist. Siehe "
-":ref:`configuration-school-list`."
+#: ../../troubleshooting.rst:82
+msgid "**Anonymization removed the email address.**"
+msgstr "**Die Anonymisierung hat die E-Mailadresse entfernt.**"
 
 #: ../../troubleshooting.rst:84
 msgid ""
-"**An LDAP filter excludes the user.** The log file doesn't name users "
-"whom a filter excluded. Run the filter with :command:`univention-"
-"ldapsearch` to check which users it selects. See :ref:`configuration-"
-"ldap-filter`."
+"The connector has anonymization enabled by default. If the account has "
+":envvar:`student.anonymize` or :envvar:`staff.anonymize` enabled, the "
+"connector exports a replacement value instead of the email address. The "
+"default email replacement value is empty. For more information, see :ref"
+":`configuration-anonymization`."
 msgstr ""
-"**Ein LDAP-Filter schließt den Benutzer aus.** Die Logdatei nennt keine "
+"Die Anonymisierung ist im Connector standardmäßig aktiviert. Wenn "
+":envvar:`student.anonymize` oder :envvar:`staff.anonymize` für das Konto "
+"aktiviert ist, exportiert der Connector statt der E-Mailadresse einen "
+"Ersatzwert. Der standardmäßige Ersatzwert für die E-Mailadresse ist leer. "
+"Weitere Informationen finden Sie in :ref:`configuration-anonymization`."
+
+#: ../../troubleshooting.rst:90
+msgid ""
+"To deactivate anonymization by default for both students and staff, add "
+"the settings in :numref:`troubleshooting-users-missing-anonymization-"
+"listing` to the existing configuration. Account-specific settings can "
+"override these defaults. Without anonymization, the connector exports the"
+" original attribute values, including names and email addresses. For "
+"account-specific settings, see :ref:`configuration-anonymization`."
+msgstr ""
+"Um die Anonymisierung standardmäßig sowohl für Schüler als auch für "
+"Mitarbeiter zu deaktivieren, ergänzen Sie die bestehende Konfiguration um "
+"die Einstellungen aus :numref:`troubleshooting-users-missing-anonymization-listing`. "
+"Einstellungen spezifisch für das Konto können diese Standardwerte überschreiben. "
+"Ohne Anonymisierung exportiert der Connector die ursprünglichen "
+"Attributwerte, einschließlich Namen und E-Mailadressen. Informationen zu "
+"Einstellungen spezifisch für das Konto finden Sie in :ref:`configuration-anonymization`."
+
+#: ../../troubleshooting.rst:98
+msgid "Turn anonymization off in :file:`/etc/asm-connections.json`"
+msgstr "Anonymisierung in :file:`/etc/asm-connections.json` ausschalten"
+
+#: ../../troubleshooting.rst:107
+msgid "**The school isn't on the list.**"
+msgstr "**Die Schule steht nicht auf der Liste.**"
+
+#: ../../troubleshooting.rst:109
+msgid ""
+"The connector exports only schools that the :envvar:`schools` section of "
+"the settings file lists. It exports each school only to the account "
+"assigned to that school. For more information, see :ref:`configuration-"
+"school-list`."
+msgstr ""
+"Der Connector exportiert nur Schulen, die der Abschnitt :envvar:`schools` "
+"der Einstellungsdatei aufführt. Er exportiert jede Schule nur in das "
+"Konto, das ihr zugewiesen ist. Weitere Informationen finden Sie in "
+":ref:`configuration-school-list`."
+
+#: ../../troubleshooting.rst:115
+msgid "**An LDAP filter excludes the user.**"
+msgstr "**Ein LDAP-Filter schließt den Benutzer aus.**"
+
+#: ../../troubleshooting.rst:117
+msgid ""
+"The log file doesn't name users whom a filter excluded. Run the filter "
+"with :command:`univention-ldapsearch` to check which users it selects. "
+"For more information, see :ref:`configuration-ldap-filter`."
+msgstr ""
+"Die Logdatei nennt keine "
 "Benutzer, die ein Filter ausgeschlossen hat. Führen Sie den Filter mit "
 ":command:`univention-ldapsearch` aus, um zu prüfen, welche Benutzer er "
 "auswählt. Siehe :ref:`configuration-ldap-filter`."
 
-#: ../../troubleshooting.rst:93
+#: ../../troubleshooting.rst:131
 msgid "Apple School Manager rejects an upload without students"
 msgstr "Apple School Manager lehnt einen Upload ohne Schüler ab"
 
-#: ../../troubleshooting.rst:95
+#: ../../troubleshooting.rst:133
 msgid ""
-"Apple School Manager rejects an upload that contains no student and shows an"
-" error. Every account needs at least one student in its upload."
+"*Apple School Manager* rejects an upload that contains no students and "
+"shows an error. Every account needs at least one student in its upload."
 msgstr ""
-"Apple School Manager lehnt einen Upload ab, der keinen Schüler enthält, und "
-"zeigt einen Fehler an. Jedes Konto braucht mindestens einen Schüler in "
-"seinem Upload."
+"*Apple School Manager* lehnt einen Upload ab, der keinen Schüler enthält,"
+" und zeigt einen Fehler an. Jedes Konto braucht mindestens einen Schüler "
+"in seinem Upload."
 
-#: ../../troubleshooting.rst:99
+#: ../../troubleshooting.rst:141
 msgid "An upload contains no students in the following cases:"
 msgstr "Ein Upload enthält in den folgenden Fällen keine Schüler:"
 
-#: ../../troubleshooting.rst:101
-msgid "None of the schools that the account receives has a student."
-msgstr "Keine der Schulen, die das Konto erhält, hat einen Schüler."
+#: ../../troubleshooting.rst:143
+msgid "None of the schools assigned to the account has a student."
+msgstr "Keine der Schulen, die dem Konto zugewiesen sind, hat einen Schüler."
 
-#: ../../troubleshooting.rst:103
+#: ../../troubleshooting.rst:145
 msgid ""
-"The LDAP filter for students excludes every student of those schools. See "
-":ref:`configuration-ldap-filter`."
+"The LDAP filter for students excludes every student of those schools. For"
+" more information, see :ref:`configuration-ldap-filter`."
 msgstr ""
-"Der LDAP-Filter für Schüler schließt alle Schüler dieser Schulen aus. Siehe "
-":ref:`configuration-ldap-filter`."
+"Der LDAP-Filter für Schüler schließt alle Schüler dieser Schulen aus. "
+"Siehe :ref:`configuration-ldap-filter`."
 
-#: ../../troubleshooting.rst:106
-msgid "To see the error, follow :ref:`troubleshooting-apple-messages`."
-msgstr ""
-"Um den Fehler zu sehen, folgen Sie :ref:`troubleshooting-apple-messages`."
+#: ../../troubleshooting.rst:148
+msgid ""
+"To see the error, follow the instructions in :ref:`troubleshooting-apple-"
+"messages`."
+msgstr "Um den Fehler zu sehen, folgen Sie :ref:`troubleshooting-apple-messages`."
 
-#: ../../troubleshooting.rst:112
+#: ../../troubleshooting.rst:154
 msgid "The run stops with a credential error"
 msgstr "Der Lauf bricht mit einem Fehler bei den Zugangsdaten ab"
 
-#: ../../troubleshooting.rst:114
+#: ../../troubleshooting.rst:156
 msgid ""
 "The connector stops before it collects any data if :file:`/etc/asm-"
 "connections.json` is missing or invalid, or if a password file is missing"
-" or empty. The message in the log file names the file and the entry."
+" or empty. The message in the log names the file and the entry, as shown "
+"in the example in :numref:`troubleshooting-credentials-listing`."
 msgstr ""
-"Der Connector bricht ab, bevor er Daten sammelt, wenn "
-":file:`/etc/asm-connections.json` fehlt oder ungültig ist oder wenn eine "
-"Passwortdatei fehlt oder leer ist. Die Meldung in der Logdatei nennt die "
-"Datei und den Eintrag."
+"Der Connector bricht ab, bevor er Daten sammelt, wenn :file:`/etc/asm-"
+"connections.json` fehlt oder ungültig ist oder wenn eine Passwortdatei "
+"fehlt oder leer ist. Die Meldung in der Logdatei nennt die Datei und den "
+"Eintrag, wie das Beispiel in :numref:`troubleshooting-credentials-listing` zeigt."
 
-#: ../../troubleshooting.rst:119
+#: ../../troubleshooting.rst:162
+msgid ""
+"Configure the accounts and their password files, as described in :ref"
+":`configuration-accounts`. If Apple rejects the credentials, generate new"
+" credentials in *Apple School Manager* and configure them as described in"
+" :ref:`configuration-accounts`."
+msgstr ""
+"Konfigurieren Sie die Konten und ihre Passwortdateien, wie in :ref:`configuration-accounts` "
+"beschrieben. Wenn Apple die Zugangsdaten ablehnt, erzeugen Sie in "
+"*Apple School Manager* neue Zugangsdaten und konfigurieren Sie diese wie "
+"in :ref:`configuration-accounts` beschrieben."
+
+#: ../../troubleshooting.rst:168
+msgid ""
+"After correcting the configuration, run the synchronization again as "
+"described in :ref:`synchronization-run`. Check the log file for errors "
+"and the timestamp of the last upload, as described in :ref"
+":`troubleshooting-log`."
+msgstr ""
+"Führen Sie nach der Korrektur der Konfiguration die Synchronisation erneut "
+"aus, wie in :ref:`synchronization-run` beschrieben. Prüfen Sie die "
+"Logdatei auf Fehler und den Zeitpunkt des letzten Uploads, wie in "
+":ref:`troubleshooting-log` beschrieben."
+
+#: ../../troubleshooting.rst:173
 msgid "Message in the log file"
 msgstr "Meldung in der Logdatei"
 
-#: ../../troubleshooting.rst:124
-msgid ""
-"Configure the accounts, as described in :ref:`configuration-accounts`. If"
-" the credentials are set but Apple rejects them, generate new ones in "
-"Apple School Manager and enter those."
-msgstr ""
-"Konfigurieren Sie die Konten, wie in :ref:`configuration-accounts` "
-"beschrieben. Wenn die Zugangsdaten gesetzt sind, Apple sie aber ablehnt, "
-"erzeugen Sie in Apple School Manager neue Zugangsdaten und tragen Sie diese "
-"ein."
-
-#: ../../troubleshooting.rst:133
+#: ../../troubleshooting.rst:182
 msgid "The upload stops with a missing host key"
-msgstr "Der Upload bricht mit einem fehlenden Host-Schlüssel ab"
+msgstr "Der Upload bricht mit einem fehlenden Rechnerschlüssel ab"
 
-#: ../../troubleshooting.rst:135
+#: ../../troubleshooting.rst:184
 msgid ""
 "The connector verifies the host key of the SFTP server against "
-":file:`/etc/asm_public_key`. The package ships that file. If it's missing"
-" or no longer matches the server, the upload fails with ``Could not find "
-"/etc/asm_public_key`` or with an SSH exception."
+":file:`/etc/asm_public_key`. The *Apple School Manager Connector* ships "
+"that file. If it's missing or no longer matches the server, the upload "
+"fails with the message ``Could not find /etc/asm_public_key`` or with an "
+"SSH exception."
 msgstr ""
-"Der Connector prüft den Host-Schlüssel des SFTP-Servers gegen "
-":file:`/etc/asm_public_key`. Das Paket liefert diese Datei mit. Fehlt sie "
-"oder passt sie nicht mehr zum Server, schlägt der Upload mit ``Could not "
-"find /etc/asm_public_key`` oder mit einem SSH-Fehler fehl."
+"Der Connector prüft den Rechnerschlüssel des SFTP-Servers gegen "
+":file:`/etc/asm_public_key`. Der *Apple School Manager Connector* liefert diese Datei mit. Fehlt sie"
+" oder passt sie nicht mehr zum Server, schlägt der Upload mit ``Could not"
+" find /etc/asm_public_key`` oder mit einem SSH-Fehler fehl."
 
-#: ../../troubleshooting.rst:142
+#: ../../troubleshooting.rst:195
 msgid ""
-"Reinstall the package to restore the file. If Apple changed the host key,"
-" report it to Univention, see :ref:`troubleshooting-support`, so that a "
-"new version of the app can ship the new key."
+"If the file is missing, reinstall the package to restore it. If Apple "
+"changed the host key, report the change to Univention so that an update "
+"of the app can ship the new key. For support options, see :ref"
+":`troubleshooting-support`."
 msgstr ""
-"Installieren Sie das Paket erneut, um die Datei wiederherzustellen. Wenn "
-"Apple den Host-Schlüssel geändert hat, melden Sie dies Univention, siehe "
-":ref:`troubleshooting-support`, damit eine neue Version der App den neuen "
-"Schlüssel mitliefern kann."
+"Wenn die Datei fehlt, installieren Sie das Paket erneut, um sie wiederherzustellen. Wenn "
+"Apple den Rechnerschlüssel geändert hat, melden Sie dies Univention, siehe "
+":ref:`troubleshooting-support`, damit eine neue Version der App den neuen"
+" Schlüssel mitliefern kann."
 
-#: ../../troubleshooting.rst:151
+#: ../../troubleshooting.rst:204
 msgid "The upload to an account stops with an invalid LDAP filter"
 msgstr "Der Upload in ein Konto bricht mit einem ungültigen LDAP-Filter ab"
 
-#: ../../troubleshooting.rst:153
+#: ../../troubleshooting.rst:206
 msgid ""
-"An LDAP filter with a syntax error stops the upload to the account of that "
-"school. The connector still uploads to the remaining accounts and exits with"
-" a non-zero status at the end. The log file names the filter and the "
-"account."
+"An LDAP filter with a syntax error stops the upload to the account of the"
+" school that has the filter. The connector still uploads to the remaining"
+" accounts and exits with a non-zero status at the end. The log file lists"
+" the filter and the account, as shown in the example in :numref"
+":`troubleshooting-ldap-filter-listing`."
 msgstr ""
-"Ein LDAP-Filter mit einem Syntaxfehler bricht den Upload in das Konto dieser"
-" Schule ab. Der Connector lädt trotzdem in die übrigen Konten hoch und endet"
-" am Schluss mit einem Exit-Status ungleich null. Die Logdatei nennt den "
-"Filter und das Konto."
+"Ein LDAP-Filter mit einem Syntaxfehler bricht den Upload in das Konto "
+"dieser Schule ab. Der Connector lädt trotzdem in die übrigen Konten hoch "
+"und endet am Schluss mit einem Exit-Status ungleich null. Die Logdatei "
+"nennt den Filter und das Konto, wie das Beispiel in :numref:`troubleshooting-ldap-filter-listing` zeigt."
 
-#: ../../troubleshooting.rst:159
+#: ../../troubleshooting.rst:213
+msgid ""
+"Correct the filter in the settings file, or remove the ``ldap_filter`` "
+"key from the school's ``student`` or ``staff`` settings to fall back to "
+"the filter in :envvar:`defaults`. For more information, see :ref"
+":`configuration-ldap-filter`."
+msgstr ""
+"Korrigieren Sie den Filter in der Einstellungsdatei oder entfernen Sie "
+"den Schlüssel ``ldap_filter`` aus den Einstellungen ``student`` oder "
+"``staff`` der Schule, damit der Filter aus :envvar:`defaults` greift. "
+"Siehe :ref:`configuration-ldap-filter`."
+
+#: ../../troubleshooting.rst:218
+msgid ""
+"After correcting the filter, run the synchronization again as described "
+"in :ref:`synchronization-run`. Check the log file for errors and the "
+"last-upload timestamp for the affected account, as described in :ref"
+":`troubleshooting-log`."
+msgstr ""
+"Führen Sie nach der Korrektur des Filters die Synchronisation erneut aus, "
+"wie in :ref:`synchronization-run` beschrieben. Prüfen Sie die Logdatei "
+"auf Fehler und den Zeitpunkt des letzten Uploads für das betroffene Konto, "
+"wie in :ref:`troubleshooting-log` beschrieben."
+
+#: ../../troubleshooting.rst:223
 msgid "Messages in the log file"
 msgstr "Meldungen in der Logdatei"
 
-#: ../../troubleshooting.rst:165
-msgid ""
-"Correct the filter in the settings file, or remove the ``ldap_filter`` key "
-"of the school to fall back to the filter in ``defaults``. See "
-":ref:`configuration-ldap-filter`."
-msgstr ""
-"Korrigieren Sie den Filter in der Einstellungsdatei oder entfernen Sie den "
-"Schlüssel ``ldap_filter`` der Schule, damit der Filter aus ``defaults`` "
-"greift. Siehe :ref:`configuration-ldap-filter`."
-
-#: ../../troubleshooting.rst:173
+#: ../../troubleshooting.rst:233
 msgid "Classes have fewer teachers than expected"
 msgstr "Klassen haben weniger Lehrer als erwartet"
 
-#: ../../troubleshooting.rst:175
+#: ../../troubleshooting.rst:240
 msgid ""
-"Apple School Manager supports at most 15 teachers per class. The "
-"connector exports the first 15 and writes a warning to the log file that "
-"names the class. This is a limitation of Apple School Manager, not of the"
-" connector."
+"*Apple School Manager* supports at most 15 teachers per class. The "
+"connector exports the first 15 and writes a warning that names the class "
+"to the log file. This is a limitation of *Apple School Manager*, not of "
+"the connector."
 msgstr ""
-"Apple School Manager unterstützt höchstens 15 Lehrer pro Klasse. Der "
-"Connector exportiert die ersten 15 und schreibt eine Warnung mit dem Namen "
-"der Klasse in die Logdatei. Das ist eine Einschränkung von Apple School "
-"Manager, nicht des Connectors."
+"*Apple School Manager* unterstützt höchstens 15 Lehrer pro Klasse. Der "
+"Connector exportiert die ersten 15 und schreibt eine Warnung mit dem "
+"Namen der Klasse in die Logdatei. Das ist eine Einschränkung von *Apple "
+"School Manager*, nicht des Connectors."
 
-#: ../../troubleshooting.rst:181
+#: ../../troubleshooting.rst:246
 msgid ""
 "An LDAP filter for teachers can also reduce the number. The log file "
 "records every teacher whom a filter excluded from a class."
@@ -304,139 +394,84 @@ msgstr ""
 "verzeichnet jeden Lehrer, den ein Filter aus einer Klasse ausgeschlossen "
 "hat."
 
-#: ../../troubleshooting.rst:187
+#: ../../troubleshooting.rst:252
 msgid "Federation for a domain fails the second time"
-msgstr "Die Föderation für eine Domain schlägt beim zweiten Mal fehl"
+msgstr "Die Föderation für eine Domäne schlägt beim zweiten Mal fehl"
 
-#: ../../troubleshooting.rst:189
+#: ../../troubleshooting.rst:254
 msgid ""
-"If you disable federation for a domain and then enable it again, Apple "
-"School Manager shows an error."
+"If you deactivate federation for a domain and then enable it again, "
+"*Apple School Manager* shows an error."
 msgstr ""
-"Wenn Sie die Föderation für eine Domain deaktivieren und anschließend wieder"
-" aktivieren, zeigt Apple School Manager einen Fehler an."
+"Wenn Sie die Föderation für eine Domäne deaktivieren und anschließend "
+"wieder aktivieren, zeigt *Apple School Manager* einen Fehler an."
 
-#: ../../troubleshooting.rst:193
+#: ../../troubleshooting.rst:257
 msgid ""
-"While federation is on, Apple School Manager offers to disconnect the domain"
-" instead of removing it. Disconnecting removes the domain only from the "
-"federation. The domain itself stays in Apple School Manager."
+"While federation is active, *Apple School Manager* offers to disconnect "
+"the domain instead of removing it. Disconnecting removes the domain from "
+"the federation, but the domain stays in *Apple School Manager*."
 msgstr ""
-"Solange die Föderation aktiv ist, bietet Apple School Manager an, die Domain"
-" zu trennen, statt sie zu entfernen. Das Trennen nimmt die Domain nur aus "
-"der Föderation heraus. Die Domain selbst bleibt in Apple School Manager "
-"erhalten."
+"Solange die Föderation aktiv ist, bietet *Apple School Manager* an, die "
+"Domäne zu trennen, statt sie zu entfernen. Das Trennen nimmt die Domäne "
+"aus der Föderation heraus. Die Domäne selbst bleibt in *Apple School "
+"Manager* erhalten."
 
-#: ../../troubleshooting.rst:199
-msgid "To enable federation for the domain again, do the following:"
+#: ../../troubleshooting.rst:267
+msgid "To enable federation for the domain again, follow these steps:"
 msgstr ""
-"Um die Föderation für die Domain wieder zu aktivieren, gehen Sie wie folgt "
-"vor:"
+"Um die Föderation für die Domäne wieder zu aktivieren, gehen Sie wie "
+"folgt vor:"
 
-#: ../../troubleshooting.rst:202
-msgid "In Apple School Manager, disconnect the identity provider."
+#: ../../troubleshooting.rst:270
+msgid "In *Apple School Manager*, disconnect the identity provider."
 msgstr ""
-"Trennen Sie in Apple School Manager die Verbindung zum Identity Provider."
+"Trennen Sie in *Apple School Manager* die Verbindung zum Identity "
+"Provider."
 
-#: ../../troubleshooting.rst:205
+#: ../../troubleshooting.rst:273
 msgid "Connect it again, as described in :ref:`identity-provider-asm-idp`."
 msgstr ""
 "Verbinden Sie ihn erneut, wie in :ref:`identity-provider-asm-idp` "
 "beschrieben."
 
-#: ../../troubleshooting.rst:208
+#: ../../troubleshooting.rst:276
 msgid ""
-"Enable federation for the domain, as described in "
-":ref:`identity-provider-asm-domain`."
+"Enable federation for the domain, as described in :ref:`identity-"
+"provider-asm-domain`."
 msgstr ""
-"Aktivieren Sie die Föderation für die Domain, wie in "
-":ref:`identity-provider-asm-domain` beschrieben."
+"Aktivieren Sie die Föderation für die Domäne, wie in :ref:`identity-"
+"provider-asm-domain` beschrieben."
 
-#: ../../troubleshooting.rst:214
+#: ../../troubleshooting.rst:282
 msgid "Where to get help"
 msgstr "Hilfe erhalten"
 
-#: ../../troubleshooting.rst:216
+#: ../../troubleshooting.rst:284
+msgid "You can ask for help through the following channels:"
+msgstr "Sie können über die folgenden Kanäle Hilfe erhalten:"
+
+#: ../../troubleshooting.rst:286
 msgid ""
-"The `Univention Help <https://help.univention.com/>`_ forum for questions"
-" from the community."
+"The `Univention Help <https://help.univention.com/>`_ forum for community"
+" support."
 msgstr ""
-"Das Forum `Univention Help <https://help.univention.com/>`_ für Fragen aus "
-"der Community."
+"Das Forum `Univention Help <https://help.univention.com/>`_ für Fragen "
+"aus der Community."
 
-#: ../../troubleshooting.rst:219
+#: ../../troubleshooting.rst:289
 msgid "Your Univention support contract for a supported environment."
-msgstr "Ihr Univention-Supportvertrag für eine unterstützte Umgebung."
+msgstr "Ihr Univention Supportvertrag für eine unterstützte Umgebung."
 
-#: ../../troubleshooting.rst:221
+#: ../../troubleshooting.rst:291
 msgid ""
 "When you report a problem, attach the relevant part of "
-":file:`/var/log/univention/asm.log`."
+":file:`/var/log/univention/asm.log`. Before sharing the excerpt, check it"
+" for sensitive personal information and credentials. Remove sensitive "
+"information, but keep the details needed to diagnose the problem."
 msgstr ""
-"Wenn Sie ein Problem melden, hängen Sie den relevanten Ausschnitt aus "
-":file:`/var/log/univention/asm.log` an."
-
-#~ msgid ""
-#~ "The connector writes to "
-#~ ":file:`/var/log/univention/asm.log`. The file holds"
-#~ " the debug level protocol of every"
-#~ " run, including the LDAP objects that"
-#~ " the connector skipped and why. The"
-#~ " app settings show the time of "
-#~ "the last upload in ``asm/last_upload``."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "**The user has no primary email "
-#~ "address.** Apple School Manager uses the"
-#~ " email address as the Apple Account,"
-#~ " so the connector skips users without"
-#~ " one."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "**An LDAP filter excludes the user.**"
-#~ " See :ref:`configuration-ldap-filter`. The"
-#~ " log file names every user that "
-#~ "a filter excluded."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Reinstall the package to restore the "
-#~ "file. If Apple changed the host "
-#~ "key, report it so that a new "
-#~ "version of the app can ship the"
-#~ " new key."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "An LDAP filter for teachers can "
-#~ "also reduce the number. The log "
-#~ "file records every teacher that a "
-#~ "filter excluded from a class."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "The connector stops before it collects"
-#~ " any data if the user name or"
-#~ " the password is missing."
-#~ msgstr ""
-#~ "Der Connector bricht ab, bevor er "
-#~ "Daten sammelt, wenn der Benutzername "
-#~ "oder das Passwort fehlt."
-
-#~ msgid "Turn anonymization off"
-#~ msgstr "Anonymisierung ausschalten"
-
-#~ msgid ""
-#~ "**The school isn't on the list.** "
-#~ "With ``school_whitelist`` set for the "
-#~ "account, the connector only exports the"
-#~ " listed schools to it. See :ref"
-#~ ":`configuration-school-list`."
-#~ msgstr ""
-#~ "**Die Schule steht nicht auf der "
-#~ "Liste.** Ist ``asm/school_whitelist`` gesetzt, "
-#~ "exportiert der Connector nur die "
-#~ "aufgeführten Schulen. Siehe :ref:`configuration-"
-#~ "school-list`."
+"Wenn Sie ein Problem melden, fügen Sie den relevanten Teil von "
+":file:`/var/log/univention/asm.log` bei. Prüfen Sie den Ausschnitt auf "
+"sensible personenbezogene Daten und Zugangsdaten, bevor Sie ihn weitergeben. "
+"Entfernen Sie sensible Informationen, aber behalten Sie die Details bei, "
+"die für die Diagnose des Problems benötigt werden."

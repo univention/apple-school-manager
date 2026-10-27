@@ -1,20 +1,14 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2026, Univention GmbH
-# This file is distributed under the same license as the Apple School
-# Manager Connector package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+# SPDX-FileCopyrightText: 2026 Univention GmbH
 #
-#, fuzzy
+# SPDX-License-Identifier: AGPL-3.0-only
 msgid ""
 msgstr ""
-"Project-Id-Version: Apple School Manager Connector 5.1.1\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-02 13:01+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language: de\n"
-"Language-Team: de <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-10-28 16:04+0000\n"
+"PO-Revision-Date: 2026-10-30 11:57+0100\n"
+"Last-Translator: Univention GmbH <packages@univention.de>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -26,121 +20,164 @@ msgstr "Installation"
 
 #: ../../installation.rst:11
 msgid ""
-"You install the *Apple School Manager Connector* from the :term:`App "
-"Center`, like any other app. This chapter describes where you can install"
-" it, how to install it, and how to obtain the credentials that the "
-"connector needs."
+"Install the *Apple School Manager Connector* on a supported system role "
+"to synchronize school data with *Apple School Manager*. Before you start,"
+" ensure that you meet the :ref:`introduction-prerequisites`."
 msgstr ""
-"Sie installieren den *Apple School Manager Connector* wie jede andere App "
-"aus dem :term:`App Center`. Dieses Kapitel beschreibt, wo Sie ihn "
-"installieren können, wie Sie ihn installieren und wie Sie die Zugangsdaten "
-"erhalten, die der Connector benötigt."
+"Installieren Sie den *Apple School Manager Connector* auf einer "
+"unterstützten Systemrolle, um Schuldaten mit *Apple School Manager* zu "
+"synchronisieren. Stellen zuerst sicher, dass Sie die :ref"
+":`introduction-prerequisites` erfüllen."
 
-#: ../../installation.rst:20
+#: ../../installation.rst:18
 msgid "Supported system roles"
 msgstr "Unterstützte Systemrollen"
 
-#: ../../installation.rst:22
+#: ../../installation.rst:20
 msgid "You can install the connector on the following system roles:"
-msgstr ""
-"Sie können den Connector auf den folgenden Systemrollen installieren:"
+msgstr "Sie können den Connector auf den folgenden Systemrollen installieren:"
+
+#: ../../installation.rst:22
+msgid ":external+uv-ucs-operation:term:`Primary Directory Node`"
+msgstr ":external+uv-ucs-operation:term:`Primary Directory Node`"
+
+#: ../../installation.rst:23
+msgid ":external+uv-ucs-operation:term:`Backup Directory Node`"
+msgstr ":external+uv-ucs-operation:term:`Backup Directory Node`"
 
 #: ../../installation.rst:24
-msgid "Primary Directory Node"
-msgstr "Primary Directory Node"
-
-#: ../../installation.rst:25
-msgid "Backup Directory Node"
-msgstr "Backup Directory Node"
+msgid ":external+uv-ucs-operation:term:`Replica Directory Node`"
+msgstr ":external+uv-ucs-operation:term:`Replica Directory Node`"
 
 #: ../../installation.rst:26
-msgid "Replica Directory Node"
-msgstr "Replica Directory Node"
-
-#: ../../installation.rst:30
-msgid "Install the connector on exactly one system in the domain."
-msgstr "Installieren Sie den Connector auf genau einem System in der Domäne."
-
-#: ../../installation.rst:32
 msgid ""
-"Every installation uploads a complete data set and overwrites what the "
-"previous upload transferred. Two installations therefore overwrite each "
-"other's data. If you want to synchronize additional schools, add them to "
-"the existing installation as described in :ref:`configuration-school-"
-"list`, or add another Apple School Manager account as described in :ref"
-":`configuration-accounts`."
-msgstr ""
-"Jede Installation lädt einen vollständigen Datensatz hoch und überschreibt, "
-"was der vorherige Upload übertragen hat. Zwei Installationen überschreiben "
-"daher gegenseitig ihre Daten. Wenn Sie weitere Schulen synchronisieren "
-"möchten, fügen Sie diese der bestehenden Installation hinzu, wie in "
-":ref:`configuration-school-list` beschrieben, oder fügen Sie ein weiteres "
-"Konto in Apple School Manager hinzu, wie in :ref:`configuration-accounts` "
-"beschrieben."
-
-#: ../../installation.rst:41
-msgid ""
-"On a school Replica Directory Node, the connector only sees the school of"
+"On a school Replica Directory Node, the connector sees only the school of"
 " that node. On a central Replica Directory Node, a Primary Directory "
-"Node, or a Backup Directory Node, it sees every school in the domain."
+"Node, or a Backup Directory Node, the connector sees every school in the "
+"domain."
 msgstr ""
 "Auf dem Replica Directory Node einer Schule sieht der Connector nur die "
 "Schule dieses Nodes. Auf einem zentralen Replica Directory Node, einem "
 "Primary Directory Node oder einem Backup Directory Node sieht er alle "
 "Schulen der Domäne."
 
-#: ../../installation.rst:50
+#: ../../installation.rst:34
+msgid "Install the connector on exactly one system in the domain."
+msgstr "Installieren Sie den Connector auf genau einem System in der Domäne."
+
+#: ../../installation.rst:36
+msgid ""
+"Each instance uploads a complete data set. The upload overwrites the data"
+" that the previous instance uploaded."
+msgstr ""
+"Jede Instanz lädt einen vollständigen Datensatz hoch. Der Upload "
+"überschreibt die Daten, die die vorherige Instanz hochgeladen hat."
+
+#: ../../installation.rst:39
+msgid ""
+"Don't install the connector more than once in a domain. To synchronize "
+"additional schools, add them to the existing instance as described in "
+":ref:`configuration-school-list`. To use another *Apple School Manager* "
+"account, add it as described in :ref:`configuration-accounts`."
+msgstr ""
+"Installieren Sie den Connector nicht mehr als einmal in einer Domäne. Um "
+"weitere Schulen zu synchronisieren, fügen Sie sie der vorhandenen Instanz"
+" hinzu, wie in :ref:`configuration-school-list` beschrieben. Um ein "
+"anderes *Apple School Manager*-Konto zu verwenden, fügen Sie es wie in "
+":ref:`configuration-accounts` beschrieben hinzu."
+
+#: ../../installation.rst:49
 msgid "Install the app"
 msgstr "App installieren"
 
-#: ../../installation.rst:52
-msgid "Open the App Center in :term:`UMC`."
-msgstr "Öffnen Sie das App Center in :term:`UMC`."
+#: ../../installation.rst:51
+msgid ""
+"Before you begin, complete the prerequisites in :ref:`introduction-"
+"prerequisites`."
+msgstr ""
+"Erfüllen Sie vor dem Start die :ref:`introduction-"
+"prerequisites`."
 
 #: ../../installation.rst:54
+msgid ""
+"To install the *Apple School Manager Connector* app on |UAS|, follow "
+"these steps:"
+msgstr ""
+"Führen Sie die folgenden Schritte aus, um die App *Apple School Manager "
+"Connector* auf |UAS| zu installieren:"
+
+#: ../../installation.rst:57
+msgid ""
+"Navigate to the *App Center* in :term:`Management UI` through "
+":menuselection:`Software --> App Center`."
+msgstr ""
+"Navigieren Sie in der :term:`Management UI` über :menuselection:`Software "
+"--> App Center` zum *App Center*."
+
+#: ../../installation.rst:60
 msgid "Select :guilabel:`Apple School Manager Connector`."
 msgstr "Wählen Sie :guilabel:`Apple School Manager Connector`."
 
-#: ../../installation.rst:56
+#: ../../installation.rst:62
 msgid "Click :guilabel:`Install`."
-msgstr "Klicken Sie auf :guilabel:`Installieren`."
-
-#: ../../installation.rst:58
-msgid ""
-"After the installation, obtain the credentials as described in the next "
-"section and enter them as described in :ref:`installation-configure-"
-"credentials`."
-msgstr ""
-"Beschaffen Sie nach der Installation die Zugangsdaten, wie im nächsten "
-"Abschnitt beschrieben, und tragen Sie sie ein, wie in "
-":ref:`installation-configure-credentials` beschrieben."
+msgstr "Klicken Sie :guilabel:`Installieren`."
 
 #: ../../installation.rst:64
-msgid ""
-"The connector requires |UAS| in version ``5.2v5`` or later. The app refuses "
-"to update on a system with an older version."
-msgstr ""
-"Der Connector erfordert |UAS| in Version ``5.2v5`` oder höher. Auf einem "
-"System mit einer älteren Version verweigert die App das Update."
+msgid "Wait until the installation completes."
+msgstr "Warten Sie, bis die Installation abgeschlossen ist."
 
-#: ../../installation.rst:70
+#: ../../installation.rst:66
+msgid ""
+"After you install the app, obtain the credentials as described in :ref"
+":`installation-credentials` and enter them as described in :ref"
+":`installation-configure-credentials`."
+msgstr ""
+"Beschaffen Sie nach der Installation der App die Zugangsdaten wie in :ref"
+":`installation-credentials` beschrieben und geben Sie sie wie in :ref"
+":`installation-configure-credentials` beschrieben ein."
+
+#: ../../installation.rst:72
+msgid ":external+uv-ucs-operation:ref:`lifecycle-app-center-installation`"
+msgstr ":external+uv-ucs-operation:ref:`lifecycle-app-center-installation`"
+
+#: ../../installation.rst:73
+msgid ""
+"in :cite:t:`uv-ucs-operation` for more information about how to install "
+"an app."
+msgstr ""
+"in :cite:t:`uv-ucs-operation` für weitere Informationen zur Installation "
+"einer App."
+
+#: ../../installation.rst:76
+msgid ":external+uv-ucs-operation:ref:`lifecycle-app-center`"
+msgstr ":external+uv-ucs-operation:ref:`lifecycle-app-center`"
+
+#: ../../installation.rst:77
+msgid ""
+"in :cite:t:`uv-ucs-operation` for more information about Univention App "
+"Center."
+msgstr ""
+"in :cite:t:`uv-ucs-operation` für weitere Informationen über Univention App Center."
+
+#: ../../installation.rst:83
 msgid "Obtain the SFTP credentials"
 msgstr "SFTP-Zugangsdaten ermitteln"
 
-#: ../../installation.rst:72
+#: ../../installation.rst:85
 msgid ""
-"Apple School Manager generates the SFTP user name and password for you. "
+"*Apple School Manager* generates the SFTP username and password for you. "
 "To find them, do the following:"
 msgstr ""
-"Apple School Manager erzeugt den SFTP-Benutzernamen und das Passwort für "
-"Sie. Um diese zu finden, gehen Sie wie folgt vor:"
+"*Apple School Manager* erzeugt den SFTP-Benutzernamen und das Passwort "
+"für Sie. Um diese zu finden, gehen Sie wie folgt vor:"
 
-#: ../../installation.rst:75
+#: ../../installation.rst:88
 msgid "Sign in to `Apple School Manager <https://school.apple.com/>`_."
 msgstr ""
-"Melden Sie sich bei `Apple School Manager <https://school.apple.com/>`_ an."
+"Melden Sie sich bei `Apple School Manager <https://school.apple.com/>`_ "
+"an."
 
-#: ../../installation.rst:77
+#: ../../installation.rst:90
 msgid ""
 "Click your name in the lower-left corner and select "
 ":guilabel:`Preferences`."
@@ -148,130 +185,95 @@ msgstr ""
 "Klicken Sie unten links auf Ihren Namen und wählen Sie "
 ":guilabel:`Preferences`."
 
-#: ../../installation.rst:80
+#: ../../installation.rst:93
 msgid "Select :guilabel:`Managed Apple Accounts`."
 msgstr "Wählen Sie :guilabel:`Managed Apple Accounts`."
 
-#: ../../installation.rst:82
-msgid "Open the menu for :guilabel:`Apple formatted CSV`."
-msgstr "Öffnen Sie das Menü für :guilabel:`Apple formatted CSV`."
-
-#: ../../installation.rst:84
-msgid "Click :guilabel:`Upload CSV`."
-msgstr "Klicken Sie auf :guilabel:`Upload CSV`."
-
-#: ../../installation.rst:86
+#: ../../installation.rst:95
 msgid ""
-"A new frame opens and shows the SFTP account data. For background "
-"information, see :cite:t:`apple-sftp-upload`."
+"Select the menu next to :guilabel:`Apple formatted CSV`, and then select "
+":guilabel:`Upload CSV`."
 msgstr ""
-"Ein neuer Bereich öffnet sich und zeigt die Daten des SFTP-Kontos. "
-"Hintergrundinformationen finden Sie in :cite:t:`apple-sftp-upload`."
+"Wählen Sie das Menü neben :guilabel:`Apple formatted CSV` und dann "
+":guilabel:`Upload CSV` aus."
 
-#: ../../installation.rst:92
+#: ../../installation.rst:98
+msgid ""
+"A dialog opens and displays the SFTP username and password. For "
+"background information, see :cite:p:`apple-sftp-upload`."
+msgstr ""
+"Ein Dialog wird geöffnet und zeigt den SFTP-Benutzernamen und das "
+"Passwort an. Hintergrundinformationen finden Sie unter :cite:p:`apple-"
+"sftp-upload`."
+
+#: ../../installation.rst:104
 msgid "Enter the credentials"
 msgstr "Zugangsdaten eingeben"
 
-#: ../../installation.rst:94
+#: ../../installation.rst:106
 msgid ""
-"Store the password in :file:`/etc/asm.secret` with read permission for "
-"the ``root`` user only."
+"To configure the upload credentials for *Apple School Manager Connector*,"
+" follow these steps:"
 msgstr ""
-"Speichern Sie das Passwort in :file:`/etc/asm.secret`, mit Leserechten nur "
-"für den Benutzer ``root``."
+"Führen Sie die folgenden Schritte aus, um die Upload-Zugangsdaten für den"
+" *Apple School Manager Connector* zu konfigurieren:"
 
-#: ../../installation.rst:97
+#: ../../installation.rst:109
+msgid ""
+"Store the SFTP password that *Apple School Manager* generated in "
+":file:`/etc/asm.secret` with permissions set to ``600``, as shown in "
+":numref:`installation-configure-credentials-store-listing`. Enter the "
+"generated SFTP password, save the file, and close the editor."
+msgstr ""
+"Speichern Sie das von *Apple School Manager* generierte SFTP-Passwort in "
+":file:`/etc/asm.secret` mit den Berechtigungen ``600``, wie in :numref"
+":`installation-configure-credentials-store-listing` gezeigt. Geben Sie "
+"das generierte SFTP-Passwort ein, speichern Sie die Datei, und schließen "
+"Sie den Editor."
+
+#: ../../installation.rst:114
 msgid "Store the password"
 msgstr "Passwort speichern"
 
-#: ../../installation.rst:103
+#: ../../installation.rst:121
 msgid ""
-"Add the user name, the path of the password file, and the schools to the "
-"settings file :file:`/etc/asm-connections.json`, which the installation "
-"creates without an account."
+"Edit the settings file :file:`/etc/asm-connections.json`, which the "
+"installation creates without an account. Add the SFTP username, path to "
+"the password file, and schools. For an example, see :numref"
+":`installation-configure-credentials-asm-listing`."
 msgstr ""
-"Tragen Sie den Benutzernamen, den Pfad der Passwortdatei und die Schulen in "
-"die Einstellungsdatei :file:`/etc/asm-connections.json` ein, die die "
-"Installation ohne Konto anlegt."
+"Bearbeiten Sie die Einstellungsdatei :file:`/etc/asm-connections.json`, "
+"die bei der Installation ohne Konto erstellt wird. Fügen Sie den SFTP-"
+"Benutzernamen, den Pfad zur Passwortdatei und die Schulen hinzu. Ein "
+"Beispiel finden Sie in :numref:`installation-configure-credentials-asm-"
+"listing`."
 
-#: ../../installation.rst:107
-msgid "One Apple School Manager account in :file:`/etc/asm-connections.json`"
-msgstr "Ein Konto in Apple School Manager in :file:`/etc/asm-connections.json`"
-
-#: ../../installation.rst:122
-msgid "The entry ``*`` in ``schools`` synchronizes every school to the account."
-msgstr ""
-"Der Eintrag ``*`` in ``schools`` synchronisiert jede Schule in das Konto."
-
-#: ../../installation.rst:124
+#: ../../installation.rst:126
 msgid ""
-":ref:`configuration-file` describes the file in detail, including how to "
-"limit the account to individual schools, how to add further accounts, and"
-" every setting for users and classes. Then continue with "
-":ref:`configuration`."
+"Replace ``sftp-user`` with the SFTP username that *Apple School Manager* "
+"generated. The entry ``*`` in ``schools`` synchronizes every school to "
+"the account. Save the file."
 msgstr ""
-":ref:`configuration-file` beschreibt die Datei im Detail, einschließlich der "
-"Beschränkung des Kontos auf einzelne Schulen, des Hinzufügens weiterer "
-"Konten und aller "
-"Einstellungen für Benutzer und Klassen. Fahren Sie danach mit "
-":ref:`configuration` fort."
+"Ersetzen Sie ``sftp-user`` durch den von *Apple School Manager* "
+"generierten SFTP-Benutzernamen. Der Eintrag ``*`` in ``schools`` "
+"synchronisiert jede Schule mit dem Konto. Speichern Sie die Datei."
 
-#~ msgid ""
-#~ "Click your name in the lower left"
-#~ " corner and select :guilabel:`Preferences`."
-#~ msgstr ""
+#: ../../installation.rst:131
+msgid ""
+"For a detailed description of the settings, see :ref:`configuration-"
+"file`. The configuration page includes information about how to limit the"
+" account to individual schools, how to add further accounts, and all "
+"settings for users and classes."
+msgstr ""
+"Eine ausführliche Beschreibung der Einstellungen finden Sie in :ref"
+":`configuration-file`. Die Konfigurationsseite enthält Informationen "
+"dazu, wie Sie das Konto auf einzelne Schulen beschränken, weitere Konten "
+"hinzufügen und alle Einstellungen für Benutzer und Klassen festlegen."
 
-#~ msgid "After you saved the settings, continue with :ref:`configuration`."
-#~ msgstr ""
+#: ../../installation.rst:137
+msgid "One *Apple School Manager* account in :file:`/etc/asm-connections.json`"
+msgstr "Ein *Apple School Manager*-Konto in :file:`/etc/asm-connections.json`"
 
-#~ msgid ""
-#~ "The App Center installs the app "
-#~ "and then opens the app settings, "
-#~ "where you enter the credentials from "
-#~ "the next section."
-#~ msgstr ""
-#~ "Das App Center installiert die App "
-#~ "und öffnet anschließend die App-"
-#~ "Einstellungen, in denen Sie die "
-#~ "Zugangsdaten aus dem nächsten Abschnitt "
-#~ "eingeben."
-
-#~ msgid "Open the App Center in UMC and select the app."
-#~ msgstr "Öffnen Sie das App Center in UMC und wählen Sie die App aus."
-
-#~ msgid "Click :guilabel:`App settings`."
-#~ msgstr "Klicken Sie auf :guilabel:`App-Einstellungen`."
-
-#~ msgid ""
-#~ "Enter the user name in the "
-#~ ":guilabel:`asm/username` field and the "
-#~ "password in the :guilabel:`asm/password` "
-#~ "field."
-#~ msgstr ""
-#~ "Geben Sie den Benutzernamen in das "
-#~ "Feld :guilabel:`asm/username` und das Passwort"
-#~ " in das Feld :guilabel:`asm/password` ein."
-
-#~ msgid "Click :guilabel:`Apply changes`."
-#~ msgstr "Klicken Sie auf :guilabel:`Änderungen anwenden`."
-
-#~ msgid "After you've saved the settings, continue with :ref:`configuration`."
-#~ msgstr ""
-#~ "Nachdem Sie die Einstellungen gespeichert "
-#~ "haben, fahren Sie mit :ref:`configuration` "
-#~ "fort."
-
-#~ msgid ""
-#~ "Write the user name and the path"
-#~ " of the password file to :file:`/etc"
-#~ "/asm-connections.json`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ ":ref:`configuration-accounts` describes the "
-#~ "file in detail, including how to "
-#~ "limit the account to individual schools"
-#~ " and how to add further accounts. "
-#~ "Then continue with :ref:`configuration`."
-#~ msgstr ""
-
+#: ../../installation.rst:153
+msgid "Continue with :ref:`configuration`."
+msgstr "Fahren Sie mit :ref:`configuration` fort."

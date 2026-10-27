@@ -11,7 +11,7 @@ Apple School Manager Connector for |UAS|
    :caption: Contents
    :numbered:
 
-   introduction
+   index
    installation
    configuration
    synchronization

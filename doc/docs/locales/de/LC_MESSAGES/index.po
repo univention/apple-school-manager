@@ -1,17 +1,13 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2026, Univention GmbH
-# This file is distributed under the same license as the Apple School
-# Manager Connector package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+# SPDX-FileCopyrightText: 2026 Univention GmbH
 #
-#, fuzzy
+# SPDX-License-Identifier: AGPL-3.0-only
 msgid ""
 msgstr ""
 "Project-Id-Version: Apple School Manager Connector 5.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-11 10:35+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2026-10-30 10:44+0000\n"
+"PO-Revision-Date: 2026-10-30 12:03+0100\n"
+"Last-Translator: Univention GmbH <packages@univention.de>\n"
 "Language: de\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -20,15 +16,262 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: ../../index.rst:11
-msgid "Contents"
-msgstr "Inhalt"
-
-#: ../../index.rst:32
-msgid "Appendix"
-msgstr "Anhang"
-
 #: ../../index.rst:9
-msgid "Apple School Manager Connector for |UAS|"
-msgstr "Apple School Manager Connector für |UAS|"
+msgid "Introduction"
+msgstr "Einleitung"
+
+#: ../../index.rst:11
+msgid ""
+"The *Apple School Manager Connector* is an app for :term:`UCS@school`. It"
+" provisions the information about schools, classes, work groups, "
+"teachers, and students of your |UAS| domain to :term:`Apple School "
+"Manager`, so that you don't have to maintain the same accounts twice."
+msgstr ""
+"Der *Apple School Manager Connector* ist eine App für :term:`UCS@school`."
+" Er stellt die Informationen über Schulen, Klassen, Arbeitsgruppen, "
+"Lehrkräfte und Schülerinnen und Schüler Ihrer |UAS|-Domäne für "
+":term:`Apple School Manager` bereit, sodass Sie dieselben Konten nicht "
+"zweimal verwalten müssen."
+
+#: ../../index.rst:16
+msgid ""
+"In this setup, |UAS| acts as the student information system for *Apple "
+"School Manager*. The connector uses the SFTP interface that Apple "
+"provides for student information systems. It collects data from the LDAP "
+"directory and writes it to CSV files. It then packs the files into a ZIP "
+"archive and uploads the archive to *Apple School Manager*."
+msgstr ""
+"In dieser Konfiguration fungiert |UAS| als Schülerverwaltungssystem für "
+"*Apple School Manager*. Der Connector verwendet die SFTP-Schnittstelle, "
+"die Apple für Schülerverwaltungssysteme bereitstellt. Er erfasst Daten "
+"aus dem LDAP-Verzeichnis und schreibt sie in CSV-Dateien. Anschließend "
+"packt er die Dateien in ein ZIP-Archiv und lädt das Archiv in *Apple "
+"School Manager* hoch."
+
+#: ../../index.rst:27
+msgid "Audience"
+msgstr "Zielgruppe"
+
+#: ../../index.rst:29
+msgid ""
+"Use this documentation if you administer a |UAS| domain and want to "
+"provision its users to *Apple School Manager*."
+msgstr ""
+"Verwenden Sie diese Dokumentation, wenn Sie eine |UAS|-Domäne verwalten "
+"und deren Benutzer für *Apple School Manager* bereitstellen möchten."
+
+#: ../../index.rst:35
+msgid "Prerequisites"
+msgstr "Voraussetzungen"
+
+#: ../../index.rst:37
+msgid "Before you start, make sure that you have the following:"
+msgstr "Stellen Sie zunächst sicher, dass Folgendes vorhanden ist:"
+
+#: ../../index.rst:39
+msgid "A |UAS| domain with at least one school."
+msgstr "Eine |UAS|-Domäne mit mindestens einer Schule."
+
+#: ../../index.rst:41
+msgid "The system runs |UAS| version ``5.2v5`` or later."
+msgstr "Das System führt |UAS| in Version ``5.2v5`` oder höher aus."
+
+#: ../../index.rst:43
+msgid "An *Apple School Manager* account for an educational institution."
+msgstr "Ein *Apple School Manager*-Konto für eine Bildungseinrichtung."
+
+#: ../../index.rst:45
+msgid "The SFTP credentials for the *Apple School Manager* account."
+msgstr "Die SFTP-Zugangsdaten für das *Apple School Manager*-Konto."
+
+#: ../../index.rst:47
+msgid ""
+"For information about how to obtain the credentials, see :ref"
+":`installation-credentials`."
+msgstr ""
+"Informationen zum Erhalt der Zugangsdaten finden Sie unter :ref"
+":`installation-credentials`."
+
+#: ../../index.rst:50
+msgid "A primary email address for each user."
+msgstr "Eine primäre E-Mailadresse für jeden Benutzer."
+
+#: ../../index.rst:52
+msgid ""
+"*Apple School Manager* uses the email address as the Apple Account and "
+"can't create an account for a user without one."
+msgstr ""
+"*Apple School Manager* "
+"verwendet die E-Mailadresse als Apple Account und kann ohne sie kein "
+"Konto für einen Benutzer erstellen."
+
+#: ../../index.rst:55
+msgid ""
+"You need to be familiar with administering :term:`Nubus for UCS` and "
+"|UAS|, including the following topics:"
+msgstr ""
+"Sie müssen mit der Verwaltung von :term:`Nubus for UCS` und |UAS| "
+"vertraut sein, einschließlich der folgenden Themen:"
+
+#: ../../index.rst:58
+msgid ""
+"The :term:`App Center`, see :external+uv-ucs-operation:ref:`lifecycle-"
+"app-center` in :cite:t:`uv-ucs-operation`."
+msgstr ""
+"Das :term:`App Center`, siehe :external+uv-ucs-operation:ref:`lifecycle-"
+"app-center` im :cite:t:`uv-ucs-operation`."
+
+#: ../../index.rst:62
+msgid ""
+"The :term:`UCR`, see :external+uv-ucs-operation:ref:`system-"
+"administration-ucr` in :cite:t:`uv-ucs-operation`."
+msgstr ""
+"Die :term:`UCR`, siehe :external+uv-ucs-operation:ref:`system-"
+"administration-ucr` im :cite:t:`uv-ucs-operation`."
+
+#: ../../index.rst:66
+msgid ""
+"The school objects that |UAS| manages, see :external+uv-ucsschool-"
+"manual:ref:`structure-ldap` in :cite:t:`ucsschool-manual`, which is "
+"available only in German."
+msgstr ""
+"Die Schulobjekte, die |UAS| verwaltet, siehe :external+uv-ucsschool-"
+"manual:ref:`structure-ldap` im :cite:t:`ucsschool-manual`."
+
+#: ../../index.rst:74 ../../index.rst:92
+msgid "Objects that the connector synchronizes"
+msgstr "Objekte, die der Connector synchronisiert"
+
+#: ../../index.rst:76
+msgid ""
+"The connector transfers data in one direction only, from |UAS| to *Apple "
+"School Manager*. It never writes data back, and it never changes objects "
+"in your |UAS| domain."
+msgstr ""
+"Der Connector überträgt Daten nur in eine Richtung, von |UAS| zu *Apple "
+"School Manager*. Er schreibt niemals Daten zurück und ändert keine "
+"Objekte in Ihrer |UAS|-Domäne."
+
+#: ../../index.rst:81
+msgid ""
+":numref:`introduction-object-mapping-table` lists which objects the "
+"connector maps to which *Apple School Manager* entity."
+msgstr ""
+":numref:`introduction-object-mapping-table` listet auf, welche Objekte "
+"der Connector welcher *Apple School Manager*-Entität zuordnet."
+
+#: ../../index.rst:84
+msgid ""
+"*Apple School Manager* requires every class to belong to a course, so the"
+" connector turns each school class and work group into a course with "
+"exactly one class in it. For more information, see :ref:`synchronization-"
+"courses`."
+msgstr ""
+"*Apple School Manager* benötigt die Zuordnung jeder Klasse zu einem Kurs. "
+"Daher wandelt der Connector jede Schulklasse und Arbeitsgruppe in einen "
+"Kurs mit genau einer Klasse um. Weitere Informationen finden Sie unter "
+":ref:`synchronization-courses`."
+
+#: ../../index.rst:96
+msgid "|UAS| object"
+msgstr "|UAS|-Objekt"
+
+#: ../../index.rst:97
+msgid "*Apple School Manager* entity"
+msgstr "*Apple School Manager*-Entität"
+
+#: ../../index.rst:99
+msgid "School"
+msgstr "Schule"
+
+#: ../../index.rst:100
+msgid "Location"
+msgstr "Standort"
+
+#: ../../index.rst:102
+msgid "School class or work group"
+msgstr "Schulklasse oder Arbeitsgruppe"
+
+#: ../../index.rst:103
+msgid "Course and class"
+msgstr "Kurs und Klasse"
+
+#: ../../index.rst:105 ../../index.rst:106
+msgid "Student"
+msgstr "Schüler"
+
+#: ../../index.rst:108
+msgid "Teacher and teacher with staff role"
+msgstr "Lehrkraft und Lehrkraft mit Mitarbeiterrolle"
+
+#: ../../index.rst:109
+msgid "Staff member"
+msgstr "Mitarbeiter"
+
+#: ../../index.rst:111
+msgid "Membership of a student in a school class or work group"
+msgstr "Mitgliedschaft eines Schülers in einer Schulklasse oder Arbeitsgruppe"
+
+#: ../../index.rst:112
+msgid "Roster entry"
+msgstr "Eintrag in der Klassenliste"
+
+#: ../../index.rst:117
+msgid "Objects that the connector doesn't synchronize"
+msgstr "Objekte, die der Connector nicht synchronisiert"
+
+#: ../../index.rst:119
+msgid "The connector doesn't synchronize the following objects:"
+msgstr "Der Connector synchronisiert keines der folgenden Objekte:"
+
+#: ../../index.rst:121
+msgid "Staff members who don't have a teacher role"
+msgstr "Mitarbeiter ohne Lehrkraftrolle"
+
+#: ../../index.rst:122
+msgid "Exam users"
+msgstr "Prüfungsbenutzer"
+
+#: ../../index.rst:124
+msgid ""
+"For detailed information about the mapping, including the individual CSV "
+"columns, see :ref:`synchronization`."
+msgstr ""
+"Detaillierte Informationen zur Zuordnung, einschließlich der einzelnen "
+"CSV-Spalten, finden Sie unter :ref:`synchronization`."
+
+#: ../../index.rst:131
+msgid "Passwords"
+msgstr "Passwörter"
+
+#: ../../index.rst:133
+msgid ""
+"The connector never transfers passwords. *Apple School Manager* creates "
+"the initial passwords for new accounts. Distribute the passwords from "
+"*Apple School Manager*. For information about how to configure the "
+"password length, see :ref:`configuration-password-policy`."
+msgstr ""
+"Der Connector überträgt niemals Passwörter. *Apple School Manager* "
+"erstellt die initialen Passwörter für neue Konten. Verteilen Sie die "
+"Passwörter über *Apple School Manager*. Informationen zur Konfiguration "
+"der Passwortlänge finden Sie unter :ref:`configuration-password-policy`."
+
+#: ../../index.rst:142
+msgid "Device management"
+msgstr "Geräteverwaltung"
+
+#: ../../index.rst:144
+msgid ""
+"For device management, use a mobile device management solution that "
+"integrates with *Apple School Manager*. For a list of solutions that "
+"integrate with |UAS|, see the `Univention integration catalog "
+"<https://www.univention.com/products/integration-catalog/>`_ and confirm "
+"that the selected solution integrates with *Apple School Manager*."
+msgstr ""
+"Verwenden Sie für die Geräteverwaltung eine Mobile Device Management-"
+"Lösung, die sich in *Apple School Manager* integrieren lässt. Eine Liste "
+"der Lösungen, die sich in |UAS| integrieren lassen, finden Sie im "
+"`Univention Integration Catalog <https://www.univention.de/produkte/integration-catalog/>`_. "
+"Stellen Sie sicher, dass die ausgewählte "
+"Lösung in *Apple School Manager* integrierbar ist."
 

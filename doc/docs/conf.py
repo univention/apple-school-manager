@@ -177,6 +177,21 @@ def adapt_settings_to_translation(_app: Sphinx, config: Config) -> None:
                 False,
             ),
         ]
+        config.bibtex_bibfiles = ["bibliography-de.bib"]
+        config.intersphinx_mapping = {
+            "uv-ucs-operation": ("https://docs.software-univention.de/ucs-operation/5.2/de/", None),
+            "uv-ucsschool-manual": (
+                "https://docs.software-univention.de/ucsschool-manual/5.2/de/",
+                None,
+            ),
+            "uv-ucsschool-import": (
+                "https://docs.software-univention.de/ucsschool-import/5.2/de/",
+                None,
+            ),
+            "uv-keycloak-app": ("https://docs.software-univention.de/keycloak-app/latest/", None),
+        }
+        config.numfig_format["code-block"] = "Listing %s"
+        config.numfig_format["table"] = "Tabelle %s"
 
 
 def setup(app: Sphinx) -> None:

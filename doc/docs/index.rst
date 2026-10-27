@@ -34,16 +34,16 @@ It assumes that you're familiar with the administration of
 in particular with the following topics:
 
 * The :term:`App Center`,
-  see :ref:`uv-manual:software-appcenter`
-  in the UCS manual :cite:p:`ucs-manual`.
+  see :external+uv-ucs-operation:ref:`lifecycle-app-center`
+  in :cite:t:`uv-ucs-operation`.
 
 * The :term:`UCR`,
-  see :ref:`uv-manual:computers-administration-of-local-system-configuration-with-univention-configuration-registry`
-  in the UCS manual :cite:p:`ucs-manual`.
+  see :external+uv-ucs-operation:ref:`system-administration-ucr`
+  in :cite:t:`uv-ucs-operation`.
 
 * The school objects that |UAS| manages,
-  see :ref:`uv-ucsschool-manual:structure-ldap`
-  in the |UAS| manual :cite:p:`ucsschool-manual`,
+  see :external+uv-ucsschool-manual:ref:`structure-ldap`
+  in :cite:t:`ucsschool-manual`,
   which is available only in German.
 
 .. _introduction-prerequisites:

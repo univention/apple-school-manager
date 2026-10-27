@@ -42,6 +42,7 @@ Glossary
       the central configuration database of :term:`UCS`.
 
    UCS
+   Nubus for UCS
       Univention Corporate Server,
       the server operating system with integrated identity management.
 

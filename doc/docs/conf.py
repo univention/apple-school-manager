@@ -86,7 +86,6 @@ html_show_copyright = False
 html_show_sphinx = False
 html_show_sourcelink = False
 html_use_index = False
-html_static_path = ["_static"]
 
 html_theme_options = {
     "pdf_download_filename": f"{doc_basename}.pdf",

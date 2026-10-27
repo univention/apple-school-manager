@@ -9,29 +9,51 @@ Introduction
 ************
 
 The *Apple School Manager Connector* is an app for :term:`UCS@school`.
-It provisions the schools, classes, work groups, teachers, and students
+It provisions the information about schools, classes, work groups, teachers, and students
 of your |UAS| domain to :term:`Apple School Manager`,
 so that you don't have to maintain the same accounts twice.
 
-In this setup, |UAS| takes the role of the student information system
-that *Apple School Manager* expects,
-and the connector uses the SFTP interface that Apple provides for such systems.
-The connector collects the data from the LDAP directory,
-writes it to a set of CSV files,
-packs them into a ZIP archive,
-and uploads that archive to *Apple School Manager*.
+In this setup, |UAS| acts as the student information system
+for *Apple School Manager*.
+The connector uses the SFTP interface that Apple provides
+for student information systems.
+It collects data from the LDAP directory and writes it to CSV files.
+It then packs the files into a ZIP archive
+and uploads the archive to *Apple School Manager*.
 
 .. _introduction-audience:
 
-Who this documentation is for
-=============================
+Audience
+========
 
-This documentation addresses administrators
-who run a |UAS| domain
-and who want to provision its users to *Apple School Manager*.
-It assumes that you're familiar with the administration of
-:term:`UCS` and |UAS|,
-in particular with the following topics:
+Use this documentation if you administer a |UAS| domain
+and want to provision its users to *Apple School Manager*.
+
+.. _introduction-prerequisites:
+
+Prerequisites
+=============
+
+Before you start, make sure that you have the following:
+
+* A |UAS| domain with at least one school.
+
+* The system runs |UAS| version ``5.2v5`` or later.
+
+* An *Apple School Manager* account for an educational institution.
+
+* The SFTP credentials for the *Apple School Manager* account.
+
+  For information about how to obtain the credentials,
+  see :ref:`installation-credentials`.
+
+* A primary email address for each user.
+
+  *Apple School Manager* uses the email address as the Apple Account
+  and can't create an account for a user without one.
+
+You need to be familiar with administering :term:`Nubus for UCS` and |UAS|,
+including the following topics:
 
 * The :term:`App Center`,
   see :external+uv-ucs-operation:ref:`lifecycle-app-center`
@@ -46,40 +68,30 @@ in particular with the following topics:
   in :cite:t:`ucsschool-manual`,
   which is available only in German.
 
-.. _introduction-prerequisites:
+.. _introduction-synchronized-objects:
 
-What you need
-=============
+Objects that the connector synchronizes
+=======================================
 
-Before you start, make sure that you have the following:
-
-* A |UAS| domain with at least one school.
-
-* An *Apple School Manager* account for an educational institution.
-
-* The SFTP credentials for the *Apple School Manager* account.
-  :ref:`installation-credentials` describes where to find them.
-
-* A primary email address for each user.
-  *Apple School Manager* uses the email address as the Apple Account
-  and can't create an account for a user without one.
-
-.. _introduction-scope:
-
-What the connector synchronizes
-===============================
-
-The connector transfers data in one direction only, from |UAS| to Apple
-School Manager.
-It never reads data back,
+The connector transfers data in one direction only,
+from |UAS| to *Apple School Manager*.
+It never writes data back,
 and it never changes objects in your |UAS| domain.
 
-The following table lists what the connector maps to which *Apple School Manager*
-entity.
+:numref:`introduction-object-mapping-table` lists
+which objects the connector maps to which *Apple School Manager* entity.
+
+*Apple School Manager* requires every class to belong to a course,
+so the connector turns each school class and work group into a course
+with exactly one class in it.
+For more information,
+see :ref:`synchronization-courses`.
+
+.. _introduction-object-mapping-table:
 
 .. list-table:: Objects that the connector synchronizes
    :header-rows: 1
-   :widths: 40 60
+   :widths: 8 4
 
    * - |UAS| object
      - *Apple School Manager* entity
@@ -99,30 +111,38 @@ entity.
    * - Membership of a student in a school class or work group
      - Roster entry
 
-*Apple School Manager* requires every class to belong to a course,
-so the connector turns each school class and work group into a course
-with exactly one class in it.
-See :ref:`synchronization-courses`.
+.. _introduction-unsynchronized-objects:
 
-Staff members without a teacher role aren't synchronized.
-Exam users aren't synchronized either.
+Objects that the connector doesn't synchronize
+==============================================
 
-:ref:`synchronization` describes the mapping in detail,
-including the individual CSV columns.
+The connector doesn't synchronize the following objects:
+
+* Staff members who don't have a teacher role
+* Exam users
+
+For detailed information about the mapping,
+including the individual CSV columns,
+see :ref:`synchronization`.
 
 .. _introduction-passwords:
 
-Passwords and devices
-=====================
+Passwords
+=========
 
 The connector never transfers passwords.
-*Apple School Manager* creates the passwords for new accounts itself,
-and you distribute them from there.
-:ref:`configuration-password-policy` describes how to influence the length of
-those passwords.
+*Apple School Manager* creates the initial passwords for new accounts.
+Distribute the passwords from *Apple School Manager*.
+For information about how to configure the password length,
+see :ref:`configuration-password-policy`.
 
-For device management, Univention recommends a mobile device management
-solution that offers an interface to *Apple School Manager*.
-The `Univention integration catalog
-<https://www.univention.com/products/integration-catalog/>`_
-lists the solutions that integrate with |UAS|.
+.. _introduction-device-management:
+
+Device management
+=================
+
+For device management, use a mobile device management solution
+that integrates with *Apple School Manager*.
+For a list of solutions that integrate with |UAS|,
+see the `Univention integration catalog <https://www.univention.com/products/integration-catalog/>`_
+and confirm that the selected solution integrates with *Apple School Manager*.

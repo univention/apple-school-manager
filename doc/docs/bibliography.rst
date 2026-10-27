@@ -4,8 +4,10 @@
 
 .. _bibliography:
 
-************
-Bibliography
-************
+.. only:: not latexpdf
+
+   ************
+   Bibliography
+   ************
 
 .. bibliography::

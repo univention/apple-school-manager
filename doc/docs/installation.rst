@@ -35,7 +35,7 @@ You can install the connector on the following system roles:
    If you want to synchronize additional schools,
    add them to the existing installation
    as described in :ref:`configuration-school-list`,
-   or add another Apple School Manager account
+   or add another *Apple School Manager* account
    as described in :ref:`configuration-accounts`.
 
 On a school Replica Directory Node,
@@ -69,7 +69,7 @@ and enter them as described in :ref:`installation-configure-credentials`.
 Obtain the SFTP credentials
 ===========================
 
-Apple School Manager generates the SFTP user name and password for you.
+*Apple School Manager* generates the SFTP user name and password for you.
 To find them, do the following:
 
 #. Sign in to `Apple School Manager <https://school.apple.com/>`_.
@@ -105,7 +105,7 @@ Enter the credentials
    which the installation creates without an account.
 
    .. code-block:: json
-      :caption: One Apple School Manager account in :file:`/etc/asm-connections.json`
+      :caption: One *Apple School Manager* account in :file:`/etc/asm-connections.json`
 
       {
           "accounts": {

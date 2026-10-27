@@ -15,7 +15,7 @@ This chapter lists the changes of every released version of the app.
 v6.0.0 (2026-10-19)
 ===================
 
-* The connector synchronizes to several Apple School Manager accounts.
+* The connector synchronizes to several *Apple School Manager* accounts.
   Each account receives only the schools that you assign to it.
 
 * The settings file :file:`/etc/asm-connections.json` replaces the app
@@ -36,9 +36,9 @@ v6.0.0 (2026-10-19)
 * The connector no longer checks whether the domain of an email address
   resolves.
   The check only wrote a warning,
-  and Apple School Manager accepts such addresses.
+  and *Apple School Manager* accepts such addresses.
 
-* The app supports Keycloak as identity provider for Apple School Manager.
+* The app supports Keycloak as identity provider for *Apple School Manager*.
   Users sign in to their Managed Apple Accounts
   with the password from the |UAS| domain.
   See :ref:`identity-provider`.
@@ -179,7 +179,7 @@ v1.2.0
 
 * The connector handles classes with more than 15 teachers correctly.
   It exports 15 of them,
-  which is the limit of Apple School Manager.
+  which is the limit of *Apple School Manager*.
 
 .. _changelog-v1.1.0:
 

@@ -11,7 +11,7 @@ Synchronization
 A synchronization run reads the school data from the LDAP directory,
 writes it to CSV files,
 packs the files into a ZIP archive,
-and uploads the archive to Apple School Manager.
+and uploads the archive to *Apple School Manager*.
 This chapter describes the run itself
 and the data that it transfers.
 
@@ -86,7 +86,7 @@ The connector doesn't track what changed since the last run.
 How Apple School Manager applies the data
 -----------------------------------------
 
-Apple School Manager compares the uploaded data with the accounts that it
+*Apple School Manager* compares the uploaded data with the accounts that it
 holds:
 
 * A user who appears for the first time gets a new account.
@@ -158,7 +158,7 @@ Locations
 Courses
 -------
 
-Apple School Manager requires every class to belong to a course.
+*Apple School Manager* requires every class to belong to a course.
 |UAS| only has the school class or work group,
 so the connector exports each of them twice:
 once as a course in :file:`courses.csv`
@@ -222,7 +222,7 @@ Classes
 
 .. note::
 
-   Apple School Manager supports at most 15 teachers per class.
+   *Apple School Manager* supports at most 15 teachers per class.
    If a class has more,
    the connector synchronizes the first 15
    and writes a warning to the log file.

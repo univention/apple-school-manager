@@ -8,18 +8,18 @@
 Keycloak as identity provider for ASM
 *************************************
 
-Apple School Manager can federate the sign-in of its Managed Apple Accounts to
+*Apple School Manager* can federate the sign-in of its Managed Apple Accounts to
 an external identity provider.
 Your users then sign in to their Apple devices with the password from your
 |UAS| domain
-instead of a password that Apple School Manager manages.
+instead of a password that *Apple School Manager* manages.
 
 This chapter describes how to set up the :term:`Keycloak` app of :term:`UCS`
 as that identity provider.
 
 .. caution::
 
-   The :term:`SSF` support that Apple School Manager requires is an
+   The :term:`SSF` support that *Apple School Manager* requires is an
    experimental feature of Keycloak.
 
 .. _identity-provider-ssf:
@@ -32,7 +32,7 @@ sharing security events, state changes, and risk signals between an identity
 provider and the applications that rely on it.
 See :cite:t:`openid-ssf`.
 
-Apple School Manager uses SSF to learn about events in your domain,
+*Apple School Manager* uses SSF to learn about events in your domain,
 such as a changed credential or a revoked session.
 It therefore only accepts an identity provider that acts as an SSF transmitter.
 A plain :term:`OIDC` client isn't enough.
@@ -43,14 +43,14 @@ What you need
 =============
 
 * A |UAS| domain
-  with the Apple School Manager Connector
+  with the *Apple School Manager* Connector
   and the Keycloak app in version ``26.7.2-nubus1`` or later.
 
-* A domain that you verified in Apple School Manager.
+* A domain that you verified in *Apple School Manager*.
   See :cite:t:`apple-verify-domain`.
   Your users need a primary email address in that domain to sign in.
 
-* An account in Apple School Manager with the *Administrator* role
+* An account in *Apple School Manager* with the *Administrator* role
   to connect the identity provider.
   See :cite:t:`apple-roles`.
   This account can't sign in through the federation itself.
@@ -58,7 +58,7 @@ What you need
 * An Apple device for the first sign-in.
 
 * Anonymization turned off,
-  because Apple School Manager needs the email address as the Apple Account:
+  because *Apple School Manager* needs the email address as the Apple Account:
 
   .. code-block:: json
      :caption: Turn anonymization off in :file:`/etc/asm-connections.json`
@@ -169,7 +169,7 @@ Create the OIDC client
 #. On the :guilabel:`Capability config` page,
    enter the settings from the following table.
 
-   .. list-table:: Capabilities of the OIDC client for Apple School Manager
+   .. list-table:: Capabilities of the OIDC client for *Apple School Manager*
       :header-rows: 1
       :widths: 40 60
 
@@ -199,7 +199,7 @@ Create the OIDC client
    enter the settings from the following table
    and click :guilabel:`Save`.
 
-   .. list-table:: Login settings of the OIDC client for Apple School Manager
+   .. list-table:: Login settings of the OIDC client for *Apple School Manager*
       :header-rows: 1
       :widths: 40 60
 
@@ -285,7 +285,7 @@ Keycloak sends a sign-out to Apple.
 Create the administrative user
 ------------------------------
 
-Apple School Manager establishes the connection to Keycloak with the
+*Apple School Manager* establishes the connection to Keycloak with the
 authorization code flow.
 The resulting access token and refresh token belong to an offline session of
 one user,
@@ -336,7 +336,7 @@ Connect the identity provider
    and the two URLs from :ref:`identity-provider-keycloak-realm`,
    as listed in the following table.
 
-   .. list-table:: Settings of the custom identity provider in Apple School Manager
+   .. list-table:: Settings of the custom identity provider in *Apple School Manager*
       :header-rows: 1
       :widths: 30 70
 
@@ -364,7 +364,7 @@ Connect the identity provider
 #. Sign in with the administrative user from
    :ref:`identity-provider-keycloak-admin-user`.
 
-Apple School Manager shows :guilabel:`Authorizing Account`
+*Apple School Manager* shows :guilabel:`Authorizing Account`
 and then confirms the connection.
 During the connection, Apple creates an SSF stream for the client,
 which you can see on the client's :guilabel:`SSF Streams` tab in Keycloak.
@@ -384,19 +384,19 @@ Enable federation for the domain
 #. Switch the toggle that appears to :guilabel:`On`.
 
 #. If the SFTP upload uses the domain,
-   Apple School Manager asks you to choose another domain for the upload.
+   *Apple School Manager* asks you to choose another domain for the upload.
    Choose any other domain.
 
-Apple School Manager enables federation for the domain
+*Apple School Manager* enables federation for the domain
 and sends a confirmation email.
 
 After that, every Managed Apple Account with an email address in the domain
 signs in through Keycloak.
 This includes accounts that existed before you enabled federation
-and accounts that you created manually in Apple School Manager.
+and accounts that you created manually in *Apple School Manager*.
 
 The upload from the connector continues to work.
-Apple School Manager assigns the accounts by the domain of their email address,
+*Apple School Manager* assigns the accounts by the domain of their email address,
 so the accounts from the upload belong to the federated domain,
 regardless of the domain that you chose for the SFTP upload.
 

@@ -35,9 +35,9 @@ The connector writes its own configuration to :file:`/etc/logrotate.d/asm`.
 Get better error messages from Apple School Manager
 ===================================================
 
-Apple School Manager reports errors in the uploaded data sparsely.
+*Apple School Manager* reports errors in the uploaded data sparsely.
 The page that shows the SFTP credentials gives more details
-about the data that Apple School Manager rejects.
+about the data that *Apple School Manager* rejects.
 You can keep the SFTP upload connected.
 
 #. Open the page with the SFTP credentials,
@@ -58,7 +58,7 @@ Check the following, in this order:
 
 #. **The user has no primary email address.**
    The connector exports the user without an email address,
-   and Apple School Manager can't create an Apple Account for the user.
+   and *Apple School Manager* can't create an Apple Account for the user.
 
 #. **Anonymization removed the email address.**
    Anonymization is enabled by default.
@@ -92,7 +92,7 @@ Check the following, in this order:
 Apple School Manager rejects an upload without students
 =======================================================
 
-Apple School Manager rejects an upload that contains no student
+*Apple School Manager* rejects an upload that contains no student
 and shows an error.
 Every account needs at least one student in its upload.
 
@@ -119,12 +119,12 @@ The message in the log file names the file and the entry.
 .. code-block:: text
    :caption: Message in the log file
 
-   No Apple School Manager account configured. Create /etc/asm-connections.json as described in the Apple School Manager Connector manual.
+   No *Apple School Manager* account configured. Create /etc/asm-connections.json as described in the Apple School Manager Connector manual.
 
 Configure the accounts,
 as described in :ref:`configuration-accounts`.
 If the credentials are set but Apple rejects them,
-generate new ones in Apple School Manager
+generate new ones in *Apple School Manager*
 and enter those.
 
 .. _troubleshooting-host-key:
@@ -172,10 +172,10 @@ See :ref:`configuration-ldap-filter`.
 Classes have fewer teachers than expected
 =========================================
 
-Apple School Manager supports at most 15 teachers per class.
+*Apple School Manager* supports at most 15 teachers per class.
 The connector exports the first 15
 and writes a warning to the log file that names the class.
-This is a limitation of Apple School Manager,
+This is a limitation of *Apple School Manager*,
 not of the connector.
 
 An LDAP filter for teachers can also reduce the number.
@@ -188,18 +188,18 @@ Federation for a domain fails the second time
 
 If you disable federation for a domain
 and then enable it again,
-Apple School Manager shows an error.
+*Apple School Manager* shows an error.
 
 While federation is on,
-Apple School Manager offers to disconnect the domain
+*Apple School Manager* offers to disconnect the domain
 instead of removing it.
 Disconnecting removes the domain only from the federation.
-The domain itself stays in Apple School Manager.
+The domain itself stays in *Apple School Manager*.
 
 To enable federation for the domain again,
 do the following:
 
-#. In Apple School Manager,
+#. In *Apple School Manager*,
    disconnect the identity provider.
 
 #. Connect it again,

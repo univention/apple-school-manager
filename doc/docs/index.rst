@@ -9,17 +9,17 @@ Introduction
 ************
 
 The *Apple School Manager Connector* is an app for :term:`UCS@school`.
-It provisions the schools, classes, work groups, teachers, and students of your
-|UAS| domain to :term:`Apple School Manager`,
+It provisions the schools, classes, work groups, teachers, and students
+of your |UAS| domain to :term:`Apple School Manager`,
 so that you don't have to maintain the same accounts twice.
 
 In this setup, |UAS| takes the role of the student information system
-that Apple School Manager expects,
+that *Apple School Manager* expects,
 and the connector uses the SFTP interface that Apple provides for such systems.
 The connector collects the data from the LDAP directory,
 writes it to a set of CSV files,
 packs them into a ZIP archive,
-and uploads that archive to Apple School Manager.
+and uploads that archive to *Apple School Manager*.
 
 .. _introduction-audience:
 
@@ -28,7 +28,7 @@ Who this documentation is for
 
 This documentation addresses administrators
 who run a |UAS| domain
-and who want to provision its users to Apple School Manager.
+and who want to provision its users to *Apple School Manager*.
 It assumes that you're familiar with the administration of
 :term:`UCS` and |UAS|,
 in particular with the following topics:
@@ -55,13 +55,13 @@ Before you start, make sure that you have the following:
 
 * A |UAS| domain with at least one school.
 
-* An Apple School Manager account for an educational institution.
+* An *Apple School Manager* account for an educational institution.
 
-* The SFTP credentials for the Apple School Manager account.
+* The SFTP credentials for the *Apple School Manager* account.
   :ref:`installation-credentials` describes where to find them.
 
 * A primary email address for each user.
-  Apple School Manager uses the email address as the Apple Account
+  *Apple School Manager* uses the email address as the Apple Account
   and can't create an account for a user without one.
 
 .. _introduction-scope:
@@ -74,7 +74,7 @@ School Manager.
 It never reads data back,
 and it never changes objects in your |UAS| domain.
 
-The following table lists what the connector maps to which Apple School Manager
+The following table lists what the connector maps to which *Apple School Manager*
 entity.
 
 .. list-table:: Objects that the connector synchronizes
@@ -82,7 +82,7 @@ entity.
    :widths: 40 60
 
    * - |UAS| object
-     - Apple School Manager entity
+     - *Apple School Manager* entity
 
    * - School
      - Location
@@ -99,7 +99,7 @@ entity.
    * - Membership of a student in a school class or work group
      - Roster entry
 
-Apple School Manager requires every class to belong to a course,
+*Apple School Manager* requires every class to belong to a course,
 so the connector turns each school class and work group into a course
 with exactly one class in it.
 See :ref:`synchronization-courses`.
@@ -116,13 +116,13 @@ Passwords and devices
 =====================
 
 The connector never transfers passwords.
-Apple School Manager creates the passwords for new accounts itself,
+*Apple School Manager* creates the passwords for new accounts itself,
 and you distribute them from there.
 :ref:`configuration-password-policy` describes how to influence the length of
 those passwords.
 
 For device management, Univention recommends a mobile device management
-solution that offers an interface to Apple School Manager.
+solution that offers an interface to *Apple School Manager*.
 The `Univention integration catalog
 <https://www.univention.com/products/integration-catalog/>`_
 lists the solutions that integrate with |UAS|.

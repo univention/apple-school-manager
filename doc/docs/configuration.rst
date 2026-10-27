@@ -19,9 +19,9 @@ and a few switches for everyday operation.
 
 .. caution::
 
-   Apple School Manager uses the email address of a user as the Apple Account.
+   *Apple School Manager* uses the email address of a user as the Apple Account.
    Make sure that every synchronized user has a primary email address.
-   Apple School Manager can't create an account for a user without one.
+   *Apple School Manager* can't create an account for a user without one.
    See :ref:`configuration-email`.
 
 .. _configuration-file:
@@ -32,7 +32,7 @@ Settings file
 The settings file :file:`/etc/asm-connections.json` has three sections:
 
 ``accounts``
-   The Apple School Manager accounts, each with its credentials and the
+   The *Apple School Manager* accounts, each with its credentials and the
    settings for the students and teachers that the account receives.
    See :ref:`configuration-accounts`.
 
@@ -47,7 +47,7 @@ The settings file :file:`/etc/asm-connections.json` has three sections:
    See :ref:`configuration-defaults`.
 
 .. code-block:: json
-   :caption: Two Apple School Manager accounts in :file:`/etc/asm-connections.json`
+   :caption: Two *Apple School Manager* accounts in :file:`/etc/asm-connections.json`
 
    {
        "accounts": {
@@ -124,7 +124,7 @@ The ``accounts`` section maps a name of your choice to each account.
 The name may only contain letters, digits, ``.``, ``_``, and ``-``.
 Usually there is a single account.
 If the schools on your |UAS| system belong to different institutions,
-each with its own Apple School Manager account,
+each with its own *Apple School Manager* account,
 add one entry per account.
 The connector then uploads a separate archive to every account,
 each restricted to the schools that refer to that account.
@@ -386,7 +386,7 @@ To open the app settings,
 select the app in the App Center and click :guilabel:`App settings`.
 The app settings apply to every account alike.
 
-.. list-table:: App settings of the Apple School Manager Connector
+.. list-table:: App settings of the *Apple School Manager* Connector
    :header-rows: 1
    :widths: 30 15 55
 
@@ -464,10 +464,10 @@ as in ``"student": {"anonymize": false}``.
 Email addresses
 ---------------
 
-Apple School Manager uses the email address of a user as the Apple Account.
+*Apple School Manager* uses the email address of a user as the Apple Account.
 The connector exports the primary email address of each user in |UAS|.
 Users without one are exported without an email address,
-and Apple School Manager can't create an Apple Account for them.
+and *Apple School Manager* can't create an Apple Account for them.
 
 ``email_prepend_domain``
    Per account.
@@ -493,10 +493,10 @@ with values that you configure.
    An anonymized user has no email address,
    unless you configure a replacement value for it.
    Without an email address,
-   Apple School Manager can't create an Apple Account for the user.
+   *Apple School Manager* can't create an Apple Account for the user.
 
    Anonymization and the :ref:`identity-provider` setup exclude each other.
-   If you use Keycloak as an identity provider for Apple School Manager,
+   If you use Keycloak as an identity provider for *Apple School Manager*,
    turn anonymization off.
 
 ``student.anonymize``, ``staff.anonymize``
@@ -555,7 +555,7 @@ with values that you configure.
 Identification of users
 -----------------------
 
-Apple School Manager identifies a user by the ``person_id`` column.
+*Apple School Manager* identifies a user by the ``person_id`` column.
 The connector fills it with an LDAP attribute of the user
 that doesn't change when you rename the user.
 
@@ -567,7 +567,7 @@ that doesn't change when you rename the user.
 .. caution::
 
    Don't change these keys on a running installation.
-   Apple School Manager treats a user with a new ``person_id``
+   *Apple School Manager* treats a user with a new ``person_id``
    as a different user
    and loses the association with the existing account.
 
@@ -576,17 +576,17 @@ that doesn't change when you rename the user.
 Password policy for students
 ----------------------------
 
-Apple School Manager creates the password for a new student itself.
+*Apple School Manager* creates the password for a new student itself.
 The password policy determines how long that password is.
 
 ``student.password_policy``
    Per account.
    Length of the password that Apple creates for a new student.
    Valid values are ``4``, ``6``, ``8``, and ``null``.
-   ``null`` means that Apple School Manager uses the default of the school.
+   ``null`` means that *Apple School Manager* uses the default of the school.
    Default: ``4``.
 
-Apple School Manager doesn't support a password policy for teachers.
+*Apple School Manager* doesn't support a password policy for teachers.
 
 .. _configuration-grade-level:
 
@@ -618,7 +618,7 @@ The connector derives the course name from that name.
 ``class_number_empty``
    Per school.
    Leaves the ``class_number`` column empty.
-   Apple School Manager builds the name of a class from the course name and the
+   *Apple School Manager* builds the name of a class from the course name and the
    class number,
    so an identical class number only repeats the course name.
    Default: ``true``.
@@ -665,6 +665,6 @@ combine it with the role of the users and run it with
 
    An invalid LDAP filter stops the upload to the account of that school.
    The connector uploads nothing to that account in that case,
-   so its data in Apple School Manager stays as it was after the last
+   so its data in *Apple School Manager* stays as it was after the last
    successful run.
    The other accounts still receive their upload.

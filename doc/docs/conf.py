@@ -69,7 +69,7 @@ source_suffix = ".rst"
 rst_epilog = """
 .. include:: /substitutions.txt
 """
-root_doc = "index"
+root_doc = "contents"
 language = "en"
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 pygments_style = "sphinx"

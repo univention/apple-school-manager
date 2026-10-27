@@ -8,11 +8,9 @@
 Installation
 ************
 
-You install the *Apple School Manager Connector* from the :term:`App Center`,
-like any other app.
-This chapter describes where you can install it,
-how to install it,
-and how to obtain the credentials that the connector needs.
+Install the *Apple School Manager Connector* on a supported system role
+to synchronize school data with *Apple School Manager*.
+Before you start, ensure that you meet the :ref:`introduction-prerequisites`.
 
 .. _installation-system-roles:
 
@@ -21,55 +19,70 @@ Supported system roles
 
 You can install the connector on the following system roles:
 
-* Primary Directory Node
-* Backup Directory Node
-* Replica Directory Node
+* :external+uv-ucs-operation:term:`Primary Directory Node`
+* :external+uv-ucs-operation:term:`Backup Directory Node`
+* :external+uv-ucs-operation:term:`Replica Directory Node`
 
-.. caution::
+On a school Replica Directory Node,
+the connector sees only the school of that node.
+On a central Replica Directory Node,
+a Primary Directory Node, or a Backup Directory Node,
+the connector sees every school in the domain.
+
+.. important::
 
    Install the connector on exactly one system in the domain.
 
-   Every installation uploads a complete data set
-   and overwrites what the previous upload transferred.
-   Two installations therefore overwrite each other's data.
-   If you want to synchronize additional schools,
-   add them to the existing installation
-   as described in :ref:`configuration-school-list`,
-   or add another *Apple School Manager* account
-   as described in :ref:`configuration-accounts`.
+   Each instance uploads a complete data set.
+   The upload overwrites the data that the previous instance uploaded.
 
-On a school Replica Directory Node,
-the connector only sees the school of that node.
-On a central Replica Directory Node,
-a Primary Directory Node, or a Backup Directory Node,
-it sees every school in the domain.
+   Don't install the connector more than once in a domain.
+   To synchronize additional schools,
+   add them to the existing instance
+   as described in :ref:`configuration-school-list`.
+   To use another *Apple School Manager* account,
+   add it as described in :ref:`configuration-accounts`.
 
 .. _installation-install:
 
 Install the app
 ===============
 
-#. Open the App Center in :term:`UMC`.
+Before you begin,
+complete the prerequisites in :ref:`introduction-prerequisites`.
+
+To install the *Apple School Manager Connector* app on |UAS|,
+follow these steps:
+
+#. Navigate to the *App Center* in :term:`Management UI`
+   through :menuselection:`Software --> App Center`.
 
 #. Select :guilabel:`Apple School Manager Connector`.
 
 #. Click :guilabel:`Install`.
 
-After the installation,
-obtain the credentials as described in the next section
+#. Wait until the installation completes.
+
+After you install the app,
+obtain the credentials as described in :ref:`installation-credentials`
 and enter them as described in :ref:`installation-configure-credentials`.
 
-.. note::
+.. seealso::
 
-   The connector requires |UAS| in version ``5.2v5`` or later.
-   The app refuses to update on a system with an older version.
+   :external+uv-ucs-operation:ref:`lifecycle-app-center-installation`
+     in :cite:t:`uv-ucs-operation`
+     for more information about how to install an app.
+
+   :external+uv-ucs-operation:ref:`lifecycle-app-center`
+     in :cite:t:`uv-ucs-operation`
+     for more information about Univention App Center.
 
 .. _installation-credentials:
 
 Obtain the SFTP credentials
 ===========================
 
-*Apple School Manager* generates the SFTP user name and password for you.
+*Apple School Manager* generates the SFTP username and password for you.
 To find them, do the following:
 
 #. Sign in to `Apple School Manager <https://school.apple.com/>`_.
@@ -79,33 +92,51 @@ To find them, do the following:
 
 #. Select :guilabel:`Managed Apple Accounts`.
 
-#. Open the menu for :guilabel:`Apple formatted CSV`.
+#. Select the menu next to :guilabel:`Apple formatted CSV`,
+   and then select :guilabel:`Upload CSV`.
 
-#. Click :guilabel:`Upload CSV`.
-
-A new frame opens and shows the SFTP account data.
-For background information, see :cite:t:`apple-sftp-upload`.
+A dialog opens and displays the SFTP username and password.
+For background information, see :cite:p:`apple-sftp-upload`.
 
 .. _installation-configure-credentials:
 
 Enter the credentials
 =====================
 
-#. Store the password in :file:`/etc/asm.secret`
-   with read permission for the ``root`` user only.
+To configure the upload credentials for *Apple School Manager Connector*,
+follow these steps:
+
+#. Store the SFTP password that *Apple School Manager* generated
+   in :file:`/etc/asm.secret` with permissions set to ``600``,
+   as shown in :numref:`installation-configure-credentials-store-listing`.
+   Enter the generated SFTP password, save the file, and close the editor.
 
    .. code-block:: console
       :caption: Store the password
+      :name: installation-configure-credentials-store-listing
 
       $ install -m 600 /dev/null /etc/asm.secret
       $ editor /etc/asm.secret
 
-#. Add the user name, the path of the password file, and the schools to the
-   settings file :file:`/etc/asm-connections.json`,
+#. Edit the settings file :file:`/etc/asm-connections.json`,
    which the installation creates without an account.
+   Add the SFTP username, path to the password file, and schools.
+   For an example, see :numref:`installation-configure-credentials-asm-listing`.
+
+   Replace ``sftp-user`` with the SFTP username that *Apple School Manager*
+   generated.
+   The entry ``*`` in ``schools`` synchronizes every school to the account.
+   Save the file.
+
+   For a detailed description of the settings,
+   see :ref:`configuration-file`.
+   The configuration page includes information about how to limit the account
+   to individual schools, how to add further accounts, and all settings for
+   users and classes.
 
    .. code-block:: json
       :caption: One *Apple School Manager* account in :file:`/etc/asm-connections.json`
+      :name: installation-configure-credentials-asm-listing
 
       {
           "accounts": {
@@ -119,10 +150,4 @@ Enter the credentials
           }
       }
 
-   The entry ``*`` in ``schools`` synchronizes every school to the account.
-
-:ref:`configuration-file` describes the file in detail,
-including how to limit the account to individual schools,
-how to add further accounts,
-and every setting for users and classes.
-Then continue with :ref:`configuration`.
+#. Continue with :ref:`configuration`.

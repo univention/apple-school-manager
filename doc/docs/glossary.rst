@@ -18,11 +18,17 @@ Glossary
 
    App Center
       The Univention App Center,
-      the component of :term:`UCS` with which you install and configure apps.
+      the component of :term:`Nubus for UCS` with which you install and configure apps.
 
    Keycloak
       The identity and access management software that UCS ships as an app.
       It provides the single sign-on of the domain.
+
+   Management UI
+      The *Management UI* is the administration web interface of :term:`Nubus for UCS`.
+      For more information, see
+      :external+uv-ucs-operation:ref:`management-interface`
+      in :cite:t:`uv-ucs-operation`.
 
    OIDC
       OpenID Connect,
@@ -39,16 +45,14 @@ Glossary
 
    UCR
       Univention Configuration Registry,
-      the central configuration database of :term:`UCS`.
+      the central configuration database of :term:`Nubus for UCS`.
+      For more information, see
+      :external+uv-ucs-operation:ref:`system-administration-ucr`
+      in :cite:t:`uv-ucs-operation`.
 
-   UCS
    Nubus for UCS
-      Univention Corporate Server,
+      Nubus for Univention Corporate Server,
       the server operating system with integrated identity management.
 
-   UCS@school
-      The extension of :term:`UCS` for schools and school authorities.
-
-   UMC
-      Univention Management Console,
-      the web interface for the administration of :term:`UCS`.
+   UCS\@school
+      The extension of :term:`Nubus for UCS` for schools and school authorities.

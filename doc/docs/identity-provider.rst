@@ -14,7 +14,7 @@ Your users then sign in to their Apple devices with the password from your
 |UAS| domain
 instead of a password that *Apple School Manager* manages.
 
-This chapter describes how to set up the :term:`Keycloak` app of :term:`UCS`
+This chapter describes how to set up the :term:`Keycloak` app of :term:`Nubus for UCS`
 as that identity provider.
 
 .. caution::
@@ -90,7 +90,7 @@ Set the app setting
 :external+uv-keycloak-app:envvar:`keycloak/server/feature/ssf`
 of the Keycloak app to ``true``.
 
-#. Open the App Center in :term:`UMC` and select the Keycloak app.
+#. Open the App Center in :term:`Management UI` and select the Keycloak app.
 
 #. Click :guilabel:`App settings`.
 

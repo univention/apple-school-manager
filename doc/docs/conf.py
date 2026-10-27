@@ -40,7 +40,11 @@ extensions = [
     "sphinxcontrib.bibtex",
     "sphinxcontrib.spelling",
     "univention_sphinx_extension",
+    "sphinxext.rediraffe",
 ]
+
+rediraffe_branch = "5.2"
+rediraffe_redirects = "redirects.txt"
 
 # 'sphinx_last_updated_by_git' dates each page from the git history. CI clones
 # shallowly, so a page whose last change predates the clone gets no date and the

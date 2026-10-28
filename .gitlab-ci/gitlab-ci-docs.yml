@@ -74,11 +74,11 @@ variables:
 # request.
 docs-en:review:
   environment:
-    name: review/docs-en/$CI_COMMIT_REF_NAME
+    name: review/docs-en/$CI_COMMIT_REF_SLUG
 
 docs-de:review:
   environment:
-    name: review/docs-de/$CI_COMMIT_REF_NAME
+    name: review/docs-de/$CI_COMMIT_REF_SLUG
 
 # One artifact for both languages, because docs.univention.de takes the whole
 # 'out' directory of one artifact per merge request and force-pushes it to a

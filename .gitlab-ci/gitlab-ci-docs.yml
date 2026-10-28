@@ -19,7 +19,7 @@
 # PO files in 'doc/docs/locales/de'.
 
 include:
-  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/sphinx-docs@2
+  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/sphinx-docs@2.24.0
     inputs:
       job_prefix: "docs-en"
       docs_dir: "doc/docs"
@@ -43,7 +43,7 @@ include:
           changes: *docs_changes
   # No link check, the translation keeps every link of the English source. No
   # production merge request either, 'docs-en:merge' carries both languages.
-  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/sphinx-docs@2
+  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/sphinx-docs@2.24.0
     inputs:
       job_prefix: "docs-de"
       docs_dir: "doc/docs"

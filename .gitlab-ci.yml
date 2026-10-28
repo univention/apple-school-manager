@@ -9,14 +9,15 @@ workflow:
 
 include:
   - project: univention/dev/tooling/ci-components
+    ref: 2.24.0
     file:
       - fragments/proxmox.yaml
     rules:
       - if: $RUN_RENOVATE != "yes"
-  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/pre-commit@2
+  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/pre-commit@2.24.0
     rules:
       - if: $RUN_RENOVATE != "yes"
-  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/app-release@2
+  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/app-release@2.24.0
     inputs:
       app_id: "apple-school-manager"
       mail_sender: "ucsschool-maintainers@univention.de"
@@ -34,7 +35,7 @@ include:
   - local: /.gitlab-ci/gitlab-ci-docs.yml
     rules:
       - if: $RUN_RENOVATE != "yes"
-  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/debian-package@2
+  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/debian-package@2.24.0
     inputs:
       ucs_base_version: "5.2"
       scope: "univention-asm"
@@ -43,7 +44,7 @@ include:
         - create_app_version
     rules:
       - if: $RUN_RENOVATE != "yes"
-  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/renovate@2
+  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/renovate@2.24.0
     inputs:
       stage: .post
     rules:
@@ -62,7 +63,6 @@ stages:
 
 variables:
   DEBIAN_SOURCE_DIRECTORIES: "apple-school-manager/"
-  UCSLINT_IMAGE: gitregistry.knut.univention.de/univention/dev/ucs
   DOC_NAME: "apple-school-manager-connector"
   RUN_RENOVATE:
     value: "no"
@@ -119,8 +119,11 @@ ucs_test_deb_lint:
     - changes:
       - apple-school-manager/**/*
   image:
-    name: $UCSLINT_IMAGE
+    name: gitregistry.knut.univention.de/univention/dev/projects/ucs-base-image/ucs-base-flex-527:0.24.5@sha256:81a74e475a0e625074ac830cc6bedd731001c4b6b4c5647d2ffecd0b043dc687
     entrypoint: [""]
+  before_script:
+    - apt-get -qq update
+    - apt-get -qq install --no-install-recommends ucslint python3-junit.xml
   script:
     - cd apple-school-manager && ucslint --exitcode-categories EWIS --junit-xml ucslint.xml
   artifacts:

@@ -6,8 +6,8 @@ include:
     ref: 2.24.0
     file:
       - fragments/proxmox.yaml
-  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/pre-commit@2.24.0
-  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/app-release@2.24.0
+  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/pre-commit@2.25.0
+  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/app-release@2.25.0
     inputs:
       app_id: "apple-school-manager"
       mail_sender: "ucsschool-maintainers@univention.de"
@@ -21,7 +21,7 @@ include:
       additional_update_appcenter_needs:
         - job: build_changelog_html
   - local: /.gitlab-ci/gitlab-ci-docs.yml
-  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/debian-package@2.24.0
+  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/debian-package@2.25.0
     inputs:
       ucs_base_version: "5.2"
       scope: "univention-asm"

@@ -6,6 +6,7 @@ repos:
     rev: v6.0.0
     hooks:
       - id: check-added-large-files
+        exclude: ^basedpyright-baseline[.]json$
       - id: check-json
       - id: check-xml
       - id: check-yaml
@@ -15,6 +16,7 @@ repos:
       - id: trailing-whitespace
       - id: pretty-format-json
         args: [--autofix]
+        exclude: ^basedpyright-baseline[.]json$
   - repo: https://git.knut.univention.de/univention/dist/pre-commit-ucr
     rev: "0.1.7"
     hooks:
@@ -31,12 +33,59 @@ repos:
         alias: "ruff-unsafe"
         stages: [manual]
         args: ["--fix", "--unsafe-fixes"]
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.19.1
+  - repo: local
     hooks:
-      - id: mypy
-        additional_dependencies: ["pytest", "types-paramiko"]
-        exclude: ".gitlab-ci/parse_junit.py"
+      - id: basedpyright-container-baseline
+        name: basedpyright (relative to baseline)
+        language: docker_image
+        entry: |
+          gitregistry.knut.univention.de/univention/dev/education/ucsschool/basedpyright-ucs@sha256:ea4e4e4c69cd2541b59cf8ae0536bad70624f540910e4e210d184dda675f245f sh -c '
+          basedpyright \
+            --pythonpath /usr/bin/python3 \
+            --project pyrightconfig.json \
+            --baselinefile basedpyright-baseline.json \
+            --baselinemode=auto' --
+        pass_filenames: false
+        types: [python]
+
+      - id: basedpyright-native-baseline
+        name: basedpyright (relative to baseline, native)
+        language: system
+        entry: |
+          sh -c 'basedpyright \
+            --pythonpath /usr/bin/python3 \
+            --project pyrightconfig.json \
+            --baselinefile basedpyright-baseline.json \
+            --baselinemode=auto' --
+        stages: [manual]
+        pass_filenames: false
+        types: [python]
+
+      - id: basedpyright-container-no-baseline
+        name: basedpyright (lint file, no baseline)
+        language: docker_image
+        entry: |
+          gitregistry.knut.univention.de/univention/dev/education/ucsschool/basedpyright-ucs@sha256:ea4e4e4c69cd2541b59cf8ae0536bad70624f540910e4e210d184dda675f245f sh -c '
+          basedpyright \
+            --pythonpath /usr/bin/python3 \
+            --project pyrightconfig.json \
+            --baselinefile /tmp/nonexistent-basedpyright-baseline.json' --
+        stages: [manual]
+        pass_filenames: true
+        types: [python]
+
+      - id: basedpyright-container-write-baseline
+        name: basedpyright (write baseline)
+        language: docker_image
+        entry: |
+          gitregistry.knut.univention.de/univention/dev/education/ucsschool/basedpyright-ucs@sha256:ea4e4e4c69cd2541b59cf8ae0536bad70624f540910e4e210d184dda675f245f sh -c '
+          basedpyright \
+            --pythonpath /usr/bin/python3 \
+            --project pyrightconfig.json \
+            --baselinefile basedpyright-baseline.json \
+            --writebaseline .' --
+        stages: [manual]
+        pass_filenames: false
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.11.0.1
     hooks:

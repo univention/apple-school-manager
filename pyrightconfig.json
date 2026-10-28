@@ -1,0 +1,6 @@
+{
+  "extraPaths": [
+    "apple-school-manager/modules"
+  ],
+  "pythonVersion": "3.11"
+}

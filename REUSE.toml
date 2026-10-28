@@ -26,6 +26,8 @@ path = [
     "appcenter/asm.settings",
     "README.md",
     "pyproject.toml",
+    "pyrightconfig.json",
+    "basedpyright-baseline.json",
     "doc/docs/_static/.gitkeep",
     "doc/docs/bibliography.bib",
     "doc/docs/spelling_wordlist",

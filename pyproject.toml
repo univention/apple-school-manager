@@ -64,9 +64,3 @@ ignore = [
 
 [tool.ruff.lint.flake8-annotations]
 allow-star-arg-any = true
-
-[tool.mypy]
-strict = true
-ignore_missing_imports = true
-files = ["**/*.py", "**/usr/sbin/asm-upload", "**/configure_host"]
-exclude = [".gitlab-ci/parse_junit.py"]

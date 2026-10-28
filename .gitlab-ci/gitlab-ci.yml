@@ -7,6 +7,25 @@ include:
     file:
       - fragments/proxmox.yaml
   - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/pre-commit@2.24.0
+    inputs:
+      skip_hooks: "basedpyright-container-baseline"
+      manual_stage_hooks: "basedpyright-native-baseline"
+  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/python-type-hint-coverage-basedpyright@2.24.0
+    inputs:
+      pipeline_stage: lint
+      python_paths: --pythonpath /usr/bin/python3 .
+      python_version: "3.11"
+      uv_image: $IMAGE_BASEDPYRIGHT_UCS
+      basedpyright_version: "1.39.8"
+      baseline_file: basedpyright-baseline.json
+      job_rules:
+        - if: $CI_MERGE_REQUEST_ID
+          changes:
+            - "**/*.py"
+            - pyrightconfig.json
+            - basedpyright-baseline.json
+        - if: $CI_COMMIT_REF_PROTECTED == "true"
+        - if: $CI_COMMIT_TAG
   - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/app-release@2.24.0
     inputs:
       app_id: "apple-school-manager"
@@ -43,6 +62,15 @@ stages:
 variables:
   DEBIAN_SOURCE_DIRECTORIES: "apple-school-manager/"
   DOC_NAME: "apple-school-manager-connector"
+  # Built in the ucsschool repository. Keep the digest in sync with the
+  # basedpyright-container-* hooks in .pre-commit-config.yaml.
+  IMAGE_BASEDPYRIGHT_UCS: "gitregistry.knut.univention.de/univention/dev/education/ucsschool/basedpyright-ucs@sha256:ea4e4e4c69cd2541b59cf8ae0536bad70624f540910e4e210d184dda675f245f"
+
+# Run inside the basedpyright-ucs image, which ships prek and the UCS Python
+# packages, so the basedpyright-native-baseline hook resolves UCS imports
+# without docker-in-docker.
+run_pre_commit:
+  image: $IMAGE_BASEDPYRIGHT_UCS
 
 # Renders doc/docs/changelog.rst into the 'changelog.html' fragment that
 # 'appcenter/README_UPDATE_EN.jinja' extends, so the App Center update text and

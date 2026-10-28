@@ -12,8 +12,8 @@ Glossary
    :sorted:
 
    Apple School Manager
-      The web service with which educational institutions manage their Managed
-      Apple Accounts, devices, and content.
+      The web service with which educational institutions manage
+      their Managed Apple Accounts, devices, and content.
       Abbreviated as ASM.
 
    App Center

@@ -4,82 +4,100 @@
 
 .. _identity-provider:
 
-*************************************
-Keycloak as identity provider for ASM
-*************************************
+*********************************************************
+Keycloak as an identity provider for Apple School Manager
+*********************************************************
 
-*Apple School Manager* can federate the sign-in of its Managed Apple Accounts to
-an external identity provider.
-Your users then sign in to their Apple devices with the password from your
-|UAS| domain
+:term:`Apple School Manager` can use an external identity provider
+to authenticate sign-ins to *Managed Apple Accounts*.
+Your users then sign in to their Apple devices
+with the password from your |UAS| domain
 instead of a password that *Apple School Manager* manages.
 
-This chapter describes how to set up the :term:`Keycloak` app of :term:`Nubus for UCS`
-as that identity provider.
+This chapter describes how to set up the :term:`Keycloak` app
+in :term:`Nubus for UCS` as that identity provider.
 
 .. caution::
 
-   The :term:`SSF` support that *Apple School Manager* requires is an
-   experimental feature of Keycloak.
+   *Apple School Manager* requires :term:`SSF` support.
+   This support is an experimental feature of Keycloak.
 
 .. _identity-provider-ssf:
 
 Why Apple School Manager needs SSF
 ==================================
 
-The Shared Signals Framework is the standard of the OpenID Foundation for
-sharing security events, state changes, and risk signals between an identity
-provider and the applications that rely on it.
-See :cite:t:`openid-ssf`.
+The Shared Signals Framework (SSF) is an OpenID Foundation standard.
+It supports sharing security events, state changes, and risk signals
+between an identity provider and the applications that rely on it.
+For more information, see :cite:p:`openid-ssf`.
 
 *Apple School Manager* uses SSF to learn about events in your domain,
 such as a changed credential or a revoked session.
-It therefore only accepts an identity provider that acts as an SSF transmitter.
+It therefore accepts only an identity provider that acts as an SSF transmitter.
 A plain :term:`OIDC` client isn't enough.
 
 .. _identity-provider-requirements:
 
-What you need
+Prerequisites
 =============
+
+To use the *Keycloak* app as an identity provider for *Apple School Manager*,
+you need to meet the following prerequisites:
 
 * A |UAS| domain
   with the *Apple School Manager* Connector
-  and the Keycloak app in version ``26.7.2-nubus1`` or later.
+  and version ``26.7.2-nubus1`` or later of the Keycloak app.
+
+  .. FIXME:  Which Keycloak permissions, command-line host and privileges, and Apple-to-Keycloak network access are required?
 
 * A domain that you verified in *Apple School Manager*.
-  See :cite:t:`apple-verify-domain`.
+  For instructions, see :cite:p:`apple-verify-domain`.
   Your users need a primary email address in that domain to sign in.
 
 * An account in *Apple School Manager* with the *Administrator* role
   to connect the identity provider.
-  See :cite:t:`apple-roles`.
   This account can't sign in through the federation itself.
+  For instructions, see :cite:p:`apple-roles`.
 
 * An Apple device for the first sign-in.
 
 * Anonymization turned off,
-  because *Apple School Manager* needs the email address as the Apple Account:
+  because *Apple School Manager* needs each user's primary email address
+  for their *Apple Account*.
+  To turn off anonymization,
+  use the settings shown in :numref:`identity-provider-requirements-listing`.
+
+  For more information,
+  see :ref:`configuration-anonymization`.
 
   .. code-block:: json
-     :caption: Turn anonymization off in :file:`/etc/asm-connections.json`
+     :caption: Anonymization settings in :file:`/etc/asm-connections.json` (fragment)
+     :name: identity-provider-requirements-listing
 
      "defaults": {
          "student": {"anonymize": false},
          "staff": {"anonymize": false}
      }
 
-  See :ref:`configuration-anonymization`.
-
 .. _identity-provider-keycloak:
 
 Configure Keycloak
 ==================
 
-Make every setting in the Keycloak admin console in the realm ``ucs``,
-which holds the users of your domain.
-The admin console opens in the realm ``master``.
-Select ``ucs`` in the realm selector before you change anything,
-and check the selected realm whenever you return to the admin console.
+To configure the *Keycloak* app as an identity provider for *Apple School Manager*,
+make all changes in the ``ucs`` realm in the *Keycloak Admin Console*.
+The ``ucs`` realm contains the users of your domain.
+
+The *Keycloak Admin Console* opens in the ``master`` realm.
+Before you change anything, select ``ucs`` in the realm selector.
+Check the selected realm whenever you return to the *Keycloak Admin Console*.
+
+.. seealso::
+
+   :external+uv-keycloak-app:ref:`keycloak-admin-console`
+      in :cite:t:`uv-keycloak-app`
+      for information about how to sign in to the *Keycloak Admin Console*.
 
 .. _identity-provider-keycloak-feature:
 
@@ -89,24 +107,36 @@ Enable the SSF feature
 Set the app setting
 :external+uv-keycloak-app:envvar:`keycloak/server/feature/ssf`
 of the Keycloak app to ``true``.
+Use the following steps on :term:`Nubus for UCS`:
 
-#. Open the App Center in :term:`Management UI` and select the Keycloak app.
+.. tab-set::
 
-#. Click :guilabel:`App settings`.
+   .. tab-item:: Management UI
 
-#. Select :guilabel:`keycloak/server/feature/ssf`.
+      #. Navigate to the *App Center* in :term:`Management UI`
+         through :menuselection:`Software --> App Center`.
 
-#. Click :guilabel:`Apply changes`.
+      #. Open the :guilabel:`Keycloak` app.
 
-Alternatively, set it on the command line:
+      #. Click :guilabel:`App settings`.
 
-.. code-block:: console
-   :caption: Enable the SSF feature of Keycloak
+      #. Select :guilabel:`keycloak/server/feature/ssf` and set the value to ``true``.
 
-   $ univention-app configure keycloak --set keycloak/server/feature/ssf=true
+      #. Click :guilabel:`Apply changes`.
+
+   .. tab-item:: Command line
+
+      Alternatively, set the app setting on the command line
+      by running the command in :numref:`identity-provider-keycloak-feature-listing`.
+
+      .. code-block:: console
+         :caption: Enable the SSF feature of Keycloak
+         :name: identity-provider-keycloak-feature-listing
+
+         $ univention-app configure keycloak --set keycloak/server/feature/ssf=true
 
 The App Center then recreates the Keycloak container,
-which starts Keycloak with the SSF feature.
+which starts Keycloak with the :term:`SSF` feature.
 Keycloak is unavailable for a short time while that happens.
 
 .. note::
@@ -114,33 +144,39 @@ Keycloak is unavailable for a short time while that happens.
    If you set the variable with :command:`ucr set` instead,
    apply it with :command:`univention-app configure keycloak`.
    Restarting the app with :command:`univention-app restart keycloak`
-   isn't enough,
-   and the :guilabel:`Realm settings` page doesn't offer
+   isn't enough to apply the setting.
+   The :guilabel:`Realm settings` page doesn't offer
    :guilabel:`SSF Transmitter`.
+
+   .. FIXME: What does this note mean? What's the action for the reader here?
 
 .. _identity-provider-keycloak-realm:
 
 Turn the realm into an SSF transmitter
 --------------------------------------
 
-#. Open the Keycloak admin console at
-   ``https://ucs-sso-ng.DOMAIN/admin/``
-   and select the realm ``ucs``.
-   Replace ``DOMAIN`` with the domain name of your UCS domain.
+Activate the :term:`SSF` transmitter in the *Keycloak* app as follows:
+
+#. To open the *Keycloak Admin Console*,
+   follow the instructions at
+   :external+uv-keycloak-app:ref:`keycloak-admin-console`
+   in :cite:t:`uv-keycloak-app`.
 
 #. On the :guilabel:`Realm settings` page,
    set :guilabel:`SSF Transmitter` to :guilabel:`On`.
 
-With the transmitter on,
-the realm offers an SSF configuration metadata endpoint next to the OpenID
-endpoint configuration.
-You need the URLs of both endpoints in :ref:`identity-provider-asm-idp`:
+When the transmitter is active,
+the realm offers an SSF configuration metadata endpoint
+in addition to the OpenID configuration endpoint.
+You need the URLs of the following endpoints
+in the :ref:`identity-provider-asm-idp` section.
+:samp:`{DOMAIN}` is your Nubus for UCS domain name:
 
-* ``https://ucs-sso-ng.DOMAIN/realms/ucs/.well-known/openid-configuration``
-* ``https://ucs-sso-ng.DOMAIN/realms/ucs/.well-known/ssf-configuration``
+* :samp:`https://ucs-sso-ng.{DOMAIN}/realms/ucs/.well-known/openid-configuration`
+* :samp:`https://ucs-sso-ng.{DOMAIN}/realms/ucs/.well-known/ssf-configuration`
 
 The URLs use the defaults of the Keycloak app:
-the host ``ucs-sso-ng.DOMAIN``
+the host :samp:`ucs-sso-ng.{DOMAIN}`
 and the realm ``ucs``, which holds the users of the domain.
 If you changed
 :external+uv-keycloak-app:envvar:`keycloak/server/sso/fqdn`
@@ -160,6 +196,8 @@ each with :guilabel:`Include in token scope` enabled.
 Create the OIDC client
 ----------------------
 
+To create the OIDC client, follow these steps:
+
 #. On the realm's :guilabel:`Clients` page,
    click :guilabel:`Create client`.
 
@@ -167,41 +205,48 @@ Create the OIDC client
    enter ``apple-asm`` as :guilabel:`Client ID`.
 
 #. On the :guilabel:`Capability config` page,
-   enter the settings from the following table.
+   enter the settings from :numref:`identity-provider-keycloak-client-table`.
+
+   Apple doesn't appear to support :term:`PKCE` for OIDC federations,
+   which is why you turn off the PKCE requirement for the client.
+
+   .. FIXME: An uncertain statement about Apple’s PKCE support is used to justify disabling a security-relevant setting. No documentation exists that confirms the statement.
+
+   To see :guilabel:`SSF Receiver` on the page,
+   you need to activate :guilabel:`Client authentication`
+   and complete :ref:`identity-provider-keycloak-feature`
+   and :ref:`identity-provider-keycloak-realm`.
+
+   .. _identity-provider-keycloak-client-table:
 
    .. list-table:: Capabilities of the OIDC client for *Apple School Manager*
       :header-rows: 1
-      :widths: 40 60
+      :widths: 4 8
 
       * - Setting
         - Value
 
       * - :guilabel:`Client authentication`
-        - :guilabel:`On`
+        - ``On``
 
       * - :guilabel:`Authentication flow`
-        - :guilabel:`Standard flow`
+        - ``Standard flow``
 
       * - :guilabel:`Require PKCE`
-        - :guilabel:`Off`
+        - ``Off``
 
       * - :guilabel:`SSF Receiver`
-        - :guilabel:`On`
-
-   Apple doesn't appear to support :term:`PKCE` for OIDC federations,
-   which is why the client turns it off.
-   The page doesn't offer :guilabel:`SSF Receiver`
-   until :guilabel:`Client authentication` is on
-   and you completed :ref:`identity-provider-keycloak-feature`
-   and :ref:`identity-provider-keycloak-realm`.
+        - ``On``
 
 #. On the :guilabel:`Login settings` page,
-   enter the settings from the following table
+   enter the settings from :numref:`identity-provider-keycloak-client-login-settings-table`
    and click :guilabel:`Save`.
+
+   .. _identity-provider-keycloak-client-login-settings-table:
 
    .. list-table:: Login settings of the OIDC client for *Apple School Manager*
       :header-rows: 1
-      :widths: 40 60
+      :widths: 4 8
 
       * - Setting
         - Value
@@ -212,13 +257,16 @@ Create the OIDC client
       * - :guilabel:`Valid post logout redirect URIs`
         - ``+``
 
-Copy the client secret from the :guilabel:`Credentials` tab.
-You need it in :ref:`identity-provider-asm-idp`.
+#. Copy the client secret from the :guilabel:`Credentials` tab.
+   You need it in the :ref:`identity-provider-asm-idp` section later.
 
 .. _identity-provider-keycloak-receiver:
 
 Configure the client as an SSF receiver
 ---------------------------------------
+
+To configure the SSF receiver in the *Keycloak* app,
+follow these steps:
 
 #. On the client's :guilabel:`Client scopes` tab,
    add ``ssf.manage``, ``ssf.read``, and ``offline_access``
@@ -228,11 +276,19 @@ Configure the client as an SSF receiver
    add the client role ``ssf-admin``.
 
 #. On the :guilabel:`SSF` tab,
-   enter the settings from the following table.
+   enter the settings in :numref:`identity-provider-keycloak-receiver-table`.
+
+   * :guilabel:`Auto verify stream` sends the verification event as soon as Apple
+     creates the stream.
+
+   * :guilabel:`Emit-only events` lets you control through the Keycloak API when
+     Keycloak sends a sign-out to Apple.
+
+.. _identity-provider-keycloak-receiver-table:
 
 .. list-table:: SSF settings of the client
    :header-rows: 1
-   :widths: 40 60
+   :widths: 4 8
 
    * - Setting
      - Value
@@ -275,25 +331,23 @@ Configure the client as an SSF receiver
    * - :guilabel:`Emit-only events`
      - ``CaepSessionRevoked``
 
-:guilabel:`Auto verify stream` sends the verification event as soon as Apple
-creates the stream.
-:guilabel:`Emit-only events` lets you control through the Keycloak API when
-Keycloak sends a sign-out to Apple.
-
 .. _identity-provider-keycloak-admin-user:
 
 Create the administrative user
 ------------------------------
 
-*Apple School Manager* establishes the connection to Keycloak with the
-authorization code flow.
-The resulting access token and refresh token belong to an offline session of
-one user,
-so that user must exist before you connect the two systems.
+*Apple School Manager* establishes the connection to *Keycloak*
+with the authorization code flow.
+The resulting access token and refresh token
+belong to one user's offline session.
+That user must exist before you connect the two systems.
 
-Create the user in Keycloak, not in UCS.
-Keycloak has only read access to the UCS users,
+Create the user in *Keycloak*, not in Nubus for UCS.
+Keycloak has only read access to the users in Nubus for UCS,
 so it can't assign client roles to them.
+To create an administrative user in *Keycloak*
+for *Apple School Manager*,
+follow these steps:
 
 #. In the realm ``ucs``,
    create a user, for example ``asm``.
@@ -302,7 +356,7 @@ so it can't assign client roles to them.
 
 #. On the :guilabel:`Credentials` tab,
    set a strong password.
-   Two-factor authentication is optional but recommended.
+   Two-factor authentication is optional, but recommended.
 
 #. Assign the client role ``ssf-admin`` of the client ``apple-asm``.
 
@@ -311,34 +365,44 @@ so it can't assign client roles to them.
 Configure Apple School Manager
 ==============================
 
+Configure *Apple School Manager* to use the *Keycloak* app
+in Nubus for UCS as an external identity provider.
+
 .. _identity-provider-asm-idp:
 
 Connect the identity provider
 -----------------------------
 
+.. FIXME: For the connection, does Apple need access to the identity provider? I suspect, yes.
+
+Connect *Apple School Manager* to the external identity provider:
+
 #. Sign in to `Apple School Manager <https://school.apple.com/>`_.
 
 #. Open :menuselection:`Preferences --> Managed Apple Accounts`.
 
-#. Make sure that your domain is verified.
-
 #. Under :guilabel:`User sign-in and directory sync`,
    click :guilabel:`Configure`.
-   If another identity provider is connected, disconnect it first.
+
+   If *Apple School Manager* is already connected to another identity provider,
+   disconnect it first.
+
+   .. FIXME: What are the consequences of disconnecting an existing connection? We should mention them here.
 
 #. Select :guilabel:`Custom Identity Provider`
    and click :guilabel:`Continue`.
 
 #. Enter a name for the identity provider, for example ``asmkc``.
 
-#. Enter the client ID and the client secret from
-   :ref:`identity-provider-keycloak-client`,
-   and the two URLs from :ref:`identity-provider-keycloak-realm`,
-   as listed in the following table.
+#. Enter the settings listed in :numref:`identity-provider-asm-idp-table`.
+   Use the client ID and client secret from :ref:`identity-provider-keycloak-client`
+   and the two URLs from :ref:`identity-provider-keycloak-realm`.
+
+   .. _identity-provider-asm-idp-table:
 
    .. list-table:: Settings of the custom identity provider in *Apple School Manager*
       :header-rows: 1
-      :widths: 30 70
+      :widths: 2 10
 
       * - Field
         - Value
@@ -350,10 +414,10 @@ Connect the identity provider
         - The client secret from the :guilabel:`Credentials` tab of the client
 
       * - :guilabel:`SSF URL`
-        - ``https://ucs-sso-ng.DOMAIN/realms/ucs/.well-known/ssf-configuration``
+        - :samp:`https://ucs-sso-ng.{DOMAIN}/realms/ucs/.well-known/ssf-configuration`
 
       * - :guilabel:`OIDC URL`
-        - ``https://ucs-sso-ng.DOMAIN/realms/ucs/.well-known/openid-configuration``
+        - :samp:`https://ucs-sso-ng.{DOMAIN}/realms/ucs/.well-known/openid-configuration`
 
 #. Click :guilabel:`Continue`.
 
@@ -374,29 +438,37 @@ which you can see on the client's :guilabel:`SSF Streams` tab in Keycloak.
 Enable federation for the domain
 --------------------------------
 
+Enable federation for the domain in *Apple School Manager*:
+
 #. Open :menuselection:`Preferences --> Managed Apple Accounts`.
 
 #. Select your domain and click :guilabel:`Manage`.
 
-#. At the bottom of the page,
-   find the section for your identity provider and click :guilabel:`Set up`.
+#. In the section for your identity provider,
+   click :guilabel:`Set up`.
 
-#. Switch the toggle that appears to :guilabel:`On`.
+#. Set the toggle that appears to :guilabel:`On`.
 
 #. If the SFTP upload uses the domain,
    *Apple School Manager* asks you to choose another domain for the upload.
    Choose any other domain.
 
+   .. FIXME: The instruction doesn’t explain the requirements for the replacement domain or what to do if none is available. Verify which replacement domains are eligible and what readers must do if none is available.
+
 *Apple School Manager* enables federation for the domain
 and sends a confirmation email.
 
-After that, every Managed Apple Account with an email address in the domain
-signs in through Keycloak.
-This includes accounts that existed before you enabled federation
-and accounts that you created manually in *Apple School Manager*.
+After that, users with a Managed Apple Account whose email address is in the domain
+sign in through Keycloak.
+This includes users with accounts that existed before you enabled federation
+and users with accounts that you created manually in *Apple School Manager*.
+
+.. FIXME: When an administrator manually creates a Managed Apple Account in a federated domain, must a corresponding user exist in Nubus for UCS—and therefore in Keycloak—for the person to sign in? If so, how are the Apple Account and Keycloak user matched?
+
+.. FIXME: Does this apply to accounts created both before and after federation is enabled?
 
 The upload from the connector continues to work.
-*Apple School Manager* assigns the accounts by the domain of their email address,
+*Apple School Manager* assigns each account to the domain of its email address,
 so the accounts from the upload belong to the federated domain,
 regardless of the domain that you chose for the SFTP upload.
 
@@ -408,7 +480,9 @@ Sign in on a device
 After you enable federation for the domain,
 your users sign in to an Apple device with their |UAS| credentials.
 The following steps describe an unpaired device.
-See :cite:t:`apple-sign-in` for the general procedure.
+See :cite:p:`apple-sign-in` for the general procedure.
+
+.. FIXME: The procedure doesn’t identify the applicable device or operating system, and “unpaired device” is unclear.
 
 #. Open :menuselection:`Settings --> Apple Account`.
 
@@ -417,7 +491,7 @@ See :cite:t:`apple-sign-in` for the general procedure.
 #. Enter the email address of the user in the federated domain
    and tap :guilabel:`Proceed`.
 
-#. The device shows a hint that names your organization.
+#. The device displays a message with the name of your organization.
    Tap :guilabel:`Proceed`.
 
 #. The Keycloak sign-in page opens with the user name already filled in.

@@ -41,6 +41,7 @@ extensions = [
     "sphinxcontrib.spelling",
     "univention_sphinx_extension",
     "sphinxext.rediraffe",
+    "sphinx_design",
 ]
 
 rediraffe_branch = "5.2"

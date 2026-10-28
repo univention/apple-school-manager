@@ -31,8 +31,6 @@ Depends:
  univention-config,
  univention-join,
  ${misc:Depends},
-Recommends:
- ntp,
 Description: Provision Apple School Manager accounts.
  Synchronize user accounts to the Apple School Manager server.
 Homepage: https://school.apple.com/

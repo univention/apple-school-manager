@@ -11,7 +11,6 @@ from functools import cache
 
 from ucsschool.importer.utils.ldap_connection import get_machine_connection, get_readonly_connection
 from ucsschool.lib.roles import context_type_school, create_ucsschool_role_string, role_dc_slave
-
 from univention.admin.uldap import access as LoType  # noqa: N812
 from univention.admin.uldap import position as PoType  # noqa: N812
 from univention.config_registry import ConfigRegistry

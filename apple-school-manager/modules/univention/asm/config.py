@@ -18,7 +18,6 @@ from types import MappingProxyType
 from typing import Any
 
 from ucsschool.lib.models.school import School
-
 from univention.asm.utils import get_ldap_connection
 from univention.config_registry import ConfigRegistry, handler_unset
 

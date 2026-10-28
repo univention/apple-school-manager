@@ -14,10 +14,9 @@ from collections.abc import Collection, Iterable
 from functools import cache
 from typing import Any, Self
 
+import univention.asm.api_constraints as asm_api_constraints
 from ucsschool.lib.models.base import WrongModel
 from ucsschool.lib.models.user import Teacher, TeachersAndStaff
-
-import univention.asm.api_constraints as asm_api_constraints
 from univention.admin import uexceptions
 from univention.admin.uldap import access as LoType  # noqa: N812
 from univention.asm.config import Settings

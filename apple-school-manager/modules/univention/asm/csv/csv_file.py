@@ -23,7 +23,6 @@ from ucsschool.importer.writer.result_exporter import ResultExporter
 from ucsschool.lib.models.group import SchoolClass, WorkGroup
 from ucsschool.lib.models.school import School
 from ucsschool.lib.models.user import Student, Teacher
-
 from univention.admin import uexceptions
 from univention.asm.config import Settings
 from univention.asm.models.base import AsmModel

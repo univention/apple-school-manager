@@ -12,9 +12,8 @@ See https://support.apple.com/en-us/HT207029
 from collections.abc import Collection
 from typing import Any, Self
 
-from ucsschool.lib.models.user import Student
-
 import univention.asm.api_constraints as asm_api_constraints
+from ucsschool.lib.models.user import Student
 from univention.asm.config import Settings, StudentSettings
 from univention.asm.utils import (
     get_ldap_connection,

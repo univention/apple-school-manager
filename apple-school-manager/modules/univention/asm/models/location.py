@@ -12,7 +12,6 @@ See https://support.apple.com/en-us/HT207029
 from typing import Any, Self
 
 from ucsschool.lib.models.school import School
-
 from univention.asm.utils import get_ldap_connection
 
 from .base import AsmModel

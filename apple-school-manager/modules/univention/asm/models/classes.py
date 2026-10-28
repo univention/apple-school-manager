@@ -13,10 +13,9 @@ import logging
 from collections.abc import Collection
 from typing import Any, Self
 
+import univention.asm.api_constraints as asm_api_constraints
 from ucsschool.lib.models.base import UnknownModel
 from ucsschool.lib.models.group import SchoolClass, WorkGroup
-
-import univention.asm.api_constraints as asm_api_constraints
 from univention.asm.config import Settings
 from univention.asm.utils import get_ldap_connection, get_person_id
 

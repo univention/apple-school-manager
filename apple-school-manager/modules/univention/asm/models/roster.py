@@ -14,7 +14,6 @@ from typing import Any, Self
 from ucsschool.lib.models.base import UnknownModel
 from ucsschool.lib.models.group import SchoolClass, WorkGroup
 from ucsschool.lib.models.user import Student
-
 from univention.asm.config import Settings
 from univention.asm.utils import get_ldap_connection, get_person_id
 

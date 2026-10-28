@@ -1,3 +1,11 @@
+variables:
+  RUN_RENOVATE:
+    value: "no"
+    options:
+      - "yes"
+      - "no"
+    description: "Set to yes if you want to run renovate"
+
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == "web"
@@ -8,124 +16,9 @@ workflow:
     - if: $RUN_RENOVATE == "yes"
 
 include:
-  - project: univention/dev/tooling/ci-components
-    ref: 2.24.0
-    file:
-      - fragments/proxmox.yaml
-    rules:
-      - if: $RUN_RENOVATE != "yes"
-  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/pre-commit@2.24.0
-    rules:
-      - if: $RUN_RENOVATE != "yes"
-  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/app-release@2.24.0
-    inputs:
-      app_id: "apple-school-manager"
-      mail_sender: "ucsschool-maintainers@univention.de"
-      author_alias: "The ByteBenders"
-      mail_subject: "Apple School Manager Connector update"
-      changelog_link: "https://docs.software-univention.de/apple-school-manager-connector/en/changelog.html"
-      mail_recipient: "app-announcement@univention.de"
-      chat_destination: "#product-announcements"
-      ucs_base_version: "5.2"
-      app_staging_version: "999.0.0-staging"
-      additional_update_appcenter_needs:
-        - job: build_changelog_html
-    rules:
-      - if: $RUN_RENOVATE != "yes"
-  - local: /.gitlab-ci/gitlab-ci-docs.yml
-    rules:
-      - if: $RUN_RENOVATE != "yes"
-  - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/debian-package@2.24.0
-    inputs:
-      ucs_base_version: "5.2"
-      scope: "univention-asm"
-      yaml_based_upload: false
-      additional_upload_needs:
-        - create_app_version
+  - local: /.gitlab-ci/gitlab-ci.yml
     rules:
       - if: $RUN_RENOVATE != "yes"
   - component: $CI_SERVER_FQDN/univention/dev/tooling/ci-components/renovate@2.24.0
-    inputs:
-      stage: .post
     rules:
       - if: $RUN_RENOVATE == "yes"
-
-stages:
-  - lint
-  - prepare
-  - build
-  - test
-  - appcenter
-  - merge
-  - production
-  - release
-  - cleanup
-
-variables:
-  DEBIAN_SOURCE_DIRECTORIES: "apple-school-manager/"
-  DOC_NAME: "apple-school-manager-connector"
-  RUN_RENOVATE:
-    value: "no"
-    options:
-      - "yes"
-      - "no"
-    description: "Set to yes if you want to run renovate"
-
-# Renders doc/docs/changelog.rst into the 'changelog.html' fragment that
-# 'appcenter/README_UPDATE_EN.jinja' extends, so the App Center update text and
-# the manual cannot drift apart. 'update_appcenter' needs it, see the
-# 'app-release' inputs above.
-#
-# Every appcenter upload renders 'README_UPDATE_EN.jinja', which fails without
-# the fragment, so this has to run whenever 'update_appcenter' does.
-build_changelog_html:
-  stage: build
-  rules:
-    - if: $RUN_RENOVATE != "yes"
-  image: $SPHINX_BASE
-  script:
-    - pip install lxml
-    - ./build_changelog_html.py
-  artifacts:
-    paths:
-      - changelog.html
-
-integration_tests:
-  extends: .run_proxmox_cfg
-  stage: test
-  needs:
-    - create_app_version
-    - update_appcenter
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: manual
-      allow_failure: False
-  variables:
-    TARGET_VERSION: "5.2-7"
-    PROXMOX_CFG_FILE: ".gitlab-ci/ucsschool-singleserver.cfg"
-  script:
-    - mkdir results
-    - !reference [.run_proxmox_cfg, script]
-    - .gitlab-ci/parse_junit.py
-  artifacts:
-    reports:
-      junit: results/**/test-reports/**/*.xml
-
-ucs_test_deb_lint:
-  stage: lint
-  rules:
-    - if: $RUN_RENOVATE == "yes"
-      when: never
-    - changes:
-      - apple-school-manager/**/*
-  image:
-    name: gitregistry.knut.univention.de/univention/dev/projects/ucs-base-image/ucs-base-flex-527:0.24.5@sha256:81a74e475a0e625074ac830cc6bedd731001c4b6b4c5647d2ffecd0b043dc687
-    entrypoint: [""]
-  before_script:
-    - apt-get -qq update
-    - apt-get -qq install --no-install-recommends ucslint python3-junit.xml
-  script:
-    - cd apple-school-manager && ucslint --exitcode-categories EWIS --junit-xml ucslint.xml
-  artifacts:
-    reports:
-      junit: apple-school-manager/ucslint.xml

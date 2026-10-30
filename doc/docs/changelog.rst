@@ -31,7 +31,7 @@ v6.0.0 (2026-10-19)
   for example an invalid LDAP filter,
   only stops the upload to that account.
 
-* ``asm/last_upload/ACCOUNT`` holds the time of the last upload to each account.
+* :samp:`asm/last_upload/{ACCOUNT}` holds the time of the last upload to each account.
 
 * The connector no longer checks whether the domain of an email address
   resolves.
@@ -39,7 +39,7 @@ v6.0.0 (2026-10-19)
   and *Apple School Manager* accepts such addresses.
 
 * The app supports Keycloak as identity provider for *Apple School Manager*.
-  Users sign in to their Managed Apple Accounts
+  Users sign in to their *Managed Apple Accounts*
   with the password from the |UAS| domain.
   See :ref:`identity-provider`.
 
@@ -48,7 +48,7 @@ v6.0.0 (2026-10-19)
 v5.1.1 (2026-03-05)
 ===================
 
-* The connector supports running on a central Replica Directory Node again.
+* The connector supports running on a central :external+uv-ucs-operation:term:`Replica Directory Node` again.
 
 .. _changelog-v5.1.0:
 
@@ -62,7 +62,7 @@ v5.1.0
 v5.0.3
 ======
 
-* The app refuses installation on a central Replica Directory Node.
+* The app refuses installation on a central :external+uv-ucs-operation:term:`Replica Directory Node`.
 
 .. _changelog-v5.0.2:
 

@@ -21,8 +21,9 @@ Glossary
       the component of :term:`Nubus for UCS` with which you install and configure apps.
 
    Keycloak
-      The identity and access management software that UCS ships as an app.
+      The identity and access management software that Nubus for UCS ships as an app.
       It provides the single sign-on of the domain.
+      For more information, see :cite:t:`uv-keycloak-app`.
 
    Management UI
       The *Management UI* is the administration web interface of :term:`Nubus for UCS`.
@@ -43,6 +44,9 @@ Glossary
       the standard of the OpenID Foundation for sharing security events between
       an identity provider and the applications that rely on it.
 
+      For information about the relation to the *Apple School Manager Connector* app,
+      see :ref:`identity-provider-ssf`.
+
    UCR
       Univention Configuration Registry,
       the central configuration database of :term:`Nubus for UCS`.
@@ -53,6 +57,8 @@ Glossary
    Nubus for UCS
       Nubus for Univention Corporate Server,
       the server operating system with integrated identity management.
+
+      For more information, see :cite:t:`uv-ucs-operation`.
 
    UCS\@school
       The extension of :term:`Nubus for UCS` for schools and school authorities.

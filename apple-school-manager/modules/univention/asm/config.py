@@ -259,7 +259,7 @@ def check_schools(
     return receiving
 
 
-def _build_settings(
+def _build_settings(  # noqa: PLR0917
     name: str,
     account: dict[str, Any],
     defaults: dict[str, Any],

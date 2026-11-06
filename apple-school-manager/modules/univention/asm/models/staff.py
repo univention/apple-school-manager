@@ -44,7 +44,7 @@ class AsmStaff(AsmModel, AnonymizeMixIn):
         "location_id",
     ]
 
-    def __init__(
+    def __init__(  # noqa: PLR0917
         self,
         person_id: str,
         first_name: str,

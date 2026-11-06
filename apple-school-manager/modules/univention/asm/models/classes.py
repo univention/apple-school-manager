@@ -37,7 +37,7 @@ class AsmClass(AsmModel):
         "location_id",
     ]
 
-    def __init__(
+    def __init__(  # noqa: PLR0917
         self,
         class_id: str,
         course_id: str,

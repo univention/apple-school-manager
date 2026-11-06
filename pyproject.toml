@@ -66,6 +66,7 @@ ignore = [
 allow-star-arg-any = true
 
 [tool.ruff.lint.flake8-copyright]
+min-file-size = 1
 notice-rgx = '(?i)(?:Copyright\s+((?:\(C\)|©)\s+)?\d{4}((-|,\s)\d{4})*|SPDX-FileCopyrightText:\s*\d{4}((-|,\s*)\d{4})*\s+\S+)'
 
 [tool.mypy]

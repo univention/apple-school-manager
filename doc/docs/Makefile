@@ -4,8 +4,8 @@
 
 # Minimal makefile for Sphinx documentation
 
-SPHINXOPTS    =
-SPHINXBUILD   = sphinx-build
+SPHINXOPTS    ?=
+SPHINXBUILD   ?= sphinx-build
 SPHINXPROJ    = AppleSchoolManagerConnector
 SOURCEDIR     = .
 BUILDDIR      = _build

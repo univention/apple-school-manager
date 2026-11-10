@@ -143,7 +143,8 @@ that names the file and the entry:
 * A :envvar:`location_id` or :envvar:`location_name`
   in :envvar:`defaults` or in the entry ``*``.
 
-* Several schools of one account with the same :envvar:`location_id`.
+* Several schools of one account with the same :envvar:`location_id`
+  and different values for :envvar:`location_name`.
 
 For the following problems,
 the connector logs a warning and uploads to the remaining accounts:
@@ -153,6 +154,11 @@ the connector logs a warning and uploads to the remaining accounts:
 
 * A school that doesn't exist, if the file has no entry ``*``.
   An account without any existing school receives no upload.
+
+* A :envvar:`location_id` that is the abbreviation of another school
+  of the same account without :envvar:`location_id`.
+  Both schools share one location,
+  see :ref:`configuration-locations-shared`.
 
 If an upload to one account fails,
 the connector uploads to the remaining accounts.
@@ -780,8 +786,6 @@ and the ``location_id`` columns of the students, staff, classes, and courses.
    Per school.
    The ID of the location of the school in *Apple School Manager*.
    The ID must not contain spaces.
-   Within one account,
-   each school needs its own ID.
 
    :Default: the school abbreviation
 
@@ -795,8 +799,8 @@ and the ``location_id`` columns of the students, staff, classes, and courses.
 
 You can set either key alone.
 The connector then uses the default for the other one.
-Because a location belongs to exactly one school,
-you can't set the keys in :envvar:`defaults` or in the entry ``*``.
+You can't set the keys in :envvar:`defaults` or in the entry ``*``,
+because every school that they cover would get the same location.
 
 The example in :numref:`configuration-locations-example-listing`
 assigns ``gym123`` to the existing location with the ID ``4711``.
@@ -810,6 +814,63 @@ assigns ``gym123`` to the existing location with the ID ``4711``.
        "location_id": "4711",
        "location_name": "Gymnasium Musterstadt"
    }
+
+To assign a school that the entry ``*`` covers,
+add an entry with the abbreviation of the school
+and the same :envvar:`account`.
+The school then no longer uses the keys of the entry ``*``,
+only those of its own entry and of :envvar:`defaults`.
+Copy the keys of the entry ``*`` that should still apply to the school.
+
+.. _configuration-locations-shared:
+
+Several schools in one location
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To upload several schools to one location,
+set the same :envvar:`location_id` for each of them.
+The connector writes the location once,
+and the users, classes, and courses of all these schools refer to it.
+A user who belongs to several of these schools gets the location only once.
+The connector logs which schools share the location.
+
+The name of the shared location is the :envvar:`location_name`
+that one or more of the schools set.
+If the schools set different names,
+the connector stops with an error.
+If none of the schools sets a name,
+the connector uses the default name
+of the school whose abbreviation comes first in alphabetical order.
+
+Classes and courses keep the school abbreviation in their ID,
+so classes with the same name from different schools stay separate.
+
+The comparison only applies within one account.
+Schools of different accounts can use the same :envvar:`location_id`
+without sharing a location.
+
+If a :envvar:`location_id` equals the abbreviation of another school
+of the same account that has no :envvar:`location_id`,
+the two schools share a location as well.
+Because this is often a mistake,
+the connector logs a warning.
+
+.. _configuration-locations-change:
+
+Change the location of a school
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. warning::
+
+   The connector doesn't migrate anything
+   if you change the :envvar:`location_id` of a school
+   after the connector uploaded the school.
+
+The next upload refers to the new ID only.
+*Apple School Manager* treats it as a different location
+and assigns the users, classes, and courses of the school to it.
+The previous location remains in *Apple School Manager*
+until you remove it there.
 
 .. _configuration-ldap-filter:
 

@@ -152,7 +152,9 @@ class AsmStudent(AsmModel, AnonymizeMixIn):
         location_ids = sorted(s for s in student.schools if s != student.school)
         if student.school:
             location_ids = [student.school, *location_ids]
-        location_ids = [settings.location_id(loc) for loc in location_ids if settings.includes(loc)]
+        location_ids = list(
+            dict.fromkeys(settings.location_id(loc) for loc in location_ids if settings.includes(loc))
+        )
         if not location_ids:
             msg = f"Non of the users schools is synchronized to the account: {student} (schools: {student.schools!r})."
             raise ValueError(msg)

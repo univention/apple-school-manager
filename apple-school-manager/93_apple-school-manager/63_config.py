@@ -9,6 +9,7 @@
 # SPDX-FileCopyrightText: 2026 Univention GmbH
 # SPDX-License-Identifier: AGPL-3.0-only
 
+import logging
 from pathlib import Path
 from typing import Any
 
@@ -126,27 +127,66 @@ def test_invalid_location_mapping(password_file: str, key: str, value: object) -
 
 
 @pytest.mark.parametrize(
-    ("schools", "location_ids"),
+    ("schools", "locations", "level"),
     [
-        ({"gym123": "north", "gs456": "north"}, {"gym123": "4711", "gs456": "4711"}),
-        ({"gym123": "north", "gs456": "north"}, {"gym123": "gs456"}),
-        ({"gym123": "north", "*": "north"}, {"gym123": "rs789"}),
+        (
+            {"gym123": "north", "gs456": "north"},
+            {"gym123": {"location_id": "4711"}, "gs456": {"location_id": "4711"}},
+            logging.INFO,
+        ),
+        (
+            {"gym123": "north", "gs456": "north"},
+            {"gym123": {"location_id": "gs456"}},
+            logging.WARNING,
+        ),
+        (
+            {"gym123": "north", "*": "north"},
+            {"gym123": {"location_id": "rs789", "location_name": "Realschule"}},
+            logging.WARNING,
+        ),
+        (
+            {"gym123": "north", "gs456": "north"},
+            {
+                "gym123": {"location_id": "4711", "location_name": "Schulzentrum"},
+                "gs456": {"location_id": "4711", "location_name": "Schulzentrum"},
+            },
+            logging.INFO,
+        ),
     ],
 )
-def test_duplicate_location_id_is_rejected(
-    password_file: str, schools: dict[str, str], location_ids: dict[str, str]
+def test_shared_location_id_is_logged(
+    password_file: str,
+    caplog: pytest.LogCaptureFixture,
+    schools: dict[str, str],
+    locations: dict[str, dict[str, str]],
+    level: int,
 ) -> None:
     data = settings_file(password_file, ["north"], schools)
-    for school, location_id in location_ids.items():
-        data["schools"][school]["location_id"] = location_id
+    for school, location in locations.items():
+        data["schools"][school].update(location)
     connections = config.parse_config(data)
-    with pytest.raises(config.ASMConfigError, match="same location_id"):
-        config.check_schools(connections, ["gym123", "gs456", "rs789"])
+    with caplog.at_level(logging.INFO, logger=config.__name__):
+        assert len(config.check_schools(connections, ["gym123", "gs456", "rs789"])) == 1
+    [record] = [record for record in caplog.records if "share the location_id" in record.getMessage()]
+    assert record.levelno == level
 
 
-def test_same_location_id_in_different_accounts(password_file: str) -> None:
+def test_shared_location_id_with_different_names_is_rejected(password_file: str) -> None:
+    data = settings_file(password_file, ["north"], {"gym123": "north", "gs456": "north"})
+    data["schools"]["gym123"].update({"location_id": "4711", "location_name": "Gymnasium"})
+    data["schools"]["gs456"].update({"location_id": "4711", "location_name": "Grundschule"})
+    connections = config.parse_config(data)
+    with pytest.raises(config.ASMConfigError, match="different location_name"):
+        config.check_schools(connections, ["gym123", "gs456"])
+
+
+def test_same_location_id_in_different_accounts(
+    password_file: str, caplog: pytest.LogCaptureFixture
+) -> None:
     data = settings_file(password_file, ["north", "south"], {"gym123": "north", "gs456": "south"})
     data["schools"]["gym123"]["location_id"] = "4711"
     data["schools"]["gs456"]["location_id"] = "4711"
     connections = config.parse_config(data)
-    assert len(config.check_schools(connections, ["gym123", "gs456"])) == 2
+    with caplog.at_level(logging.INFO, logger=config.__name__):
+        assert len(config.check_schools(connections, ["gym123", "gs456"])) == 2
+    assert not [record for record in caplog.records if "share the location_id" in record.getMessage()]

@@ -249,7 +249,7 @@ def check_schools(
     :param existing_schools: the names of the schools in LDAP
     :return: the connections that receive at least one school
     :raises ASMConfigError: if a school doesn't exist while an entry ``*`` exists,
-        if an account receives several schools with the same ``location_id``,
+        if schools of one account share a ``location_id`` with different ``location_name`` values,
         or if no account receives a school
     """
     connections = list(connections)
@@ -271,7 +271,7 @@ def check_schools(
         if connection.settings.other_schools is None and not existing & set(connection.settings.schools):
             logger.warning("Account %r has no existing school and receives no upload.", connection.name)
             continue
-        _check_unique_location_ids(connection, existing)
+        _check_shared_locations(connection, existing)
         receiving.append(connection)
     if not receiving:
         msg = f"No Apple School Manager account in {CONFIG_FILE_PATH} receives an existing school."
@@ -279,23 +279,39 @@ def check_schools(
     return receiving
 
 
-def _check_unique_location_ids(connection: Connection, existing_schools: Iterable[str]) -> None:
+def _check_shared_locations(connection: Connection, existing_schools: Iterable[str]) -> None:
+    settings = connection.settings
     schools_by_location: dict[str, list[str]] = {}
     for school in sorted(existing_schools):
-        if connection.settings.includes(school):
-            schools_by_location.setdefault(connection.settings.location_id(school), []).append(school)
-    duplicates = {
-        location: schools for location, schools in schools_by_location.items() if len(schools) > 1
-    }
-    if duplicates:
-        details = "; ".join(
-            f"{location!r}: {', '.join(schools)}" for location, schools in sorted(duplicates.items())
-        )
-        msg = (
-            f"{CONFIG_FILE_PATH}: account {connection.name!r} receives several schools "
-            f"with the same location_id ({details})."
-        )
-        raise ASMConfigError(msg)
+        if settings.includes(school):
+            schools_by_location.setdefault(settings.location_id(school), []).append(school)
+    logger = logging.getLogger(__name__)
+    for location, schools in sorted(schools_by_location.items()):
+        if len(schools) < 2:
+            continue
+        names = {settings.school(school).location_name for school in schools} - {None}
+        if len(names) > 1:
+            msg = (
+                f"{CONFIG_FILE_PATH}: account {connection.name!r}: the schools {', '.join(schools)} "
+                f"share the location_id {location!r} but set different location_name values. "
+                "Set the same location_name for all of them or for only one."
+            )
+            raise ASMConfigError(msg)
+        if all(settings.school(school).location_id for school in schools):
+            logger.info(
+                "Account %r: the schools %s share the location_id %r.",
+                connection.name,
+                ", ".join(schools),
+                location,
+            )
+        else:
+            logger.warning(
+                "Account %r: the schools %s share the location_id %r, "
+                "which is also the abbreviation of a school without location_id.",
+                connection.name,
+                ", ".join(schools),
+                location,
+            )
 
 
 def _build_settings(  # noqa: PLR0917

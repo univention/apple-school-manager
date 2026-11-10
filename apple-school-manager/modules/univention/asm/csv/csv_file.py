@@ -269,9 +269,12 @@ class AsmLocationsCsvFile(AsmCsvFile):
         :return list of AsmModel objects
         :rtype: list(AsmLocation)
         """
-        schools = self.get_schools()
-        for school in schools:
-            yield AsmLocation.from_dn(school.dn, self.settings)
+        locations: dict[str, AsmLocation] = {}
+        for school in self.get_schools():
+            location = AsmLocation.from_dn(school.dn, self.settings)
+            if location.location_id not in locations or self.settings.school(school.name).location_name:
+                locations[location.location_id] = location
+        yield from locations.values()
 
 
 class AsmRostersCsvFile(AsmCsvFile):

@@ -28,7 +28,7 @@ The following sections help you configure the connector:
 * :ref:`configuration-schedule` explains how to run synchronization daily.
 
 * :ref:`configuration-details` describes optional settings,
-  such as anonymization and LDAP filters.
+  such as anonymization, LDAP filters, and existing locations.
 
 .. caution::
 
@@ -139,6 +139,11 @@ that names the file and the entry:
   to the account of that entry.
 
 * No account that receives an existing school.
+
+* A :envvar:`location_id` or :envvar:`location_name`
+  in :envvar:`defaults` or in the entry ``*``.
+
+* Several schools of one account with the same :envvar:`location_id`.
 
 For the following problems,
 the connector logs a warning and uploads to the remaining accounts:
@@ -320,13 +325,18 @@ You can also set optional keys in :envvar:`defaults`.
      - Empty
      - See :ref:`configuration-ldap-filter`.
 
+   * - :envvar:`location_id`, :envvar:`location_name`
+     - The school abbreviation and the display name of the school
+     - See :ref:`configuration-locations`.
+
 .. _configuration-defaults:
 
 Defaults
 --------
 
 The :envvar:`defaults` section can contain every optional key
-of an account entry and a school entry.
+of an account entry and a school entry,
+except :envvar:`location_id` and :envvar:`location_name`.
 A value in :envvar:`defaults` applies to every account or school
 that doesn't set the key itself.
 
@@ -745,6 +755,61 @@ The connector derives the course name from the class name.
    the class name repeats the course name.
 
    :Default: ``true``
+
+.. _configuration-locations:
+
+Use existing locations in Apple School Manager
+----------------------------------------------
+
+.. versionadded:: 6.1.0
+
+The connector creates one location in *Apple School Manager* for each school.
+By default,
+the ``location_id`` of the location is the school abbreviation,
+and the ``location_name`` is the display name of the school.
+
+If your *Apple School Manager* account already has locations,
+for example from another application such as *Jamf*,
+you can assign each school to the ID and the name of its existing location.
+The connector then uses these values in all files that it uploads:
+the locations,
+and the ``location_id`` columns of the students, staff, classes, and courses.
+
+.. envvar:: location_id
+
+   Per school.
+   The ID of the location of the school in *Apple School Manager*.
+   The ID must not contain spaces.
+   Within one account,
+   each school needs its own ID.
+
+   :Default: the school abbreviation
+
+.. envvar:: location_name
+
+   Per school.
+   The name of the location of the school in *Apple School Manager*.
+
+   :Default: the display name of the school,
+      or the school abbreviation if the school has no display name
+
+You can set either key alone.
+The connector then uses the default for the other one.
+Because a location belongs to exactly one school,
+you can't set the keys in :envvar:`defaults` or in the entry ``*``.
+
+The example in :numref:`configuration-locations-example-listing`
+assigns ``gym123`` to the existing location with the ID ``4711``.
+
+.. code-block:: json
+   :caption: Assign a school to an existing location
+   :name: configuration-locations-example-listing
+
+   "gym123": {
+       "account": "north",
+       "location_id": "4711",
+       "location_name": "Gymnasium Musterstadt"
+   }
 
 .. _configuration-ldap-filter:
 

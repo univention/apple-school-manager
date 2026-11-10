@@ -10,6 +10,17 @@ Changelog
 
 This chapter lists the changes of every released version of the app.
 
+.. _changelog-v6.1.0:
+
+v6.1.0
+======
+
+* You can assign each school to an existing location in *Apple School Manager*,
+  for example one that another application created,
+  with the keys :envvar:`location_id` and :envvar:`location_name`
+  in the school entry of the settings file.
+  See :ref:`configuration-locations`.
+
 .. _changelog-v6.0.0:
 
 v6.0.0 (2026-10-19)

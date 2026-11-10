@@ -249,6 +249,7 @@ def check_schools(
     :param existing_schools: the names of the schools in LDAP
     :return: the connections that receive at least one school
     :raises ASMConfigError: if a school doesn't exist while an entry ``*`` exists,
+        if a ``location_id`` is the abbreviation of a school without ``location_id``,
         if schools of one account share a ``location_id`` with different ``location_name`` values,
         or if no account receives a school
     """
@@ -289,6 +290,15 @@ def _check_shared_locations(connection: Connection, existing_schools: Iterable[s
     for location, schools in sorted(schools_by_location.items()):
         if len(schools) < 2:
             continue
+        unmapped = [school for school in schools if not settings.school(school).location_id]
+        if unmapped:
+            msg = (
+                f"{CONFIG_FILE_PATH}: account {connection.name!r}: the location_id {location!r} of "
+                f"{', '.join(school for school in schools if school not in unmapped)} is the abbreviation "
+                f"of the school {unmapped[0]}, which has no location_id. To share the location, "
+                f"set the location_id {location!r} for {unmapped[0]} as well; otherwise choose another ID."
+            )
+            raise ASMConfigError(msg)
         names = {settings.school(school).location_name for school in schools} - {None}
         if len(names) > 1:
             msg = (
@@ -297,21 +307,12 @@ def _check_shared_locations(connection: Connection, existing_schools: Iterable[s
                 "Set the same location_name for all of them or for only one."
             )
             raise ASMConfigError(msg)
-        if all(settings.school(school).location_id for school in schools):
-            logger.info(
-                "Account %r: the schools %s share the location_id %r.",
-                connection.name,
-                ", ".join(schools),
-                location,
-            )
-        else:
-            logger.warning(
-                "Account %r: the schools %s share the location_id %r, "
-                "which is also the abbreviation of a school without location_id.",
-                connection.name,
-                ", ".join(schools),
-                location,
-            )
+        logger.info(
+            "Account %r: the schools %s share the location_id %r.",
+            connection.name,
+            ", ".join(schools),
+            location,
+        )
 
 
 def _build_settings(  # noqa: PLR0917

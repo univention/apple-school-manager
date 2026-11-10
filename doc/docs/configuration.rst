@@ -146,6 +146,10 @@ that names the file and the entry:
 * Several schools of one account with the same :envvar:`location_id`
   and different values for :envvar:`location_name`.
 
+* A :envvar:`location_id` that is the abbreviation of another school
+  of the same account without :envvar:`location_id`,
+  see :ref:`configuration-locations-shared`.
+
 For the following problems,
 the connector logs a warning and uploads to the remaining accounts:
 
@@ -154,11 +158,6 @@ the connector logs a warning and uploads to the remaining accounts:
 
 * A school that doesn't exist, if the file has no entry ``*``.
   An account without any existing school receives no upload.
-
-* A :envvar:`location_id` that is the abbreviation of another school
-  of the same account without :envvar:`location_id`.
-  Both schools share one location,
-  see :ref:`configuration-locations-shared`.
 
 If an upload to one account fails,
 the connector uploads to the remaining accounts.
@@ -851,9 +850,10 @@ without sharing a location.
 
 If a :envvar:`location_id` equals the abbreviation of another school
 of the same account that has no :envvar:`location_id`,
-the two schools share a location as well.
-Because this is often a mistake,
-the connector logs a warning.
+the connector stops with an error,
+because the two schools would share a location by accident.
+To share the location on purpose,
+set the :envvar:`location_id` for the other school as well.
 
 .. _configuration-locations-change:
 

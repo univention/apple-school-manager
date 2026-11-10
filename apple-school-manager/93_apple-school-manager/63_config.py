@@ -127,48 +127,36 @@ def test_invalid_location_mapping(password_file: str, key: str, value: object) -
 
 
 @pytest.mark.parametrize(
-    ("schools", "locations", "level"),
-    [
-        (
-            {"gym123": "north", "gs456": "north"},
-            {"gym123": {"location_id": "4711"}, "gs456": {"location_id": "4711"}},
-            logging.INFO,
-        ),
-        (
-            {"gym123": "north", "gs456": "north"},
-            {"gym123": {"location_id": "gs456"}},
-            logging.WARNING,
-        ),
-        (
-            {"gym123": "north", "*": "north"},
-            {"gym123": {"location_id": "rs789", "location_name": "Realschule"}},
-            logging.WARNING,
-        ),
-        (
-            {"gym123": "north", "gs456": "north"},
-            {
-                "gym123": {"location_id": "4711", "location_name": "Schulzentrum"},
-                "gs456": {"location_id": "4711", "location_name": "Schulzentrum"},
-            },
-            logging.INFO,
-        ),
-    ],
+    "names",
+    [{}, {"gym123": "Schulzentrum"}, {"gym123": "Schulzentrum", "gs456": "Schulzentrum"}],
 )
 def test_shared_location_id_is_logged(
-    password_file: str,
-    caplog: pytest.LogCaptureFixture,
-    schools: dict[str, str],
-    locations: dict[str, dict[str, str]],
-    level: int,
+    password_file: str, caplog: pytest.LogCaptureFixture, names: dict[str, str]
 ) -> None:
-    data = settings_file(password_file, ["north"], schools)
-    for school, location in locations.items():
-        data["schools"][school].update(location)
+    data = settings_file(password_file, ["north"], {"gym123": "north", "gs456": "north"})
+    for school in ("gym123", "gs456"):
+        data["schools"][school]["location_id"] = "4711"
+    for school, name in names.items():
+        data["schools"][school]["location_name"] = name
     connections = config.parse_config(data)
     with caplog.at_level(logging.INFO, logger=config.__name__):
-        assert len(config.check_schools(connections, ["gym123", "gs456", "rs789"])) == 1
+        assert len(config.check_schools(connections, ["gym123", "gs456"])) == 1
     [record] = [record for record in caplog.records if "share the location_id" in record.getMessage()]
-    assert record.levelno == level
+    assert record.levelno == logging.INFO
+
+
+@pytest.mark.parametrize(
+    ("schools", "location_id"),
+    [({"gym123": "north", "gs456": "north"}, "gs456"), ({"gym123": "north", "*": "north"}, "rs789")],
+)
+def test_location_id_of_unmapped_school_is_rejected(
+    password_file: str, schools: dict[str, str], location_id: str
+) -> None:
+    data = settings_file(password_file, ["north"], schools)
+    data["schools"]["gym123"]["location_id"] = location_id
+    connections = config.parse_config(data)
+    with pytest.raises(config.ASMConfigError, match=f"abbreviation of the school {location_id}"):
+        config.check_schools(connections, ["gym123", "gs456", "rs789"])
 
 
 def test_shared_location_id_with_different_names_is_rejected(password_file: str) -> None:

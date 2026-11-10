@@ -27,6 +27,8 @@ LEGACY_PASSWORD_FILE_PATH = "/etc/asm.secret"  # noqa: S105
 MIGRATED_ACCOUNT_NAME = "default"
 OTHER_SCHOOLS = "*"
 ACCOUNT_NAME_PATTERN = re.compile(r"[A-Za-z0-9._-]+")
+LOCATION_ID_PATTERN = re.compile(r"\S+")
+LOCATION_KEYS = ("location_id", "location_name")
 PASSWORD_POLICIES = (4, 6, 8)
 ANONYMIZE_ATTRIBUTES = ("first_name", "middle_name", "last_name", "email_address", "sis_username")
 REQUIRED_ANONYMIZE_ATTRIBUTES = ("first_name", "last_name")
@@ -59,7 +61,11 @@ SCHOOL_SETTINGS_SPEC: dict[str, Any] = {
     "staff": {"ldap_filter": str},
 }
 ACCOUNT_SPEC: dict[str, Any] = {"username": str, "password_file": str, **ACCOUNT_SETTINGS_SPEC}
-SCHOOL_SPEC: dict[str, Any] = {"account": str, **SCHOOL_SETTINGS_SPEC}
+SCHOOL_SPEC: dict[str, Any] = {
+    "account": str,
+    **dict.fromkeys(LOCATION_KEYS, str),
+    **SCHOOL_SETTINGS_SPEC,
+}
 DEFAULTS_SPEC: dict[str, Any] = {
     **ACCOUNT_SETTINGS_SPEC,
     **SCHOOL_SETTINGS_SPEC,
@@ -91,6 +97,8 @@ class SchoolSettings:
     class_number_empty: bool = True
     student_ldap_filter: str = ""
     staff_ldap_filter: str = ""
+    location_id: str | None = None
+    location_name: str | None = None
 
 
 @dataclass(frozen=True)
@@ -126,6 +134,14 @@ class Settings:
             return self.other_schools
         msg = f"School {school!r} is not synchronized to this Apple School Manager account."
         raise ValueError(msg)
+
+    def location_id(self, school: str) -> str:
+        """
+        Return the ``location_id`` of `school` in Apple School Manager.
+
+        :raises ValueError: if the account doesn't receive `school`
+        """
+        return self.school(school).location_id or school
 
 
 @dataclass(frozen=True)
@@ -186,10 +202,12 @@ def parse_config(data: Any, source: str = "configuration") -> list[Connection]: 
         msg = f"No school assigned to an Apple School Manager account in {source}."
         raise ASMConfigError(msg)
     for school, entry in schools.items():
-        account = _required_str(entry, "account", f"{source}: school {school!r}")
+        where = f"{source}: school {school!r}"
+        account = _required_str(entry, "account", where)
         if account not in accounts:
             msg = f"{source}: school {school!r} refers to the unknown account {account!r}."
             raise ASMConfigError(msg)
+        _check_location(school, entry, where)
     usernames = [entry.get("username") for entry in accounts.values()]
     duplicates = sorted({str(name) for name in usernames if usernames.count(name) > 1})
     if duplicates:
@@ -231,6 +249,7 @@ def check_schools(
     :param existing_schools: the names of the schools in LDAP
     :return: the connections that receive at least one school
     :raises ASMConfigError: if a school doesn't exist while an entry ``*`` exists,
+        if an account receives several schools with the same ``location_id``,
         or if no account receives a school
     """
     connections = list(connections)
@@ -252,11 +271,31 @@ def check_schools(
         if connection.settings.other_schools is None and not existing & set(connection.settings.schools):
             logger.warning("Account %r has no existing school and receives no upload.", connection.name)
             continue
+        _check_unique_location_ids(connection, existing)
         receiving.append(connection)
     if not receiving:
         msg = f"No Apple School Manager account in {CONFIG_FILE_PATH} receives an existing school."
         raise ASMConfigError(msg)
     return receiving
+
+
+def _check_unique_location_ids(connection: Connection, existing_schools: Iterable[str]) -> None:
+    schools_by_location: dict[str, list[str]] = {}
+    for school in sorted(existing_schools):
+        if connection.settings.includes(school):
+            schools_by_location.setdefault(connection.settings.location_id(school), []).append(school)
+    duplicates = {
+        location: schools for location, schools in schools_by_location.items() if len(schools) > 1
+    }
+    if duplicates:
+        details = "; ".join(
+            f"{location!r}: {', '.join(schools)}" for location, schools in sorted(duplicates.items())
+        )
+        msg = (
+            f"{CONFIG_FILE_PATH}: account {connection.name!r} receives several schools "
+            f"with the same location_id ({details})."
+        )
+        raise ASMConfigError(msg)
 
 
 def _build_settings(  # noqa: PLR0917
@@ -273,7 +312,10 @@ def _build_settings(  # noqa: PLR0917
     )
     school_defaults = _project(defaults, SCHOOL_SETTINGS_SPEC)
     school_settings = {
-        school: _school_settings(_merge(school_defaults, _project(entry, SCHOOL_SETTINGS_SPEC)))
+        school: _school_settings(
+            _merge(school_defaults, _project(entry, SCHOOL_SETTINGS_SPEC)),
+            entry,
+        )
         for school, entry in own_schools.items()
     }
     other_schools = school_settings.pop(OTHER_SCHOOLS, None)
@@ -327,14 +369,31 @@ def _role_kwargs(data: dict[str, Any], where: str) -> dict[str, Any]:
     }
 
 
-def _school_settings(data: dict[str, Any]) -> SchoolSettings:
+def _school_settings(data: dict[str, Any], entry: dict[str, Any]) -> SchoolSettings:
     default = SchoolSettings()
     return SchoolSettings(
         course_name_pattern=data.get("course_name_pattern", default.course_name_pattern),
         class_number_empty=data.get("class_number_empty", default.class_number_empty),
         student_ldap_filter=data.get("student", {}).get("ldap_filter", default.student_ldap_filter),
         staff_ldap_filter=data.get("staff", {}).get("ldap_filter", default.staff_ldap_filter),
+        location_id=entry.get("location_id"),
+        location_name=entry.get("location_name"),
     )
+
+
+def _check_location(school: str, entry: dict[str, Any], where: str) -> None:
+    if school == OTHER_SCHOOLS:
+        for key in LOCATION_KEYS:
+            if key in entry:
+                msg = f"{where}: {key} applies to one school and is not allowed in the entry {OTHER_SCHOOLS!r}."
+                raise ASMConfigError(msg)
+        return
+    if "location_id" in entry and not LOCATION_ID_PATTERN.fullmatch(entry["location_id"]):
+        msg = f"{where}: location_id must be a non-empty string without spaces, not {entry['location_id']!r}."
+        raise ASMConfigError(msg)
+    if "location_name" in entry and not entry["location_name"].strip():
+        msg = f"{where}: location_name must not be empty."
+        raise ASMConfigError(msg)
 
 
 def _check_entries(entries: Any, spec: dict[str, Any], source: str, kind: str) -> None:  # noqa: ANN401

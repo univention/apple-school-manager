@@ -80,7 +80,7 @@ class AsmCourse(AsmModel):
         course_name = course_pattern.replace("{ou}", school_class.school).replace("{name}", name)
         return cls(
             course_id=school_class.name,
-            location_id=school_class.school,
+            location_id=settings.location_id(school_class.school),
             course_number=school_class.name,
             course_name=course_name,
         )

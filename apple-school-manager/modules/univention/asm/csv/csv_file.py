@@ -271,7 +271,7 @@ class AsmLocationsCsvFile(AsmCsvFile):
         """
         schools = self.get_schools()
         for school in schools:
-            yield AsmLocation.from_dn(school.dn)
+            yield AsmLocation.from_dn(school.dn, self.settings)
 
 
 class AsmRostersCsvFile(AsmCsvFile):

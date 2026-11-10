@@ -142,7 +142,7 @@ class AsmStaff(AsmModel, AnonymizeMixIn):
             else None
         )
         location_ids = [teacher.school, *sorted(s for s in teacher.schools if s != teacher.school)]
-        location_ids = [loc for loc in location_ids if settings.includes(loc)]
+        location_ids = [settings.location_id(loc) for loc in location_ids if settings.includes(loc)]
         if not location_ids:
             msg = f"Non of the users schools is synchronized to the account: {teacher} (schools: {teacher.schools!r})."
             raise ValueError(msg)

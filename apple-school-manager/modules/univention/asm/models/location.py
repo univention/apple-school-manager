@@ -13,6 +13,7 @@ from typing import Any, Self
 
 from ucsschool.lib.models.school import School
 
+from univention.asm.config import Settings
 from univention.asm.utils import get_ldap_connection
 
 from .base import AsmModel
@@ -34,14 +35,21 @@ class AsmLocation(AsmModel):
         self.location_name = location_name
 
     @classmethod
-    def from_dn(cls, dn: str, *args: Any, **kwargs: Any) -> Self:
+    def from_dn(cls, dn: str, settings: Settings | None = None, *args: Any, **kwargs: Any) -> Self:
         """
         Get AsmLocation object created from data in LDAP object.
 
         :param str dn: DN to the School/OU object to represent
+        :param settings: settings of the Apple School Manager account, the
+                default settings if None
         :return: AsmLocation instance
         :rtype: AsmLocation
         """
+        settings = settings or Settings()
         lo, _po = get_ldap_connection()
         school = School.from_dn(dn, None, lo)
-        return cls(school.name, school.display_name or school.name)
+        school_settings = settings.school(school.name)
+        return cls(
+            settings.location_id(school.name),
+            school_settings.location_name or school.display_name or school.name,
+        )

@@ -1,3 +1,11 @@
+univention-apple-school-manager-connector (6.1.0) unstable; urgency=medium
+
+  * Map schools to existing Apple School Manager locations with
+    location_id and location_name in /etc/asm-connections.json
+    Issue univention/dev/education/apple-school-manager#25
+
+ -- Jürn Brodersen <brodersen@univention.de>  Tue, 10 Nov 2026 12:00:00 +0100
+
 univention-apple-school-manager-connector (6.0.0) unstable; urgency=medium
 
   * Bug #56486: Synchronize to several Apple School Manager accounts;

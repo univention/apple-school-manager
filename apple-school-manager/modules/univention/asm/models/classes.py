@@ -159,7 +159,7 @@ class AsmClass(AsmModel):
         return cls(
             class_id=school_class.name,
             course_id=school_class.name,
-            location_id=school_class.school,
+            location_id=settings.location_id(school_class.school),
             class_number="" if school_settings.class_number_empty else school_class.name,
             instructor_id=instructor_id,
             instructor_id_2=instructor_id_2,

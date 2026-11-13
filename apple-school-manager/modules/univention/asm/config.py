@@ -290,13 +290,13 @@ def _check_shared_locations(connection: Connection, existing_schools: Iterable[s
     for location, schools in sorted(schools_by_location.items()):
         if len(schools) < 2:
             continue
-        unmapped = [school for school in schools if not settings.school(school).location_id]
-        if unmapped:
+        if location in schools and not settings.school(location).location_id:
+            others = ", ".join(school for school in schools if school != location)
             msg = (
                 f"{CONFIG_FILE_PATH}: account {connection.name!r}: the location_id {location!r} of "
-                f"{', '.join(school for school in schools if school not in unmapped)} is the abbreviation "
-                f"of the school {unmapped[0]}, which has no location_id. To share the location, "
-                f"set the location_id {location!r} for {unmapped[0]} as well; otherwise choose another ID."
+                f"{others} is the abbreviation of the school {location}, which has no location_id. "
+                f"To share the location, set the location_id {location!r} for {location} as well; "
+                "otherwise choose another ID."
             )
             raise ASMConfigError(msg)
         names = {settings.school(school).location_name for school in schools} - {None}

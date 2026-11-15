@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Apple School Manager Connector 5.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-15 00:20+0000\n"
+"POT-Creation-Date: 2026-11-15 00:22+0000\n"
 "PO-Revision-Date: 2026-10-30 13:56+0100\n"
 "Last-Translator: Univention GmbH <packages@univention.de>\n"
 "Language: de\n"
@@ -1341,7 +1341,14 @@ msgid ""
 "connector uses the ID from the SFTP upload. A location that you created "
 "manually in *Apple School Manager* only has the internal ID, which the "
 "*Apple School Manager* user interface doesn't show."
-msgstr "Sie können nur Standorte verwenden, die ein SFTP-Upload angelegt hat, zum Beispiel der Upload einer anderen Anwendung. *Apple School Manager* speichert für jeden Standort zwei IDs: eine interne ID und die ID aus dem SFTP-Upload. Der Connector verwendet die ID aus dem SFTP-Upload. Ein Standort, den Sie manuell in *Apple School Manager* angelegt haben, hat nur die interne ID, die die Benutzeroberfläche von *Apple School Manager* nicht anzeigt."
+msgstr ""
+"Sie können nur Standorte verwenden, die ein SFTP-Upload angelegt hat, zum"
+" Beispiel der Upload einer anderen Anwendung. *Apple School Manager* "
+"speichert für jeden Standort zwei IDs: eine interne ID und die ID aus dem"
+" SFTP-Upload. Der Connector verwendet die ID aus dem SFTP-Upload. Ein "
+"Standort, den Sie manuell in *Apple School Manager* angelegt haben, hat "
+"nur die interne ID, die die Benutzeroberfläche von *Apple School Manager*"
+" nicht anzeigt."
 
 #: ../../configuration.rst:804
 msgid ""
@@ -1367,20 +1374,14 @@ msgstr ""
 msgid ""
 "the display name of the school, or the school abbreviation if the school "
 "has no display name"
-msgstr ""
-"der Anzeigename der Schule, oder das Schulkürzel, wenn die Schule keinen "
-"Anzeigenamen hat"
+msgstr "der Anzeigename der Schule oder das Schulkürzel, wenn die Schule keinen Anzeigenamen hat"
 
 #: ../../configuration.rst:819
 msgid ""
 "You can set either key alone. The connector then uses the default for the"
 " other one. You can't set the keys in :envvar:`defaults` or in the entry "
 "``*``, because every school that they cover would get the same location."
-msgstr ""
-"Sie können jeden der beiden Schlüssel allein setzen. Der Connector "
-"verwendet dann für den anderen die Voreinstellung. Sie können die "
-"Schlüssel nicht in :envvar:`defaults` oder im Eintrag ``*`` setzen, weil "
-"sonst jede Schule, die diese abdecken, denselben Standort erhielte."
+msgstr "Sie können jeden der beiden Schlüssel allein setzen. Der Connector verwendet dann für den anderen die Voreinstellung. Sie können die Schlüssel nicht in :envvar:`defaults` oder im Eintrag ``*`` setzen, weil sonst jede Schule, die dieser Abschnitt oder Eintrag abdeckt, denselben Standort erhielte."
 
 #: ../../configuration.rst:824
 msgid ""
@@ -1401,34 +1402,36 @@ msgid ""
 "then no longer uses the keys of the entry ``*``, only those of its own "
 "entry and of :envvar:`defaults`. Copy the keys of the entry ``*`` that "
 "should still apply to the school."
-msgstr ""
-"Um eine Schule zuzuordnen, die der Eintrag ``*`` abdeckt, fügen Sie einen"
-" Eintrag mit dem Kürzel der Schule und demselben :envvar:`account` hinzu."
-" Die Schule verwendet dann nicht mehr die Schlüssel des Eintrags ``*``, "
-"sondern nur die ihres eigenen Eintrags und aus :envvar:`defaults`. "
-"Kopieren Sie die Schlüssel des Eintrags ``*``, die weiterhin für die "
-"Schule gelten sollen."
+msgstr "Um eine Schule zuzuordnen, die der Eintrag ``*`` abdeckt, fügen Sie einen Eintrag mit dem Kürzel der Schule und demselben :envvar:`account` hinzu. Die Schule verwendet dann nicht mehr die Schlüssel des Eintrags ``*``, sondern nur die ihres eigenen Eintrags und die aus :envvar:`defaults`. Kopieren Sie die Schlüssel des Eintrags ``*``, die weiterhin für die Schule gelten sollen."
 
-#: ../../configuration.rst:847
+#: ../../configuration.rst:844
+msgid ""
+"In :numref:`configuration-locations-catch-all-listing`, the entry ``*`` "
+"sends all schools to the account ``south`` and sets a course name "
+"pattern. The entry ``gs456`` assigns the school ``gs456`` to the existing"
+" location with the ID ``4712``. Because ``gs456`` no longer uses the "
+"entry ``*``, the entry repeats :envvar:`account` and "
+":envvar:`course_name_pattern`."
+msgstr "In :numref:`configuration-locations-catch-all-listing` weist der Eintrag ``*`` alle Schulen dem Konto ``south`` zu und setzt ein Muster für Kursnamen. Der Eintrag ``gs456`` ordnet die Schule ``gs456`` dem existierenden Standort mit der ID ``4712`` zu. Da ``gs456`` den Eintrag ``*`` nicht mehr verwendet, wiederholt der Eintrag :envvar:`account` und :envvar:`course_name_pattern`."
+
+#: ../../configuration.rst:852
+msgid "Assign a school that the entry ``*`` covers to an existing location"
+msgstr "Eine Schule, die der Eintrag ``*`` abdeckt, einem existierenden Standort zuordnen"
+
+#: ../../configuration.rst:871
 msgid "Several schools in one location"
 msgstr "Mehrere Schulen an einem Standort"
 
-#: ../../configuration.rst:849
+#: ../../configuration.rst:873
 msgid ""
 "To upload several schools to one location, set the same "
 ":envvar:`location_id` for each of them. The connector writes the location"
 " once, and the users, classes, and courses of all these schools refer to "
 "it. A user who belongs to several of these schools gets the location only"
 " once. The connector logs which schools share the location."
-msgstr ""
-"Um mehrere Schulen an einen Standort hochzuladen, setzen Sie für jede von"
-" ihnen dieselbe :envvar:`location_id`. Der Connector schreibt den "
-"Standort einmal, und die Benutzer, Klassen und Kurse all dieser Schulen "
-"verweisen darauf. Ein Benutzer, der zu mehreren dieser Schulen gehört, "
-"erhält den Standort nur einmal. Der Connector protokolliert, welche "
-"Schulen sich den Standort teilen."
+msgstr "Um mehrere Schulen einem gemeinsamen Standort zuzuordnen, setzen Sie für jede von ihnen dieselbe :envvar:`location_id`. Der Connector schreibt den Standort einmal, und die Benutzer, Klassen und Kurse all dieser Schulen verweisen darauf. Ein Benutzer, der zu mehreren dieser Schulen gehört, erhält den Standort nur einmal. Der Connector protokolliert, welche Schulen sich den Standort teilen."
 
-#: ../../configuration.rst:856
+#: ../../configuration.rst:880
 msgid ""
 "The name of the shared location is the :envvar:`location_name` that one "
 "or more of the schools set. If the schools set different names, the "
@@ -1442,7 +1445,7 @@ msgstr ""
 " einen Namen, verwendet der Connector den voreingestellten Namen der "
 "Schule, deren Kürzel alphabetisch zuerst kommt."
 
-#: ../../configuration.rst:864
+#: ../../configuration.rst:888
 msgid ""
 "Classes and courses keep the school abbreviation in their ID, so classes "
 "with the same name from different schools stay separate."
@@ -1450,7 +1453,7 @@ msgstr ""
 "Klassen und Kurse behalten das Schulkürzel in ihrer ID, sodass "
 "gleichnamige Klassen verschiedener Schulen getrennt bleiben."
 
-#: ../../configuration.rst:867
+#: ../../configuration.rst:891
 msgid ""
 "The comparison only applies within one account. Schools of different "
 "accounts can use the same :envvar:`location_id` without sharing a "
@@ -1460,7 +1463,7 @@ msgstr ""
 "Konten können dieselbe :envvar:`location_id` verwenden, ohne sich einen "
 "Standort zu teilen."
 
-#: ../../configuration.rst:871
+#: ../../configuration.rst:895
 msgid ""
 "If a :envvar:`location_id` equals the abbreviation of another school of "
 "the same account that has no :envvar:`location_id`, the connector stops "
@@ -1474,11 +1477,11 @@ msgstr ""
 "Standort teilen würden. Um den Standort absichtlich zu teilen, setzen Sie"
 " die :envvar:`location_id` auch für die andere Schule."
 
-#: ../../configuration.rst:881
+#: ../../configuration.rst:905
 msgid "Change the location of a school"
 msgstr "Den Standort einer Schule ändern"
 
-#: ../../configuration.rst:885
+#: ../../configuration.rst:909
 msgid ""
 "The connector doesn't migrate anything if you change the "
 ":envvar:`location_id` of a school after the connector uploaded the "
@@ -1487,7 +1490,7 @@ msgstr ""
 "Der Connector migriert nichts, wenn Sie die :envvar:`location_id` einer "
 "Schule ändern, nachdem der Connector die Schule hochgeladen hat."
 
-#: ../../configuration.rst:889
+#: ../../configuration.rst:913
 msgid ""
 "The next upload refers to the new ID only. *Apple School Manager* treats "
 "it as a different location and assigns the users, classes, and courses of"
@@ -1499,11 +1502,11 @@ msgstr ""
 "Klassen und Kurse der Schule zu. Der bisherige Standort bleibt in *Apple "
 "School Manager*, bis Sie ihn dort entfernen."
 
-#: ../../configuration.rst:898
+#: ../../configuration.rst:922
 msgid "Select users with an LDAP filter"
 msgstr "Benutzer mit einem LDAP-Filter auswählen"
 
-#: ../../configuration.rst:900
+#: ../../configuration.rst:924
 msgid ""
 "If the school list from :ref:`configuration-school-list` isn't specific "
 "enough, you can select the users with an LDAP filter. The connector "
@@ -1513,7 +1516,7 @@ msgstr ""
 " genug ist, können Sie die Benutzer mit einem LDAP-Filter auswählen. Der "
 "Connector wendet den Filter zusätzlich zur Schulliste an."
 
-#: ../../configuration.rst:906
+#: ../../configuration.rst:930
 msgid ""
 "Per school. LDAP filter for the students or the teachers of the school. A"
 " filter in :envvar:`defaults` applies to every school that doesn't set "
@@ -1523,15 +1526,15 @@ msgstr ""
 "Filter in :envvar:`defaults` gilt für jede Schule, die keinen eigenen "
 "setzt."
 
-#: ../../configuration.rst:911
+#: ../../configuration.rst:935
 msgid "empty, which selects every user."
 msgstr "leer, wodurch jeder Benutzer ausgewählt wird."
 
-#: ../../configuration.rst:915
+#: ../../configuration.rst:939
 msgid "See :envvar:`student.ldap_filter`"
 msgstr "Siehe :envvar:`student.ldap_filter`"
 
-#: ../../configuration.rst:917
+#: ../../configuration.rst:941
 msgid ""
 "The example in :numref:`configuration-ldap-filter-primary-address-"
 "example-listing` synchronizes only students in ``gym123`` who have a "
@@ -1541,11 +1544,11 @@ msgstr ""
 "example-listing` synchronisiert nur Schüler in ``gym123``, die eine "
 "primäre E-Mailadresse haben."
 
-#: ../../configuration.rst:921
+#: ../../configuration.rst:945
 msgid "Synchronize only the students of ``gym123`` with a primary email address"
 msgstr "Nur die Schüler von ``gym123`` mit primärer E-Mailadresse synchronisieren"
 
-#: ../../configuration.rst:930
+#: ../../configuration.rst:954
 msgid ""
 "The connector first selects the students or teachers of a school. It then"
 " applies the LDAP filter to that selection. The filter only needs to "
@@ -1555,7 +1558,7 @@ msgstr ""
 " wendet er den LDAP-Filter auf diese Auswahl an. Der Filter muss nur die "
 "Benutzerattribute beschreiben, die Sie auswählen möchten."
 
-#: ../../configuration.rst:934
+#: ../../configuration.rst:958
 msgid ""
 "To verify which users a filter selects before you set it, combine it with"
 " the role of the users and run it with :command:`univention-ldapsearch`, "
@@ -1566,11 +1569,11 @@ msgstr ""
 ":command:`univention-ldapsearch` aus, wie in :numref:`configuration-ldap-"
 "filter-verify-filter-listing` gezeigt."
 
-#: ../../configuration.rst:939
+#: ../../configuration.rst:963
 msgid "List the students of ``gym123`` who match the filter"
 msgstr "Die Schüler von ``gym123`` auflisten, auf die der Filter zutrifft"
 
-#: ../../configuration.rst:948
+#: ../../configuration.rst:972
 msgid ""
 "An invalid LDAP filter stops the upload to the account of that school. "
 "The connector uploads nothing to that account in that case, so its data "

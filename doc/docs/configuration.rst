@@ -841,6 +841,30 @@ The school then no longer uses the keys of the entry ``*``,
 only those of its own entry and of :envvar:`defaults`.
 Copy the keys of the entry ``*`` that should still apply to the school.
 
+In :numref:`configuration-locations-catch-all-listing`,
+the entry ``*`` sends all schools to the account ``south``
+and sets a course name pattern.
+The entry ``gs456`` assigns the school ``gs456``
+to the existing location with the ID ``4712``.
+Because ``gs456`` no longer uses the entry ``*``,
+the entry repeats :envvar:`account` and :envvar:`course_name_pattern`.
+
+.. code-block:: json
+   :caption: Assign a school that the entry ``*`` covers to an existing location
+   :name: configuration-locations-catch-all-listing
+
+   "schools": {
+       "*": {
+           "account": "south",
+           "course_name_pattern": "{name}"
+       },
+       "gs456": {
+           "account": "south",
+           "course_name_pattern": "{name}",
+           "location_id": "4712"
+       }
+   }
+
 .. _configuration-locations-shared:
 
 Several schools in one location

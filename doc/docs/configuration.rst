@@ -87,7 +87,11 @@ with the following sections.
            "student": {"password_policy": 6}
        },
        "schools": {
-           "gym123": {"account": "north"},
+           "gym123": {
+               "account": "north",
+               "location_id": "4711",
+               "location_name": "Gymnasium Musterstadt"
+           },
            "gs456": {
                "account": "south",
                "course_name_pattern": "{name}",
@@ -142,6 +146,10 @@ that names the file and the entry:
 
 * A :envvar:`location_id` or :envvar:`location_name`
   in :envvar:`defaults` or in the entry ``*``.
+
+* A :envvar:`location_id` that is empty or contains spaces,
+  or a :envvar:`location_name` that is empty or contains only spaces.
+  To use the default value, omit the key.
 
 * Several schools of one account with the same :envvar:`location_id`
   and different values for :envvar:`location_name`.
@@ -784,7 +792,7 @@ and the ``location_id`` columns of the students, staff, classes, and courses.
 
    Per school.
    The ID of the location of the school in *Apple School Manager*.
-   The ID must not contain spaces.
+   The ID must not be empty or contain spaces.
 
    :Default: the school abbreviation
 
@@ -792,6 +800,7 @@ and the ``location_id`` columns of the students, staff, classes, and courses.
 
    Per school.
    The name of the location of the school in *Apple School Manager*.
+   The name must not be empty.
 
    :Default: the display name of the school,
       or the school abbreviation if the school has no display name

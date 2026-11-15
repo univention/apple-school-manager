@@ -130,7 +130,8 @@ and then by user or class name.
      - Details
 
    * - :file:`locations.csv`
-     - One row per school.
+     - One row per location.
+       By default, each school has its own location.
      - :ref:`synchronization-locations`
 
    * - :file:`courses.csv`
@@ -171,11 +172,16 @@ The :file:`locations.csv` file has the columns listed in :numref:`synchronizatio
      - Source in |UAS|
 
    * - ``location_id``
-     - Name of the school, for example ``gym123``.
+     - The :envvar:`location_id` of the school.
+       By default, the name of the school, for example ``gym123``.
 
    * - ``location_name``
-     - Display name of the school.
-       The connector uses the school name if the school has no display name.
+     - The :envvar:`location_name` of the school.
+       By default, the display name of the school,
+       or the school name if the school has no display name.
+
+Schools of one account with the same :envvar:`location_id` share one row,
+see :ref:`configuration-locations-shared`.
 
 .. _synchronization-courses:
 
@@ -215,7 +221,7 @@ The :file:`courses.csv` file has the columns listed in :numref:`synchronization-
        See :ref:`configuration-course-names`.
 
    * - ``location_id``
-     - Name of the school.
+     - The :envvar:`location_id` of the school.
 
 .. _synchronization-classes:
 
@@ -251,7 +257,7 @@ The :file:`classes.csv` file has the columns listed in :numref:`synchronization-
        The connector only writes as many columns as it needs.
 
    * - ``location_id``
-     - Name of the school.
+     - The :envvar:`location_id` of the school.
 
 .. note::
 
@@ -302,10 +308,12 @@ The connector doesn't export staff members who don't have a teacher role.
      - Username of the teacher.
 
    * - ``location_id``
-     - Primary school of the teacher.
+     - Location of the primary school of the teacher.
 
    * - ``location_id_2`` and following
-     - The other schools of the teacher, in alphabetical order.
+     - Locations of the other schools of the teacher,
+       in alphabetical order of the schools.
+       Each location appears only once.
 
 .. _synchronization-students:
 
@@ -356,10 +364,12 @@ The connector doesn't export exam users.
        See :ref:`configuration-password-policy`.
 
    * - ``location_id``
-     - Primary school of the student.
+     - Location of the primary school of the student.
 
    * - ``location_id_2`` and following
-     - The other schools of the student, in alphabetical order.
+     - Locations of the other schools of the student,
+       in alphabetical order of the schools.
+       Each location appears only once.
 
 .. _synchronization-rosters:
 

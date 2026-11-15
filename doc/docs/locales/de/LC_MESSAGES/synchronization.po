@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Apple School Manager Connector 5.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-06 11:16+0000\n"
+"POT-Creation-Date: 2026-11-15 00:14+0000\n"
 "PO-Revision-Date: 2026-10-30 12:37+0100\n"
 "Last-Translator: Univention GmbH <packages@univention.de>\n"
 "Language: de\n"
@@ -98,8 +98,8 @@ msgid ""
 "For information about the connector's behavior when problems occur, see "
 ":ref:`configuration-file-behavior-on-problems`."
 msgstr ""
-"Weitere Informationen zum Verhalten des Connectors bei Problemen finden Sie unter "
-":ref:`configuration-file-behavior-on-problems`."
+"Weitere Informationen zum Verhalten des Connectors bei Problemen finden "
+"Sie unter :ref:`configuration-file-behavior-on-problems`."
 
 #: ../../synchronization.rst:59
 msgid ""
@@ -251,82 +251,82 @@ msgid ":file:`locations.csv`"
 msgstr ":file:`locations.csv`"
 
 #: ../../synchronization.rst:133
-msgid "One row per school."
-msgstr "Eine Zeile pro Schule."
+msgid "One row per location. By default, each school has its own location."
+msgstr "Eine Zeile pro Standort. In der Voreinstellung hat jede Schule einen eigenen Standort."
 
-#: ../../synchronization.rst:134
+#: ../../synchronization.rst:135
 msgid ":ref:`synchronization-locations`"
 msgstr ":ref:`synchronization-locations`"
 
-#: ../../synchronization.rst:136
+#: ../../synchronization.rst:137
 msgid ":file:`courses.csv`"
 msgstr ":file:`courses.csv`"
 
-#: ../../synchronization.rst:137
+#: ../../synchronization.rst:138
 msgid "One row per school class and work group."
 msgstr "Eine Zeile pro Schulklasse und Arbeitsgruppe."
 
-#: ../../synchronization.rst:138
+#: ../../synchronization.rst:139
 msgid ":ref:`synchronization-courses`"
 msgstr ":ref:`synchronization-courses`"
 
-#: ../../synchronization.rst:140
+#: ../../synchronization.rst:141
 msgid ":file:`classes.csv`"
 msgstr ":file:`classes.csv`"
 
-#: ../../synchronization.rst:141
+#: ../../synchronization.rst:142
 msgid "One row per school class and work group, with the teachers of that class."
 msgstr ""
 "Eine Zeile pro Schulklasse und Arbeitsgruppe, mit den Lehrern dieser "
 "Klasse."
 
-#: ../../synchronization.rst:143
+#: ../../synchronization.rst:144
 msgid ":ref:`synchronization-classes`"
 msgstr ":ref:`synchronization-classes`"
 
-#: ../../synchronization.rst:145
+#: ../../synchronization.rst:146
 msgid ":file:`staff.csv`"
 msgstr ":file:`staff.csv`"
 
-#: ../../synchronization.rst:146
+#: ../../synchronization.rst:147
 msgid "One row per teacher."
 msgstr "Eine Zeile pro Lehrer."
 
-#: ../../synchronization.rst:147
+#: ../../synchronization.rst:148
 msgid ":ref:`synchronization-staff`"
 msgstr ":ref:`synchronization-staff`"
 
-#: ../../synchronization.rst:149
+#: ../../synchronization.rst:150
 msgid ":file:`students.csv`"
 msgstr ":file:`students.csv`"
 
-#: ../../synchronization.rst:150
+#: ../../synchronization.rst:151
 msgid "One row per student."
 msgstr "Eine Zeile pro Schüler."
 
-#: ../../synchronization.rst:151
+#: ../../synchronization.rst:152
 msgid ":ref:`synchronization-students`"
 msgstr ":ref:`synchronization-students`"
 
-#: ../../synchronization.rst:153
+#: ../../synchronization.rst:154
 msgid ":file:`rosters.csv`"
 msgstr ":file:`rosters.csv`"
 
-#: ../../synchronization.rst:154
+#: ../../synchronization.rst:155
 msgid "One row per membership of a student in a school class or work group."
 msgstr ""
 "Eine Zeile pro Mitgliedschaft eines Schülers in einer Schulklasse oder "
 "Arbeitsgruppe."
 
-#: ../../synchronization.rst:155
+#: ../../synchronization.rst:156
 msgid ":ref:`synchronization-rosters`"
 msgstr ":ref:`synchronization-rosters`"
 
-#: ../../synchronization.rst:160
+#: ../../synchronization.rst:161
 msgid "Locations"
 msgstr "Standorte"
 
-#: ../../synchronization.rst:162
+#: ../../synchronization.rst:163
 msgid ""
 "The :file:`locations.csv` file has the columns listed in :numref"
 ":`synchronization-locations-table`."
@@ -334,49 +334,55 @@ msgstr ""
 "Die Datei :file:`locations.csv` enthält die in :numref:`synchronization-"
 "locations-table` aufgeführten Spalten."
 
-#: ../../synchronization.rst:166
+#: ../../synchronization.rst:167
 msgid "Columns of :file:`locations.csv`"
 msgstr "Spalten von :file:`locations.csv`"
 
-#: ../../synchronization.rst:170 ../../synchronization.rst:203
-#: ../../synchronization.rst:233 ../../synchronization.rst:278
-#: ../../synchronization.rst:324 ../../synchronization.rst:380
+#: ../../synchronization.rst:171 ../../synchronization.rst:209
+#: ../../synchronization.rst:239 ../../synchronization.rst:284
+#: ../../synchronization.rst:332 ../../synchronization.rst:390
 msgid "Column"
 msgstr "Spalte"
 
-#: ../../synchronization.rst:171 ../../synchronization.rst:204
-#: ../../synchronization.rst:234 ../../synchronization.rst:279
-#: ../../synchronization.rst:325 ../../synchronization.rst:381
+#: ../../synchronization.rst:172 ../../synchronization.rst:210
+#: ../../synchronization.rst:240 ../../synchronization.rst:285
+#: ../../synchronization.rst:333 ../../synchronization.rst:391
 msgid "Source in |UAS|"
 msgstr "Quelle in |UAS|"
 
-#: ../../synchronization.rst:173 ../../synchronization.rst:217
-#: ../../synchronization.rst:253 ../../synchronization.rst:304
-#: ../../synchronization.rst:358
+#: ../../synchronization.rst:174 ../../synchronization.rst:223
+#: ../../synchronization.rst:259 ../../synchronization.rst:310
+#: ../../synchronization.rst:366
 msgid "``location_id``"
 msgstr "``location_id``"
 
-#: ../../synchronization.rst:174
-msgid "Name of the school, for example ``gym123``."
-msgstr "Name der Schule, zum Beispiel ``gym123``."
+#: ../../synchronization.rst:175
+msgid ""
+"The :envvar:`location_id` of the school. By default, the name of the "
+"school, for example ``gym123``."
+msgstr "Die :envvar:`location_id` der Schule. In der Voreinstellung der Name der Schule, zum Beispiel ``gym123``."
 
-#: ../../synchronization.rst:176
+#: ../../synchronization.rst:178
 msgid "``location_name``"
 msgstr "``location_name``"
 
-#: ../../synchronization.rst:177
+#: ../../synchronization.rst:179
 msgid ""
-"Display name of the school. The connector uses the school name if the "
-"school has no display name."
-msgstr ""
-"Anzeigename der Schule. Hat die Schule keinen Anzeigenamen, verwendet der"
-" Connector stattdessen den Namen."
+"The :envvar:`location_name` of the school. By default, the display name "
+"of the school, or the school name if the school has no display name."
+msgstr "Der :envvar:`location_name` der Schule. In der Voreinstellung der Anzeigename der Schule, oder der Name der Schule, wenn sie keinen Anzeigenamen hat."
 
 #: ../../synchronization.rst:183
+msgid ""
+"Schools of one account with the same :envvar:`location_id` share one row,"
+" see :ref:`configuration-locations-shared`."
+msgstr "Schulen eines Kontos mit derselben :envvar:`location_id` teilen sich eine Zeile, siehe :ref:`configuration-locations-shared`."
+
+#: ../../synchronization.rst:189
 msgid "Courses"
 msgstr "Kurse"
 
-#: ../../synchronization.rst:185
+#: ../../synchronization.rst:191
 msgid ""
 "*Apple School Manager* requires a course for every class. |UAS| only has "
 "the school class or work group. Therefore, the connector exports each of "
@@ -386,15 +392,15 @@ msgstr ""
 "nur die Schulklasse oder Arbeitsgruppe. Daher exportiert der Connector "
 "jede davon zweimal:"
 
-#: ../../synchronization.rst:189
+#: ../../synchronization.rst:195
 msgid "As a course in :file:`courses.csv`."
 msgstr "Als Kurs in :file:`courses.csv`."
 
-#: ../../synchronization.rst:190
+#: ../../synchronization.rst:196
 msgid "As a class of that course in :file:`classes.csv`."
 msgstr "Als Klasse dieses Kurses in :file:`classes.csv`."
 
-#: ../../synchronization.rst:192
+#: ../../synchronization.rst:198
 msgid ""
 "Both rows use the name of the group as their ID, so each course has "
 "exactly one class."
@@ -402,7 +408,7 @@ msgstr ""
 "Beide Zeilen verwenden den Namen der Gruppe als ID, sodass jeder Kurs "
 "genau eine Klasse hat."
 
-#: ../../synchronization.rst:195
+#: ../../synchronization.rst:201
 msgid ""
 "The :file:`courses.csv` file has the columns listed in :numref"
 ":`synchronization-courses-table`."
@@ -410,15 +416,15 @@ msgstr ""
 "Die Datei :file:`courses.csv` enthält die in :numref:`synchronization-"
 "courses-table` aufgeführten Spalten."
 
-#: ../../synchronization.rst:199
+#: ../../synchronization.rst:205
 msgid "Columns of :file:`courses.csv`"
 msgstr "Spalten von :file:`courses.csv`"
 
-#: ../../synchronization.rst:206 ../../synchronization.rst:243
+#: ../../synchronization.rst:212 ../../synchronization.rst:249
 msgid "``course_id``"
 msgstr "``course_id``"
 
-#: ../../synchronization.rst:207
+#: ../../synchronization.rst:213
 msgid ""
 "Name of the school class or work group, including the school prefix, for "
 "example ``gym123-1a``."
@@ -426,33 +432,33 @@ msgstr ""
 "Name der Schulklasse oder Arbeitsgruppe einschließlich des Schulpräfixes,"
 " zum Beispiel ``gym123-1a``."
 
-#: ../../synchronization.rst:210
+#: ../../synchronization.rst:216
 msgid "``course_number``"
 msgstr "``course_number``"
 
-#: ../../synchronization.rst:211
+#: ../../synchronization.rst:217
 msgid "Uses the same value as ``course_id``."
 msgstr "Derselbe Wert wie ``course_id``."
 
-#: ../../synchronization.rst:213
+#: ../../synchronization.rst:219
 msgid "``course_name``"
 msgstr "``course_name``"
 
-#: ../../synchronization.rst:214
+#: ../../synchronization.rst:220
 msgid "Built from ``course_name_pattern``. See :ref:`configuration-course-names`."
 msgstr ""
 "Gebildet aus ``course_name_pattern``. Siehe :ref:`configuration-course-"
 "names`."
 
-#: ../../synchronization.rst:218 ../../synchronization.rst:254
-msgid "Name of the school."
-msgstr "Name der Schule."
+#: ../../synchronization.rst:224 ../../synchronization.rst:260
+msgid "The :envvar:`location_id` of the school."
+msgstr "Die :envvar:`location_id` der Schule."
 
-#: ../../synchronization.rst:223
+#: ../../synchronization.rst:229
 msgid "Classes"
 msgstr "Klassen"
 
-#: ../../synchronization.rst:225
+#: ../../synchronization.rst:231
 msgid ""
 "The :file:`classes.csv` file has the columns listed in :numref"
 ":`synchronization-classes-table`."
@@ -460,40 +466,40 @@ msgstr ""
 "Die Datei :file:`classes.csv` enthält die in :numref:`synchronization-"
 "classes-table` aufgeführten Spalten."
 
-#: ../../synchronization.rst:229
+#: ../../synchronization.rst:235
 msgid "Columns of :file:`classes.csv`"
 msgstr "Spalten von :file:`classes.csv`"
 
-#: ../../synchronization.rst:236 ../../synchronization.rst:387
+#: ../../synchronization.rst:242 ../../synchronization.rst:397
 msgid "``class_id``"
 msgstr "``class_id``"
 
-#: ../../synchronization.rst:237 ../../synchronization.rst:244
-#: ../../synchronization.rst:388
+#: ../../synchronization.rst:243 ../../synchronization.rst:250
+#: ../../synchronization.rst:398
 msgid "Name of the school class or work group."
 msgstr "Name der Schulklasse oder Arbeitsgruppe."
 
-#: ../../synchronization.rst:239
+#: ../../synchronization.rst:245
 msgid "``class_number``"
 msgstr "``class_number``"
 
-#: ../../synchronization.rst:240
+#: ../../synchronization.rst:246
 msgid "The field is empty by default. See :envvar:`class_number_empty`."
 msgstr "Das Feld ist standardmäßig leer. Siehe :envvar:`class_number_empty`."
 
-#: ../../synchronization.rst:246
+#: ../../synchronization.rst:252
 msgid "``instructor_id``, ``instructor_id_2``, ``instructor_id_3``"
 msgstr "``instructor_id``, ``instructor_id_2``, ``instructor_id_3``"
 
-#: ../../synchronization.rst:247
+#: ../../synchronization.rst:253
 msgid "The ``person_id`` of the first three teachers of the class."
 msgstr "Die ``person_id`` der ersten drei Lehrer der Klasse."
 
-#: ../../synchronization.rst:249
+#: ../../synchronization.rst:255
 msgid "``instructor_id_4`` to ``instructor_id_15``"
 msgstr "``instructor_id_4`` bis ``instructor_id_15``"
 
-#: ../../synchronization.rst:250
+#: ../../synchronization.rst:256
 msgid ""
 "The ``person_id`` of the remaining teachers. The connector only writes as"
 " many columns as it needs."
@@ -501,7 +507,7 @@ msgstr ""
 "Die ``person_id`` der übrigen Lehrer. Der Connector schreibt nur so viele"
 " Spalten, wie er benötigt."
 
-#: ../../synchronization.rst:258
+#: ../../synchronization.rst:264
 msgid ""
 "*Apple School Manager* supports at most 15 teachers per class. If a class"
 " has more, the connector synchronizes the first 15 and writes a warning "
@@ -511,11 +517,11 @@ msgstr ""
 "eine Klasse mehr, synchronisiert der Connector die ersten 15 und schreibt"
 " eine Warnung in die Logdatei."
 
-#: ../../synchronization.rst:266
+#: ../../synchronization.rst:272
 msgid "Staff"
 msgstr "Mitarbeiter"
 
-#: ../../synchronization.rst:268
+#: ../../synchronization.rst:274
 msgid ""
 "The :file:`staff.csv` file has the columns listed in :numref"
 ":`synchronization-staff-table`. The file holds teachers and teachers with"
@@ -527,15 +533,15 @@ msgstr ""
 "Lehrkräfte mit einer zusätzlichen Mitarbeiterrolle. Der Connector "
 "exportiert keine Mitarbeitenden ohne Lehrerrolle."
 
-#: ../../synchronization.rst:274
+#: ../../synchronization.rst:280
 msgid "Columns of :file:`staff.csv`"
 msgstr "Spalten von :file:`staff.csv`"
 
-#: ../../synchronization.rst:281 ../../synchronization.rst:327
+#: ../../synchronization.rst:287 ../../synchronization.rst:335
 msgid "``person_id``"
 msgstr "``person_id``"
 
-#: ../../synchronization.rst:282
+#: ../../synchronization.rst:288
 msgid ""
 "The attribute from :envvar:`staff.person_id_attribute`, ``entryUUID`` by "
 "default."
@@ -543,71 +549,73 @@ msgstr ""
 "Das Attribut aus :envvar:`staff.person_id_attribute`, standardmäßig "
 "``entryUUID``."
 
-#: ../../synchronization.rst:285 ../../synchronization.rst:331
+#: ../../synchronization.rst:291 ../../synchronization.rst:339
 msgid "``person_number``"
 msgstr "``person_number``"
 
-#: ../../synchronization.rst:286 ../../synchronization.rst:332
+#: ../../synchronization.rst:292 ../../synchronization.rst:340
 msgid "Uses the same value as ``person_id``."
 msgstr "Derselbe Wert wie ``person_id``."
 
-#: ../../synchronization.rst:288 ../../synchronization.rst:334
+#: ../../synchronization.rst:294 ../../synchronization.rst:342
 msgid "``first_name``"
 msgstr "``first_name``"
 
-#: ../../synchronization.rst:289
+#: ../../synchronization.rst:295
 msgid "First name of the teacher."
 msgstr "Vorname des Lehrers."
 
-#: ../../synchronization.rst:291 ../../synchronization.rst:337
+#: ../../synchronization.rst:297 ../../synchronization.rst:345
 msgid "``middle_name``"
 msgstr "``middle_name``"
 
-#: ../../synchronization.rst:292 ../../synchronization.rst:338
+#: ../../synchronization.rst:298 ../../synchronization.rst:346
 msgid "First value of ``middleName``, ``initials``, or ``oxMiddleName``."
 msgstr "Erster Wert von ``middleName``, ``initials`` oder ``oxMiddleName``."
 
-#: ../../synchronization.rst:294 ../../synchronization.rst:340
+#: ../../synchronization.rst:300 ../../synchronization.rst:348
 msgid "``last_name``"
 msgstr "``last_name``"
 
-#: ../../synchronization.rst:295
+#: ../../synchronization.rst:301
 msgid "Last name of the teacher."
 msgstr "Nachname des Lehrers."
 
-#: ../../synchronization.rst:297 ../../synchronization.rst:347
+#: ../../synchronization.rst:303 ../../synchronization.rst:355
 msgid "``email_address``"
 msgstr "``email_address``"
 
-#: ../../synchronization.rst:298 ../../synchronization.rst:348
+#: ../../synchronization.rst:304 ../../synchronization.rst:356
 msgid "Primary email address, modified by :envvar:`email_prepend_domain`."
 msgstr "Primäre E-Mailadresse, angepasst durch :envvar:`email_prepend_domain`."
 
-#: ../../synchronization.rst:301 ../../synchronization.rst:351
+#: ../../synchronization.rst:307 ../../synchronization.rst:359
 msgid "``sis_username``"
 msgstr "``sis_username``"
 
-#: ../../synchronization.rst:302
+#: ../../synchronization.rst:308
 msgid "Username of the teacher."
 msgstr "Benutzername des Lehrers."
 
-#: ../../synchronization.rst:305
-msgid "Primary school of the teacher."
-msgstr "Primäre Schule des Lehrers."
+#: ../../synchronization.rst:311
+msgid "Location of the primary school of the teacher."
+msgstr "Standort der primären Schule des Lehrers."
 
-#: ../../synchronization.rst:307 ../../synchronization.rst:361
+#: ../../synchronization.rst:313 ../../synchronization.rst:369
 msgid "``location_id_2`` and following"
 msgstr "``location_id_2`` und folgende"
 
-#: ../../synchronization.rst:308
-msgid "The other schools of the teacher, in alphabetical order."
-msgstr "Die weiteren Schulen des Lehrers, in alphabetischer Reihenfolge."
+#: ../../synchronization.rst:314
+msgid ""
+"Locations of the other schools of the teacher, in alphabetical order of "
+"the schools. Each location appears only once."
+msgstr "Standorte der weiteren Schulen des Lehrers, in alphabetischer Reihenfolge der Schulen. Jeder Standort erscheint nur einmal."
 
-#: ../../synchronization.rst:313
+#: ../../synchronization.rst:321
 msgid "Students"
 msgstr "Schüler"
 
-#: ../../synchronization.rst:315
+#: ../../synchronization.rst:323
 msgid ""
 "The :file:`students.csv` file has the columns listed in :numref"
 ":`synchronization-students-table`. The connector doesn't export exam "
@@ -617,11 +625,11 @@ msgstr ""
 "students-table` aufgeführten Spalten. Der Connector exportiert keine "
 "Prüfungsbenutzer."
 
-#: ../../synchronization.rst:320
+#: ../../synchronization.rst:328
 msgid "Columns of :file:`students.csv`"
 msgstr "Spalten von :file:`students.csv`"
 
-#: ../../synchronization.rst:328
+#: ../../synchronization.rst:336
 msgid ""
 "The attribute from :envvar:`student.person_id_attribute`, ``entryUUID`` "
 "by default."
@@ -629,19 +637,19 @@ msgstr ""
 "Das Attribut aus :envvar:`student.person_id_attribute`, standardmäßig "
 "``entryUUID``."
 
-#: ../../synchronization.rst:335
+#: ../../synchronization.rst:343
 msgid "First name of the student."
 msgstr "Vorname des Schülers."
 
-#: ../../synchronization.rst:341
+#: ../../synchronization.rst:349
 msgid "Last name of the student."
 msgstr "Nachname des Schülers."
 
-#: ../../synchronization.rst:343
+#: ../../synchronization.rst:351
 msgid "``grade_level``"
 msgstr "``grade_level``"
 
-#: ../../synchronization.rst:344
+#: ../../synchronization.rst:352
 msgid ""
 "The attribute from :envvar:`student.grade_level_attribute`. The field is "
 "empty if the attribute is unset."
@@ -649,15 +657,15 @@ msgstr ""
 "Das Attribut aus :envvar:`student.grade_level_attribute`. Das Feld ist "
 "leer, wenn das Attribut nicht gesetzt ist."
 
-#: ../../synchronization.rst:352
+#: ../../synchronization.rst:360
 msgid "Username of the student."
 msgstr "Benutzername des Schülers."
 
-#: ../../synchronization.rst:354
+#: ../../synchronization.rst:362
 msgid "``password_policy``"
 msgstr "``password_policy``"
 
-#: ../../synchronization.rst:355
+#: ../../synchronization.rst:363
 msgid ""
 "The password policy from :envvar:`student.password_policy`. See :ref"
 ":`configuration-password-policy`."
@@ -665,19 +673,21 @@ msgstr ""
 "Die Passwortrichtlinie aus :envvar:`student.password_policy`. Siehe :ref"
 ":`configuration-password-policy`."
 
-#: ../../synchronization.rst:359
-msgid "Primary school of the student."
-msgstr "Primäre Schule des Schülers."
-
-#: ../../synchronization.rst:362
-msgid "The other schools of the student, in alphabetical order."
-msgstr "Die weiteren Schulen des Schülers, in alphabetischer Reihenfolge."
-
 #: ../../synchronization.rst:367
+msgid "Location of the primary school of the student."
+msgstr "Standort der primären Schule des Schülers."
+
+#: ../../synchronization.rst:370
+msgid ""
+"Locations of the other schools of the student, in alphabetical order of "
+"the schools. Each location appears only once."
+msgstr "Standorte der weiteren Schulen des Schülers, in alphabetischer Reihenfolge der Schulen. Jeder Standort erscheint nur einmal."
+
+#: ../../synchronization.rst:377
 msgid "Rosters"
 msgstr "Roster"
 
-#: ../../synchronization.rst:369
+#: ../../synchronization.rst:379
 msgid ""
 "The :file:`rosters.csv` file has the columns listed in :numref"
 ":`synchronization-rosters-table`. The file contains only student records."
@@ -689,33 +699,33 @@ msgstr ""
 "Schülerdatensätze. Die Spalten ``instructor_id`` in :file:`classes.csv` "
 "ordnen Lehrkräfte Klassen zu. Siehe :ref:`synchronization-classes`."
 
-#: ../../synchronization.rst:376
+#: ../../synchronization.rst:386
 msgid "Columns of :file:`rosters.csv`"
 msgstr "Spalten von :file:`rosters.csv`"
 
-#: ../../synchronization.rst:383
+#: ../../synchronization.rst:393
 msgid "``roster_id``"
 msgstr "``roster_id``"
 
-#: ../../synchronization.rst:384
+#: ../../synchronization.rst:394
 msgid "The class name and the ``person_id`` of the student, joined with a hyphen."
 msgstr ""
 "Der Klassenname und die ``person_id`` des Schülers, verbunden durch einen"
 " Bindestrich."
 
-#: ../../synchronization.rst:390
+#: ../../synchronization.rst:400
 msgid "``student_id``"
 msgstr "``student_id``"
 
-#: ../../synchronization.rst:391
+#: ../../synchronization.rst:401
 msgid "The ``person_id`` of the student."
 msgstr "Die ``person_id`` des Schülers."
 
-#: ../../synchronization.rst:396
+#: ../../synchronization.rst:406
 msgid "Inspect the uploaded data"
 msgstr "Hochgeladene Daten prüfen"
 
-#: ../../synchronization.rst:398
+#: ../../synchronization.rst:408
 msgid ""
 "To look at what the connector uploads, enable :envvar:`asm/store_zip` in "
 "the app settings and run the synchronization. The connector then keeps "
@@ -726,7 +736,7 @@ msgstr ""
 "Synchronisation aus. Der Connector behält das Archiv dann in "
 ":file:`/var/lib/asm/`."
 
-#: ../../synchronization.rst:403
+#: ../../synchronization.rst:413
 msgid ""
 "To list and unpack the archive from the most recent upload, run the "
 "commands in :numref:`synchronization-inspect-listing`."
@@ -734,14 +744,21 @@ msgstr ""
 "Um das Archiv des letzten Uploads aufzulisten und zu entpacken, führen "
 "Sie die Befehle in :numref:`synchronization-inspect-listing` aus."
 
-#: ../../synchronization.rst:406
+#: ../../synchronization.rst:416
 msgid "List the archives and unpack the newest one"
 msgstr "Archive auflisten und das neueste entpacken"
 
-#: ../../synchronization.rst:415
+#: ../../synchronization.rst:425
 msgid ""
 "The archives contain personal data. Delete them when you no longer need "
 "them, and deactivate :envvar:`asm/store_zip`."
 msgstr ""
 "Die Archive enthalten personenbezogene Daten. Löschen Sie sie, sobald Sie"
 " sie nicht mehr benötigen, und deaktivieren Sie :envvar:`asm/store_zip`."
+
+#~ msgid "One row per school."
+#~ msgstr "Eine Zeile pro Schule."
+
+#~ msgid "Name of the school."
+#~ msgstr "Name der Schule."
+

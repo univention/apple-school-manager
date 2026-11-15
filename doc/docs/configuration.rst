@@ -788,6 +788,17 @@ The connector then uses these values in all files that it uploads:
 the locations,
 and the ``location_id`` columns of the students, staff, classes, and courses.
 
+.. important::
+
+   You can only use locations that an SFTP upload created,
+   for example the upload of another application.
+   *Apple School Manager* stores two IDs for each location:
+   an internal ID and the ID from the SFTP upload.
+   The connector uses the ID from the SFTP upload.
+   A location that you created manually in *Apple School Manager*
+   only has the internal ID,
+   which the *Apple School Manager* user interface doesn't show.
+
 .. envvar:: location_id
 
    Per school.

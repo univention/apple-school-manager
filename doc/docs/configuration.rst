@@ -813,6 +813,11 @@ and the ``location_id`` columns of the students, staff, classes, and courses.
    The name of the location of the school in *Apple School Manager*.
    The name must not be empty.
 
+   The connector uploads the name with every synchronization,
+   so it replaces the name of an existing location in *Apple School Manager*.
+   To keep the existing name,
+   set :envvar:`location_name` to it.
+
    :Default: the display name of the school,
       or the school abbreviation if the school has no display name
 
@@ -865,6 +870,17 @@ the entry repeats :envvar:`account` and :envvar:`course_name_pattern`.
        }
    }
 
+.. tip::
+
+   Test the location mapping with a small test dataset first,
+   for example one school with a few users.
+   Check in *Apple School Manager*
+   that the users, classes, and courses appear in the expected locations
+   before you add the other schools.
+   If another source already uploads to the account,
+   then a small upload deactivates the users of that source that it doesn't contain.
+   For more information, see :ref:`configuration-locations-existing-users`.
+
 .. _configuration-locations-shared:
 
 Several schools in one location
@@ -884,6 +900,9 @@ the connector stops with an error.
 If none of the schools sets a name,
 the connector uses the default name
 of the school whose abbreviation comes first in alphabetical order.
+If you add a school to a shared location later,
+the default name can change.
+Set :envvar:`location_name` for one of the schools to keep the name stable.
 
 Classes and courses keep the school abbreviation in their ID,
 so classes with the same name from different schools stay separate.
@@ -915,6 +934,188 @@ The next upload refers to the new ID only.
 and assigns the users, classes, and courses of the school to it.
 The previous location remains in *Apple School Manager*
 until you remove it there.
+
+.. _configuration-locations-existing-users:
+
+Existing users and classes
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If another SFTP upload source already created users and classes
+in *Apple School Manager*,
+the connector can use the existing users,
+but not the existing classes.
+No setting maps a |UAS| class to an existing class,
+so the connector creates its own classes next to the existing ones,
+and the classes appear twice in *Apple School Manager*.
+For more information, see :ref:`configuration-locations-existing-classes`.
+
+.. important::
+
+   Prepare the configuration before the first upload of the connector.
+   User accounts that the first upload creates by mistake
+   remain in *Apple School Manager*.
+
+   The first upload deactivates every user of the other source
+   that the connector doesn't send.
+   Examples are staff without a teacher role
+   and the users of schools that the settings file doesn't list.
+   *Apple School Manager* deletes these users after 30 days.
+   For more information, see :ref:`synchronization-lifecycle`.
+
+Users
+"""""
+
+*Apple School Manager* identifies a user by the ``person_id`` column.
+For more information, see :ref:`configuration-person-id`.
+If the connector sends the ``person_id`` of an existing user,
+then *Apple School Manager* updates that user.
+Otherwise, *Apple School Manager* creates a new user,
+and the person appears twice.
+
+To use the existing users,
+proceed as follows:
+
+#. Store the ID that the other source uploaded as ``person_id``
+   in an LDAP attribute of each user,
+   for example ``ucsschoolRecordUID``
+   if your |UAS| import uses the same IDs as the other source.
+
+#. Set :envvar:`student.person_id_attribute`
+   and :envvar:`staff.person_id_attribute` to that attribute
+   in the entry of the account that receives the schools.
+   Set the keys in :envvar:`defaults` only
+   if the connector hasn't synchronized any account yet.
+   Otherwise, the ``person_id`` of the users in the synchronized accounts changes,
+   and *Apple School Manager* creates these users a second time.
+
+   The keys apply to every school of the account,
+   so every user that the connector uploads to the account
+   needs a value in the attribute.
+   If one user has no value,
+   then the connector uploads nothing to the account
+   and logs an error with the DN of the user.
+   The connector stops at the first user without a value,
+   so each run reports only one user.
+   To list all students and teachers of a school without a value,
+   run the command in :numref:`configuration-locations-missing-person-id-listing`
+   for each school of the account.
+
+   .. code-block:: console
+      :caption: List the students and teachers of ``gym123`` without ``ucsschoolRecordUID``
+      :name: configuration-locations-missing-person-id-listing
+
+      $ univention-ldapsearch -LLL \
+        '(&(|(ucsschoolRole=student:school:gym123)(ucsschoolRole=teacher:school:gym123))(!(ucsschoolRecordUID=*)))' uid
+
+#. Assign the schools to the existing locations.
+   For more information, see :ref:`configuration-locations`.
+
+*Apple School Manager* updates the existing users
+with the values that the connector sends.
+With anonymization enabled,
+which is the default,
+the first name becomes the username,
+the last name becomes ``-``,
+and the email address stays empty.
+The connector then sends the existing users without an email address.
+To keep the email addresses,
+turn anonymization off
+or configure a replacement value for ``email_address``.
+For more information, see :ref:`configuration-anonymization`.
+
+The example in :numref:`configuration-locations-existing-users-listing`
+identifies the users of the account ``north`` by ``ucsschoolRecordUID``
+and assigns ``gym123`` to the existing location with the ID ``4711``.
+
+.. code-block:: json
+   :caption: Use existing users and an existing location
+   :name: configuration-locations-existing-users-listing
+
+   "accounts": {
+       "north": {
+           "username": "sftp-user-north",
+           "password_file": "/etc/asm-north.secret",
+           "student": {"person_id_attribute": "ucsschoolRecordUID"},
+           "staff": {"person_id_attribute": "ucsschoolRecordUID"}
+       }
+   },
+   "schools": {
+       "gym123": {
+           "account": "north",
+           "location_id": "4711",
+           "location_name": "Gymnasium Musterstadt"
+       }
+   }
+
+.. _configuration-locations-existing-classes:
+
+Classes
+"""""""
+
+The connector uses the |UAS| class name as the ID of the class and the course,
+for example ``gym123-1a``.
+You can't assign a class to the ID of an existing class.
+The connector creates new classes,
+and the existing classes remain in *Apple School Manager*:
+
+* The students leave the existing classes with the first upload,
+  because every upload replaces the class memberships of the students.
+
+* The teachers remain in the existing classes,
+  because the connector doesn't send these classes.
+  Teachers therefore see the existing and the new classes.
+
+* You can't delete classes from an SFTP upload in *Apple School Manager*,
+  and you can't remove their teachers there.
+
+To remove the teachers from the existing classes,
+upload the existing classes once with empty teacher columns.
+The other source or the connector can do this upload.
+
+If the other source can still upload,
+remove the teachers from the classes in the other source.
+Then let the other source upload one last time
+before the first upload of the connector.
+
+Otherwise, proceed as follows:
+
+#. Enable :envvar:`asm/store_zip` and run the synchronization.
+   This run is the first upload of the connector.
+   It creates the new classes,
+   and the connector keeps the uploaded archive in :file:`/var/lib/asm/`.
+   The connector can't create the archive without uploading it.
+   With several accounts,
+   the connector keeps one archive for each account.
+   The :file:`locations.csv` file in each archive
+   lists the locations of the account.
+
+#. Unpack the archive.
+   For each existing class,
+   add a row to :file:`classes.csv`
+   with the ``class_id``, ``course_id``, and ``location_id`` of the class
+   and empty ``instructor_id`` columns.
+   For each course of these classes,
+   copy its row from the :file:`courses.csv` file of the other source
+   to the :file:`courses.csv` file of the archive.
+   Take the IDs from the files of the other source.
+
+#. Pack the files into a ZIP archive named :file:`archive.zip`
+   and upload it with an SFTP client
+   to the SFTP account of *Apple School Manager*.
+   *Apple School Manager* deactivates every user that an upload doesn't contain,
+   so the archive must contain the files of the connector
+   in addition to the existing classes.
+
+#. Deactivate :envvar:`asm/store_zip`
+   and delete the archives in :file:`/var/lib/asm/`,
+   because they contain personal data.
+
+The next uploads of the connector don't contain the existing classes.
+*Apple School Manager* keeps them without teachers.
+
+To remove the school abbreviation from the names of the new classes,
+set :envvar:`course_name_pattern` to ``{name}``.
+For more information, see :ref:`configuration-course-names`.
 
 .. _configuration-ldap-filter:
 

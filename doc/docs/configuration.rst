@@ -776,10 +776,11 @@ Use existing locations in Apple School Manager
 
 .. versionadded:: 6.1.0
 
-The connector creates one location in *Apple School Manager* for each school.
+The connector assigns each school to a location in *Apple School Manager*.
 By default,
-the ``location_id`` of the location is the school abbreviation,
-and the ``location_name`` is the display name of the school.
+it creates one location for each school,
+with the school abbreviation as ``location_id``
+and the display name of the school as ``location_name``.
 
 If your *Apple School Manager* account already has locations,
 for example from another application such as *Jamf*,
@@ -811,7 +812,7 @@ and the ``location_id`` columns of the students, staff, classes, and courses.
 
    Per school.
    The name of the location of the school in *Apple School Manager*.
-   The name must not be empty.
+   The name must not be empty or contain only spaces.
 
    The connector uploads the name with every synchronization,
    so it replaces the name of an existing location in *Apple School Manager*.

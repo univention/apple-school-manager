@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Apple School Manager Connector 5.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-18 09:07+0100\n"
+"POT-Creation-Date: 2026-11-18 08:54+0100\n"
 "PO-Revision-Date: 2026-10-30 13:56+0100\n"
 "Last-Translator: Univention GmbH <packages@univention.de>\n"
 "Language: de\n"
@@ -1309,16 +1309,17 @@ msgstr "Existierende Standorte in Apple School Manager verwenden"
 
 #: ../../configuration.rst:779
 msgid ""
-"The connector creates one location in *Apple School Manager* for each "
-"school. By default, the ``location_id`` of the location is the school "
-"abbreviation, and the ``location_name`` is the display name of the "
-"school."
+"The connector assigns each school to a location in *Apple School "
+"Manager*. By default, it creates one location for each school, with the "
+"school abbreviation as ``location_id`` and the display name of the school"
+" as ``location_name``."
 msgstr ""
-"Der Connector legt in *Apple School Manager* für jede Schule einen "
-"Standort an. Standardmäßig ist die ``location_id`` des Standorts das "
-"Schulkürzel und der ``location_name`` der Anzeigename der Schule."
+"Der Connector ordnet jede Schule einem Standort in *Apple School Manager*"
+" zu. Standardmäßig legt er für jede Schule einen Standort an, mit dem "
+"Schulkürzel als ``location_id`` und dem Anzeigenamen der Schule als "
+"``location_name``."
 
-#: ../../configuration.rst:784
+#: ../../configuration.rst:785
 msgid ""
 "If your *Apple School Manager* account already has locations, for example"
 " from another application such as *Jamf*, you can assign each school to "
@@ -1333,7 +1334,7 @@ msgstr ""
 "in den Standorten und in den Spalten ``location_id`` der Schüler, "
 "Mitarbeiter, Klassen und Kurse."
 
-#: ../../configuration.rst:793
+#: ../../configuration.rst:794
 msgid ""
 "You can only use locations that an SFTP upload created, for example the "
 "upload of another application. *Apple School Manager* stores two IDs for "
@@ -1350,7 +1351,7 @@ msgstr ""
 "nur die interne ID, die die Benutzeroberfläche von *Apple School Manager*"
 " nicht anzeigt."
 
-#: ../../configuration.rst:804
+#: ../../configuration.rst:805
 msgid ""
 "Per school. The ID of the location of the school in *Apple School "
 "Manager*. The ID must not be empty or contain spaces."
@@ -1358,19 +1359,19 @@ msgstr ""
 "Pro Schule. Die ID des Standorts der Schule in *Apple School Manager*. "
 "Die ID darf weder leer sein noch Leerzeichen enthalten."
 
-#: ../../configuration.rst:808
+#: ../../configuration.rst:809
 msgid "the school abbreviation"
 msgstr "das Schulkürzel"
 
-#: ../../configuration.rst:812
+#: ../../configuration.rst:813
 msgid ""
 "Per school. The name of the location of the school in *Apple School "
-"Manager*. The name must not be empty."
+"Manager*. The name must not be empty or contain only spaces."
 msgstr ""
 "Pro Schule. Der Name des Standorts der Schule in *Apple School Manager*. "
-"Der Name darf nicht leer sein."
+"Der Name darf weder leer sein noch nur aus Leerzeichen bestehen."
 
-#: ../../configuration.rst:816
+#: ../../configuration.rst:817
 msgid ""
 "The connector uploads the name with every synchronization, so it replaces"
 " the name of an existing location in *Apple School Manager*. To keep the "
@@ -1381,7 +1382,7 @@ msgstr ""
 "den vorhandenen Namen zu behalten, setzen Sie :envvar:`location_name` auf"
 " diesen Namen."
 
-#: ../../configuration.rst:821
+#: ../../configuration.rst:822
 msgid ""
 "the display name of the school, or the school abbreviation if the school "
 "has no display name"
@@ -1389,7 +1390,7 @@ msgstr ""
 "der Anzeigename der Schule oder das Schulkürzel, wenn die Schule keinen "
 "Anzeigenamen hat"
 
-#: ../../configuration.rst:824
+#: ../../configuration.rst:825
 msgid ""
 "You can set either key alone. The connector then uses the default for the"
 " other one. You can't set the keys in :envvar:`defaults` or in the entry "
@@ -1401,7 +1402,7 @@ msgstr ""
 "sonst jede Schule, die dieser Abschnitt oder Eintrag abdeckt, denselben "
 "Standort erhielte."
 
-#: ../../configuration.rst:829
+#: ../../configuration.rst:830
 msgid ""
 "The example in :numref:`configuration-locations-example-listing` assigns "
 "``gym123`` to the existing location with the ID ``4711``."
@@ -1409,11 +1410,11 @@ msgstr ""
 "Das Beispiel in :numref:`configuration-locations-example-listing` ordnet "
 "``gym123`` dem existierenden Standort mit der ID ``4711`` zu."
 
-#: ../../configuration.rst:832
+#: ../../configuration.rst:833
 msgid "Assign a school to an existing location"
 msgstr "Eine Schule einem existierenden Standort zuordnen"
 
-#: ../../configuration.rst:842
+#: ../../configuration.rst:843
 msgid ""
 "To assign a school that the entry ``*`` covers, add an entry with the "
 "abbreviation of the school and the same :envvar:`account`. The school "
@@ -1428,7 +1429,7 @@ msgstr ""
 "Kopieren Sie die Schlüssel des Eintrags ``*``, die weiterhin für die "
 "Schule gelten sollen."
 
-#: ../../configuration.rst:849
+#: ../../configuration.rst:850
 msgid ""
 "In :numref:`configuration-locations-catch-all-listing`, the entry ``*`` "
 "sends all schools to the account ``south`` and sets a course name "
@@ -1444,7 +1445,7 @@ msgstr ""
 "``*`` nicht mehr verwendet, wiederholt der Eintrag :envvar:`account` und "
 ":envvar:`course_name_pattern`."
 
-#: ../../configuration.rst:857
+#: ../../configuration.rst:858
 msgid "Assign a school that the entry ``*`` covers to an existing location"
 msgstr ""
 "Eine Schule, die der Eintrag ``*`` abdeckt, einem existierenden Standort "
@@ -1473,7 +1474,7 @@ msgstr ""
 msgid "Several schools in one location"
 msgstr "Mehrere Schulen an einem Standort"
 
-#: ../../configuration.rst:878
+#: ../../configuration.rst:879
 msgid ""
 "To upload several schools to one location, set the same "
 ":envvar:`location_id` for each of them. The connector writes the location"
@@ -1488,7 +1489,7 @@ msgstr ""
 "erhält den Standort nur einmal. Der Connector protokolliert, welche "
 "Schulen sich den Standort teilen."
 
-#: ../../configuration.rst:885
+#: ../../configuration.rst:886
 msgid ""
 "The name of the shared location is the :envvar:`location_name` that one "
 "or more of the schools set. If the schools set different names, the "
@@ -1507,7 +1508,7 @@ msgstr ""
 "voreingestellte Name ändern. Setzen Sie :envvar:`location_name` für eine "
 "der Schulen, damit der Name gleich bleibt."
 
-#: ../../configuration.rst:896
+#: ../../configuration.rst:897
 msgid ""
 "Classes and courses keep the school abbreviation in their ID, so classes "
 "with the same name from different schools stay separate."
@@ -1515,7 +1516,7 @@ msgstr ""
 "Klassen und Kurse behalten das Schulkürzel in ihrer ID, sodass "
 "gleichnamige Klassen verschiedener Schulen getrennt bleiben."
 
-#: ../../configuration.rst:899
+#: ../../configuration.rst:900
 msgid ""
 "The comparison only applies within one account. Schools of different "
 "accounts can use the same :envvar:`location_id` without sharing a "
@@ -1525,7 +1526,7 @@ msgstr ""
 "Konten können dieselbe :envvar:`location_id` verwenden, ohne sich einen "
 "Standort zu teilen."
 
-#: ../../configuration.rst:903
+#: ../../configuration.rst:904
 msgid ""
 "If a :envvar:`location_id` equals the abbreviation of another school of "
 "the same account that has no :envvar:`location_id`, the connector stops "
@@ -1539,11 +1540,11 @@ msgstr ""
 "Standort teilen würden. Um den Standort absichtlich zu teilen, setzen Sie"
 " die :envvar:`location_id` auch für die andere Schule."
 
-#: ../../configuration.rst:913
+#: ../../configuration.rst:914
 msgid "Change the location of a school"
 msgstr "Den Standort einer Schule ändern"
 
-#: ../../configuration.rst:917
+#: ../../configuration.rst:918
 msgid ""
 "The connector doesn't migrate anything if you change the "
 ":envvar:`location_id` of a school after the connector uploaded the "
@@ -1552,7 +1553,7 @@ msgstr ""
 "Der Connector migriert nichts, wenn Sie die :envvar:`location_id` einer "
 "Schule ändern, nachdem der Connector die Schule hochgeladen hat."
 
-#: ../../configuration.rst:921
+#: ../../configuration.rst:922
 msgid ""
 "The next upload refers to the new ID only. *Apple School Manager* treats "
 "it as a different location and assigns the users, classes, and courses of"
@@ -1564,7 +1565,7 @@ msgstr ""
 "Klassen und Kurse der Schule zu. Der bisherige Standort bleibt in *Apple "
 "School Manager*, bis Sie ihn dort entfernen."
 
-#: ../../configuration.rst:930
+#: ../../configuration.rst:931
 msgid "Existing users and classes"
 msgstr "Existierende Benutzer und Klassen"
 
@@ -1585,7 +1586,7 @@ msgstr ""
 "danach doppelt vorhanden. Weitere Informationen finden Sie in :ref"
 ":`configuration-locations-existing-classes`."
 
-#: ../../configuration.rst:939
+#: ../../configuration.rst:940
 msgid ""
 "Prepare the configuration before the first upload of the connector. User "
 "accounts that the first upload creates by mistake remain in *Apple School"
@@ -1595,7 +1596,7 @@ msgstr ""
 "Benutzerkonten, die der erste Upload versehentlich anlegt, bleiben in "
 "*Apple School Manager*."
 
-#: ../../configuration.rst:943
+#: ../../configuration.rst:944
 msgid ""
 "The first upload deactivates every user of the other source that the "
 "connector doesn't send. Examples are staff without a teacher role and the"
@@ -1609,11 +1610,11 @@ msgstr ""
 "*Apple School Manager* löscht diese Benutzer nach 30 Tagen. Weitere "
 "Informationen finden Sie in :ref:`synchronization-lifecycle`."
 
-#: ../../configuration.rst:951
+#: ../../configuration.rst:952
 msgid "Users"
 msgstr "Benutzer"
 
-#: ../../configuration.rst:953
+#: ../../configuration.rst:954
 msgid ""
 "*Apple School Manager* identifies a user by the ``person_id`` column. For"
 " more information, see :ref:`configuration-person-id`. If the connector "
@@ -1628,11 +1629,11 @@ msgstr ""
 "Andernfalls legt *Apple School Manager* einen neuen Benutzer an, und die "
 "Person erscheint doppelt."
 
-#: ../../configuration.rst:960
+#: ../../configuration.rst:961
 msgid "To use the existing users, proceed as follows:"
 msgstr "Um die existierenden Benutzer zu verwenden, gehen Sie wie folgt vor:"
 
-#: ../../configuration.rst:963
+#: ../../configuration.rst:964
 msgid ""
 "Store the ID that the other source uploaded as ``person_id`` in an LDAP "
 "attribute of each user, for example ``ucsschoolRecordUID`` if your |UAS| "
@@ -1643,7 +1644,7 @@ msgstr ""
 "``ucsschoolRecordUID``, wenn Ihr |UAS|-Import dieselben IDs wie die "
 "andere Quelle verwendet."
 
-#: ../../configuration.rst:968
+#: ../../configuration.rst:969
 msgid ""
 "Set :envvar:`student.person_id_attribute` and "
 ":envvar:`staff.person_id_attribute` to that attribute in the entry of the"
@@ -1660,7 +1661,7 @@ msgstr ""
 "synchronisierten Konten, und *Apple School Manager* legt diese Benutzer "
 "ein zweites Mal an."
 
-#: ../../configuration.rst:976
+#: ../../configuration.rst:977
 msgid ""
 "The keys apply to every school of the account, so every user that the "
 "connector uploads to the account needs a value in the attribute. If one "
@@ -1686,7 +1687,7 @@ msgid ""
 "``ucsschoolRecordUID``"
 msgstr "Schüler und Lehrer von ``gym123`` ohne ``ucsschoolRecordUID`` auflisten"
 
-#: ../../configuration.rst:983
+#: ../../configuration.rst:984
 msgid ""
 "Assign the schools to the existing locations. For more information, see "
 ":ref:`configuration-locations`."
@@ -1694,7 +1695,7 @@ msgstr ""
 "Ordnen Sie die Schulen den existierenden Standorten zu. Weitere "
 "Informationen finden Sie in :ref:`configuration-locations`."
 
-#: ../../configuration.rst:986
+#: ../../configuration.rst:987
 msgid ""
 "*Apple School Manager* updates the existing users with the values that "
 "the connector sends. With anonymization enabled, which is the default, "
@@ -1713,7 +1714,7 @@ msgstr ""
 "einen Ersatzwert für ``email_address``. Weitere Informationen finden Sie "
 "in :ref:`configuration-anonymization`."
 
-#: ../../configuration.rst:999
+#: ../../configuration.rst:1000
 msgid ""
 "The example in :numref:`configuration-locations-existing-users-listing` "
 "identifies the users of the account ``north`` by ``ucsschoolRecordUID`` "
@@ -1724,15 +1725,15 @@ msgstr ""
 "``ucsschoolRecordUID`` und ordnet ``gym123`` dem existierenden Standort "
 "mit der ID ``4711`` zu."
 
-#: ../../configuration.rst:1003
+#: ../../configuration.rst:1004
 msgid "Use existing users and an existing location"
 msgstr "Existierende Benutzer und einen existierenden Standort verwenden"
 
-#: ../../configuration.rst:1024
+#: ../../configuration.rst:1025
 msgid "Classes"
 msgstr "Klassen"
 
-#: ../../configuration.rst:1026
+#: ../../configuration.rst:1027
 msgid ""
 "The connector uses the |UAS| class name as the ID of the class and the "
 "course, for example ``gym123-1a``. You can't assign a class to the ID of "
@@ -1744,7 +1745,7 @@ msgstr ""
 "einer existierenden Klasse zuordnen. Der Connector legt neue Klassen an, "
 "und die existierenden Klassen bleiben in *Apple School Manager*:"
 
-#: ../../configuration.rst:1032
+#: ../../configuration.rst:1033
 msgid ""
 "The students leave the existing classes with the first upload, because "
 "every upload replaces the class memberships of the students."
@@ -1752,7 +1753,7 @@ msgstr ""
 "Die Schüler verlassen die existierenden Klassen mit dem ersten Upload, "
 "weil jeder Upload die Klassenmitgliedschaften der Schüler ersetzt."
 
-#: ../../configuration.rst:1035
+#: ../../configuration.rst:1036
 msgid ""
 "The teachers remain in the existing classes, because the connector "
 "doesn't send these classes. Teachers therefore see the existing and the "
@@ -1762,7 +1763,7 @@ msgstr ""
 " Klassen nicht sendet. Lehrer sehen deshalb die existierenden und die "
 "neuen Klassen."
 
-#: ../../configuration.rst:1039
+#: ../../configuration.rst:1040
 msgid ""
 "You can't delete classes from an SFTP upload in *Apple School Manager*, "
 "and you can't remove their teachers there."
@@ -1770,7 +1771,7 @@ msgstr ""
 "Sie können Klassen aus einem SFTP-Upload in *Apple School Manager* nicht "
 "löschen, und Sie können ihre Lehrer dort nicht entfernen."
 
-#: ../../configuration.rst:1042
+#: ../../configuration.rst:1043
 msgid ""
 "To remove the teachers from the existing classes, upload the existing "
 "classes once with empty teacher columns. The other source or the "
@@ -1780,7 +1781,7 @@ msgstr ""
 "existierenden Klassen einmal mit leeren Lehrerspalten hoch. Diesen Upload"
 " kann die andere Quelle oder der Connector ausführen."
 
-#: ../../configuration.rst:1046
+#: ../../configuration.rst:1047
 msgid ""
 "If the other source can still upload, remove the teachers from the "
 "classes in the other source. Then let the other source upload one last "
@@ -1790,11 +1791,11 @@ msgstr ""
 "der anderen Quelle aus den Klassen. Lassen Sie die andere Quelle dann vor"
 " dem ersten Upload des Connectors ein letztes Mal hochladen."
 
-#: ../../configuration.rst:1051
+#: ../../configuration.rst:1052
 msgid "Otherwise, proceed as follows:"
 msgstr "Andernfalls gehen Sie wie folgt vor:"
 
-#: ../../configuration.rst:1053
+#: ../../configuration.rst:1054
 msgid ""
 "Enable :envvar:`asm/store_zip` and run the synchronization. This run is "
 "the first upload of the connector. It creates the new classes, and the "
@@ -1812,7 +1813,7 @@ msgstr ""
 "jedes Konto. Die Datei :file:`locations.csv` in jedem Archiv listet die "
 "Standorte des Kontos auf."
 
-#: ../../configuration.rst:1063
+#: ../../configuration.rst:1064
 msgid ""
 "Unpack the archive. For each existing class, add a row to "
 ":file:`classes.csv` with the ``class_id``, ``course_id``, and "
@@ -1828,7 +1829,7 @@ msgstr ""
 ":file:`courses.csv` der anderen Quelle in die :file:`courses.csv` des "
 "Archivs. Entnehmen Sie die IDs den Dateien der anderen Quelle."
 
-#: ../../configuration.rst:1072
+#: ../../configuration.rst:1073
 msgid ""
 "Pack the files into a ZIP archive named :file:`archive.zip` and upload it"
 " with an SFTP client to the SFTP account of *Apple School Manager*. "
@@ -1843,7 +1844,7 @@ msgstr ""
 "zusätzlich zu den existierenden Klassen die Dateien des Connectors "
 "enthalten."
 
-#: ../../configuration.rst:1079
+#: ../../configuration.rst:1080
 msgid ""
 "Deactivate :envvar:`asm/store_zip` and delete the archives in "
 ":file:`/var/lib/asm/`, because they contain personal data."
@@ -1851,7 +1852,7 @@ msgstr ""
 "Deaktivieren Sie :envvar:`asm/store_zip` und löschen Sie die Archive in "
 ":file:`/var/lib/asm/`, weil sie personenbezogene Daten enthalten."
 
-#: ../../configuration.rst:1083
+#: ../../configuration.rst:1084
 msgid ""
 "The next uploads of the connector don't contain the existing classes. "
 "*Apple School Manager* keeps them without teachers."
@@ -1859,7 +1860,7 @@ msgstr ""
 "Die nächsten Uploads des Connectors enthalten die existierenden Klassen "
 "nicht. *Apple School Manager* behält sie ohne Lehrer."
 
-#: ../../configuration.rst:1086
+#: ../../configuration.rst:1087
 #, python-brace-format
 msgid ""
 "To remove the school abbreviation from the names of the new classes, set "
@@ -1870,11 +1871,11 @@ msgstr ""
 "Sie :envvar:`course_name_pattern` auf ``{name}``. Weitere Informationen "
 "finden Sie in :ref:`configuration-course-names`."
 
-#: ../../configuration.rst:1093
+#: ../../configuration.rst:1094
 msgid "Select users with an LDAP filter"
 msgstr "Benutzer mit einem LDAP-Filter auswählen"
 
-#: ../../configuration.rst:1095
+#: ../../configuration.rst:1096
 msgid ""
 "If the school list from :ref:`configuration-school-list` isn't specific "
 "enough, you can select the users with an LDAP filter. The connector "
@@ -1884,7 +1885,7 @@ msgstr ""
 " genug ist, können Sie die Benutzer mit einem LDAP-Filter auswählen. Der "
 "Connector wendet den Filter zusätzlich zur Schulliste an."
 
-#: ../../configuration.rst:1101
+#: ../../configuration.rst:1102
 msgid ""
 "Per school. LDAP filter for the students or the teachers of the school. A"
 " filter in :envvar:`defaults` applies to every school that doesn't set "
@@ -1894,15 +1895,15 @@ msgstr ""
 "Filter in :envvar:`defaults` gilt für jede Schule, die keinen eigenen "
 "setzt."
 
-#: ../../configuration.rst:1106
+#: ../../configuration.rst:1107
 msgid "empty, which selects every user."
 msgstr "leer, wodurch jeder Benutzer ausgewählt wird."
 
-#: ../../configuration.rst:1110
+#: ../../configuration.rst:1111
 msgid "See :envvar:`student.ldap_filter`"
 msgstr "Siehe :envvar:`student.ldap_filter`"
 
-#: ../../configuration.rst:1112
+#: ../../configuration.rst:1113
 msgid ""
 "The example in :numref:`configuration-ldap-filter-primary-address-"
 "example-listing` synchronizes only students in ``gym123`` who have a "
@@ -1912,11 +1913,11 @@ msgstr ""
 "example-listing` synchronisiert nur Schüler in ``gym123``, die eine "
 "primäre E-Mailadresse haben."
 
-#: ../../configuration.rst:1116
+#: ../../configuration.rst:1117
 msgid "Synchronize only the students of ``gym123`` with a primary email address"
 msgstr "Nur die Schüler von ``gym123`` mit primärer E-Mailadresse synchronisieren"
 
-#: ../../configuration.rst:1125
+#: ../../configuration.rst:1126
 msgid ""
 "The connector first selects the students or teachers of a school. It then"
 " applies the LDAP filter to that selection. The filter only needs to "
@@ -1926,7 +1927,7 @@ msgstr ""
 " wendet er den LDAP-Filter auf diese Auswahl an. Der Filter muss nur die "
 "Benutzerattribute beschreiben, die Sie auswählen möchten."
 
-#: ../../configuration.rst:1129
+#: ../../configuration.rst:1130
 msgid ""
 "To verify which users a filter selects before you set it, combine it with"
 " the role of the users and run it with :command:`univention-ldapsearch`, "
@@ -1937,11 +1938,11 @@ msgstr ""
 ":command:`univention-ldapsearch` aus, wie in :numref:`configuration-ldap-"
 "filter-verify-filter-listing` gezeigt."
 
-#: ../../configuration.rst:1134
+#: ../../configuration.rst:1135
 msgid "List the students of ``gym123`` who match the filter"
 msgstr "Die Schüler von ``gym123`` auflisten, auf die der Filter zutrifft"
 
-#: ../../configuration.rst:1143
+#: ../../configuration.rst:1144
 msgid ""
 "An invalid LDAP filter stops the upload to the account of that school. "
 "The connector uploads nothing to that account in that case, so its data "
@@ -1967,4 +1968,14 @@ msgstr ""
 #~ msgstr ""
 #~ "Pro Schule. Der Name des Standorts "
 #~ "der Schule in *Apple School Manager*."
+
+#~ msgid ""
+#~ "Per school. The name of the "
+#~ "location of the school in *Apple "
+#~ "School Manager*. The name must not "
+#~ "be empty."
+#~ msgstr ""
+#~ "Pro Schule. Der Name des Standorts "
+#~ "der Schule in *Apple School Manager*."
+#~ " Der Name darf nicht leer sein."
 

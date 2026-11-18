@@ -19,7 +19,10 @@ v6.1.0
   for example one that another application created,
   with the keys :envvar:`location_id` and :envvar:`location_name`
   in the school entry of the settings file.
-  See :ref:`configuration-locations`.
+  Several schools of one account can share a location.
+  If the location settings contradict each other,
+  then the synchronization doesn't start.
+  See :ref:`Use existing locations in Apple School Manager <configuration-locations>`.
 
 .. _changelog-v6.0.0:
 
@@ -52,7 +55,7 @@ v6.0.0 (2026-10-19)
 * The app supports Keycloak as identity provider for *Apple School Manager*.
   Users sign in to their *Managed Apple Accounts*
   with the password from the |UAS| domain.
-  See :ref:`identity-provider`.
+  See :ref:`Keycloak as an identity provider for Apple School Manager <identity-provider>`.
 
 .. _changelog-v5.1.1:
 

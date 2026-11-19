@@ -26,8 +26,8 @@ msgid ""
 msgstr ""
 "Installieren Sie den *Apple School Manager Connector* auf einer "
 "unterstützten Systemrolle, um Schuldaten mit *Apple School Manager* zu "
-"synchronisieren. Stellen zuerst sicher, dass Sie die :ref"
-":`introduction-prerequisites` erfüllen."
+"synchronisieren. Stellen zuerst sicher, dass Sie die :ref:`introduction-"
+"prerequisites` erfüllen."
 
 #: ../../installation.rst:18
 msgid "Supported system roles"
@@ -81,10 +81,10 @@ msgid ""
 "account, add it as described in :ref:`configuration-accounts`."
 msgstr ""
 "Installieren Sie den Connector nicht mehr als einmal in einer Domäne. Um "
-"weitere Schulen zu synchronisieren, fügen Sie sie der vorhandenen Instanz"
-" hinzu, wie in :ref:`configuration-school-list` beschrieben. Um ein "
-"anderes *Apple School Manager*-Konto zu verwenden, fügen Sie es wie in "
-":ref:`configuration-accounts` beschrieben hinzu."
+"weitere Schulen zu synchronisieren, fügen Sie sie der existierenden "
+"Instanz hinzu, wie in :ref:`configuration-school-list` beschrieben. Um "
+"ein anderes *Apple School Manager*-Konto zu verwenden, fügen Sie es wie "
+"in :ref:`configuration-accounts` beschrieben hinzu."
 
 #: ../../installation.rst:49
 msgid "Install the app"
@@ -94,9 +94,7 @@ msgstr "App installieren"
 msgid ""
 "Before you begin, complete the prerequisites in :ref:`introduction-"
 "prerequisites`."
-msgstr ""
-"Erfüllen Sie vor dem Start die :ref:`introduction-"
-"prerequisites`."
+msgstr "Erfüllen Sie vor dem Start die :ref:`introduction-prerequisites`."
 
 #: ../../installation.rst:54
 msgid ""
@@ -111,8 +109,8 @@ msgid ""
 "Navigate to the *App Center* in :term:`Management UI` through "
 ":menuselection:`Software --> App Center`."
 msgstr ""
-"Navigieren Sie in der :term:`Management UI` über :menuselection:`Software "
-"--> App Center` zum *App Center*."
+"Navigieren Sie in der :term:`Management UI` über :menuselection:`Software"
+" --> App Center` zum *App Center*."
 
 #: ../../installation.rst:60
 msgid "Select :guilabel:`Apple School Manager Connector`."
@@ -157,7 +155,8 @@ msgid ""
 "in :cite:t:`uv-ucs-operation` for more information about Univention App "
 "Center."
 msgstr ""
-"in :cite:t:`uv-ucs-operation` für weitere Informationen über Univention App Center."
+"in :cite:t:`uv-ucs-operation` für weitere Informationen über Univention "
+"App Center."
 
 #: ../../installation.rst:83
 msgid "Obtain the SFTP credentials"
@@ -277,3 +276,4 @@ msgstr "Ein *Apple School Manager*-Konto in :file:`/etc/asm-connections.json`"
 #: ../../installation.rst:153
 msgid "Continue with :ref:`configuration`."
 msgstr "Fahren Sie mit :ref:`configuration` fort."
+

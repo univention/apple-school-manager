@@ -137,19 +137,19 @@ msgstr ""
 
 #: ../../troubleshooting.rst:72
 msgid "**The user has no primary email address.**"
-msgstr "**Der Benutzer hat keine primäre E-Mailadresse.**"
+msgstr "**Der Benutzer hat keine primäre E-Mail-Adresse.**"
 
 #: ../../troubleshooting.rst:74
 msgid ""
 "The connector exports the user without an email address, and *Apple "
 "School Manager* can't create an *Apple Account* for the user."
 msgstr ""
-"Der Connector exportiert den Benutzer ohne E-Mailadresse, und *Apple "
+"Der Connector exportiert den Benutzer ohne E-Mail-Adresse, und *Apple "
 "School Manager* kann für den Benutzer keinen *Apple Account* anlegen."
 
 #: ../../troubleshooting.rst:77
 msgid "**Anonymization removed the email address.**"
-msgstr "**Die Anonymisierung hat die E-Mailadresse entfernt.**"
+msgstr "**Die Anonymisierung hat die E-Mail-Adresse entfernt.**"
 
 #: ../../troubleshooting.rst:79
 msgid ""
@@ -161,9 +161,10 @@ msgid ""
 msgstr ""
 "Die Anonymisierung ist im Connector standardmäßig aktiviert. Wenn "
 ":envvar:`student.anonymize` oder :envvar:`staff.anonymize` für das Konto "
-"aktiviert ist, exportiert der Connector statt der E-Mailadresse einen "
-"Ersatzwert. Der standardmäßige Ersatzwert für die E-Mailadresse ist leer."
-" Weitere Informationen finden Sie in :ref:`configuration-anonymization`."
+"aktiviert ist, exportiert der Connector statt der E-Mail-Adresse einen "
+"Ersatzwert. Der standardmäßige Ersatzwert für die E-Mail-Adresse ist "
+"leer. Weitere Informationen finden Sie in :ref:`configuration-"
+"anonymization`."
 
 #: ../../troubleshooting.rst:85
 msgid ""
@@ -179,8 +180,8 @@ msgstr ""
 " die Einstellungen aus :numref:`troubleshooting-users-missing-"
 "anonymization-listing`. Einstellungen spezifisch für das Konto können "
 "diese Standardwerte überschreiben. Ohne Anonymisierung exportiert der "
-"Connector die ursprünglichen Attributwerte, einschließlich Namen und "
-"E-Mailadressen. Informationen zu Einstellungen spezifisch für das Konto "
+"Connector die ursprünglichen Attributwerte, einschließlich Namen und E"
+"-Mail-Adressen. Informationen zu Einstellungen spezifisch für das Konto "
 "finden Sie in :ref:`configuration-anonymization`."
 
 #: ../../troubleshooting.rst:93

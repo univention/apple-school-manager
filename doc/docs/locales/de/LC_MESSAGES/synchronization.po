@@ -190,7 +190,7 @@ msgid ""
 "accounts and then does the following:"
 msgstr ""
 "*Apple School Manager* vergleicht die hochgeladenen Daten mit seinen "
-"vorhandenen Konten und führt dann Folgendes aus:"
+"existierenden Konten und führt dann Folgendes aus:"
 
 #: ../../synchronization.rst:101
 msgid "It creates a user account when no matching account exists."
@@ -252,7 +252,9 @@ msgstr ":file:`locations.csv`"
 
 #: ../../synchronization.rst:133
 msgid "One row per location. By default, each school has its own location."
-msgstr "Eine Zeile pro Standort. In der Voreinstellung hat jede Schule einen eigenen Standort."
+msgstr ""
+"Eine Zeile pro Standort. In der Voreinstellung hat jede Schule einen "
+"eigenen Standort."
 
 #: ../../synchronization.rst:135
 msgid ":ref:`synchronization-locations`"
@@ -360,7 +362,9 @@ msgstr "``location_id``"
 msgid ""
 "The :envvar:`location_id` of the school. By default, the name of the "
 "school, for example ``gym123``."
-msgstr "Die :envvar:`location_id` der Schule. In der Voreinstellung der Name der Schule, zum Beispiel ``gym123``."
+msgstr ""
+"Die :envvar:`location_id` der Schule. In der Voreinstellung der Name der "
+"Schule, zum Beispiel ``gym123``."
 
 #: ../../synchronization.rst:178
 msgid "``location_name``"
@@ -370,13 +374,18 @@ msgstr "``location_name``"
 msgid ""
 "The :envvar:`location_name` of the school. By default, the display name "
 "of the school, or the school name if the school has no display name."
-msgstr "Der :envvar:`location_name` der Schule. In der Voreinstellung der Anzeigename der Schule, oder der Name der Schule, wenn sie keinen Anzeigenamen hat."
+msgstr ""
+"Der :envvar:`location_name` der Schule. In der Voreinstellung der "
+"Anzeigename der Schule oder der Name der Schule, wenn sie keinen "
+"Anzeigenamen hat."
 
 #: ../../synchronization.rst:183
 msgid ""
 "Schools of one account with the same :envvar:`location_id` share one row,"
 " see :ref:`configuration-locations-shared`."
-msgstr "Schulen eines Kontos mit derselben :envvar:`location_id` teilen sich eine Zeile, siehe :ref:`configuration-locations-shared`."
+msgstr ""
+"Schulen eines Kontos mit derselben :envvar:`location_id` teilen sich eine"
+" Zeile, siehe :ref:`configuration-locations-shared`."
 
 #: ../../synchronization.rst:189
 msgid "Courses"
@@ -531,7 +540,7 @@ msgstr ""
 "Die Datei :file:`staff.csv` enthält die in :numref:`synchronization-"
 "staff-table` aufgeführten Spalten. Die Datei enthält Lehrkräfte sowie "
 "Lehrkräfte mit einer zusätzlichen Mitarbeiterrolle. Der Connector "
-"exportiert keine Mitarbeitenden ohne Lehrerrolle."
+"exportiert keine Mitarbeiter ohne Lehrerrolle."
 
 #: ../../synchronization.rst:280
 msgid "Columns of :file:`staff.csv`"
@@ -587,7 +596,7 @@ msgstr "``email_address``"
 
 #: ../../synchronization.rst:304 ../../synchronization.rst:356
 msgid "Primary email address, modified by :envvar:`email_prepend_domain`."
-msgstr "Primäre E-Mailadresse, angepasst durch :envvar:`email_prepend_domain`."
+msgstr "Primäre E-Mail-Adresse, angepasst durch :envvar:`email_prepend_domain`."
 
 #: ../../synchronization.rst:307 ../../synchronization.rst:359
 msgid "``sis_username``"
@@ -609,7 +618,9 @@ msgstr "``location_id_2`` und folgende"
 msgid ""
 "Locations of the other schools of the teacher, in alphabetical order of "
 "the schools. Each location appears only once."
-msgstr "Standorte der weiteren Schulen des Lehrers, in alphabetischer Reihenfolge der Schulen. Jeder Standort erscheint nur einmal."
+msgstr ""
+"Standorte der weiteren Schulen des Lehrers, in alphabetischer Reihenfolge"
+" der Schulen. Jeder Standort erscheint nur einmal."
 
 #: ../../synchronization.rst:321
 msgid "Students"
@@ -681,7 +692,9 @@ msgstr "Standort der primären Schule des Schülers."
 msgid ""
 "Locations of the other schools of the student, in alphabetical order of "
 "the schools. Each location appears only once."
-msgstr "Standorte der weiteren Schulen des Schülers, in alphabetischer Reihenfolge der Schulen. Jeder Standort erscheint nur einmal."
+msgstr ""
+"Standorte der weiteren Schulen des Schülers, in alphabetischer "
+"Reihenfolge der Schulen. Jeder Standort erscheint nur einmal."
 
 #: ../../synchronization.rst:377
 msgid "Rosters"

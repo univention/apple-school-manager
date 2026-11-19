@@ -94,16 +94,15 @@ msgstr ""
 
 #: ../../index.rst:50
 msgid "A primary email address for each user."
-msgstr "Eine primäre E-Mailadresse für jeden Benutzer."
+msgstr "Eine primäre E-Mail-Adresse für jeden Benutzer."
 
 #: ../../index.rst:52
 msgid ""
 "*Apple School Manager* uses the email address as the Apple Account and "
 "can't create an account for a user without one."
 msgstr ""
-"*Apple School Manager* "
-"verwendet die E-Mailadresse als Apple Account und kann ohne sie kein "
-"Konto für einen Benutzer erstellen."
+"*Apple School Manager* verwendet die E-Mail-Adresse als Apple Account und"
+" kann ohne sie kein Konto für einen Benutzer erstellen."
 
 #: ../../index.rst:55
 msgid ""
@@ -167,8 +166,8 @@ msgid ""
 "exactly one class in it. For more information, see :ref:`synchronization-"
 "courses`."
 msgstr ""
-"*Apple School Manager* benötigt die Zuordnung jeder Klasse zu einem Kurs. "
-"Daher wandelt der Connector jede Schulklasse und Arbeitsgruppe in einen "
+"*Apple School Manager* benötigt die Zuordnung jeder Klasse zu einem Kurs."
+" Daher wandelt der Connector jede Schulklasse und Arbeitsgruppe in einen "
 "Kurs mit genau einer Klasse um. Weitere Informationen finden Sie unter "
 ":ref:`synchronization-courses`."
 
@@ -271,7 +270,7 @@ msgstr ""
 "Verwenden Sie für die Geräteverwaltung eine Mobile Device Management-"
 "Lösung, die sich in *Apple School Manager* integrieren lässt. Eine Liste "
 "der Lösungen, die sich in |UAS| integrieren lassen, finden Sie im "
-"`Univention Integration Catalog <https://www.univention.de/produkte/integration-catalog/>`_. "
-"Stellen Sie sicher, dass die ausgewählte "
-"Lösung in *Apple School Manager* integrierbar ist."
+"`Univention Integration Catalog <https://www.univention.de/produkte"
+"/integration-catalog/>`_. Stellen Sie sicher, dass die ausgewählte Lösung"
+" in *Apple School Manager* integrierbar ist."
 
